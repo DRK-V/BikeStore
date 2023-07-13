@@ -1,0 +1,33 @@
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\bin\Debug\net7.0\appsettings.Development.json
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\bin\Debug\net7.0\appsettings.json
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\bin\Debug\net7.0\Api BikeStore.exe
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\bin\Debug\net7.0\Api BikeStore.deps.json
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\bin\Debug\net7.0\Api BikeStore.runtimeconfig.json
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\bin\Debug\net7.0\Api BikeStore.dll
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\bin\Debug\net7.0\Api BikeStore.pdb
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\bin\Debug\net7.0\Microsoft.AspNetCore.OpenApi.dll
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\bin\Debug\net7.0\Microsoft.OpenApi.dll
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\bin\Debug\net7.0\Swashbuckle.AspNetCore.Swagger.dll
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\Api BikeStore.csproj.AssemblyReference.cache
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\Api BikeStore.GeneratedMSBuildEditorConfig.editorconfig
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\Api BikeStore.AssemblyInfoInputs.cache
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\Api BikeStore.AssemblyInfo.cs
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\Api BikeStore.csproj.CoreCompileInputs.cache
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\Api BikeStore.MvcApplicationPartsAssemblyInfo.cs
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\Api BikeStore.MvcApplicationPartsAssemblyInfo.cache
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\staticwebassets\msbuild.Api BikeStore.Microsoft.AspNetCore.StaticWebAssets.props
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\staticwebassets\msbuild.build.Api BikeStore.props
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\staticwebassets\msbuild.buildMultiTargeting.Api BikeStore.props
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\staticwebassets\msbuild.buildTransitive.Api BikeStore.props
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\staticwebassets.pack.json
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\staticwebassets.build.json
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\staticwebassets.development.json
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\scopedcss\bundle\Api BikeStore.styles.css
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\Api BikeStore.csproj.CopyComplete
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\Api BikeStore.dll
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\refint\Api BikeStore.dll
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\Api BikeStore.pdb
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\Api BikeStore.genruntimeconfig.cache
+F:\BikeStore\baken\Api BikeStore\Api BikeStore\obj\Debug\net7.0\ref\Api BikeStore.dll
