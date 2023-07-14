@@ -1,0 +1,25 @@
+Registrar nuevo usuario: Permite a los usuarios crear una cuenta en la tienda proporcionando su información personal.
+
+Iniciar sesión: Permite a los usuarios acceder a su cuenta ingresando sus credenciales de inicio de sesión.
+
+Buscar productos: Permite a los usuarios buscar y filtrar productos según categorías, características o precios específicos.
+
+Ver detalles del producto: Permite a los usuarios ver información detallada sobre un producto, incluyendo imágenes, descripción y especificaciones.
+
+Agregar producto al carrito: Permite a los usuarios seleccionar un producto y agregarlo al carrito de compras.
+
+Modificar carrito de compras: Permite a los usuarios ajustar las cantidades de los productos en su carrito de compras o eliminar productos.
+
+Proceso de pago: Guía a los usuarios a través del proceso de pago, incluyendo la selección de opciones de envío y el ingreso de información de pago.
+
+Confirmación de pedido: Muestra a los usuarios un resumen de su pedido y solicita confirmación antes de finalizar la compra.
+
+Administrar pedidos: Permite a los administradores ver y gestionar los pedidos recibidos, actualizar su estado y generar facturas o comprobantes de envío.
+
+Gestionar inventario: Permite a los administradores agregar, editar o eliminar productos del catálogo, así como actualizar los niveles de existencias.
+
+Valoraciones y comentarios de productos: Permite a los usuarios dejar reseñas y comentarios sobre los productos, lo que ayuda a otros usuarios en su proceso de compra.
+
+Administración de cuentas de usuario: Permite a los usuarios gestionar su información personal, actualizar sus preferencias y realizar cambios en su cuenta.
+
+Promociones y descuentos: Permite la aplicación de promociones y descuentos en productos seleccionados, lo que puede ayudar a impulsar las ventas.
