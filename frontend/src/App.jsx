@@ -1,14 +1,13 @@
-import { useState } from 'react'
 
-
-
+import Carousel from "./components/carousel"
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-<h1>fdf</h1>
-    </>
+  
+<>
+  <Carousel/>
+</>
+    
   )
 }
 
