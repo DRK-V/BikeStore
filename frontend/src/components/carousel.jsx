@@ -1,50 +1,73 @@
 import React, { useState, useEffect } from 'react';
 import '../css/carousel.css';
 
-const Carousel = () => {
+const images = [
+  {
+    imageUrl: 'https://www.incolmotos-yamaha.com.co/bicicletas/images/civante.png',
+    discount: '20% Off ',
+  },
+  {
+    imageUrl: 'https://www.classbike.co/wp-content/uploads/2022/10/Elite-blue.png',
+    discount: '10% Off',
+  },
+  {
+    imageUrl: 'https://rambikes.cl/wp-content/uploads/2021/09/16ramtrx-hyd-aro29m16-min.png',
+    discount: '15% Off ',
+  },
  
+  // Agrega más imágenes y descuentos necesario
+];
 
-  const slides = [
-    'https://www.sena.edu.co/es-co/sena/PublishingImages/regionales.jpg',
-    'https://www.sena.edu.co/es-co/sena/PublishingImages/regionales.jpg',
-    'https://www.sena.edu.co/es-co/sena/PublishingImages/regionales.jpg',
-    // Agrega más imágenes según sea necesario
-  ];
-
-  const [currentSlide, setCurrentSlide] = useState(0);
+const Carousel = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
-    }, 3000); // Cambiar imagen cada 3 segundos
+      nextImage();
+    }, 3000);
 
     return () => clearInterval(interval);
-  }, [slides.length]);
+  }, []);
 
-  const nextSlide = () => {
-    setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
+  const nextImage = () => {
+    setActiveIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
 
-  const prevSlide = () => {
-    setCurrentSlide((prevSlide) => (prevSlide - 1 + slides.length) % slides.length);
+  const prevImage = () => {
+    setActiveIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
   };
 
   return (
-    <div className="carousel">
-      <div className="slider" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
-        {slides.map((slide, index) => (
-          <div key={index} className="slide">
-            <img src={slide} alt={`Slide ${index}`} />
+    <div className="carousel-container">
+      <div className="carousel">
+        {images.map((imageInfo, index) => (
+          <div
+            key={index}
+            className={`carousel-item ${index === activeIndex ? 'active' : ''}`}
+            style={{
+              marginLeft: `${index === 0 ? -activeIndex * 100 : 0}%`,
+            }}
+          >
+            <div className="image-container">
+              <img src={imageInfo.imageUrl} alt={`Image ${index + 1}`} />
+              <div className="discount">{imageInfo.discount}</div>
+            </div>
           </div>
         ))}
       </div>
-      <button onClick={prevSlide} className="prev-btn">{"<"}</button>
-      <button onClick={nextSlide} className="next-btn">{">"}</button>
+      <button onClick={prevImage} className="carousel-button prev-button">&#10094;</button>
+      <button onClick={nextImage} className="carousel-button next-button">&#10095;</button>
     </div>
   );
 };
 
 export default Carousel;
+
+
+
+
+
+
 
 
 
