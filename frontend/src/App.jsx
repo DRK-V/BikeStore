@@ -1,18 +1,18 @@
+import { useState } from 'react'
+import './App.css'
+import { Card_container } from './components/Card_container'
+import { Footer } from './components/Footer'
+import Carousel from './components/carousel'
 import { Navbar } from "./components/Navbar"
-import  Carousel  from "./components/carousel"
-import {Card_container} from "./components/Card_container"
-import {Footer} from "./components/Footer"
 
 function App() {
-
+  const [count, setCount] = useState(0)
   return (
     <>
-         <Navbar/>
+      <Navbar/>
          <Carousel/>
          <Card_container/>
          <Footer/>
-
-
     </>
   )
 }
