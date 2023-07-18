@@ -27,7 +27,7 @@ const Carousel = () => {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [activeIndex]); // Agregamos 'activeIndex' como dependencia para el useEffect
+  }, [activeIndex]); 
 
   const nextImage = () => {
     setActiveIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -61,11 +61,13 @@ const Carousel = () => {
       </div>
       <div className="carousel-indicators">
         {images.map((_, index) => (
-          <span
+          <div
             key={index}
             className={`indicator ${index === activeIndex ? 'active' : ''}`}
-            onClick={() => goToImage(index)} // Usamos goToImage en lugar de setActiveIndex
-          />
+            onClick={() => goToImage(index)}
+          >
+            <div className={`inner-indicator ${index === activeIndex ? 'active' : ''}`} />
+          </div>
         ))}
       </div>
       <button onClick={prevImage} className="carousel-button prev-button">&#10094;</button>
@@ -75,6 +77,7 @@ const Carousel = () => {
 };
 
 export default Carousel;
+
 
 
 
