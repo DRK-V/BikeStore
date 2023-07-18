@@ -3,6 +3,7 @@
   overflow: hidden;
   width: 100%;
   height: 501px;
+  background-color: #d5f3ca;
 }
 
 .carousel {
@@ -69,5 +70,25 @@ img{
   font-size: 14px;
   z-index: 2;
 }
-  
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+}
+
+.indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #bbb;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.indicator.active {
+  background-color: #333;
+}
   
