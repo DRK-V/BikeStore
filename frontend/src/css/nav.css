@@ -1,0 +1,118 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
+nav {
+  display: flex;
+  width: 100%;
+  height: 12vh;
+  background-color: #7ee29a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bike {
+  padding: 3px;
+  width: 9%;
+  height: 100%;
+  object-fit: contain;
+}
+.car{
+    width: 5%;
+    height: 100%;
+    object-fit: contain;
+    margin-left: 15px;
+
+}
+
+.busque {
+  margin: 10px;
+  border-radius: 5px;
+  border: none;
+  width: 70%;
+  outline: none;
+  height: 7vh;
+  box-shadow: 1px 5px 1px 1px rgba(128, 128, 128, 0.452);
+  display: flex;
+}
+
+.buscar {
+  width: 20%;
+  height: 7vh;
+  border-radius: 5px;
+  border: none;
+  left: -21%;
+  position: relative;
+}
+
+form {
+  width: 70%;
+  float: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.descu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 31px;
+  border-radius: 5px;
+  border: none;
+  width: 38%;
+  height: 40px;
+  background-color: #efc14a;
+  color: white;
+  font-size: 20px;
+}
+
+.nav2 {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: #7ee29a;
+  justify-content: space-around;
+}
+ul {
+  height: 100%;
+  width: 100%;
+  display: inline-block;
+}
+.right-side,
+.left-side {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+.left-side > ul {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+}
+.right-side > ul {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  width: 80%;
+  height: 100%;
+}
+
+
+ul > a,
+li {
+  margin-left: 10px;
+
+  color: black;
+}
