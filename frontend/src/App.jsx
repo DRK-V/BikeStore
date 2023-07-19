@@ -1,23 +1,22 @@
 import { useState } from 'react'
 import './App.css'
 import './css/main.css'
-import { Card_container } from './components/Card_container'
-import { Footer } from './components/Footer'
-import { Navbar } from './components/Navbar'
-import { Container_button_comprados } from './components/Container_button_comprados'
-import Carousel from './components/carousel'
+import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import { Home } from './page/Home';
+import { Register } from './page/Register';
+
 function App() {
   const [count, setCount] = useState(0)
   return (
     <>
-      <Navbar></Navbar>
-      <Carousel></Carousel>
-      <Container_button_comprados/>
-      <Card_container>
-
-      </Card_container>
-      <Footer />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home/>} />
+          <Route path="/register" element={<Register/>} />
+        </Routes>
+      </Router>
     </>
   )
 }
+
 export default App
