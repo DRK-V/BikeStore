@@ -19,7 +19,7 @@ export const Footer = () =>{
                 <ul>
                     <a href="#"><li><strong>Ayuda</strong></li></a>
                 </ul>
-                <div>
+                <div className="copyright">
                     @copyRight
                 </div>
             </footer>
