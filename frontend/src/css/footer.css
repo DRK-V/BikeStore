@@ -18,7 +18,7 @@ footer > ul{
     padding-left: 20%;
 }
 
-footer > ul > a , li{
+footer > ul > a , footer > ul > li{
     color: black;
     margin-top: 16%;
     width: 100%;
