@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/carousel.css';
 
 const images = [
@@ -27,7 +27,7 @@ const Carousel = () => {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [activeIndex]); 
 
   const nextImage = () => {
     setActiveIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -35,6 +35,10 @@ const Carousel = () => {
 
   const prevImage = () => {
     setActiveIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+  };
+
+  const goToImage = (index) => {
+    setActiveIndex(index);
   };
 
   return (
@@ -55,6 +59,17 @@ const Carousel = () => {
           </div>
         ))}
       </div>
+      <div className="carousel-indicators">
+        {images.map((_, index) => (
+          <div
+            key={index}
+            className={`indicator ${index === activeIndex ? 'active' : ''}`}
+            onClick={() => goToImage(index)}
+          >
+            <div className={`inner-indicator ${index === activeIndex ? 'active' : ''}`} />
+          </div>
+        ))}
+      </div>
       <button onClick={prevImage} className="carousel-button prev-button">&#10094;</button>
       <button onClick={nextImage} className="carousel-button next-button">&#10095;</button>
     </div>
@@ -62,6 +77,9 @@ const Carousel = () => {
 };
 
 export default Carousel;
+
+
+
 
 
 
