@@ -2,6 +2,7 @@ import React from 'react'
 import '../css/Bike_details.css'
 import imagen_ejemplo from '../assets/beneli.png'
 import { Navbar } from '../components/Navbar'
+import Container_comments from '../components/Comments/Container_comments'
 const Bike_details = () => {
     return (
         <>
@@ -37,7 +38,18 @@ const Bike_details = () => {
                     <p className="text_descripcion_details">
                         Descripcion:bicicleta fabricada en 60501 aluminio, modelo 2016,Unisex
                     </p>
+                    <button className="btn_buy">
+                        <i></i>
+                        Comprar
+                    </button>
+                    <button className="btn_add_item_cart">
+                        <i></i>
+                        Agregar al carrito
+                    </button>
                 </form>
+                <div className="container_comments">
+                    <Container_comments/>
+                </div>
             </div>
         </>
     )

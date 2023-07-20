@@ -6,16 +6,6 @@
     align-items: center;
 }
 
-@keyframes hover_button {
-    from {
-        transform: translateY(0);
-    }
-
-    to {
-        transform: translateY(-5px);
-    }
-}
-
 .button_comprados {
     position: relative;
     width: 10%;
