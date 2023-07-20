@@ -80,15 +80,28 @@ img{
 }
 
 .indicator {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin: 0 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-width: 1px;
+  border-style: solid;
+  border-color: black;
+}
+
+.inner-indicator {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #bbb;
-  margin: 0 5px;
-  cursor: pointer;
+  background-color: #333;
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
-.indicator.active {
-  background-color: #333;
+.indicator.active .inner-indicator {
+  opacity: 1;
 }
-  

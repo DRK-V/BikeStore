@@ -1,0 +1,102 @@
+.card_container {
+    position: relative;
+    width: 80%;
+    left: 10%;
+    min-height: 80vh;
+    height: auto;
+    overflow-y: auto;
+    background-color: rgb(238, 238, 238);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    justify-items: center;
+    gap: 20px;        
+}
+
+.card_container_categories{
+    position: relative;
+    width: 60%;
+    min-height: 80vh;
+    height: 80vh;
+    overflow-y: auto;
+    background-color: rgb(238, 238, 238);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+    gap: 20px;     
+    left: 10%;
+    overflow: hidden;
+    overflow-y: auto;
+}
+.card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 35vh;
+    border-radius: .4rem;
+    box-shadow: 1px 10px 10px 5px rgb(136, 136, 136);
+    flex-direction: column;
+    margin: 2%;
+    margin-top: 8%;
+}
+
+.card>img {
+    width: 100%;
+    height: 40%;
+    object-fit: cover;
+}
+
+.texto_descuento,
+.texto_nombre,
+.texto_precio,
+.texto_cuotas {
+    height: auto;
+    width: 80%;
+    margin-top: 2%;
+}
+
+.texto_descuento {
+    color: red;
+}
+
+.texto_nombre.texto_cuotas {
+    color: black;
+}
+
+.texto_precio {
+    color: green;
+}
+
+.texto_descuento {
+    text-decoration: line-through;
+}
+
+.texto_nombre {
+    font-weight: bold;
+    font-size: 15px;
+}
+.texto_cuotas{
+    font-size: 14px;
+}
+
+@media (max-width:800px) {
+
+    .card_container {
+        position: relative;
+        width: 100%;
+        min-height: 80vh;
+        overflow-y: auto;
+        background-color: rgb(238, 238, 238);
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        /* 4 columnas con ancho fraccionado */
+        /* grid-auto-rows: 100px; */
+        padding: 40px;
+    }
+
+    .card {
+        width: 300px;
+        height: 40vh;
+        margin-top: 10%;
+    }
+}
