@@ -15,7 +15,7 @@ export const Navbar = () => {
       <nav className="nav2">
         <div className="left-side">
           <ul>
-               <a href="#">
+               <a href="/filters">
               <li>Categorias</li>
             </a>
             <a href="#">
@@ -39,7 +39,7 @@ export const Navbar = () => {
             </a>
             <i></i>
           </ul>
-          <img src={carrito} alt="carrito" className="car"  />
+          <img src={carrito} alt="carrito" className="car"/>
         </div>
       </nav>
     </>
