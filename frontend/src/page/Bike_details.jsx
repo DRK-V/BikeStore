@@ -1,8 +1,12 @@
 import React from 'react'
 import '../css/Bike_details.css'
 import imagen_ejemplo from '../assets/beneli.png'
+import icon_brand from '../assets/icons/bbike-red-logo.png'
+
 import { Navbar } from '../components/Navbar'
 import Container_comments from '../components/Comments/Container_comments'
+import Similar_container from '../components/Similar_container'
+import {Footer} from '../components/Footer'
 const Bike_details = () => {
     return (
         <>
@@ -48,8 +52,29 @@ const Bike_details = () => {
                     </button>
                 </form>
                 <div className="container_comments">
-                    <Container_comments/>
+                    <Container_comments />
                 </div>
+                <form className="assessment">
+                    <h1>Valoracion del producto</h1>
+                    <div className="container_stars">
+                        <input className='option_star' id="radio1" type="radio" name="estrellas" value="5" />
+                        <label for="radio1">★</label>
+                        <input className='option_star' id="radio2" type="radio" name="estrellas" value="4" />
+                        <label for="radio2">★</label>
+                        <input className='option_star' id="radio3" type="radio" name="estrellas" value="3" />
+                        <label for="radio3">★</label>
+                        <input className='option_star' id="radio4" type="radio" name="estrellas" value="2" />
+                        <label for="radio4">★</label>
+                        <input className='option_star' id="radio5" type="radio" name="estrellas" value="1" />
+                        <label for="radio5">★</label>
+                    </div>
+                    <div className="brand">
+                        <h1>Marca del producto</h1>
+                        <img src={icon_brand} alt="" className="icon_bike_brand" />
+                    </div>
+                </form>
+                <Similar_container/>
+                <Footer/>
             </div>
         </>
     )

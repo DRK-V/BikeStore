@@ -9,10 +9,10 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     justify-items: center;
-    gap: 20px;        
+    gap: 20px;
 }
 
-.card_container_categories{
+.card_container_categories {
     position: relative;
     width: 60%;
     min-height: 80vh;
@@ -22,11 +22,12 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     justify-items: center;
-    gap: 20px;     
+    gap: 20px;
     left: 10%;
     overflow: hidden;
     overflow-y: auto;
 }
+
 .card {
     display: flex;
     justify-content: center;
@@ -40,6 +41,39 @@
     margin-top: 8%;
 }
 
+/* diseño de tarjeta para el contendor del slider o el slider */
+.card_container_similar {
+    position: relative;
+    width: 90%;
+    height: 80%;
+    overflow-y: auto;
+    background-color: transparent;
+    display: flex;
+    flex-direction: row;
+    left: 5%;
+    overflow: hidden;
+    overflow-x: auto;
+}
+
+.card_similar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 18%;
+    height: 35vh;
+    border-radius: .4rem;
+    box-shadow: 1px 10px 10px 5px rgb(136, 136, 136);
+    flex-direction: column;
+    margin: 2%;
+}
+.card_container_similar::selection{
+    background-color: red;
+}
+.card_similar>img {
+    height: 60%;
+    width: 18em;
+    object-fit: cover;
+}
 .card>img {
     width: 100%;
     height: 40%;
@@ -53,6 +87,7 @@
     height: auto;
     width: 80%;
     margin-top: 2%;
+    color: black;
 }
 
 .texto_descuento {
@@ -75,7 +110,8 @@
     font-weight: bold;
     font-size: 15px;
 }
-.texto_cuotas{
+
+.texto_cuotas {
     font-size: 14px;
 }
 
