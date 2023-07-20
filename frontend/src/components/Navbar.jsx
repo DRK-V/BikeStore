@@ -39,7 +39,7 @@ export const Navbar = () => {
             </a>
             <i></i>
           </ul>
-          <img src={carrito} alt="carrito" className="car"  />
+          <img src={carrito} alt="carrito" className="car"/>
         </div>
       </nav>
     </>
