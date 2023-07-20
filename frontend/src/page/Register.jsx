@@ -20,25 +20,25 @@ export const Register = () => {
   };
 
   const handleRedirect = () => {
-    // Reemplaza '/' con la ruta de tu componente Home
+   
     navigate('/');
   };
 
-  // Función para validar que solo se ingresen letras
+  
   const handleAlphaInput = (event) => {
     const input = event.target;
-    const regex = /^[A-Za-z]*$/; // Expresión regular para solo permitir letras (mayúsculas y minúsculas)
+    const regex = /^[A-Za-z]*$/; 
     if (!regex.test(input.value)) {
-      input.value = input.value.replace(/[^A-Za-z]/g, ''); // Eliminar caracteres no alfabéticos
+      input.value = input.value.replace(/[^A-Za-z]/g, ''); 
     }
   };
 
-  // Función para validar que solo se ingresen números
+  
   const handleNumericInput = (event) => {
     const input = event.target;
-    const regex = /^[0-9]*$/; // Expresión regular para solo permitir números
+    const regex = /^[0-9]*$/; 
     if (!regex.test(input.value)) {
-      input.value = input.value.replace(/[^0-9]/g, ''); // Eliminar caracteres no numéricos
+      input.value = input.value.replace(/[^0-9]/g, ''); 
     }
   };
 
