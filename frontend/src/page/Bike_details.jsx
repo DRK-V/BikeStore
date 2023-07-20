@@ -2,6 +2,7 @@ import React from 'react'
 import '../css/Bike_details.css'
 import imagen_ejemplo from '../assets/beneli.png'
 import { Navbar } from '../components/Navbar'
+import Container_comments from '../components/Comments/Container_comments'
 const Bike_details = () => {
     return (
         <>
@@ -46,6 +47,9 @@ const Bike_details = () => {
                         Agregar al carrito
                     </button>
                 </form>
+                <div className="container_comments">
+                    <Container_comments/>
+                </div>
             </div>
         </>
     )
