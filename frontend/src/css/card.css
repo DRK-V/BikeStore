@@ -12,6 +12,21 @@
     gap: 20px;        
 }
 
+.card_container_categories{
+    position: relative;
+    width: 60%;
+    min-height: 80vh;
+    height: 80vh;
+    overflow-y: auto;
+    background-color: rgb(238, 238, 238);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+    gap: 20px;     
+    left: 10%;
+    overflow: hidden;
+    overflow-y: auto;
+}
 .card {
     display: flex;
     justify-content: center;
