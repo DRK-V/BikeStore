@@ -4,17 +4,20 @@ import carrito from "../assets/carrito.png"
 export const Navbar = () => {
   return (
     <>
-      <nav>
+      <nav className="nav1">
         <img src={icon} alt="" className="bike"/>
         <form action="">
           <input type="text" className="busque" />
-          <button className="buscar">buscar</button>
+          <button className="buscar"></button>
         </form>
         <button className="descu">Cupones 20% de descuento</button>
       </nav>
       <nav className="nav2">
         <div className="left-side">
           <ul>
+               <a href="#">
+              <li>Categorias</li>
+            </a>
             <a href="#">
               <li>Ofertas</li>
             </a>
@@ -29,7 +32,7 @@ export const Navbar = () => {
               <li>Crea tu cuenta</li>
             </a>
             <a href="#">
-              <li>Populares</li>
+              <li>Ingresar</li>
             </a>
             <a href="#">
               <li>Mis compras</li>
