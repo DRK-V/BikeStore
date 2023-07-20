@@ -37,6 +37,14 @@ const Bike_details = () => {
                     <p className="text_descripcion_details">
                         Descripcion:bicicleta fabricada en 60501 aluminio, modelo 2016,Unisex
                     </p>
+                    <button className="btn_buy">
+                        <i></i>
+                        Comprar
+                    </button>
+                    <button className="btn_add_item_cart">
+                        <i></i>
+                        Agregar al carrito
+                    </button>
                 </form>
             </div>
         </>

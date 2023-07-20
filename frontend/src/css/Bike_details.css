@@ -21,6 +21,12 @@
     background-color: white;
     margin: 10px;
     border-radius: .4rem;
+    cursor: pointer;
+}
+
+.sub_images:hover {
+    transition: .3s;
+    border: solid 1px gray;
 }
 
 .main_image {
@@ -32,8 +38,10 @@
 }
 
 .form_add_item_cart {
+    position: relative;
+    top: 20vh;
     width: 30%;
-    height: 80%;
+    height: 100vh;
     background-color: white;
 }
 
@@ -54,7 +62,7 @@
 
 .bike_name {
     width: 80%;
-    font-size: 1.5em;
+    font-size: 1.7em;
 }
 
 .price_text {
@@ -99,32 +107,90 @@
     border: none;
     border-radius: 2em;
     width: 30%;
-    height: 80%;
+    height: 65%;
 }
 
 .form_add_item_cart>select {
     width: 26%;
-    height: 8%;
+    height: 6%;
     border-radius: .5rem;
-    font-size: 1.2em;
+    font-size: 1.1em;
 }
-.container_count{
+
+.container_count {
     width: 80%;
-    height: 10%;
+    height: 7%;
 }
-.container_count > label{
+
+.container_count>label {
     font-weight: bold;
     font-size: 1.2em;
     margin-right: 4%;
 }
-.container_count > input{
+
+.container_count>input {
     width: 30%;
     height: 80%;
     border-radius: .5rem;
     font-size: 1.2em;
     text-align: center;
 }
-.text_descripcion_details{
+
+.text_descripcion_details {
     font-size: 1em;
-    font-weight:bold;
+    font-weight: bold;
+}
+
+/* Estilos generales para los botones */
+.form_add_item_cart>button {
+    position: relative;
+    width: 45%;
+    height: 8%;
+    left: 30%;
+    font-size: 0.9em;
+    font-weight: bold;
+    border-radius: 0.2rem;
+    border: none;
+    cursor: pointer;
+}
+/* se llama la animacion del archivo css "animation" */
+.form_add_item_cart>button:hover {
+    animation: hover_button .2s alternate ease-in forwards;
+}
+
+.btn_buy {
+    background-color: rgb(75, 199, 112);
+    color: white;
+}
+
+.btn_add_item_cart {
+    background-color: rgb(212, 214, 77);
+    color: black;
+}
+
+/* Estilos para el ícono */
+.btn_buy>i,
+.btn_add_item_cart>i {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    margin-right: 8px;
+    background-size: cover;
+    /* Utiliza "cover" en lugar de "100%" */
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.btn_buy>i {
+    background-image: url('../assets/icons/trolley_ico.svg');
+}
+
+.btn_add_item_cart>i {
+    background-image: url('../assets/icons/buy_icon.svg');
+}
+
+/* Ajusta la alineación vertical del texto con el ícono */
+.btn_buy i,
+.btn_add_item_cart i {
+    vertical-align: middle;
 }
