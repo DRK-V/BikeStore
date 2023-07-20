@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import './App.css'
-import './css/main.css'
-import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
-import { Home } from './page/Home';
-import { Register } from './page/Register';
+import '../css/main.css'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Home } from './Home';
+import { Register } from './Register';
+import Categories from './Categories';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -13,6 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="/register" element={<Register/>} />
+          <Route path="/filters" element={<Categories/>} />
         </Routes>
       </Router>
     </>

@@ -28,8 +28,8 @@ export const Navbar = () => {
         </div>
         <div className="right-side">
           <ul>
-            <a href="#">
-              <li>Crear tu cuenta</li>
+            <a href="/register">
+              <li>Crea tu cuenta</li>
             </a>
             <a href="#">
               <li>Ingresar</li>
