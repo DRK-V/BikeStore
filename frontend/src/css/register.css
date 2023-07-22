@@ -1,21 +1,21 @@
-/* Update .App to occupy the entire screen */
+
 .App {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* Center children both horizontally and vertically */
-  height: 100vh; /* Set the height to 100vh to occupy the full viewport height */
-  margin: 0; /* Remove default margin */
-  padding: 0; /* Remove default padding */
+  justify-content: center; 
+  height: 100vh; 
+  margin: 0; 
+  padding: 0; 
 }
 
-/* Update .split-container to occupy 80% of .App */
+
 .split-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 80%; /* Set the flex property to occupy 80% of the parent (.App) */
-  max-width: 80%; /* Limit the maximum width to 80% of the parent (.App) */
+  flex: 0 0 80%; 
+  max-width: 80%; 
 }
 
 
