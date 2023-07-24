@@ -66,14 +66,17 @@
     flex-direction: column;
     margin: 2%;
 }
-.card_container_similar::selection{
+
+.card_container_similar::selection {
     background-color: red;
 }
+
 .card_similar>img {
     height: 60%;
     width: 18em;
     object-fit: cover;
 }
+
 .card>img {
     width: 100%;
     height: 40%;
@@ -115,6 +118,19 @@
     font-size: 14px;
 }
 
+/*responsive*/
+
+@media (max-width:1200px) {
+    .card_container {
+        width: 100%;
+        left: 0;
+    }
+
+    .card {
+        width: 98%;
+    }
+}
+
 @media (max-width:800px) {
 
     .card_container {
@@ -135,4 +151,56 @@
         height: 40vh;
         margin-top: 10%;
     }
+}
+
+@media (max-width:690px) {
+    .card {
+        width: 100%;
+        height: 40vh;
+        margin-top: 10%;
+    }
+}
+
+@media (max-width:475px) {
+    .card_container {
+        padding: 10px;
+    }
+
+    .card {
+        width: 100%;
+        height: 32vh;
+        margin-top: 10%;
+    }
+}
+
+@media (max-width:405px) {
+    .texto_descuento {
+        text-decoration: line-through;
+        font-size: .8em;
+    }
+
+    .texto_nombre,
+    .texto_precio {
+        font-size: .7em;
+    }
+
+    .texto_cuotas {
+        font-size: .6em;
+    }
+}
+
+@media (max-width:350px) {
+    .card {
+        height: 25vh;
+    }
+
+
+    /* .card_container {
+        grid-template-columns: repeat(1, 1fr);
+        padding: 40px;
+    }
+
+    .card {
+        height: 40vh;
+    } */
 }

@@ -36,3 +36,34 @@
 .button_comprados:hover {
     animation: hover_button .2s alternate ease-in forwards;
 }
+
+/*responsive*/
+@media (max-width:1100px) {
+    .button_comprados {
+        width: 18%;
+    }
+}
+
+@media (max-width:790px) {
+    .button_comprados {
+        width: 22%;
+    }
+}
+
+@media (max-width:620px) {
+    .button_comprados {
+        width: 25%;
+    }
+}
+
+@media (max-width:560px) {
+    .button_comprados {
+        width: 30%;
+    }
+}
+
+@media (max-width:475px) {
+    .button_comprados {
+        width: 40%;
+    }
+}
