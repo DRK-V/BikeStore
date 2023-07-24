@@ -14,7 +14,7 @@ export const Card_container = (props) => {
     // el cual es para mostrar el contenedor de tarjetas pero version slider 
     if (props.is_categories !== "true" && props.is_categories !== "false") {
         add_class_categories = props.is_categories == "similar" ? "card_container_similar" : "card_container"
-        console.log('ingreso: '+add_class_categories)
+        console.log('ingreso: ' + add_class_categories)
     }
     let card_clase = add_class_categories == "card_container_similar" ? "similar" : ""
     return (

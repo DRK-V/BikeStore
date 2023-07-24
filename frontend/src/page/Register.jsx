@@ -38,16 +38,15 @@ export const Register = () => {
   };
 
   return (
-    <div className="App">
-      <div className="split-container">
-      <button className="close-button" onClick={handleRedirect}>
+    <div className="App2">
+      <div className="split-container2">
+      <button className="close-button2" onClick={handleRedirect}>
           <i className="fas fa-times"></i>
           </button>
-        <div className="left-side2">
+        <div className="left-side">
           <img src={leftImage} alt="Image on the left" />
         </div>
-        
-        <div className="right-side2">
+        <div className="right-side">
           <div className="form-container">
             <h1>Registrate</h1>
             <form id="form1" onSubmit={handleSubmit}>

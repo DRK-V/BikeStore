@@ -1,5 +1,5 @@
 
-.App {
+.App2 {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,12 +10,13 @@
 }
 
 
-.split-container {
+.split-container2 {
   display: flex;
   align-items: center;
   justify-content: center;
-  max-width: 60%;
+  max-width: 70%;
   border: 3px solid #ccc;
+  border-radius: 15px;
 }
 
 
@@ -25,7 +26,7 @@ h1 {
 
 
 
-.left-side2 {
+.left-side {
   width: 50%;
   height: 100%;
   display: flex;
@@ -33,7 +34,7 @@ h1 {
   margin-right: 2%;
  
 }
-.right-side2{
+.right-side{
       flex: 1;
     width: 50%;
     height: 100%;
@@ -42,10 +43,10 @@ h1 {
     align-items: center;
     margin-right: 2%;
 }
-.left-side2 img {
+.left-side img {
   max-width: 100%;
-    border-radius: 0px 15px 15px 0px;
-    width: 90%;
+    border-radius:15px;
+    width: 100%;
     height: 501px;
 }
 
@@ -95,11 +96,11 @@ h1 {
   width: 170px;
 }
 
-.close-button{
+.close-button2{
   position: absolute;
   margin-right: 5px;
-  top: 76px;
-  right: 280px;
+  top: 50px;
+  right: 210px;
   font-size: 30px;
   border: none;
   border-radius: 10px;
@@ -111,5 +112,4 @@ h1 {
 .form-row i {
   font-size: 16px;
 }
-
   
