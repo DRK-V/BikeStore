@@ -49,6 +49,18 @@
   background-position: center;
 }
 
+.menudes{
+    display: none;
+
+}
+
+.menu-hambu{
+  padding: 3px;
+  width: 52%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .descu,
 .buscar:hover {
   cursor: pointer;
@@ -127,4 +139,46 @@ li {
   margin-left: 10px;
 
   color: black;
+}
+
+/*responsive*/
+
+@media (max-width:760px){
+.nav2{
+  display: none;
+}
+.descu{
+  display: none;
+}
+
+.nav1{
+  display: flex;
+  width: 100%;
+  height: 12vh;
+  background-color: #7ee29a;
+  display: flex;
+  justify-content: initial;
+  align-items: center;
+}
+
+.menudes{
+  width: 19%;
+  height: 73%;
+  display: flex;
+  background-color: transparent;
+  padding: 0px;
+  justify-content: center;
+  align-items: center;
+
+}
+
+}
+
+@media (max-width:375px){
+  .bike {
+    padding: 3px;
+    width: 16%;
+    height: 73%;
+    object-fit: contain;
+}
 }

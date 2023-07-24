@@ -1,6 +1,7 @@
 import "../css/nav.css";
 import icon from "../assets/bici.png";
 import carrito from "../assets/carrito.png"
+import menuu from "../assets/menu.png"
 export const Navbar = () => {
   return (
     <>
@@ -11,6 +12,7 @@ export const Navbar = () => {
           <button className="buscar"></button>
         </form>
         <button className="descu">Cupones 20% de descuento</button>
+        <button className="menudes"><img src={menuu} className="menu-hambu" alt="" /></button>
       </nav>
       <nav className="nav2">
         <div className="left-side">
