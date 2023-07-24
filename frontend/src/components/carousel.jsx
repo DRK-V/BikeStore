@@ -7,9 +7,10 @@ const images = [
     discount: '20% Off ',
   },
   {
-    imageUrl: 'https://www.classbike.co/wp-content/uploads/2022/10/Elite-blue.png',
+    imageUrl: 'https://www.incolmotos-yamaha.com.co/bicicletas/images/ydx-torc.png',
     discount: '10% Off',
   },
+  
   {
     imageUrl: 'https://rambikes.cl/wp-content/uploads/2021/09/16ramtrx-hyd-aro29m16-min.png',
     discount: '15% Off ',

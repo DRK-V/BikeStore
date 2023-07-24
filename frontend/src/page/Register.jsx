@@ -46,6 +46,7 @@ export const Register = () => {
         <div className="left-side2">
           <img src={leftImage} alt="Image on the left" />
         </div>
+        
         <div className="right-side2">
           <div className="form-container">
             <h1>Registrate</h1>
@@ -72,7 +73,7 @@ export const Register = () => {
                 <i className="fas fa-map-marker-alt"></i>
                 <input type="text" placeholder='Ciudad:' name="city" required />
               </div>
-              <button type="submit">Registrarse</button>
+              <button className='regis-button' type="submit">Registrarse</button>
             </form>
           </div>
          
