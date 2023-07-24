@@ -46,7 +46,6 @@ export const Register = () => {
         <div className="left-side2">
           <img src={leftImage} alt="Image on the left" />
         </div>
-        
         <div className="right-side2">
           <div className="form-container">
             <h1>Registrate</h1>
