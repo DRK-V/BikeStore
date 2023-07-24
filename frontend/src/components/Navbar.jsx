@@ -5,6 +5,7 @@ import menuu from "../assets/menu.png"
 export const Navbar = () => {
   return (
     <>
+    <div className="menu_resp activar-active"></div>
       <nav className="nav1">
         <img src={icon} alt="" className="bike"/>
         <form action="">
