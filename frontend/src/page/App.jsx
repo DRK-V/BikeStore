@@ -1,4 +1,3 @@
-
 import '../css/main.css'
 import '../css/animation.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -7,8 +6,8 @@ import { Register } from './Register';
 import Categories from './Categories';
 import Bike_details from './Bike_details';
 import {Login} from './Login';
-function App() {
  
+function App() {
   return (
     <>
       <Router>

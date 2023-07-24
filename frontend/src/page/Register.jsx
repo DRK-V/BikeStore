@@ -72,7 +72,7 @@ export const Register = () => {
                 <i className="fas fa-map-marker-alt"></i>
                 <input type="text" placeholder='Ciudad:' name="city" required />
               </div>
-              <button type="submit">Registrarse</button>
+              <button className='regis-button' type="submit">Registrarse</button>
             </form>
           </div>
          
