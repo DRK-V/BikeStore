@@ -66,12 +66,15 @@
     flex-direction: column;
     margin: 2%;
 }
+
 /*se desactiva el texto de descuento para las tarjetas que no tienen descuento*/
-.card_similar > .text_discount , .card > .text_discount{
+.card_similar>.text_discount,
+.card>.text_discount {
     display: none;
 }
+
 /*card similar with discount */
-.card_discount{
+.card_discount {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -83,11 +86,12 @@
     margin-top: 8%;
     overflow: hidden;
 }
+
 .text_discount {
     display: flex;
 }
 
-.card_discount > .text_discount {
+.card_discount>.text_discount {
     position: relative;
     left: -20%;
     top: -10%;
@@ -104,7 +108,7 @@
 }
 
 
-.card_container_similar::selection{
+.card_container_similar::selection {
     background-color: red;
 }
 
@@ -117,11 +121,13 @@
     width: 12em;
     object-fit: cover;
 }
+
 .card_similar>img {
     height: 50%;
     width: 15em;
     object-fit: cover;
 }
+
 .card>img {
     width: 100%;
     height: 40%;
@@ -171,8 +177,24 @@
         left: 0;
     }
 
+    .card_container_categories {
+        width: 80%;
+    }
+
     .card {
         width: 98%;
+    }
+
+    .card_discount {
+        width: 85%;
+    }
+}
+
+@media (max-width:980px) {
+
+    .menu_categories ul>a,
+    li {
+        font-size: .9em;
     }
 }
 
@@ -191,11 +213,27 @@
         padding: 40px;
     }
 
+    .card_container_categories {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .menu_categories {
+        width: 35%;
+    }
+
     .card {
         width: 300px;
         height: 40vh;
         margin-top: 10%;
     }
+}
+
+@media (max-width:720px) {
+    .card_container_categories {
+        width: 100%;
+    }
+
+
 }
 
 @media (max-width:690px) {
@@ -204,6 +242,8 @@
         height: 40vh;
         margin-top: 10%;
     }
+
+
 }
 
 @media (max-width:475px) {
@@ -216,9 +256,21 @@
         height: 32vh;
         margin-top: 10%;
     }
+
+    .card_discount {
+        height: 32vh;
+    }
 }
 
 @media (max-width:405px) {
+    .card_discount {
+        height: 28vh;
+    }
+
+    .card_discount>img {
+        width: 90%;
+    }
+
     .texto_descuento {
         text-decoration: line-through;
         font-size: .8em;
@@ -239,6 +291,9 @@
         height: 25vh;
     }
 
+    .card_discount {
+        height: 25vh;
+    }
 
     /* .card_container {
         grid-template-columns: repeat(1, 1fr);

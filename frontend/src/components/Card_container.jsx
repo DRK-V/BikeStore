@@ -23,6 +23,17 @@ export const Card_container = (props) => {
         <article className={add_class_categories}>
             <Card
                 card_clase={card_clase}
+                discount="5%"
+                imagen='../src/assets/beneli.png'
+                descuento='10.300.000'
+                nombre='Cicla beneli - marco fibra de vidrio'
+                precio='9.000.000'
+                cuotas='35 cuotas en 250.000'
+            />
+
+            <Card
+                card_clase={card_clase}
+                discount="20%"
                 imagen='../src/assets/beneli.png'
                 descuento='9.300.000'
                 nombre='Cicla beneli - marco fibra de vidrio'
@@ -32,6 +43,7 @@ export const Card_container = (props) => {
 
             <Card
                 card_clase={card_clase}
+                discount="15%"
                 imagen='../src/assets/beneli.png'
                 descuento='9.300.000'
                 nombre='Cicla beneli - marco fibra de vidrio'
@@ -41,6 +53,7 @@ export const Card_container = (props) => {
 
             <Card
                 card_clase={card_clase}
+                discount="22%"
                 imagen='../src/assets/beneli.png'
                 descuento='9.300.000'
                 nombre='Cicla beneli - marco fibra de vidrio'
@@ -50,6 +63,7 @@ export const Card_container = (props) => {
 
             <Card
                 card_clase={card_clase}
+                discount="35%"
                 imagen='../src/assets/beneli.png'
                 descuento='9.300.000'
                 nombre='Cicla beneli - marco fibra de vidrio'
@@ -59,6 +73,7 @@ export const Card_container = (props) => {
 
             <Card
                 card_clase={card_clase}
+                discount="40%"
                 imagen='../src/assets/beneli.png'
                 descuento='9.300.000'
                 nombre='Cicla beneli - marco fibra de vidrio'
@@ -68,6 +83,7 @@ export const Card_container = (props) => {
 
             <Card
                 card_clase={card_clase}
+                discount="40%"
                 imagen='../src/assets/beneli.png'
                 descuento='9.300.000'
                 nombre='Cicla beneli - marco fibra de vidrio'
@@ -77,6 +93,16 @@ export const Card_container = (props) => {
 
             <Card
                 card_clase={card_clase}
+                discount="40%"
+                imagen='../src/assets/beneli.png'
+                descuento='9.300.000'
+                nombre='Cicla beneli - marco fibra de vidrio'
+                precio='9.000.000'
+                cuotas='35 cuotas en 250.000'
+            />
+            <Card
+                card_clase={card_clase}
+                discount="40%"
                 imagen='../src/assets/beneli.png'
                 descuento='9.300.000'
                 nombre='Cicla beneli - marco fibra de vidrio'
@@ -86,14 +112,7 @@ export const Card_container = (props) => {
 
             <Card
                 card_clase={card_clase}
-                imagen='../src/assets/beneli.png'
-                descuento='9.300.000'
-                nombre='Cicla beneli - marco fibra de vidrio'
-                precio='9.000.000'
-                cuotas='35 cuotas en 250.000'
-            />
-            <Card
-                card_clase={card_clase}
+                discount="40%"
                 imagen='../src/assets/beneli.png'
                 descuento='9.300.000'
                 nombre='Cicla beneli - marco fibra de vidrio'
@@ -103,6 +122,7 @@ export const Card_container = (props) => {
 
             <Card
                 card_clase={card_clase}
+                discount="40%"
                 imagen='../src/assets/beneli.png'
                 descuento='9.300.000'
                 nombre='Cicla beneli - marco fibra de vidrio'
@@ -112,6 +132,16 @@ export const Card_container = (props) => {
 
             <Card
                 card_clase={card_clase}
+                discount="40%"
+                imagen='../src/assets/beneli.png'
+                descuento='9.300.000'
+                nombre='Cicla beneli - marco fibra de vidrio'
+                precio='9.000.000'
+                cuotas='35 cuotas en 250.000'
+            />
+            <Card
+                card_clase={card_clase}
+                discount="40%"
                 imagen='../src/assets/beneli.png'
                 descuento='9.300.000'
                 nombre='Cicla beneli - marco fibra de vidrio'
@@ -121,14 +151,7 @@ export const Card_container = (props) => {
 
             <Card
                 card_clase={card_clase}
-                imagen='../src/assets/beneli.png'
-                descuento='9.300.000'
-                nombre='Cicla beneli - marco fibra de vidrio'
-                precio='9.000.000'
-                cuotas='35 cuotas en 250.000'
-            />
-            <Card
-                card_clase={card_clase}
+                discount="40%"
                 imagen='../src/assets/beneli.png'
                 descuento='9.300.000'
                 nombre='Cicla beneli - marco fibra de vidrio'
@@ -138,6 +161,7 @@ export const Card_container = (props) => {
 
             <Card
                 card_clase={card_clase}
+                discount="40%"
                 imagen='../src/assets/beneli.png'
                 descuento='9.300.000'
                 nombre='Cicla beneli - marco fibra de vidrio'
@@ -147,6 +171,16 @@ export const Card_container = (props) => {
 
             <Card
                 card_clase={card_clase}
+                discount="40%"
+                imagen='../src/assets/beneli.png'
+                descuento='9.300.000'
+                nombre='Cicla beneli - marco fibra de vidrio'
+                precio='9.000.000'
+                cuotas='35 cuotas en 250.000'
+            />
+            <Card
+                card_clase={card_clase}
+                discount="40%"
                 imagen='../src/assets/beneli.png'
                 descuento='9.300.000'
                 nombre='Cicla beneli - marco fibra de vidrio'
@@ -156,14 +190,7 @@ export const Card_container = (props) => {
 
             <Card
                 card_clase={card_clase}
-                imagen='../src/assets/beneli.png'
-                descuento='9.300.000'
-                nombre='Cicla beneli - marco fibra de vidrio'
-                precio='9.000.000'
-                cuotas='35 cuotas en 250.000'
-            />
-            <Card
-                card_clase={card_clase}
+                discount="40%"
                 imagen='../src/assets/beneli.png'
                 descuento='9.300.000'
                 nombre='Cicla beneli - marco fibra de vidrio'
@@ -173,6 +200,7 @@ export const Card_container = (props) => {
 
             <Card
                 card_clase={card_clase}
+                discount="40%"
                 imagen='../src/assets/beneli.png'
                 descuento='9.300.000'
                 nombre='Cicla beneli - marco fibra de vidrio'
@@ -182,15 +210,7 @@ export const Card_container = (props) => {
 
             <Card
                 card_clase={card_clase}
-                imagen='../src/assets/beneli.png'
-                descuento='9.300.000'
-                nombre='Cicla beneli - marco fibra de vidrio'
-                precio='9.000.000'
-                cuotas='35 cuotas en 250.000'
-            />
-
-            <Card
-                card_clase={card_clase}
+                discount="40%"
                 imagen='../src/assets/beneli.png'
                 descuento='9.300.000'
                 nombre='Cicla beneli - marco fibra de vidrio'
