@@ -36,7 +36,7 @@ export const Navbar = () => {
             onClick={handleMenuClick}
           />
         </button>
-        <img src={carrito} alt="carrito" className="car" />
+        <img src={carrito} alt="carrito" className="car2" />
 
       </nav>
       <nav className="nav2">
