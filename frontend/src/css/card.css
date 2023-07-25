@@ -14,7 +14,7 @@
 
 .card_container_categories {
     position: relative;
-    width: 60%;
+    width: 70%;
     min-height: 80vh;
     height: 80vh;
     overflow-y: auto;
@@ -22,8 +22,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     justify-items: center;
-    gap: 20px;
-    left: 10%;
+    gap: 0px;
     overflow: hidden;
     overflow-y: auto;
 }
@@ -40,6 +39,7 @@
     margin: 2%;
     margin-top: 8%;
 }
+
 
 /* diseño de tarjeta para el contendor del slider o el slider */
 .card_container_similar {
@@ -60,12 +60,50 @@
     justify-content: center;
     align-items: center;
     width: 18%;
-    height: 35vh;
+    height: 38vh;
     border-radius: .4rem;
     box-shadow: 1px 10px 10px 5px rgb(136, 136, 136);
     flex-direction: column;
     margin: 2%;
 }
+/*se desactiva el texto de descuento para las tarjetas que no tienen descuento*/
+.card_similar > .text_discount , .card > .text_discount{
+    display: none;
+}
+/*card similar with discount */
+.card_discount{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    height: 35vh;
+    border-radius: .4rem;
+    box-shadow: 1px 10px 10px 5px rgb(136, 136, 136);
+    flex-direction: column;
+    margin-top: 8%;
+    overflow: hidden;
+}
+.text_discount {
+    display: flex;
+}
+
+.card_discount > .text_discount {
+    position: relative;
+    left: -20%;
+    top: -10%;
+    width: 100%;
+    height: 10%;
+    background-color: red;
+    color: wheat;
+    text-align: center;
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 20%;
+    align-items: center;
+    transform: rotate(-35deg);
+}
+
+
 .card_container_similar::selection{
     background-color: red;
 }
@@ -74,9 +112,14 @@
     background-color: red;
 }
 
+.card_discount>img {
+    height: 40%;
+    width: 12em;
+    object-fit: cover;
+}
 .card_similar>img {
-    height: 60%;
-    width: 18em;
+    height: 50%;
+    width: 15em;
     object-fit: cover;
 }
 .card>img {
