@@ -31,10 +31,10 @@ export const Login = () => {
       <button className="close-button" onClick={handleRedirect}>
           <i className="fas fa-times"></i>
           </button>
-        <div className="left-side2">
+        <div className="left-side">
           <img src={leftImage} alt="Image on the left" />
         </div>
-        <div className="right-side2">
+        <div className="right-side">
           <div className="form-container">
             <h1>Iniciar Sesión</h1>
             <form id="form12" onSubmit={handleSubmit}>

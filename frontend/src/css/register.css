@@ -1,5 +1,5 @@
 
-.App2 {
+.App {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,7 +10,7 @@
 }
 
 
-.split-container2 {
+.split-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -96,7 +96,7 @@ h1 {
   width: 170px;
 }
 
-.close-button2{
+.close-button{
   position: absolute;
   margin-right: 5px;
   top: 50px;
@@ -112,4 +112,45 @@ h1 {
 .form-row i {
   font-size: 16px;
 }
-  
+  /* Mobile and smaller screens */
+@media screen and (max-width: 767px) {
+  .split-container {
+    flex-direction: column;
+    max-width: 100%;
+    border: none;
+  }
+
+  .left-side, .right-side {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .left-side img {
+    display: none; /* Ocultar la imagen en pantallas pequeñas */
+  }
+
+  .close-button {
+    top: 10px;
+    right: 10px;
+  }
+  .form-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+}
+
+/* Tablets and larger screens */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .left-side, .right-side {
+    width: 50%;
+    height: auto; /* Permitir que el contenido ajuste su altura */
+    margin-right: 2%;
+  }
+
+  .left-side img {
+    height: auto; /* Permitir que la imagen ajuste su altura */
+  }
+}
