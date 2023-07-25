@@ -25,7 +25,7 @@ export const Login = () => {
 
 
 
-  return (
+   return (
     <div className="App">
       <div className="split-container">
       <button className="close-button" onClick={handleRedirect}>
@@ -57,6 +57,7 @@ export const Login = () => {
     </div>
   );
 };
+
 
 
 
