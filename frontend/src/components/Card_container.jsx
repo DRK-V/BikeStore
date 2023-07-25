@@ -3,20 +3,22 @@ import { Card } from './Card'
 import React from 'react';
 export const Card_container = (props) => {
     let add_class_categories = ""
-    // if (props.is_categories == "true") {
-    //     add_class_categories = "card_container_categories"
-    // } else {
-    //     add_class_categories = ""
-    // }
 
     add_class_categories = props.is_categories == "true" ? "card_container_categories" : "card_container"
     // si el props no es true o false quiere decir que puede ser "similar" 
     // el cual es para mostrar el contenedor de tarjetas pero version slider 
+    let card_clase = ""
     if (props.is_categories !== "true" && props.is_categories !== "false") {
         add_class_categories = props.is_categories == "similar" ? "card_container_similar" : "card_container"
         console.log('ingreso: ' + add_class_categories)
     }
-    let card_clase = add_class_categories == "card_container_similar" ? "similar" : ""
+
+    card_clase = add_class_categories == "card_container_similar" ? "similar" : ""
+    if (add_class_categories == "card_container_categories") {
+        card_clase = "card_discount"
+    }
+    console.log(add_class_categories)
+    console.log(card_clase)
     return (
         <article className={add_class_categories}>
             <Card
