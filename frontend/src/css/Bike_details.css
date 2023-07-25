@@ -380,3 +380,11 @@
         top: 10%;
     }
 }
+
+@media (max-width:930px) {
+    .container_comments {
+        left: 3%;
+        width: 86%;
+        height: 100vh;
+    }
+}
