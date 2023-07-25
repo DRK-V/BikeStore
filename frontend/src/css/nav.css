@@ -1,8 +1,4 @@
-.menu_resp{
-  display: none;
 
-
-}
 .nav1 {
   display: flex;
   width: 100%;
@@ -175,19 +171,35 @@ li {
   align-items: center;
 
 }
+.menudes2{
+  width: 17%;
+  height: 4%;
+  display: flex;
+  background-color: transparent;
+  padding: 0px;
+  justify-content: center;
+  align-items: center;
+  margin: 3%;
+}
 
-.menu_resp{
-  display: none;
+
+
+
+}
+
+.desactivar-off{
+  opacity: 0;
+  display: flex;
   position: fixed;
   width: 70%;
   height: 100%;
-  background-color: gray;
+  background-color: white;
   z-index: 3;
   float: right;
   right: 0;
   top: 0;
-}
-
+  justify-content: end;
+  animation: close_menu .5s alternate ease-in forwards;
 
 }
 
@@ -196,11 +208,13 @@ li {
   position: fixed;
   width: 70%;
   height: 100%;
-  background-color: gray;
+  background-color: white;
   z-index: 3;
   float: right;
-  right: 0;
+  right: -999px;
   top: 0;
+  justify-content: end;
+  animation: open_menu .5s alternate ease-in forwards;
 }
 
 @media (max-width:375px){
