@@ -364,7 +364,12 @@
         left: 4%;
         top: 0;
         width: 80%;
-        height: 80vh;
+        height: 120vh;
+    }
+
+    .form_add_item_cart>button {
+        width: 30%;
+        display: inline;
     }
 
     .container_comments {
@@ -379,6 +384,11 @@
     .slider_similar_bike {
         top: 10%;
     }
+
+    .card_similar>img {
+        object-fit: contain;
+    }
+
 }
 
 @media (max-width:930px) {
@@ -388,3 +398,124 @@
         height: 100vh;
     }
 }
+
+@media (max-width:690px) {
+    .container_images {
+        width: 14%;
+    }
+
+    .main_image {
+        width: 70%;
+    }
+
+    .form_add_item_cart {
+        width: 85%;
+    }
+
+    .form_add_item_cart>button {
+        left: 30%;
+        height: 10%;
+        width: 40%;
+    }
+
+    .assessment {
+        margin-top: 2em;
+        height: 60vh;
+        width: 60%;
+    }
+}
+
+@media (max-width:590px) {
+    .container_comments {
+        top: 0;
+    }
+
+    .form_add_item_cart>button {
+        width: 70%;
+        left: 15%;
+    }
+
+    .container_comments {
+        width: 100%;
+    }
+
+    .assessment {
+        margin-top: 1em;
+    }
+}
+
+@media (max-width:530px) {
+    .container_images {
+        margin-top: 5%;
+        width: 100%;
+        height: 15vh;
+        flex-direction: row;
+        justify-content: center;
+        order: 5;
+    }
+
+    .main_image {
+        margin-top: 10%;
+        width: 100%;
+        height: 40vh;
+        order: 10;
+        order: 4;
+    }
+
+    .sub_images {
+        width: 20%;
+        height: 100%;
+        order: 3;
+    }
+
+    .form_add_item_cart {
+        order:5 ;
+    }
+    .form_add_item_cart>select{
+        width: 40%;
+    }
+    .container_color_details>input[type="color"]{
+        margin-top: 2%;
+        width: 40%;
+    }
+    .container_count>input{
+        width: 40%;
+    }
+    .container_comments {
+        order: 7;
+    }
+
+    .assessment {
+        order: 6;
+    }
+}
+@media (max-width:450px) {
+    .text_content{
+        font-size: .8em;
+    }
+    .section_comment_profile{
+        width: 12%;
+    }
+    .container_icon_user {
+        width: 15%;
+    }
+    .icon_user {
+        height: 10%;
+        background-size: 100%;
+    }
+    .sub_images{
+        width: 26%;
+    }
+    .form_add_item_cart{
+        width: 100%;
+    }
+    .form_add_item_cart>label, .container_color_details>label{
+        width: 100%;
+        text-align: left;
+    }
+    .assessment {
+        margin-top: 0;
+    }
+    
+}
+
