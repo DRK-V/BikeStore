@@ -44,7 +44,7 @@ export const Navbar = () => {
             <a href="/filters">
               <li>Categorias</li>
             </a>
-            <a href="#">
+            <a href="/filters">
               <li>Ofertas</li>
             </a>
             <a href="#">
