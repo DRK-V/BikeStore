@@ -13,7 +13,6 @@ export const Navbar = () => {
 
   return (
     <>
-
       <div
         className={`menu_resp ${menu ? "activar-active" : "desactivar-off"}`}
       >

@@ -153,7 +153,12 @@ li {
 .descu{
   display: none;
 }
-
+.busque{
+  width: 70%;
+}
+.buscar{
+  width: 16%;
+} 
 .nav1{
   display: flex;
   width: 100%;

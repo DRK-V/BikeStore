@@ -196,8 +196,26 @@
     li {
         font-size: .9em;
     }
+    .card_similar{
+        width: 35em;
+    }
+    
 }
-
+@media (max-width:905px) {
+    .container_comments{
+        left: 2%;
+    }
+    .form_add_item_cart{
+        padding: 40px;
+    }
+    .slider_similar_bike{
+        margin-top: 12%;
+    }
+    .form_add_item_cart>button{
+        width: 43%;
+        height: 10%;
+    }
+}
 @media (max-width:800px) {
 
     .card_container {
@@ -303,4 +321,10 @@
     .card {
         height: 40vh;
     } */
+}
+
+@media (max-width:530px) {
+    .slider_similar_bike{
+        order: 8;
+    }
 }
