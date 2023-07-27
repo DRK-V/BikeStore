@@ -21,7 +21,7 @@ function App() {
 
   return (
     <>
-      {isLoading ? (
+      {isLoading ? (// si esta cargando
         <Loading />
       ) : (
         <Router>
