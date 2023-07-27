@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import '../css/register.css';
 
-// Import the image you want to display on the left
 const leftImage = 'https://i.blogs.es/b00143/img_1513/840_560.jpeg';
 
 export const Register = () => {
@@ -14,7 +13,16 @@ export const Register = () => {
     formData.forEach((value, key) => {
       userData[key] = value;
     });
+
+    if (userData.password !== userData.confirmPassword) {
+      alert("revise la contraseña.");
+      return;
+    }
+
+   
     console.log(userData);
+
+    
   };
 
   const handleRedirect = () => {
@@ -40,13 +48,13 @@ export const Register = () => {
   return (
     <div className="App">
       <div className="split-container">
-      <button className="close-button" onClick={handleRedirect}>
+        <button className="close-button" onClick={handleRedirect}>
           <i className="fas fa-times"></i>
-          </button>
-        <div className="left-side2">
+        </button>
+        <div className="left-side">
           <img src={leftImage} alt="Image on the left" />
         </div>
-        <div className="right-side2">
+        <div className="right-side">
           <div className="form-container">
             <h1>Registrate</h1>
             <form id="form1" onSubmit={handleSubmit}>
@@ -75,7 +83,6 @@ export const Register = () => {
               <button className='regis-button' type="submit">Registrarse</button>
             </form>
           </div>
-         
         </div>
       </div>
     </div>

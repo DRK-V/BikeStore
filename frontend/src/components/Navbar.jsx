@@ -13,13 +13,37 @@ export const Navbar = () => {
 
   return (
     <>
-
       <div
         className={`menu_resp ${menu ? "activar-active" : "desactivar-off"}`}
       >
         <button className="menudes2" onClick={handleMenuClick}>
           <img src={cerrar} className="menu-hambu" alt="" />
         </button>
+        <nav className="menu_res">
+        <div className="info_res">
+          <ul>
+            <a href="/filters">
+              <li>Categorias</li>
+            </a>
+            <a href="/filters">
+              <li>Ofertas</li>
+            </a>
+            <a href="#">
+              <li>Populares</li>
+            </a>
+            <a href="/register">
+              <li>Crea tu cuenta</li>
+            </a>
+            <a href="/Login">
+              <li>Ingresar</li>
+            </a>
+            <a href="#">
+              <li>Mis compras</li>
+            </a>
+            <i></i>
+          </ul>
+        </div>
+      </nav>
       </div>
       <nav className="nav1">
         <img src={icon} alt="" className="bike" />
@@ -45,7 +69,7 @@ export const Navbar = () => {
             <a href="/filters">
               <li>Categorias</li>
             </a>
-            <a href="#">
+            <a href="/filters">
               <li>Ofertas</li>
             </a>
             <a href="#">

@@ -25,16 +25,16 @@ export const Login = () => {
 
 
 
-  return (
+   return (
     <div className="App">
       <div className="split-container">
       <button className="close-button" onClick={handleRedirect}>
           <i className="fas fa-times"></i>
           </button>
-        <div className="left-side2">
+        <div className="left-side">
           <img src={leftImage} alt="Image on the left" />
         </div>
-        <div className="right-side2">
+        <div className="right-side">
           <div className="form-container">
             <h1>Iniciar Sesión</h1>
             <form id="form12" onSubmit={handleSubmit}>
@@ -48,7 +48,7 @@ export const Login = () => {
               </div>
              
          
-              <button type="submit">Iniciar</button>
+              <button className='button-ini' type="submit">Iniciar</button>
             </form>
           </div>
          
@@ -57,6 +57,7 @@ export const Login = () => {
     </div>
   );
 };
+
 
 
 

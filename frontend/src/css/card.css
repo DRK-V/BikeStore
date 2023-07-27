@@ -14,7 +14,7 @@
 
 .card_container_categories {
     position: relative;
-    width: 60%;
+    width: 70%;
     min-height: 80vh;
     height: 80vh;
     overflow-y: auto;
@@ -22,8 +22,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     justify-items: center;
-    gap: 20px;
-    left: 10%;
+    gap: 0px;
     overflow: hidden;
     overflow-y: auto;
 }
@@ -40,6 +39,7 @@
     margin: 2%;
     margin-top: 8%;
 }
+
 
 /* diseño de tarjeta para el contendor del slider o el slider */
 .card_container_similar {
@@ -60,13 +60,55 @@
     justify-content: center;
     align-items: center;
     width: 18%;
-    height: 35vh;
+    height: 38vh;
     border-radius: .4rem;
     box-shadow: 1px 10px 10px 5px rgb(136, 136, 136);
     flex-direction: column;
     margin: 2%;
 }
-.card_container_similar::selection{
+
+/*se desactiva el texto de descuento para las tarjetas que no tienen descuento*/
+.card_similar>.text_discount,
+.card>.text_discount {
+    display: none;
+}
+
+/*card similar with discount */
+.card_discount {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    height: 35vh;
+    border-radius: .4rem;
+    box-shadow: 1px 10px 10px 5px rgb(136, 136, 136);
+    flex-direction: column;
+    margin-top: 8%;
+    overflow: hidden;
+}
+
+.text_discount {
+    display: flex;
+}
+
+.card_discount>.text_discount {
+    position: relative;
+    left: -20%;
+    top: -10%;
+    width: 100%;
+    height: 10%;
+    background-color: red;
+    color: wheat;
+    text-align: center;
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 20%;
+    align-items: center;
+    transform: rotate(-35deg);
+}
+
+
+.card_container_similar::selection {
     background-color: red;
 }
 
@@ -74,11 +116,18 @@
     background-color: red;
 }
 
-.card_similar>img {
-    height: 60%;
-    width: 18em;
+.card_discount>img {
+    height: 40%;
+    width: 12em;
     object-fit: cover;
 }
+
+.card_similar>img {
+    height: 50%;
+    width: 15em;
+    object-fit: cover;
+}
+
 .card>img {
     width: 100%;
     height: 40%;
@@ -128,11 +177,45 @@
         left: 0;
     }
 
+    .card_container_categories {
+        width: 80%;
+    }
+
     .card {
         width: 98%;
     }
+
+    .card_discount {
+        width: 85%;
+    }
 }
 
+@media (max-width:980px) {
+
+    .menu_categories ul>a,
+    li {
+        font-size: .9em;
+    }
+    .card_similar{
+        width: 35em;
+    }
+    
+}
+@media (max-width:905px) {
+    .container_comments{
+        left: 2%;
+    }
+    .form_add_item_cart{
+        padding: 40px;
+    }
+    .slider_similar_bike{
+        margin-top: 12%;
+    }
+    .form_add_item_cart>button{
+        width: 43%;
+        height: 10%;
+    }
+}
 @media (max-width:800px) {
 
     .card_container {
@@ -148,11 +231,27 @@
         padding: 40px;
     }
 
+    .card_container_categories {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .menu_categories {
+        width: 35%;
+    }
+
     .card {
         width: 300px;
         height: 40vh;
         margin-top: 10%;
     }
+}
+
+@media (max-width:720px) {
+    .card_container_categories {
+        width: 100%;
+    }
+
+
 }
 
 @media (max-width:690px) {
@@ -161,6 +260,8 @@
         height: 40vh;
         margin-top: 10%;
     }
+
+
 }
 
 @media (max-width:475px) {
@@ -173,9 +274,21 @@
         height: 32vh;
         margin-top: 10%;
     }
+
+    .card_discount {
+        height: 32vh;
+    }
 }
 
 @media (max-width:405px) {
+    .card_discount {
+        height: 28vh;
+    }
+
+    .card_discount>img {
+        width: 90%;
+    }
+
     .texto_descuento {
         text-decoration: line-through;
         font-size: .8em;
@@ -196,6 +309,9 @@
         height: 25vh;
     }
 
+    .card_discount {
+        height: 25vh;
+    }
 
     /* .card_container {
         grid-template-columns: repeat(1, 1fr);
@@ -205,4 +321,10 @@
     .card {
         height: 40vh;
     } */
+}
+
+@media (max-width:530px) {
+    .slider_similar_bike{
+        order: 8;
+    }
 }
