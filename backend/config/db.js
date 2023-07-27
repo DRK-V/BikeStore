@@ -1,8 +1,8 @@
 const CONFIG_BD = {
-    user: 'user',
+    user: 'postgres',
     host: 'localhost',
-    database: 'nombre-db',
-    password: 'clave',
+    database: 'bikestore',
+    password: 'admin',
     port: 5432
 }
 
