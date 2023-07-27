@@ -1,17 +1,19 @@
-//aqui esta el jogo bonito
 const { Pool } = require('pg');
 const { CONFIG_BD } = require('../config/db');
 
 const pool = new Pool(CONFIG_BD);
+console.log(pool)
 
 const getProducts = (req, res) => {
-    pool.query('SELECT * FROM persona', (error, result) => {
+    pool.query('SELECT * FROM productos', (error, result) => {
         if (error) {
-            //se controla el error
-            console.error('Error al obtener datos', Error);
+            // Imprimir el mensaje de error en la consola
+            console.error('Error al obtener datos', error.message);
+
+            // Responder con un mensaje de error en la respuesta HTTP
             res.status(500).send('Error al obtener datos');
         } else {
-            res.json(result.rows)
+            res.json(result.rows);
         }
     });
 }
