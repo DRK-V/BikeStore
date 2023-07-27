@@ -7,7 +7,7 @@ export const Card = (props) => {
     if (clase == "") {
         clase = props.card_clase == "card_discount" ? "card_discount" : "card"
         // clase = props.card_clase == "card_discount" ? "card_discount" : "card"
-        console.log(clase)
+        // console.log(clase)
     }
 
     const rutaRedireccion = "/details"; // Reemplaza "/ruta-a-la-que-quieres-redirigir" con tu dirección deseada

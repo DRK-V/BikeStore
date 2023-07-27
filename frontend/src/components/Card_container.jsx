@@ -5,6 +5,7 @@ export const Card_container = (props) => {
     let add_class_categories = ""
 
     add_class_categories = props.is_categories == "true" ? "card_container_categories" : "card_container"
+    // si el props no es true o false quiere decir que puede ser "similar" 
     // el cual es para mostrar el contenedor de tarjetas pero version slider 
     let card_clase = ""
     if (props.is_categories !== "true" && props.is_categories !== "false") {
