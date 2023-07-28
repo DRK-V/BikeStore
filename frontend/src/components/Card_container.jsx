@@ -10,15 +10,15 @@ export const Card_container = (props) => {
     let card_clase = ""
     if (props.is_categories !== "true" && props.is_categories !== "false") {
         add_class_categories = props.is_categories == "similar" ? "card_container_similar" : "card_container"
-        console.log('ingreso: ' + add_class_categories)
+        // console.log('ingreso: ' + add_class_categories)
     }
 
     card_clase = add_class_categories == "card_container_similar" ? "similar" : ""
     if (add_class_categories == "card_container_categories") {
         card_clase = "card_discount"
     }
-    console.log(add_class_categories)
-    console.log(card_clase)
+    // console.log(add_class_categories)
+    // console.log(card_clase)
     return (
         <article className={add_class_categories}>
             <Card
