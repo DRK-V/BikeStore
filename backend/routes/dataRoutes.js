@@ -1,7 +1,12 @@
 const express = require('express');
+const dataController = require('../controllers/dataController');
 const router = express.Router();
-const dataController = require('../controllers/dataController')
 
-router.get('/products',dataController.getProducts); // el primer servicio get (simple)
+
+router.get('/images', dataController.getImages);
 
 module.exports = router;
+
+
+
+
