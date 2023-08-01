@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>r1</title>
+</head>
+<body>
+    <h1>imagenes</h1>
+    <% images.forEach(image => { %>
+        <div>
+            <h3><%= image.title %></h3>
+            <p><%= image.description %></p>
+            <img src="<%= image.url %>" alt="<%= image.title %>">
+        </div>
+    <% }); %>
+</body>
+</html>
+
