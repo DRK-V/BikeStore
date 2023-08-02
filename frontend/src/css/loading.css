@@ -1,0 +1,22 @@
+.loading-spinner {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(110, 216, 124, 0.61);
+    z-index: 20;
+    top: 0;
+    left: 0;
+    transition: 1s;
+}
+  
+  .spinner {
+    width: 50%;
+    height: 50%;
+    background-image: url('../assets/gif_spinner.gif');
+    background-position: center;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}

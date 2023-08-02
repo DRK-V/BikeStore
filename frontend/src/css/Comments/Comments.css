@@ -75,3 +75,11 @@
     margin: 0px 30px 30px 0;
     text-align: justify;
 }
+@media (max-width:450px) {
+    .section_comment_profile{
+        align-items: flex-start;
+    }
+    .text_content{
+        font-size: .8em;
+    } 
+}

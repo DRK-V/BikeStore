@@ -92,3 +92,8 @@ footer>ul>li {
         text-decoration: dotted;
     }
 }
+@media (max-width:530px) {
+    footer{
+        order: 9;
+    }
+}
