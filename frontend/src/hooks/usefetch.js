@@ -6,8 +6,8 @@ export const usefetch = (url) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:3060/${url}`);
-        const result = await response.json();
+        const response = await fetch(`http://localhost:3060${url}`);
+        const result = await response.json(); // Corrected line, added 'await'
         setData(result);
       } catch (error) {
         console.log('error', error);
