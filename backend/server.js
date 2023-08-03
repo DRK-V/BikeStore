@@ -28,7 +28,7 @@ app.post('/api/register', (req, res) => {
     port: 5432, // Puerto de PostgreSQL 
   });
 
-  const insertUserQuery = 'INSERT INTO usuario (nombre, email, password, telefono, pais, ciudad) VALUES ($1, $2, $3, $4, $5, $6)';
+  const insertUserQuery = 'INSERT INTO cliente (nombre_usuario, correo, contrasena, telefono, pais, ciudad) VALUES ($1, $2, $3, $4, $5, $6)';
   const values = [userData.nombre, userData.email, userData.password, userData.telefono, userData.pais, userData.ciudad];
 
   pool.query(insertUserQuery, values)
@@ -57,7 +57,7 @@ app.post('/api/login', (req, res) => {
     port: 5432, // Puerto de PostgreSQL 
   });
 
-  const selectUserQuery = 'SELECT * FROM usuario WHERE email = $1 AND password = $2';
+  const selectUserQuery = 'SELECT * FROM cliente WHERE correo = $1 AND contrasena = $2';
   const values = [email, password];
 
   pool.query(selectUserQuery, values)
