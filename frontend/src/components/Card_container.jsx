@@ -1,6 +1,6 @@
 import '../css/card.css';
 import { Card } from './Card'
-import React from 'react';
+
 
 export const Card_container = (props) => {
     const numCards = 4; // The number of cards to display

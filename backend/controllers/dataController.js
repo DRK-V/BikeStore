@@ -22,8 +22,11 @@ const getProducts = (req, res) => {
   });
 };
 
+<<<<<<< HEAD
 module.exports = {
   getImages,
   getProducts,
 };
 
+=======
+>>>>>>> Daniel
