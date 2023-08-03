@@ -8,9 +8,31 @@ const port = 3001;
 app.use(express.json());
 app.use(cors());
 
-// Ruta de inicio
+// Ruta de inicio para mostrar los usuarios registrados
 app.get('/', (req, res) => {
-  res.send('¡Bienvenido a la aplicación de registro!');
+  // Conexión a la base de datos y operación de consulta
+  const pool = new Pool({
+    user: 'postgres', // Usuario de PostgreSQL
+    host: 'localhost',
+    database: 'bikestore', // Nombre de la base de datos
+    password: 'admin', // Contraseña de PostgreSQL
+    port: 5432, // Puerto de PostgreSQL 
+  });
+
+  const selectAllUsersQuery = 'SELECT * FROM cliente';
+
+  pool.query(selectAllUsersQuery)
+    .then((result) => {
+      const users = result.rows;
+      res.status(200).json(users);
+    })
+    .catch((error) => {
+      console.error('Error al consultar en la base de datos:', error);
+      res.status(500).json({ message: 'Error en el servidor' });
+    })
+    .finally(() => {
+      pool.end();
+    });
 });
 
 // Ruta para el registro
@@ -82,4 +104,3 @@ app.post('/api/login', (req, res) => {
 app.listen(port, () => {
   console.log(`Servidor ejecutándose en http://localhost:${port}`);
 });
-
