@@ -5,7 +5,7 @@ import { Register } from './Register';
 import Categories from './Categories';
 import Bike_details from './Bike_details';
 import { Login } from './Login';
-import {Loading} from '../components/loading';
+import {Loading} from '../components/Loading';
 
 import '../css/main.css'
 import '../css/animation.css'

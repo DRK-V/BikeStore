@@ -8,6 +8,7 @@ import { routesApp } from '../config/routesApp'
 
 export const Home = () => {
     const data = usefetch(routesApp.getProducts)
+    
     console.log(data)
     return (
         <>
