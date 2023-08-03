@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Home } from './Home';
 import { Register } from './Register';
@@ -9,6 +9,7 @@ import {Loading} from '../components/loading';
 
 import '../css/main.css'
 import '../css/animation.css'
+import { Carrito_compras } from './Carrito_compras';
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -31,6 +32,7 @@ function App() {
             <Route path="/filters" element={<Categories />} />
             <Route path="/details" element={<Bike_details />} />
             <Route path="/Login" element={<Login />} />
+            <Route path="/Carrito_compras" element={<Carrito_compras />} />
           </Routes>
         </Router>
       )}
