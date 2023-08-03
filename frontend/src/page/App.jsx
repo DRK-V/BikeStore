@@ -6,7 +6,7 @@ import Categories from './Categories';
 import Bike_details from './Bike_details';
 import { Login } from './Login';
 import {Loading} from '../components/Loading';
-
+import { Payment } from './Payment';
 import '../css/main.css'
 import '../css/animation.css'
 function App() {
@@ -31,6 +31,7 @@ function App() {
             <Route path="/filters" element={<Categories />} />
             <Route path="/details" element={<Bike_details />} />
             <Route path="/Login" element={<Login />} />
+            <Route path="/payment" element={<Payment />} />
           </Routes>
         </Router>
       )}
