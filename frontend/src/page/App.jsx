@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Home } from './Home';
 import { Register } from './Register';
 import Categories from './Categories';
 import Bike_details from './Bike_details';
 import { Login } from './Login';
-import {Loading} from '../components/loading';
+import {Loading} from '../components/Loading';
 
 import '../css/main.css'
 import '../css/animation.css'

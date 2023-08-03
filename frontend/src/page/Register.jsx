@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/register.css';
 
@@ -5,8 +6,9 @@ const leftImage = 'https://i.blogs.es/b00143/img_1513/840_560.jpeg';
 
 export const Register = () => {
   const navigate = useNavigate();
+  const [registrationStatus, setRegistrationStatus] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const userData = {};
@@ -15,18 +17,34 @@ export const Register = () => {
     });
 
     if (userData.password !== userData.confirmPassword) {
-      alert("revise la contraseña.");
+      alert('Revise la contraseña.');
       return;
     }
 
-   
-    console.log(userData);
+    try {
+      // Enviar los datos del formulario al backend utilizando fetch
+      const response = await fetch('http://localhost:3001/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
 
-    
-  };
-
-  const handleRedirect = () => {
-    navigate('/');
+      if (response.status === 201) {
+        // Registro exitoso
+        setRegistrationStatus('¡Registro exitoso!');
+        // Redirigirse a '/'
+        navigate('/');
+      } else {
+        // Registro fallido
+        setRegistrationStatus('Error al registrarse. Intente nuevamente.');
+      }
+    } catch (error) {
+      // Manejo de errores
+      console.error('Error en la solicitud al backend:', error);
+      setRegistrationStatus('Error en el servidor. Intente nuevamente más tarde.');
+    }
   };
 
   const handleAlphaInput = (event) => {
@@ -48,7 +66,7 @@ export const Register = () => {
   return (
     <div className="App">
       <div className="split-container">
-        <button className="close-button" onClick={handleRedirect}>
+        <button className="close-button" onClick={() => navigate('/')}>
           <i className="fas fa-times"></i>
         </button>
         <div className="left-side">
@@ -60,7 +78,7 @@ export const Register = () => {
             <form id="form1" onSubmit={handleSubmit}>
               <div className="form-row">
                 <i className="fas fa-user"></i>
-                <input type="text" placeholder='Nombre' name="username" required onInput={handleAlphaInput} />
+                <input type="text" placeholder='Nombre' name="nombre" required onInput={handleAlphaInput} />
                 <i className="fas fa-envelope"></i>
                 <input type="email" placeholder='Correo electrónico:' name="email" required />
               </div>
@@ -72,22 +90,22 @@ export const Register = () => {
               </div>
               <div className="form-row">
                 <i className="fas fa-phone"></i>
-                <input type="tel" placeholder='Teléfono:' name="phone" required onInput={handleNumericInput} />
+                <input type="tel" placeholder='Teléfono:' name="telefono" required onInput={handleNumericInput} />
                 <i className="fas fa-globe"></i>
-                <input type="text" placeholder='País:' name="country" required />
+                <input type="text" placeholder='País:' name="pais" required />
               </div>
               <div className="form-row">
                 <i className="fas fa-map-marker-alt"></i>
-                <input type="text" placeholder='Ciudad:' name="city" required />
+                <input type="text" placeholder='Ciudad:' name="ciudad" required />
               </div>
               <button className='regis-button' type="submit">Registrarse</button>
             </form>
+            <div className="registration-status">{registrationStatus}</div>
           </div>
         </div>
       </div>
     </div>
   );
 };
-
 
 

@@ -1,12 +1,12 @@
 import '../css/card.css';
 import { Card } from './Card'
-import React from 'react';
+
 
 export const Card_container = (props) => {
     const numCards = 4; 
     const card_clase = getCardClase(props.is_categories); 
 
-   
+ 
     const cardsData = Array.from({ length: numCards }, (_, index) => ({
         id: index,
         discount: `${getRandomNumber(1, 50)}%`,
@@ -46,9 +46,11 @@ const getCardClase = (isCategories) => {
     }
 }
 
+
 const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
+
 
 const getCardContainerClass = (isCategories) => {
     return isCategories === "true" ? "card_container_categories" : "card_container";
