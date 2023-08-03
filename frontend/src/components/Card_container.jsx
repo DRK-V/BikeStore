@@ -3,10 +3,10 @@ import { Card } from './Card'
 
 
 export const Card_container = (props) => {
-    const numCards = 4; 
-    const card_clase = getCardClase(props.is_categories); 
+    const numCards = 4; // The number of cards to display
+    const card_clase = getCardClase(props.is_categories); // Helper function to get the card_clase
 
- 
+    // Generate an array of objects containing random card details
     const cardsData = Array.from({ length: numCards }, (_, index) => ({
         id: index,
         discount: `${getRandomNumber(1, 50)}%`,
@@ -35,7 +35,7 @@ export const Card_container = (props) => {
     )
 }
 
-
+// Helper function to get the card_clase
 const getCardClase = (isCategories) => {
     if (isCategories === "true") {
         return "card_discount";
@@ -46,12 +46,12 @@ const getCardClase = (isCategories) => {
     }
 }
 
-
+// Helper function to generate a random number within a range
 const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-
+// Helper function to get the appropriate container class
 const getCardContainerClass = (isCategories) => {
     return isCategories === "true" ? "card_container_categories" : "card_container";
 }
