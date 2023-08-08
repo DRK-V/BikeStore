@@ -30,7 +30,7 @@
     background-color: aqua;
     position: relative;
     display: flex;
-    
+    border-radius: .5rem;
     
     
 }

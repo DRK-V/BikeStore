@@ -10,7 +10,7 @@ export const Carrito_compras = () => {
     <div className='car_comp'>
         <h1>Carrito de Compras</h1>
         <Item_cart/>
-
+        
     </div>
 
     <Footer />
