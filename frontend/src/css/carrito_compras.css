@@ -4,9 +4,15 @@
     width: 80%;
     height: 80vh;
     left: 10%;
-    background-color: white;
+    background-color: rgb(216, 209, 209);
     border-radius: .5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
 }
+
+
 
 .car_comp > h1{
     width: 100%;
@@ -15,4 +21,16 @@
     justify-content: center;
     align-items: center;
     font-size: 1.2em;
+}
+
+/* aca va el de los conotenedores */
+.Cart_compras_carrito{
+    width: 50%;
+    height: 20%;
+    background-color: aqua;
+    position: relative;
+    display: flex;
+    
+    
+    
 }
