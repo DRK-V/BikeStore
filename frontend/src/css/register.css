@@ -1,0 +1,181 @@
+/* Estilos generales */
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.split-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 70%;
+  height: 70%;
+  border: 3px solid #ccc;
+  border-radius: 15px;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+h1 {
+  margin: 20px 0;
+  white-space: nowrap; /* Evita que el h1 se rompa en varias líneas */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Agrega puntos suspensivos si el texto no cabe */
+}
+
+/* Lados izquierdo y derecho */
+.left-side,
+.right-side {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 2%;
+}
+
+.left-side img {
+  max-width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  width: 100%;
+}
+
+/* Formulario */
+.form-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+#form1 {
+  display: grid;
+  gap: 10px;
+}
+
+.form-row input {
+  width: 170px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.regis-button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 170px;
+  margin: auto;
+}
+
+.close-button {
+  position: absolute;
+  margin-right: 5px;
+  top: 100px;
+  right: 210px;
+  font-size: 30px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 30px;
+}
+
+.form-row i {
+  font-size: 16px;
+}
+
+/* Puntos de interrupción */
+@media screen and (min-width: 1023px) and (max-width: 1300px){
+  .close-button {
+    top: 100px;
+    right: 110px;
+  }
+  .form-container {
+    max-width: 400px;
+    margin: 0 auto;
+}
+.split-container {
+  max-width: 80%;
+}
+}
+@media screen and (max-width: 767px) {
+  .split-container {
+    flex-direction: column;
+    max-width: 100%;
+    border: none;
+  }
+  .form-row i {
+
+    display: none;
+}
+  .left-side,
+  .right-side {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .left-side img {
+    display: none;
+  }
+
+  .close-button {
+    top: 10px;
+    right: 10px;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  h1 {
+    font-size: 18px;
+    text-align: center;
+  }
+}
+
+/* Tablets y pantallas más grandes */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .left-side,
+  .right-side {
+    width: 100%; /* Cambia el ancho a 100% para tablets */
+    height: auto;
+    margin-right: 0;
+  }
+
+  .left-side img {
+    display: none;
+  }
+  .close-button {
+    top: 100px;
+    right: 285px;
+}
+h1 {
+  text-align: center;
+}
+.regis-button{
+margin: auto;
+}
+.split-container {
+height: 60%;
+}
+}

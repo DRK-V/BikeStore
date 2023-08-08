@@ -1,0 +1,11 @@
+.slider_similar_bike{
+    width: 100%;
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.slider_similar_bike > h1{
+    width: 100%;
+    padding-left: 5%;
+}

@@ -1,0 +1,263 @@
+.nav1 {
+  display: flex;
+  width: 100%;
+  height: 12vh;
+  background-color: #7ee29a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bike {
+  padding: 3px;
+  width: 9%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.car {
+  width: 5%;
+  position: relative;
+  height: 100%;
+  object-fit: contain;
+  margin-left: 16px;
+  top: -9%;
+}
+
+.car2 {
+  display: none;
+}
+
+.busque {
+  margin: 10px;
+  border-radius: 5px;
+  border: none;
+  width: 70%;
+  outline: none;
+  height: 7vh;
+  box-shadow: 1px 5px 1px 1px rgba(128, 128, 128, 0.452);
+  display: flex;
+}
+
+.buscar {
+  width: 7%;
+  height: 7vh;
+  border-radius: 5px;
+  border: none;
+  left: -8%;
+  position: relative;
+  background-image: url("../assets/lupa.png");
+  background-size: 70%;
+  background-repeat: no-repeat;
+  background-color: white;
+  background-position: center;
+}
+
+.menudes {
+  display: none;
+
+}
+
+.menu-hambu {
+  padding: 3px;
+  width: 52%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.descu,
+.buscar:hover {
+  cursor: pointer;
+}
+
+form {
+  width: 70%;
+  float: center;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.descu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 60px;
+  border-radius: 9px;
+  border: none;
+  width: 27%;
+  height: 40px;
+  background-color: #efc14a;
+  color: white;
+  font-size: 17px;
+}
+
+.nav2 {
+  display: flex;
+  width: 100%;
+  height: 8vh;
+  background-color: #7ee29a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+ul {
+  height: 100%;
+  width: 100%;
+  display: inline-block;
+}
+
+.right-side,
+.left-side {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-right: 2%;
+}
+
+.left-side>ul {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  margin-left: 15%;
+}
+
+.right-side>ul {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+}
+
+ul>a,
+li {
+  margin-left: 10px;
+
+  color: black;
+}
+
+/*responsive*/
+
+@media (max-width:760px) {
+  .nav2 {
+    display: none;
+  }
+
+  .descu {
+    display: none;
+  }
+
+  .busque {
+    width: 70%;
+  }
+
+  .buscar {
+    width: 16%;
+  }
+
+  .nav1 {
+    display: flex;
+    width: 100%;
+    height: 12vh;
+    background-color: #7ee29a;
+    display: flex;
+    justify-content: initial;
+    align-items: center;
+  }
+
+  .menudes {
+    width: 19%;
+    height: 73%;
+    display: flex;
+    background-color: transparent;
+    padding: 0px;
+    justify-content: center;
+    align-items: center;
+
+  }
+
+  .menudes2 {
+    width: 17%;
+    height: 4%;
+    display: flex;
+    background-color: transparent;
+    padding: 0px;
+    justify-content: center;
+    align-items: center;
+    margin: 3%;
+  }
+
+  .car2 {
+    display: flex;
+    width: 5%;
+    position: relative;
+    height: 100%;
+    object-fit: contain;
+    margin-left: 0px;
+    margin-right: 4%;
+    top: 0%;
+  }
+
+
+}
+
+.desactivar-off {
+  opacity: 0;
+  display: flex;
+  position: fixed;
+  width: 70%;
+  height: 100%;
+  background-color: white;
+  z-index: 3;
+  float: right;
+  right: 0;
+  top: 0;
+  justify-content: end;
+  animation: close_menu .5s alternate ease-in forwards;
+
+}
+
+.activar-active {
+  display: flex;
+  position: fixed;
+  width: 70%;
+  height: 100%;
+  background-color: white;
+  z-index: 3;
+  float: right;
+  right: -999px;
+  top: 0;
+  justify-content: end;
+  animation: open_menu .5s alternate ease-in forwards;
+  flex-direction: row-reverse;
+}
+
+.menu_res {
+  display: flex;
+  position: relative;
+  width: 49%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width:375px) {
+  .bike {
+    padding: 3px;
+    width: 16%;
+    height: 73%;
+    object-fit: contain;
+  }
+}
