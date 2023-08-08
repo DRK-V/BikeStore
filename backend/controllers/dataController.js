@@ -8,17 +8,14 @@ const registerUser = (userData) => {
 };
 
 const getImages = (req, res) => {
-  const selectImagesQuery = 'SELECT imagen FROM imagen_producto';
-
-  pool.query(selectImagesQuery)
-    .then((result) => {
-      const images = result.rows.map((row) => row.imagen);
-      res.status(200).json({ images });
-    })
-    .catch((error) => {
-      console.error('Error al obtener datos:', error);
-      res.status(500).json({ message: 'Error en el servidor' });
-    });
+  pool.query('SELECT * FROM imagen_producto', (error, result) => {
+    if (error) {
+      console.error('Error al obtener datos', error.message);
+      res.status(500).json({ error: 'Error al obtener datos' });
+    } else {
+      res.json({ images: result.rows });
+    }
+  });
 };
 
 const getAllClientes = (req, res) => {
@@ -44,10 +41,10 @@ const loginUser = (req, res) => {
   pool.query(selectUserQuery, values)
     .then((result) => {
       if (result.rowCount === 1) {
-       
+        // Inicio de sesión exitoso
         res.status(200).json({ message: 'Inicio de sesión exitoso' });
       } else {
-        
+        // Inicio de sesión fallido
         res.status(401).json({ message: 'Credenciales inválidas' });
       }
     })
@@ -63,4 +60,5 @@ module.exports = {
   getAllClientes,
   loginUser,
 };
+
 

@@ -8,10 +8,10 @@ app.use(cors());
 
 const dataRoutes = require('./routes/dataRoutes');
 
-app.use('/api/images', express.static(__dirname + '/images'));
+app.use('/images', express.static(__dirname + '/images'));
 app.use('/', dataRoutes);
 
-
+// Ruta para ver todos los clientes
 app.get('/api/cliente', (req, res) => {
   const { pool } = require('./config/db');
 

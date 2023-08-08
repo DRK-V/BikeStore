@@ -2,12 +2,12 @@ const express = require('express');
 const dataController = require('../controllers/dataController');
 const router = express.Router();
 
-router.get('/api/images', dataController.getImages);
+router.get('/images', dataController.getImages);
 router.get('/cliente', dataController.getAllClientes);
 router.post('/api/register', (req, res) => {
   const userData = req.body;
 
- 
+  // Validación de datos (Agrega aquí la validación si es necesario)
 
   dataController.registerUser(userData)
     .then(() => {
@@ -22,3 +22,4 @@ router.post('/api/register', (req, res) => {
 router.post('/api/login', dataController.loginUser);
 
 module.exports = router;
+
