@@ -13,7 +13,7 @@ export const Card_container = (props) => {
         try {
             const responses = await Promise.all(
                 Array.from({ length: numCards }, (_, index) =>
-                    fetch(imagesBaseUrl + `cicle${getRandomNumber(1, 4)}.png`)
+                    fetch(imagesBaseUrl + `${getRandomNumber(1, 4)}.png`)
                 )
             );
             const cardsData = await Promise.all(
