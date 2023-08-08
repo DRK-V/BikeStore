@@ -23,7 +23,7 @@ export const Register = () => {
 
     try {
       // Enviar los datos del formulario al backend utilizando fetch
-      const response = await fetch('http://localhost:3001/api/register', {
+      const response = await fetch('http://localhost:3060/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
