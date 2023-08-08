@@ -1,17 +1,17 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const port = 3001;
+const port = 3060;
 
 app.use(express.json());
 app.use(cors());
 
 const dataRoutes = require('./routes/dataRoutes');
 
-app.use('/api/images', express.static(__dirname + '/images'));
+app.use('/images', express.static(__dirname + '/images'));
 app.use('/', dataRoutes);
 
-
+// Ruta para ver todos los clientes
 app.get('/api/cliente', (req, res) => {
   const { pool } = require('./config/db');
 
