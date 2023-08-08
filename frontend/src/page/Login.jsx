@@ -50,7 +50,7 @@ export const Login = () => {
   return (
     <div className="App">
       <div className="split-container">
-        <button className="close-button" onClick={handleRedirect}>
+        <button className="close-button2" onClick={handleRedirect}>
           <i className="fas fa-times"></i>
         </button>
         <div className="left-side">

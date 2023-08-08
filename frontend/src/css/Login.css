@@ -3,6 +3,7 @@
   
   h1 {
     margin: 20px 0;
+    text-align: center;
   }
   
   #form12 {
@@ -10,6 +11,7 @@
     align-items: center;
     display: flex;
     gap: 21px;
+    margin: auto;
   }
 
   
@@ -25,13 +27,42 @@
     width: 170px;
   }
 
-  .close-button i {
+  .close-button2{
+    position: absolute;
     margin-right: 5px;
+    top: 100px;
+    right: 250px;
+    font-size: 30px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 30px;
   }
   
   .form-row i {
     font-size: 16px;
   }
+  @media screen and (max-width: 767px) {
+ 
+  
+  
+   
+  
+    .close-button2 {
+      top: 10px;
+      right: 10px;
+    }
   
     
+  
+    h1 {
+      font-size: 18px;
+      text-align: center;
+    }
+  }
+  @media screen and (min-width: 1023px) and (max-width: 1300px){
+    .close-button2 {
+      top: 100px;
+      right: 125px;
+    }
     

@@ -85,6 +85,7 @@ h1 {
   border-radius: 10px;
   cursor: pointer;
   width: 170px;
+  margin: auto;
 }
 
 .close-button {
