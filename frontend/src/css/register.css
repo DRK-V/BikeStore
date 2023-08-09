@@ -1,3 +1,4 @@
+
 /* Estilos generales */
 .App {
   display: flex;
@@ -178,4 +179,5 @@ margin: auto;
 .split-container {
 height: 60%;
 }
+
 }
