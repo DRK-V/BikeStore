@@ -10,7 +10,6 @@ import { Payment } from './Payment';
 import '../css/main.css'
 import '../css/animation.css'
 import { Carrito_compras } from './Carrito_compras';
-
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -35,7 +34,6 @@ function App() {
             <Route path="/Login" element={<Login />} />
             <Route path="/payment" element={<Payment />} />
             <Route path="/Carrito_compras" element={<Carrito_compras />} />
-
           </Routes>
         </Router>
       )}
