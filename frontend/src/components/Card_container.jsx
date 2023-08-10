@@ -24,9 +24,11 @@ const getCardContainerClass = (isCategories, isSimilar) => {
     }
 };
 
+
 const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
 };
+
 
 export const Card_container = (props) => {
     const numCards = 4;
@@ -42,6 +44,7 @@ export const Card_container = (props) => {
                 )
             );
 
+
             const productData = await Promise.all(productResponses.map(response => response.json()));
 
             const cardsData = productData.map((product, index) => {
@@ -52,6 +55,7 @@ export const Card_container = (props) => {
                     descuento: `${getRandomNumber(7, 15)}.000.000`,
                     nombre:product.product.nombre_producto,
                     precio: product.product.precio,
+
                     cuotas: '35 cuotas en 250.000',
                 };
             });
@@ -83,4 +87,6 @@ export const Card_container = (props) => {
             ))}
         </article>
     );
+
 };
+
