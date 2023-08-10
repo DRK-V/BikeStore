@@ -23,14 +23,18 @@ const getImages = (req, res) => {
         console.error('Error al obtener imágenes:', error.message);
         res.status(500).json({ error: 'Error al obtener imágenes' });
       });
-    } else if (id_imagen) {
+  } else if (id_imagen) {
     const selectImageQuery = 'SELECT * FROM imagen_producto WHERE id_imagen = $1';
     const values = [id_imagen];
 
     pool.query(selectImageQuery, values)
       .then((result) => {
         if (result.rows.length > 0) {
-          res.json({ image: result.rows[0] });
+          const rutaImagen = result.rows[0].ruta_imagen;
+          const decodedRutaImagen = decodeURIComponent(rutaImagen);
+
+          // Redirect to the ruta_imagen
+          res.redirect(decodedRutaImagen);
         } else {
           res.status(404).json({ message: 'Imagen no encontrada' });
         }
@@ -57,16 +61,24 @@ const getImages = (req, res) => {
 
     pool.query(selectImageQuery, values)
       .then((result) => {
-        res.json({ images: result.rows });
+        if (result.rows.length > 0) {
+          const idToRedirect = result.rows[0].id_imagen;
+          res.redirect(`/images/${idToRedirect}`);
+        } else {
+          res.status(404).json({ message: 'Imagen no encontrada' });
+        }
       })
       .catch((error) => {
         console.error('Error al obtener imágenes:', error.message);
         res.status(500).json({ error: 'Error al obtener imágenes' });
       });
   } else {
-    // Resto del código para manejar otras búsquedas
+    // Rest of the code to handle other searches
   }
 };
+
+// Rest of your code
+
 const getAllProducts = (req, res) => {
   const { id_producto } = req.params;
   const { nombre_producto } = req.query;

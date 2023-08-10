@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { Card } from './Card';
 
 export const Card_container = (props) => {
-  const numCards = 4; // The number of cards to display
+  const numCards = 4; 
   const [cardsData, setCardsData] = useState([]);
 
-  // Fetch images from the server based on IDs
+
   const fetchImagesByIds = async () => {
     const imagesBaseUrl = 'http://localhost:3060/images/';
     try {
@@ -22,7 +22,7 @@ export const Card_container = (props) => {
           return {
             id: index,
             imagen: response.url,
-            ruta: rutaData.ruta, // Assuming rutaData has 'ruta' property
+            ruta: rutaData.ruta, 
           };
         })
       );
@@ -49,10 +49,7 @@ export const Card_container = (props) => {
   );
 };
 
-// ... Resto de las funciones auxiliares sin cambios ...
 
-
-// Helper function to get the card_clase
 const getCardClase = (isCategories) => {
     if (isCategories === 'true') {
         return 'card_discount';
@@ -63,12 +60,12 @@ const getCardClase = (isCategories) => {
     }
 };
 
-// Helper function to generate a random number within a range
+
 const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-// Helper function to get the appropriate container class
+
 const getCardContainerClass = (isCategories) => {
     return isCategories === 'true' ? 'card_container_categories' : 'card_container';
 };
