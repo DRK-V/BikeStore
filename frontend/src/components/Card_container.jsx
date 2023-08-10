@@ -12,9 +12,7 @@ const getCardClase = (isCategories, isSimilar) => {
     }
 };
 
-const getRandomNumber = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-};
+
 
 const getCardContainerClass = (isCategories, isSimilar) => {
     if (isSimilar === 'true') {
@@ -26,26 +24,38 @@ const getCardContainerClass = (isCategories, isSimilar) => {
     }
 };
 
+
+const getRandomNumber = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+
 export const Card_container = (props) => {
     const numCards = 4;
     const [cardsData, setCardsData] = useState([]);
 
     const fetchRandomCards = async () => {
         const imagesBaseUrl = 'http://localhost:3060/images/';
+        const productsBaseUrl = 'http://localhost:3060/products/';
         try {
-            const responses = await Promise.all(
+            const productResponses = await Promise.all(
                 Array.from({ length: numCards }, (_, index) =>
-                    fetch(imagesBaseUrl + `cicle${getRandomNumber(1, 4)}.png`)
+                    fetch(productsBaseUrl + (index + 1))
                 )
             );
-            const cardsData = responses.map((response, index) => {
+
+
+            const productData = await Promise.all(productResponses.map(response => response.json()));
+
+            const cardsData = productData.map((product, index) => {
                 return {
                     id: index,
                     discount: `${getRandomNumber(1, 50)}%`,
-                    imagen: response.url,
+                    imagen: imagesBaseUrl + (index + 1),
                     descuento: `${getRandomNumber(7, 15)}.000.000`,
-                    nombre: 'Cicla beneli - marco fibra de vidrio',
-                    precio: '9.000.000',
+                    nombre:product.product.nombre_producto,
+                    precio: product.product.precio,
+
                     cuotas: '35 cuotas en 250.000',
                 };
             });
@@ -62,6 +72,7 @@ export const Card_container = (props) => {
     return (
         <article className={getCardContainerClass(props.is_categories, props.is_similar)}>
             {cardsData.map((card) => (
+                <>
                 <Card
                     key={card.id}
                     card_clase={getCardClase(props.is_categories, props.is_similar)}
@@ -72,7 +83,10 @@ export const Card_container = (props) => {
                     precio={card.precio}
                     cuotas={card.cuotas}
                 />
+                </>
             ))}
         </article>
     );
+
 };
+

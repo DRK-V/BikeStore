@@ -1,3 +1,5 @@
+// app.js
+
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -6,10 +8,18 @@ const port = 3060;
 app.use(express.json());
 app.use(cors());
 
+const dataController = require('./controllers/dataController');
+
 const dataRoutes = require('./routes/dataRoutes');
 
 app.use('/images', express.static(__dirname + '/images'));
 app.use('/', dataRoutes);
+
+app.get('/images', dataController.getImages);
+app.get('/images/:id_imagen', dataController.getImages);
+app.get('/products', dataController.getAllProducts);
+app.get('/products/:id_producto', dataController.getAllProducts);
+
 
 // Ruta para ver todos los clientes
 app.get('/api/cliente', (req, res) => {
@@ -31,3 +41,4 @@ app.get('/api/cliente', (req, res) => {
 app.listen(port, () => {
   console.log(`Servidor ejecutándose en http://localhost:${port}`);
 });
+

@@ -1,8 +1,13 @@
+//routes
+
 const express = require('express');
 const dataController = require('../controllers/dataController');
 const router = express.Router();
 
 router.get('/images', dataController.getImages);
+router.get('/images/:id_imagen', dataController.getImages);
+router.get('/products', dataController.getAllProducts);
+router.get('/products/:id_producto', dataController.getAllProducts);
 router.get('/cliente', dataController.getAllClientes);
 router.post('/api/register', (req, res) => {
   const userData = req.body;

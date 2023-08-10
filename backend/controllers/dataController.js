@@ -1,3 +1,5 @@
+//datacontroller
+
 const { pool } = require('../config/db');
 
 const registerUser = (userData) => {
@@ -8,16 +10,107 @@ const registerUser = (userData) => {
 };
 
 const getImages = (req, res) => {
-  pool.query('SELECT * FROM imagen_producto', (error, result) => {
-    if (error) {
-      console.error('Error al obtener datos', error.message);
-      res.status(500).json({ error: 'Error al obtener datos' });
-    } else {
-      res.json({ images: result.rows });
-    }
-  });
+  const { id_imagen, nombre, ruta } = req.params;
+
+  if (!id_imagen && !nombre && !ruta) {
+    const selectAllImagesQuery = 'SELECT * FROM imagen_producto';
+
+    pool.query(selectAllImagesQuery)
+      .then((result) => {
+        res.json({ images: result.rows });
+      })
+      .catch((error) => {
+        console.error('Error al obtener imágenes:', error.message);
+        res.status(500).json({ error: 'Error al obtener imágenes' });
+      });
+  } else if (id_imagen) {
+    const selectImageQuery = 'SELECT * FROM imagen_producto WHERE id_imagen = $1';
+    const values = [id_imagen];
+
+    pool.query(selectImageQuery, values)
+      .then((result) => {
+        if (result.rows.length > 0) {
+          const rutaImagen = result.rows[0].ruta_imagen;
+          const decodedRutaImagen = decodeURIComponent(rutaImagen);
+
+        
+          res.redirect(decodedRutaImagen);
+        } else {
+          res.status(404).json({ message: 'Imagen no encontrada' });
+        }
+      })
+      .catch((error) => {
+        console.error('Error al obtener imagen:', error.message);
+        res.status(500).json({ error: 'Error al obtener imagen' });
+      });
+  } else if (ruta) {
+    const selectImageQuery = 'SELECT * FROM imagen_producto WHERE ruta = $1';
+    const values = [decodeURIComponent(ruta)];
+
+    pool.query(selectImageQuery, values)
+      .then((result) => {
+        if (result.rows.length > 0) {
+          const idToRedirect = result.rows[0].id_imagen;
+          res.redirect(`/images/${idToRedirect}`);
+        } else {
+          res.status(404).json({ message: 'Imagen no encontrada' });
+        }
+      })
+      .catch((error) => {
+        console.error('Error al obtener imágenes:', error.message);
+        res.status(500).json({ error: 'Error al obtener imágenes' });
+      });
+  } else {
+   
+  }
 };
 
+
+const getAllProducts = (req, res) => {
+  const { id_producto } = req.params;
+  const { nombre_producto } = req.query;
+
+  if (id_producto) {
+    const selectProductQuery = 'SELECT * FROM producto WHERE id_producto = $1';
+    const values = [id_producto];
+
+    pool.query(selectProductQuery, values)
+      .then((result) => {
+        if (result.rows.length > 0) {
+          res.json({ product: result.rows[0] });
+        } else {
+          res.status(404).json({ message: 'Producto no encontrado' });
+        }
+      })
+      .catch((error) => {
+        console.error('Error al obtener producto:', error.message);
+        res.status(500).json({ error: 'Error al obtener producto' });
+      });
+  } else if (nombre_producto) {
+    const selectProductQuery = 'SELECT * FROM producto WHERE nombre_producto = $1';
+    const values = [nombre_producto];
+
+    pool.query(selectProductQuery, values)
+      .then((result) => {
+        res.json({ products: result.rows });
+      })
+      .catch((error) => {
+        console.error('Error al obtener productos:', error.message);
+        res.status(500).json({ error: 'Error al obtener productos' });
+      });
+  } else {
+    const selectAllProductsQuery = 'SELECT * FROM producto';
+
+    pool.query(selectAllProductsQuery)
+      .then((result) => {
+        res.json({ products: result.rows });
+      })
+      .catch((error) => {
+        console.error('Error al obtener productos:', error.message);
+        res.status(500).json({ error: 'Error al obtener productos' });
+      });
+  }
+};
 const getAllClientes = (req, res) => {
   const selectAllClientesQuery = 'SELECT * FROM cliente';
 
@@ -41,10 +134,10 @@ const loginUser = (req, res) => {
   pool.query(selectUserQuery, values)
     .then((result) => {
       if (result.rowCount === 1) {
-        // Inicio de sesión exitoso
+      
         res.status(200).json({ message: 'Inicio de sesión exitoso' });
       } else {
-        // Inicio de sesión fallido
+     
         res.status(401).json({ message: 'Credenciales inválidas' });
       }
     })
@@ -59,6 +152,7 @@ module.exports = {
   getImages,
   getAllClientes,
   loginUser,
+  getAllProducts,
 };
 
 
