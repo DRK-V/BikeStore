@@ -33,7 +33,7 @@ const getImages = (req, res) => {
           const rutaImagen = result.rows[0].ruta_imagen;
           const decodedRutaImagen = decodeURIComponent(rutaImagen);
 
-          // Redirect to the ruta_imagen
+        
           res.redirect(decodedRutaImagen);
         } else {
           res.status(404).json({ message: 'Imagen no encontrada' });
@@ -73,11 +73,10 @@ const getImages = (req, res) => {
         res.status(500).json({ error: 'Error al obtener imágenes' });
       });
   } else {
-    // Rest of the code to handle other searches
+   
   }
 };
 
-// Rest of your code
 
 const getAllProducts = (req, res) => {
   const { id_producto } = req.params;
@@ -147,10 +146,10 @@ const loginUser = (req, res) => {
   pool.query(selectUserQuery, values)
     .then((result) => {
       if (result.rowCount === 1) {
-        // Inicio de sesión exitoso
+      
         res.status(200).json({ message: 'Inicio de sesión exitoso' });
       } else {
-        // Inicio de sesión fallido
+     
         res.status(401).json({ message: 'Credenciales inválidas' });
       }
     })
