@@ -67,7 +67,51 @@ const getImages = (req, res) => {
     // Resto del código para manejar otras búsquedas
   }
 };
+const getAllProducts = (req, res) => {
+  const { id_producto } = req.params;
+  const { nombre_producto } = req.query;
 
+  if (id_producto) {
+    const selectProductQuery = 'SELECT * FROM producto WHERE id_producto = $1';
+    const values = [id_producto];
+
+    pool.query(selectProductQuery, values)
+      .then((result) => {
+        if (result.rows.length > 0) {
+          res.json({ product: result.rows[0] });
+        } else {
+          res.status(404).json({ message: 'Producto no encontrado' });
+        }
+      })
+      .catch((error) => {
+        console.error('Error al obtener producto:', error.message);
+        res.status(500).json({ error: 'Error al obtener producto' });
+      });
+  } else if (nombre_producto) {
+    const selectProductQuery = 'SELECT * FROM producto WHERE nombre_producto = $1';
+    const values = [nombre_producto];
+
+    pool.query(selectProductQuery, values)
+      .then((result) => {
+        res.json({ products: result.rows });
+      })
+      .catch((error) => {
+        console.error('Error al obtener productos:', error.message);
+        res.status(500).json({ error: 'Error al obtener productos' });
+      });
+  } else {
+    const selectAllProductsQuery = 'SELECT * FROM producto';
+
+    pool.query(selectAllProductsQuery)
+      .then((result) => {
+        res.json({ products: result.rows });
+      })
+      .catch((error) => {
+        console.error('Error al obtener productos:', error.message);
+        res.status(500).json({ error: 'Error al obtener productos' });
+      });
+  }
+};
 const getAllClientes = (req, res) => {
   const selectAllClientesQuery = 'SELECT * FROM cliente';
 
@@ -109,6 +153,7 @@ module.exports = {
   getImages,
   getAllClientes,
   loginUser,
+  getAllProducts,
 };
 
 

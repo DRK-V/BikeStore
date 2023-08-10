@@ -19,7 +19,8 @@ app.get('/images', dataController.getImages);
 app.get('/images/:id_imagen', dataController.getImages);
 app.get('/images/name/:nombre', dataController.getImages);
 app.get('/images/ruta/:ruta', dataController.getImages);
-
+app.get('/products', dataController.getAllProducts);
+app.get('/products/:id_producto', dataController.getAllProducts);
 
 
 // Ruta para ver todos los clientes
@@ -42,3 +43,4 @@ app.get('/api/cliente', (req, res) => {
 app.listen(port, () => {
   console.log(`Servidor ejecutándose en http://localhost:${port}`);
 });
+
