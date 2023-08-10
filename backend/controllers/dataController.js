@@ -43,18 +43,6 @@ const getImages = (req, res) => {
         console.error('Error al obtener imagen:', error.message);
         res.status(500).json({ error: 'Error al obtener imagen' });
       });
-  } else if (nombre) {
-    const selectImageQuery = 'SELECT * FROM imagen_producto WHERE nombre_imagen = $1';
-    const values = [decodeURIComponent(nombre)];
-
-    pool.query(selectImageQuery, values)
-      .then((result) => {
-        res.json({ images: result.rows });
-      })
-      .catch((error) => {
-        console.error('Error al obtener imágenes:', error.message);
-        res.status(500).json({ error: 'Error al obtener imágenes' });
-      });
   } else if (ruta) {
     const selectImageQuery = 'SELECT * FROM imagen_producto WHERE ruta = $1';
     const values = [decodeURIComponent(ruta)];

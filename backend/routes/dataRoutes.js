@@ -6,8 +6,6 @@ const router = express.Router();
 
 router.get('/images', dataController.getImages);
 router.get('/images/:id_imagen', dataController.getImages);
-router.get('/images/name/:nombre', dataController.getImages);
-router.get('/images/ruta/:ruta', dataController.getImages);
 router.get('/products', dataController.getAllProducts);
 router.get('/products/:id_producto', dataController.getAllProducts);
 router.get('/cliente', dataController.getAllClientes);
