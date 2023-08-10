@@ -1,3 +1,5 @@
+//datacontroller
+
 const { pool } = require('../config/db');
 
 const registerUser = (userData) => {
@@ -8,14 +10,62 @@ const registerUser = (userData) => {
 };
 
 const getImages = (req, res) => {
-  pool.query('SELECT * FROM imagen_producto', (error, result) => {
-    if (error) {
-      console.error('Error al obtener datos', error.message);
-      res.status(500).json({ error: 'Error al obtener datos' });
-    } else {
-      res.json({ images: result.rows });
-    }
-  });
+  const { id_imagen, nombre, ruta } = req.params;
+
+  if (!id_imagen && !nombre && !ruta) {
+    const selectAllImagesQuery = 'SELECT * FROM imagen_producto';
+
+    pool.query(selectAllImagesQuery)
+      .then((result) => {
+        res.json({ images: result.rows });
+      })
+      .catch((error) => {
+        console.error('Error al obtener imágenes:', error.message);
+        res.status(500).json({ error: 'Error al obtener imágenes' });
+      });
+    } else if (id_imagen) {
+    const selectImageQuery = 'SELECT * FROM imagen_producto WHERE id_imagen = $1';
+    const values = [id_imagen];
+
+    pool.query(selectImageQuery, values)
+      .then((result) => {
+        if (result.rows.length > 0) {
+          res.json({ image: result.rows[0] });
+        } else {
+          res.status(404).json({ message: 'Imagen no encontrada' });
+        }
+      })
+      .catch((error) => {
+        console.error('Error al obtener imagen:', error.message);
+        res.status(500).json({ error: 'Error al obtener imagen' });
+      });
+  } else if (nombre) {
+    const selectImageQuery = 'SELECT * FROM imagen_producto WHERE nombre_imagen = $1';
+    const values = [decodeURIComponent(nombre)];
+
+    pool.query(selectImageQuery, values)
+      .then((result) => {
+        res.json({ images: result.rows });
+      })
+      .catch((error) => {
+        console.error('Error al obtener imágenes:', error.message);
+        res.status(500).json({ error: 'Error al obtener imágenes' });
+      });
+  } else if (ruta) {
+    const selectImageQuery = 'SELECT * FROM imagen_producto WHERE ruta = $1';
+    const values = [decodeURIComponent(ruta)];
+
+    pool.query(selectImageQuery, values)
+      .then((result) => {
+        res.json({ images: result.rows });
+      })
+      .catch((error) => {
+        console.error('Error al obtener imágenes:', error.message);
+        res.status(500).json({ error: 'Error al obtener imágenes' });
+      });
+  } else {
+    // Resto del código para manejar otras búsquedas
+  }
 };
 
 const getAllClientes = (req, res) => {
