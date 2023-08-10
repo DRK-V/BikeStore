@@ -50,8 +50,8 @@ export const Card_container = (props) => {
                     discount: `${getRandomNumber(1, 50)}%`,
                     imagen: imagesBaseUrl + (index + 1),
                     descuento: `${getRandomNumber(7, 15)}.000.000`,
-                    nombre: product.nombre_producto,
-                    precio: product.precio,
+                    nombre:product.product.nombre_producto,
+                    precio: product.product.precio,
                     cuotas: '35 cuotas en 250.000',
                 };
             });
@@ -68,6 +68,7 @@ export const Card_container = (props) => {
     return (
         <article className={getCardContainerClass(props.is_categories, props.is_similar)}>
             {cardsData.map((card) => (
+                <>
                 <Card
                     key={card.id}
                     card_clase={getCardClase(props.is_categories, props.is_similar)}
@@ -78,6 +79,7 @@ export const Card_container = (props) => {
                     precio={card.precio}
                     cuotas={card.cuotas}
                 />
+                </>
             ))}
         </article>
     );
