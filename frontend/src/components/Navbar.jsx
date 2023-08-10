@@ -20,7 +20,6 @@ export const Navbar = () => {
   }, [isLoggedIn]);
 
   return (
-
     <>
       <div
         className={`menu_resp ${menu ? "activar-active" : "desactivar-off"}`}
@@ -31,24 +30,30 @@ export const Navbar = () => {
         <nav className="menu_res">
           <div className="info_res">
             <ul>
-              <a href="/filters">
+              <Link to="/filters">
                 <li>Categorias</li>
-              </a>
-              <a href="/filters">
+              </Link>
+              <Link to="/filters">
                 <li>Ofertas</li>
-              </a>
-              <a href="#">
+              </Link>
+              <Link to="#">
                 <li>Populares</li>
-              </a>
-              <a href="/register" className={isLoggedIn=== true ? 'desactivar_opcion':''}>
+              </Link>
+              <Link
+                to="/register"
+                className={isLoggedIn === true ? "desactivar_opcion" : ""}
+              >
                 <li>Crea tu cuenta</li>
-              </a>
-              <a href="/Login" className={isLoggedIn=== true ? 'desactivar_opcion':''}>
+              </Link>
+              <Link
+                to="/Login"
+                className={isLoggedIn === true ? "desactivar_opcion" : ""}
+              >
                 <li>Ingresar</li>
-              </a>
-              <a href="#">
+              </Link>
+              <Link to="#">
                 <li>Mis compras</li>
-              </a>
+              </Link>
               <i></i>
             </ul>
           </div>
@@ -72,36 +77,43 @@ export const Navbar = () => {
           />
         </button>
         <img src={carrito} alt="carrito" className="car2" />
-
       </nav>
       <nav className="nav2">
         <div className="left-side">
           <ul>
-            <a href="/filters">
+            <Link to="/filters">
               <li>Categorias</li>
-            </a>
-            <a href="/filters">
+            </Link>
+            <Link to="/filters">
               <li>Ofertas</li>
-            </a>
-            <a href="#">
+            </Link>
+            <Link to="#">
               <li>Populares</li>
-            </a>
+            </Link>
           </ul>
         </div>
         <div className="right-side">
           <ul>
-            <a href="/register" className={isLoggedIn=== true ? 'desactivar_opcion':''}>
+            <Link
+              to="/register"
+              className={isLoggedIn === true ? "desactivar_opcion" : ""}
+            >
               <li>Crea tu cuenta</li>
-            </a>
-            <a href="/Login" className={isLoggedIn=== true ? 'desactivar_opcion':''}>
+            </Link>
+            <Link
+              to="/Login"
+              className={isLoggedIn === true ? "desactivar_opcion" : ""}
+            >
               <li>Ingresar</li>
-            </a>
-            <a href="#">
+            </Link>
+            <Link to="#">
               <li>Mis compras</li>
-            </a>
+            </Link>
             <i></i>
           </ul>
-          <img src={carrito} alt="carrito" className="car" />
+          <Link to="/Carrito_compras">
+            <img src={carrito} alt="carrito" className="car" />
+          </Link>
         </div>
       </nav>
     </>
