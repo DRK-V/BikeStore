@@ -4,14 +4,23 @@ import carrito from "../assets/carrito.png";
 import menuu from "../assets/menu.png";
 import cerrar from "../assets/cerrar.png";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 
+import React from "react";
 export const Navbar = () => {
   const [menu, setMenu] = useState(false);
   const handleMenuClick = () => {
     setMenu(!menu);
   };
+  const { isLoggedIn } = useAuth();
+
+  React.useEffect(() => {
+    console.log(`Sesión activa: ${isLoggedIn}`);
+  }, [isLoggedIn]);
 
   return (
+
     <>
       <div
         className={`menu_resp ${menu ? "activar-active" : "desactivar-off"}`}
@@ -31,10 +40,10 @@ export const Navbar = () => {
               <a href="#">
                 <li>Populares</li>
               </a>
-              <a href="/register">
+              <a href="/register" className={isLoggedIn=== true ? 'desactivar_opcion':''}>
                 <li>Crea tu cuenta</li>
               </a>
-              <a href="/Login">
+              <a href="/Login" className={isLoggedIn=== true ? 'desactivar_opcion':''}>
                 <li>Ingresar</li>
               </a>
               <a href="#">
@@ -46,7 +55,9 @@ export const Navbar = () => {
         </nav>
       </div>
       <nav className="nav1">
-        <img src={icon} alt="" className="bike" />
+        <Link to="/" className="bike">
+          <img src={icon} alt="" />
+        </Link>
         <form action="">
           <input type="text" className="busque" />
           <button className="buscar"></button>
@@ -79,10 +90,10 @@ export const Navbar = () => {
         </div>
         <div className="right-side">
           <ul>
-            <a href="/register">
+            <a href="/register" className={isLoggedIn=== true ? 'desactivar_opcion':''}>
               <li>Crea tu cuenta</li>
             </a>
-            <a href="/Login">
+            <a href="/Login" className={isLoggedIn=== true ? 'desactivar_opcion':''}>
               <li>Ingresar</li>
             </a>
             <a href="#">
