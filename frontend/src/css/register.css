@@ -111,7 +111,7 @@ h1 {
     right: 110px;
   }
   .form-container {
-
+    max-width: 400px;
     margin: 0 auto;
 }
 .split-container {

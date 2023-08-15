@@ -4,20 +4,12 @@ import carrito from "../assets/carrito.png";
 import menuu from "../assets/menu.png";
 import cerrar from "../assets/cerrar.png";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useAuth } from "./AuthContext";
 
-import React from "react";
 export const Navbar = () => {
   const [menu, setMenu] = useState(false);
   const handleMenuClick = () => {
     setMenu(!menu);
   };
-  const { isLoggedIn } = useAuth();
-
-  React.useEffect(() => {
-    console.log(`Sesión activa: ${isLoggedIn}`);
-  }, [isLoggedIn]);
 
   return (
     <>
@@ -30,39 +22,31 @@ export const Navbar = () => {
         <nav className="menu_res">
           <div className="info_res">
             <ul>
-              <Link to="/filters">
+              <a href="/filters">
                 <li>Categorias</li>
-              </Link>
-              <Link to="/filters">
+              </a>
+              <a href="/filters">
                 <li>Ofertas</li>
-              </Link>
-              <Link to="#">
+              </a>
+              <a href="#">
                 <li>Populares</li>
-              </Link>
-              <Link
-                to="/register"
-                className={isLoggedIn === true ? "desactivar_opcion" : ""}
-              >
+              </a>
+              <a href="/register">
                 <li>Crea tu cuenta</li>
-              </Link>
-              <Link
-                to="/Login"
-                className={isLoggedIn === true ? "desactivar_opcion" : ""}
-              >
+              </a>
+              <a href="/Login">
                 <li>Ingresar</li>
-              </Link>
-              <Link to="#">
+              </a>
+              <a href="#">
                 <li>Mis compras</li>
-              </Link>
+              </a>
               <i></i>
             </ul>
           </div>
         </nav>
       </div>
       <nav className="nav1">
-        <Link to="/" className="bike">
-          <img src={icon} alt="" />
-        </Link>
+        <img src={icon} alt="" className="bike" />
         <form action="">
           <input type="text" className="busque" />
           <button className="buscar"></button>
@@ -77,43 +61,36 @@ export const Navbar = () => {
           />
         </button>
         <img src={carrito} alt="carrito" className="car2" />
+
       </nav>
       <nav className="nav2">
         <div className="left-side">
           <ul>
-            <Link to="/filters">
+            <a href="/filters">
               <li>Categorias</li>
-            </Link>
-            <Link to="/filters">
+            </a>
+            <a href="/filters">
               <li>Ofertas</li>
-            </Link>
-            <Link to="#">
+            </a>
+            <a href="#">
               <li>Populares</li>
-            </Link>
+            </a>
           </ul>
         </div>
         <div className="right-side">
           <ul>
-            <Link
-              to="/register"
-              className={isLoggedIn === true ? "desactivar_opcion" : ""}
-            >
+            <a href="/register">
               <li>Crea tu cuenta</li>
-            </Link>
-            <Link
-              to="/Login"
-              className={isLoggedIn === true ? "desactivar_opcion" : ""}
-            >
+            </a>
+            <a href="/Login">
               <li>Ingresar</li>
-            </Link>
-            <Link to="#">
+            </a>
+            <a href="#">
               <li>Mis compras</li>
-            </Link>
+            </a>
             <i></i>
           </ul>
-          <Link to="/Carrito_compras">
-            <img src={carrito} alt="carrito" className="car" />
-          </Link>
+          <img src={carrito} alt="carrito" className="car" />
         </div>
       </nav>
     </>
