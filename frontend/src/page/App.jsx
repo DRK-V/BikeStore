@@ -1,18 +1,15 @@
-import Categories from './Categories';
 import  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Home } from './Home';
 import { Register } from './Register';
+import Categories from './Categories';
 import Bike_details from './Bike_details';
 import { Login } from './Login';
-import { AuthProvider } from '../components/AuthContext';
 import {Loading} from '../components/Loading';
 import { Payment } from './Payment';
-import { Carrito_compras } from './Carrito_compras';
-
-import '../css/animation.css'
 import '../css/main.css'
-
+import '../css/animation.css'
+import { Carrito_compras } from './Carrito_compras';
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -24,13 +21,11 @@ function App() {
   }, []);
 
   return (
-    <AuthProvider> {/* Agrega el AuthProvider aquí para envolver la aplicación */}
-      {isLoading ? (
-        // si esta cargando
+    <>
+      {isLoading ? (// si esta cargando
         <Loading />
       ) : (
-        <>
-         {/* No es necesario pasar ninguna prop al Navbar */}
+        <Router>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
@@ -40,9 +35,9 @@ function App() {
             <Route path="/payment" element={<Payment />} />
             <Route path="/Carrito_compras" element={<Carrito_compras />} />
           </Routes>
-        </>
+        </Router>
       )}
-    </AuthProvider>
+    </>
   );
 }
 

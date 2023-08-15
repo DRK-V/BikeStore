@@ -1,14 +1,10 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from './components/AuthContext';  // Importa el contexto de autenticación
-import App  from './page/App'
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './page/App.jsx'
 
-ReactDOM.render(
-  <BrowserRouter>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
-  </BrowserRouter>,
-  document.getElementById('root')
-);
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
