@@ -31,7 +31,7 @@ const getRandomNumber = (min, max) => {
 
 
 export const Card_container = (props) => {
-    const numCards = 4;
+    const numCards = 5;
     const [cardsData, setCardsData] = useState([]);
 
     const fetchRandomCards = async () => {
