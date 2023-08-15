@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/login.css';
-import { useAuth } from '../components/AuthContext';
+
+
 const leftImage = 'https://i.blogs.es/b00143/img_1513/840_560.jpeg';
 
 export const Login = () => {
   const navigate = useNavigate();
   const [loginStatus, setLoginStatus] = useState('');
-  const { login } = useAuth(); // Obtén la función de login del contexto
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -30,8 +30,6 @@ export const Login = () => {
       if (response.status === 200) {
         // Inicio de sesión exitoso
         setLoginStatus('¡Inicio de sesión exitoso!');
-        // Cambiar la sesión a true
-        login();
         // Redirigirse a '/'
         navigate('/');
       } else {
