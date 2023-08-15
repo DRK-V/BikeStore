@@ -20,7 +20,7 @@ export const Register = () => {
       alert('Revise la contraseña.');
       return;
     }
-
+console.log(userData)
     try {
       // Enviar los datos del formulario al backend utilizando fetch
       const response = await fetch('http://localhost:3060/api/register', {

@@ -4,13 +4,14 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const port = 3060;
-
+const { swaggerDocs } = require('./routes/swagger')
 app.use(express.json());
 app.use(cors());
 
 const dataController = require('./controllers/dataController');
 
 const dataRoutes = require('./routes/dataRoutes');
+swaggerDocs(app, port);
 
 app.use('/images', express.static(__dirname + '/images'));
 app.use('/', dataRoutes);
