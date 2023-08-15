@@ -11,13 +11,13 @@ const options = {
         },
         servers: [
             {
-                url: "http://localhost:3060", // Cambia esto a la URL base de tu API
-                description: "Local development server"
+                url: "http://localhost:3060/api/v1/docs", // Cambia esto a la URL base de tu API
+                description: "si"
             }
             // Puedes agregar más servidores aquí si es necesario
         ]
     },
-    apis: ['src/controllers/*.js'], // Cambia esto para incluir todas las rutas de tus controladores
+    apis: ['./routes/dataRoutes.js'], // Cambia esto para incluir todas las rutas de tus controladores
 };
 
 const swaggerSpec = swaggerJsDoc(options);
