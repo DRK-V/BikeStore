@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { Card } from './Card';
 
 export const Card_container = (props) => {
-    const numCards = 4; // The number of cards to display
+
+    const numCards = 5;
+
     const [cardsData, setCardsData] = useState([]);
 
     const card_clase = getCardClase(props.is_categories); // Helper function to get the card_clase
