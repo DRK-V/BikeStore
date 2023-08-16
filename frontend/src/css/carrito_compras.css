@@ -1,4 +1,4 @@
-.car_comp {
+.car_comp{
     position: relative;
     margin: 20px;
     width: 80%;
@@ -11,12 +11,12 @@
     align-items: center;
     box-shadow: 4px 5px 4px 4px rgba(128, 128, 128, 0.452);
 
-
+    
 }
 
 
 
-.car_comp>h1 {
+.car_comp > h1{
     width: 100%;
     height: 10%;
     display: flex;
@@ -26,103 +26,32 @@
 }
 
 /* aca va el de los conotenedores */
-.Cart_compras_carrito {
-    width: 75%;
-    height: 27%;
+.Cart_compras_carrito{
+    width: 50%;
+    height: 20%;
+    background-color: aqua;
     position: relative;
     display: flex;
-    flex-direction: column;
-    border-radius: 0 .5rem .5rem 0;
-    border: none;
-    border-left: solid 5px #7EE29A;
-
-
-
-}
-
-.Cart_compras_carrito::after {
-    content: "";
-    width: 1em;
-    height: 1em;
-    left: -1.8%;
-    top: 20%;
-    clip-path: circle();
-    background-color: #7EE29A;
-    position: absolute;
-}
-
-.Cart_compras_carrito>h2 {
-    margin-left: 6%;
-    width: 100%;
-    height: 26%;
-}
-
-.info_bici_compra {
-    width: 100%;
-    height: 74%;
-    margin-left: 6%;
-    display: flex;
-    flex-direction: row;
-}
-
-/*botones de aumentar productos*/
-.botones_compra{
-    width: 36%;
-    margin-left: 2%;
-    align-items: end;
-    display: flex;
-}
-
-.boton1 {
-    margin: 1%;
-    width: 21%;
-    height: 32%;
-    color: transparent;
-    border: solid 2px #bef6c4a2;
-    border-radius: 0.9em;
-    background-color: transparent;
-}
-.boton2{
-    margin: 1%;
-    width: 38%;
-    height: 32%;
-    border: solid 2px #bef6c4a2;
-    border-radius: 0.5em;
-    padding: 3%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.su_re{
-    background-color: transparent;
-    border: none;
-}
-
-/*imagen de contenedor de compras*/
-.img_bicci {
-    width: 27%;
-    height: 100%;
-    position: relative;
-    object-fit: contain;
-    margin-right: 10px;
+    border-radius: .5rem;
+    
+    
 }
 
 /* here is the one with the purchase values and purchase button */
 
-.precios_pagos {
+.precios_pagos{
     width: 100%;
     height: 25%;
     position: relative;
-    top: 33%;
+    top: 39%;
     display: flex;
     justify-content: center;
     align-items: flex-end;
     flex-direction: column-reverse;
-
+    
 }
 
-.info_pc {
+.info_pc{
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
@@ -139,10 +68,10 @@
     height: 100%;
     object-fit: contain;
     margin-right: 10px;
-
+       
 }
 
-.pagar {
+.pagar{
     width: 45%;
     height: 26%;
     display: flex;

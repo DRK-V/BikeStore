@@ -147,7 +147,9 @@ li {
 
   color: black;
 }
-
+.desactivar_opcion{
+  display: none;
+}
 /*responsive*/
 
 @media (max-width:760px) {

@@ -32,7 +32,7 @@ const Categories = () => {
                     </ul>
                 </div>
                 {/* aqui se debe poner las cards pero con 3 columnas */}
-                <Card_container is_categories="true" />
+                <Card_container is_categories="true" is_similar="false"/>
             </div>
             <Footer />
         </>
