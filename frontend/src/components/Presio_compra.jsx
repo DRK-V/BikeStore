@@ -1,4 +1,4 @@
-import React from 'react'
+
 import '../css/carrito_compras.css'
 import carritoo from "../assets/bolsa-de-la-compra.png";
 
