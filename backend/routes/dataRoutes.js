@@ -80,7 +80,7 @@ router.get('/images/:id_imagen', dataController.getImages);
   *                 stock: 2
   *                 type: Mountain
   *                 color: red
-  *                 image_code: 2
+  *                 image_code: 3
  *               - id: 4
   *                 name: Helmet
   *                 price: 50
