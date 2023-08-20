@@ -3,11 +3,14 @@
 const { pool } = require('../config/db');
 
 const registerUser = (userData) => {
-  const insertUserQuery = 'INSERT INTO cliente (nombre_usuario, correo, contrasena, telefono, pais, ciudad) VALUES ($1, $2, $3, $4, $5, $6)';
-  const values = [userData.nombre, userData.email, userData.password, userData.telefono, userData.pais, userData.ciudad];
+  const insertUserQuery = 'INSERT INTO cliente (nombre_cliente, correo, contrasena, telefono, tipo_de_documento, numero_de_documento) VALUES ($1, $2, $3, $4, $5, $6)';
+  const nombreCompleto = userData.nombre_cliente; // Aquí tienes el nombre y el apellido juntos
+  const values = [nombreCompleto, userData.email, userData.password, userData.telefono, userData.tipo_de_documento, userData.numero_de_documento];
 
   return pool.query(insertUserQuery, values);
 };
+
+
 
 const getImages = (req, res) => {
   const { id_imagen, nombre, ruta } = req.params;
