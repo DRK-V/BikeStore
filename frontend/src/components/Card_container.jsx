@@ -31,7 +31,10 @@ const getRandomNumber = (min, max) => {
 
 
 export const Card_container = (props) => {
+
+
     const numCards = 4;
+
     const [cardsData, setCardsData] = useState([]);
 
     const fetchRandomCards = async () => {
@@ -71,21 +74,19 @@ export const Card_container = (props) => {
 
     return (
         <article className={getCardContainerClass(props.is_categories, props.is_similar)}>
-            {cardsData.map((card) => (
-                <>
-                <Card
-                    key={card.id}
-                    card_clase={getCardClase(props.is_categories, props.is_similar)}
-                    discount={card.discount}
-                    imagen={card.imagen}
-                    descuento={card.descuento}
-                    nombre={card.nombre}
-                    precio={card.precio}
-                    cuotas={card.cuotas}
-                />
-                </>
-            ))}
-        </article>
+        {cardsData.map((card) => (
+          <Card
+            key={card.id} // Agregar una prop "key" única
+            card_clase={getCardClase(props.is_categories, props.is_similar)}
+            discount={card.discount}
+            imagen={card.imagen}
+            descuento={card.descuento}
+            nombre={card.nombre}
+            precio={card.precio}
+            cuotas={card.cuotas}
+          />
+        ))}
+      </article>
     );
 
 };

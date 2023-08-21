@@ -1,14 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from './components/AuthContext';  // Importa el contexto de autenticación
-import App  from './page/App'
+import { AuthProvider } from './components/AuthContext';
+import { createRoot } from 'react-dom/client'; // Importa createRoot
 
-ReactDOM.render(
+import App from './page/App';
+
+const root = document.getElementById('root');
+
+// Usar createRoot en lugar de render
+createRoot(root).render(
   <BrowserRouter>
     <AuthProvider>
       <App />
     </AuthProvider>
-  </BrowserRouter>,
-  document.getElementById('root')
+  </BrowserRouter>
 );

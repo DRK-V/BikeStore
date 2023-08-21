@@ -41,20 +41,20 @@ export const Navbar = () => {
               </Link>
               <Link
                 to="/register"
-                className={isLoggedIn === true ? "desactivar_opcion" : ""}
               >
-                <li>Crea tu cuenta</li>
+                <li className={isLoggedIn === true ? "desactivar_opcion" : ""}>Crea tu cuenta</li>
               </Link>
               <Link
                 to="/Login"
-                className={isLoggedIn === true ? "desactivar_opcion" : ""}
               >
-                <li>Ingresar</li>
+                <li className={isLoggedIn === true ? "desactivar_opcion" : ""}>Ingresar</li>
               </Link>
               <Link to="#">
                 <li>Mis compras</li>
               </Link>
-              <i></i>
+              <li>
+                <i></i>
+              </li>
             </ul>
           </div>
         </nav>
@@ -96,24 +96,24 @@ export const Navbar = () => {
           <ul>
             <Link
               to="/register"
-              className={isLoggedIn === true ? "desactivar_opcion" : ""}
+
             >
-              <li>Crea tu cuenta</li>
+              <li className={isLoggedIn === true ? "desactivar_opcion" : ""}>Crea tu cuenta</li>
             </Link>
             <Link
               to="/Login"
-              className={isLoggedIn === true ? "desactivar_opcion" : ""}
+
             >
-              <li>Ingresar</li>
+              <li className={isLoggedIn === true ? "desactivar_opcion" : ""}>Ingresar</li>
             </Link>
             <Link to="#">
               <li>Mis compras</li>
             </Link>
             <i></i>
+            <Link to="/Carrito_compras">
+              <img src={carrito} alt="carrito" className="car" />
+            </Link>
           </ul>
-          <Link to="/Carrito_compras">
-            <img src={carrito} alt="carrito" className="car" />
-          </Link>
         </div>
       </nav>
     </>

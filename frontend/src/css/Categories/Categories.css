@@ -22,7 +22,10 @@
 .menu_categories>ul {
     width: 80%;
 }
-
+.menu_categories>ul>a>li ,
+.menu_categories>ul>a {
+    margin-top: 1em;
+}
 .menu_categories>ul>h1 {
     font-size: 1.7em;
 }
