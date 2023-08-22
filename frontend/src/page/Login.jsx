@@ -5,7 +5,7 @@ import { useAuth } from '../components/AuthContext';
 import leftImage from '../assets/bici_login.png';
 
 export const Login = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const [loginStatus, setLoginStatus] = useState('');
 
   const { login } = useAuth();
@@ -85,13 +85,11 @@ export const Login = () => {
             <form id="form12" onSubmit={handleSubmit}>
               <div className="form-row">
                 <i className="fas fa-envelope"></i>
-                <input type="email" placeholder='Correo electrónico:' name="email" required />
+                <input type="email" placeholder='Correo electrónico' name="email" required />
               </div>
               <div className="form-row">
                 <i className="fas fa-lock"></i>
-                <input type="password" placeholder='Contraseña:' name="password" required></input>
-
-
+                <input type="password" placeholder='Contraseña' name="password" required></input>
               </div>
               <button className='button-ini' type="submit">Iniciar</button>
             </form>
