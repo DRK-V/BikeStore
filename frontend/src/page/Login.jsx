@@ -2,19 +2,19 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/login.css';
 import { useAuth } from '../components/AuthContext';
-const leftImage = 'https://i.blogs.es/b00143/img_1513/840_560.jpeg';
+import leftImage from '../assets/bici_login.png';
 
 export const Login = () => {
   const navigate = useNavigate(); 
   const [loginStatus, setLoginStatus] = useState('');
 
-  const { login } = useAuth(); 
-  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const { login } = useAuth();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
     if (isLoggedIn) {
       const redirectTimeout = setTimeout(() => {
         navigate('/');
-      }, 3000); 
+      }, 3000);
 
       return () => {
         clearTimeout(redirectTimeout);
@@ -32,13 +32,13 @@ export const Login = () => {
     });
 
     try {
-    
+
       if (!userData.email || !userData.password) {
         setLoginStatus('Por favor, complete todos los campos.');
         return;
       }
 
-     
+
       const response = await fetch('http://localhost:3060/api/login', {
         method: 'POST',
         headers: {
@@ -48,19 +48,19 @@ export const Login = () => {
       });
 
       if (response.status === 200) {
-      
+
         setLoginStatus('¡Inicio de sesión exitoso!');
 
-       
+
         login();
-        setIsLoggedIn(true); 
+        setIsLoggedIn(true);
 
       } else {
-     
+
         setLoginStatus('Credenciales inválidas. Intente nuevamente.');
       }
     } catch (error) {
-      
+
       console.error('Error en la solicitud al backend:', error);
       setLoginStatus('Error en el servidor. Intente nuevamente más tarde.');
     }
@@ -81,7 +81,7 @@ export const Login = () => {
             {isLoggedIn && (
               <div className="login-message-overlay">¡Has iniciado sesión exitosamente!</div>
             )}
-            
+
             <form id="form12" onSubmit={handleSubmit}>
               <div className="form-row">
                 <i className="fas fa-envelope"></i>
@@ -91,7 +91,7 @@ export const Login = () => {
                 <i className="fas fa-lock"></i>
                 <input type="password" placeholder='Contraseña' name="password" required></input>
                
-                
+e6b8e7aa42c5d611c4ceca1004eb7852788c24b4
               </div>
               <button className='button-ini' type="submit">Iniciar</button>
             </form>
