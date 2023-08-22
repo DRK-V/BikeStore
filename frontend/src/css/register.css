@@ -13,7 +13,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  max-width: 70%;
+  min-width: 62%;
   height: 75%;
   border-radius: 15px;
   padding: 5px;
@@ -41,10 +41,9 @@ h1 {
 }
 
 .left-side img {
-  max-width: 100%;
   height: 100%;
   border-radius: 15px;
-  width: 100%;
+  width: 28em;
 }
 
 /* Formulario */

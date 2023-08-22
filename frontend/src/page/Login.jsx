@@ -90,8 +90,6 @@ export const Login = () => {
               <div className="form-row">
                 <i className="fas fa-lock"></i>
                 <input type="password" placeholder='Contraseña' name="password" required></input>
-               
-e6b8e7aa42c5d611c4ceca1004eb7852788c24b4
               </div>
               <button className='button-ini' type="submit">Iniciar</button>
             </form>
