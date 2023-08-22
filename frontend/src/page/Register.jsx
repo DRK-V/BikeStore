@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/register.css';
 
@@ -9,6 +9,8 @@ export const Register = () => {
   const [registrationStatus, setRegistrationStatus] = useState('');
   const [passwordValidation, setPasswordValidation] = useState(false);
   const [missingParams, setMissingParams] = useState([]);
+  const [showRegistrationMessage, setShowRegistrationMessage] = useState(false);
+  const [redirectCountdown, setRedirectCountdown] = useState(3);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -64,8 +66,15 @@ export const Register = () => {
       });
 
       if (response.status === 201) {
-        setRegistrationStatus('¡Registro exitoso!');
-        navigate('/');
+        setShowRegistrationMessage(true);
+        const countdownInterval = setInterval(() => {
+          setRedirectCountdown((prevCountdown) => prevCountdown - 1);
+        }, 1000);
+
+        setTimeout(() => {
+          clearInterval(countdownInterval);
+          navigate('/login');
+        }, 3000);
       } else {
         setRegistrationStatus('Error al registrarse. Intente nuevamente.');
       }
@@ -166,7 +175,14 @@ export const Register = () => {
               )}
               <button className='regis-button' type="submit">Registrarse</button>
             </form>
-            <div className="registration-status">{registrationStatus}</div>
+            <div className="registration-status">
+              {showRegistrationMessage && (
+                <div>
+                  Te has registrado. Serás redirigido en {redirectCountdown} segundos...
+                </div>
+              )}
+              {registrationStatus && <div>{registrationStatus}</div>}
+            </div>
           </div>
         </div>
       </div>

@@ -70,7 +70,12 @@ h1 {
   border: 1px solid #ccc;
   border-radius: 10px;
 }
-
+.registration-status {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 18px;
+  color: green; /* Color del mensaje de éxito */
+}
 .button-container {
   display: flex;
   justify-content: space-between;
