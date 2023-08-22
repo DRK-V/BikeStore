@@ -7,6 +7,7 @@ const leftImage = 'https://i.blogs.es/b00143/img_1513/840_560.jpeg';
 export const Login = () => {
   const navigate = useNavigate();
   const [loginStatus, setLoginStatus] = useState('');
+
   const { login } = useAuth(); 
   const [isLoggedIn, setIsLoggedIn] = useState(false); 
   useEffect(() => {
@@ -20,6 +21,7 @@ export const Login = () => {
       };
     }
   }, [isLoggedIn, navigate]);
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -48,9 +50,11 @@ export const Login = () => {
       if (response.status === 200) {
       
         setLoginStatus('¡Inicio de sesión exitoso!');
+
        
         login();
         setIsLoggedIn(true); 
+
       } else {
      
         setLoginStatus('Credenciales inválidas. Intente nuevamente.');

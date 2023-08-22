@@ -55,7 +55,7 @@ export const Register = () => {
       setRegistrationStatus('El número de teléfono debe tener exactamente 10 dígitos.');
       return;
     }
-
+console.log(userData)
     try {
       const response = await fetch('http://localhost:3060/api/register', {
         method: 'POST',
