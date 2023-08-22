@@ -111,20 +111,22 @@ router.get('/products/:id_producto', dataController.getAllProducts);
 router.get('/cliente', dataController.getAllClientes);
 
 
-router.post('/api/register', (req, res) => {
+router.post('/api/register', async (req, res) => {
   const userData = req.body;
 
-  // Validación de datos (Agrega aquí la validación si es necesario)
-
-  dataController.registerUser(userData)
-    .then(() => {
-      res.status(201).json({ message: 'Registro exitoso' });
-    })
-    .catch((error) => {
+  try {
+    await dataController.registerUser(userData);
+    res.status(201).json({ message: 'Registro exitoso' });
+  } catch (error) {
+    if (error.message === 'Este usuario ya está registrado.') {
+      res.status(409).json({ error: 'duplicate' }); 
+      } else {
       console.error('Error al insertar en la base de datos:', error);
       res.status(500).json({ message: 'Error en el servidor' });
-    });
+    }
+  }
 });
+
 
 /**
  * @openapi

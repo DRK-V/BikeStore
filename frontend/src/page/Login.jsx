@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/login.css';
 import { useAuth } from '../components/AuthContext';
@@ -7,7 +7,21 @@ const leftImage = 'https://i.blogs.es/b00143/img_1513/840_560.jpeg';
 export const Login = () => {
   const navigate = useNavigate();
   const [loginStatus, setLoginStatus] = useState('');
-  const { login } = useAuth(); // Obtén la función de login del contexto
+
+  const { login } = useAuth(); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  useEffect(() => {
+    if (isLoggedIn) {
+      const redirectTimeout = setTimeout(() => {
+        navigate('/');
+      }, 3000); 
+
+      return () => {
+        clearTimeout(redirectTimeout);
+      };
+    }
+  }, [isLoggedIn, navigate]);
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -18,7 +32,13 @@ export const Login = () => {
     });
 
     try {
-      // Enviar los datos del formulario al backend utilizando fetch
+    
+      if (!userData.email || !userData.password) {
+        setLoginStatus('Por favor, complete todos los campos.');
+        return;
+      }
+
+     
       const response = await fetch('http://localhost:3060/api/login', {
         method: 'POST',
         headers: {
@@ -28,31 +48,28 @@ export const Login = () => {
       });
 
       if (response.status === 200) {
-        // Inicio de sesión exitoso
+      
         setLoginStatus('¡Inicio de sesión exitoso!');
-        // Cambiar la sesión a true
+
+       
         login();
-        // Redirigirse a '/'
-        navigate('/');
+        setIsLoggedIn(true); 
+
       } else {
-        // Inicio de sesión fallido
+     
         setLoginStatus('Credenciales inválidas. Intente nuevamente.');
       }
     } catch (error) {
-      // Manejo de errores
+      
       console.error('Error en la solicitud al backend:', error);
       setLoginStatus('Error en el servidor. Intente nuevamente más tarde.');
     }
   };
 
-  const handleRedirect = () => {
-    navigate('/');
-  };
-
   return (
     <div className="App">
       <div className="split-container">
-        <button className="close-button2" onClick={handleRedirect}>
+        <button className="close-button2" onClick={() => navigate('/')}>
           <i className="fas fa-times"></i>
         </button>
         <div className="left-side">
@@ -61,6 +78,10 @@ export const Login = () => {
         <div className="right-side">
           <div className="form-container">
             <h1>Iniciar Sesión</h1>
+            {isLoggedIn && (
+              <div className="login-message-overlay">¡Has iniciado sesión exitosamente!</div>
+            )}
+            
             <form id="form12" onSubmit={handleSubmit}>
               <div className="form-row">
                 <i className="fas fa-envelope"></i>
@@ -68,7 +89,9 @@ export const Login = () => {
               </div>
               <div className="form-row">
                 <i className="fas fa-lock"></i>
-                <input type="password" placeholder='Contraseña:' name="password" required />
+                <input type="password" placeholder='Contraseña:' name="password" required></input>
+               
+                
               </div>
               <button className='button-ini' type="submit">Iniciar</button>
             </form>
