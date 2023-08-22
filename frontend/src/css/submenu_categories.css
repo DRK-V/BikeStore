@@ -1,15 +1,15 @@
 .sub-menu {
     position: absolute;
-    left: 0;
-    width: 100%;
-    height: 60vh;
+    left: 7%;
+    width: 25%;
+    height: 75vh;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    column-count: 2;
+    column-count: 1;
     /* Dividir en dos columnas */
-    column-gap: 20px;
+    /* column-gap: 20px; */
     /* Espacio entre columnas */
-    padding: 20px;
+    padding: 10px;
     /* Agregar espacio interno */
     z-index: 10;
 }
@@ -20,14 +20,14 @@
 
 
 .sub-menu-item {
-    padding: 10px 0;
-    width: 100%;
+    margin-top: 2%;
+    padding-left: 5%;
+    width: 95%;
     text-align: center;
     border-bottom: 1px solid #ccc;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding-left: 10%;
     transition: background-color 0.3s;
     /* Agregar transición para suavizar el cambio de color */
 
@@ -41,7 +41,7 @@
 
 .sub-menu-item>img {
     width: 20%;
-    height: 5em;
+    height: 4em;
     margin-right: 10px;
     object-fit: contain;
 }
