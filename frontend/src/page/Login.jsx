@@ -70,7 +70,9 @@ export const Login = () => {
     <div className="App">
       <div className="split-container">
         <button className="close-button2" onClick={() => navigate('/')}>
-          <i className="fas fa-times"></i>
+        <span className="material-icons">
+close
+</span>
         </button>
         <div className="left-side">
           <img src={leftImage} alt="Image on the left" />
