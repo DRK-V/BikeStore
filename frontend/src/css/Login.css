@@ -54,7 +54,7 @@
   .close-button2{
     position: absolute;
     margin-right: 5px;
-    top: 100px;
+    top: 85px;
     right: 260px;
     font-size: 30px;
     border: none;
@@ -70,8 +70,8 @@
   /* Puntos de interrupción */
 @media screen and (min-width: 1023px) and (max-width: 1300px){
   .close-button2{
-    top: 95px;
-    right: 135px;
+    top: 80px;
+    right: 210px;
   }
 }
 @media screen and (max-width: 767px) {
