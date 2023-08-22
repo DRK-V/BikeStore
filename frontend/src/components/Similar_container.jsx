@@ -1,5 +1,5 @@
 // Similar_container.jsx
-
+import React from 'react';
 import '../css/similar_bike.css';
 import { Card_container } from './Card_container';
 

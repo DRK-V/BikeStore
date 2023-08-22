@@ -1,0 +1,47 @@
+.sub-menu {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 60vh;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    column-count: 2;
+    /* Dividir en dos columnas */
+    column-gap: 20px;
+    /* Espacio entre columnas */
+    padding: 20px;
+    /* Agregar espacio interno */
+    z-index: 10;
+}
+.active-menu-item
+{
+    display: grid;
+}
+
+
+.sub-menu-item {
+    padding: 10px 0;
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 10%;
+    transition: background-color 0.3s;
+    /* Agregar transición para suavizar el cambio de color */
+
+    /* Cambio de color al pasar el mouse */
+    &:hover {
+        background-color: #7ee29a;
+        cursor: pointer;
+        /* Cambiar al color verde claro deseado */
+    }
+}
+
+.sub-menu-item>img {
+    width: 20%;
+    height: 5em;
+    margin-right: 10px;
+    object-fit: contain;
+}
