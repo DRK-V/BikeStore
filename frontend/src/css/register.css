@@ -21,7 +21,17 @@
   box-shadow:1px 1px 10px 3px rgba(0, 0, 0, 0.568);
 }
 
-
+.split-container1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 70%;
+  height: 75%;
+  border-radius: 15px;
+  padding: 5px;
+  box-sizing: border-box;
+  box-shadow:1px 1px 10px 3px rgba(0, 0, 0, 0.568);
+}
 h1 {
   margin: 20px 0;
   white-space: nowrap; /* Evita que el h1 se rompa en varias líneas */

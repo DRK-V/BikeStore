@@ -117,7 +117,7 @@ console.log(userData)
 
   return (
     <div className="App">
-      <div className="split-container">
+      <div className="split-container1">
         <button className="close-button" onClick={() => navigate('/')}>
         <span className="material-icons">
 close
