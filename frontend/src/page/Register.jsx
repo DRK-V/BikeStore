@@ -7,6 +7,10 @@ const leftImage = 'https://i.blogs.es/b00143/img_1513/840_560.jpeg';
 export const Register = () => {
   const navigate = useNavigate();
   const [registrationStatus, setRegistrationStatus] = useState('');
+  const [passwordValidation, setPasswordValidation] = useState(false);
+  const [missingParams, setMissingParams] = useState([]);
+  const [showRegistrationMessage, setShowRegistrationMessage] = useState(false);
+  const [redirectCountdown, setRedirectCountdown] = useState(3);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -16,13 +20,43 @@ export const Register = () => {
       userData[key] = value;
     });
 
+    const missing = [];
+    if (!userData.nombre) missing.push('nombre');
+    if (!userData.email) missing.push('email');
+    if (!userData.password) missing.push('password');
+    if (!userData.confirmPassword) missing.push('confirmPassword');
+    if (!userData.telefono) missing.push('telefono');
+    if (!userData.tipo_de_documento) missing.push('tipo_de_documento');
+    if (!userData.numero_de_documento) missing.push('numero_de_documento');
+
+    if (missing.length > 0) {
+      setMissingParams(missing);
+      return;
+    }
+
     if (userData.password !== userData.confirmPassword) {
-      alert('Revise la contraseña.');
+      setRegistrationStatus('Revise la contraseña.');
+      return;
+    }
+
+    if (userData.numero_de_documento.length < 8 || userData.numero_de_documento.length > 10) {
+      setRegistrationStatus('El número de documento debe tener entre 8 y 10 dígitos.');
+      return;
+    }
+
+    if (!isPasswordValid(userData.password)) {
+      setRegistrationStatus(
+        'La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula y un número.'
+      );
+      return;
+    }
+
+    if (userData.telefono.length !== 10) {
+      setRegistrationStatus('El número de teléfono debe tener exactamente 10 dígitos.');
       return;
     }
 console.log(userData)
     try {
-      // Enviar los datos del formulario al backend utilizando fetch
       const response = await fetch('http://localhost:3060/api/register', {
         method: 'POST',
         headers: {
@@ -30,21 +64,38 @@ console.log(userData)
         },
         body: JSON.stringify(userData),
       });
-
+  
       if (response.status === 201) {
-        // Registro exitoso
-        setRegistrationStatus('¡Registro exitoso!');
-        // Redirigirse a '/'
-        navigate('/');
+        setShowRegistrationMessage(true);
+        const countdownInterval = setInterval(() => {
+          setRedirectCountdown((prevCountdown) => prevCountdown - 1);
+        }, 1000);
+  
+        setTimeout(() => {
+          clearInterval(countdownInterval);
+          navigate('/login');
+        }, 3000);
       } else {
-        // Registro fallido
-        setRegistrationStatus('Error al registrarse. Intente nuevamente.');
+        const responseData = await response.json();
+        if (response.status === 409 && responseData.error === 'duplicate') {
+          setRegistrationStatus('El correo electrónico o el número de cédula ya están registrados.');
+        } else {
+          setRegistrationStatus('El correo electrónico o el número de cédula ya están registrados.');
+        }
       }
     } catch (error) {
-      // Manejo de errores
       console.error('Error en la solicitud al backend:', error);
       setRegistrationStatus('Error en el servidor. Intente nuevamente más tarde.');
     }
+  };
+
+  const isPasswordValid = (password) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    return passwordRegex.test(password);
+  };
+
+  const handlePasswordInput = (password) => {
+    setPasswordValidation(isPasswordValid(password));
   };
 
   const handleAlphaInput = (event) => {
@@ -84,28 +135,65 @@ console.log(userData)
               </div>
               <div className="form-row">
                 <i className="fas fa-lock"></i>
-                <input type="password" placeholder='Contraseña:' name="password" required />
+                <input
+                  type="password"
+                  placeholder='Contraseña:'
+                  name="password"
+                  required
+                  minLength="8"
+                  onChange={(e) => handlePasswordInput(e.target.value)}
+                />
+
                 <i className="fas fa-lock"></i>
                 <input type="password" placeholder='Confirmar contraseña:' name="confirmPassword" required />
               </div>
               <div className="form-row">
                 <i className="fas fa-phone"></i>
                 <input type="tel" placeholder='Teléfono:' name="telefono" required onInput={handleNumericInput} />
-                <i className="fas fa-globe"></i>
-                <input type="text" placeholder='País:' name="pais" required />
+                <i className="fas fa-id-card"></i>
+                <select className="form-row" name="tipo_de_documento" required>
+                  <option value="" disabled selected>
+                    Tipo de documento
+                  </option>
+                  <option value="CC">Cédula de ciudadanía</option>
+                  <option value="CE">Cédula extranjera</option>
+                </select>
               </div>
               <div className="form-row">
-                <i className="fas fa-map-marker-alt"></i>
-                <input type="text" placeholder='Ciudad:' name="ciudad" required />
+                <i className="fas fa-user"></i>
+                <input
+                  type="text"
+                  placeholder="Número de documento"
+                  name="numero_de_documento"
+                  required
+                  minLength="8"
+                  maxLength="10"
+                  onInput={handleNumericInput}
+                />
               </div>
+              {missingParams.length > 0 && (
+                <div className="missing-params">
+                  Faltan los siguientes parámetros: {missingParams.join(', ')}
+                </div>
+              )}
               <button className='regis-button' type="submit">Registrarse</button>
             </form>
-            <div className="registration-status">{registrationStatus}</div>
+            <div className="registration-status">
+              {showRegistrationMessage && (
+                <div className="registration-message-overlay">
+                  Te has registrado.
+                </div>
+              )}
+              {registrationStatus && (
+                <div className="error-message">
+                  {registrationStatus}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
 };
-
 

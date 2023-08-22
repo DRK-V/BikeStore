@@ -70,13 +70,30 @@ h1 {
   border: 1px solid #ccc;
   border-radius: 10px;
 }
+.registration-message-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(76, 175, 80, 0.9);
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 18px;
+  z-index: 9999;
+}
 
 .button-container {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
 }
-
+.form-row select{
+  width: 170px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
 .regis-button {
   background-color: #007bff;
   color: #fff;
@@ -98,6 +115,7 @@ h1 {
   border-radius: 10px;
   cursor: pointer;
   width: 30px;
+  background-color: inherit;
 }
 
 .form-row i {
@@ -107,8 +125,8 @@ h1 {
 /* Puntos de interrupción */
 @media screen and (min-width: 1023px) and (max-width: 1300px){
   .close-button {
-    top: 100px;
-    right: 110px;
+    top: 95px;
+    right: 115px;
   }
   .form-container {
 
@@ -166,8 +184,8 @@ h1 {
     display: none;
   }
   .close-button {
-    top: 100px;
-    right: 285px;
+    top: 240px;
+    right: 185px;
 }
 h1 {
   text-align: center;
