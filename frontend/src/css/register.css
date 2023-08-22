@@ -14,11 +14,11 @@
   align-items: center;
   justify-content: center;
   max-width: 70%;
-  height: 70%;
+  height: 75%;
   border-radius: 15px;
   padding: 5px;
   box-sizing: border-box;
-  box-shadow:1px 1px 5px 1px rgba(0, 0, 0, 0.568);
+  box-shadow:1px 1px 10px 3px rgba(0, 0, 0, 0.568);
 }
 
 
@@ -98,7 +98,7 @@ h1 {
 .regis-button {
   background-color: #007bff;
   color: #fff;
-  padding: 10px 20px;
+  padding: 14px 20px;
   border: none;
   border-radius: 10px;
   cursor: pointer;

@@ -5,7 +5,7 @@ import { useAuth } from '../components/AuthContext';
 const leftImage = 'https://i.blogs.es/b00143/img_1513/840_560.jpeg';
 
 export const Login = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const [loginStatus, setLoginStatus] = useState('');
 
   const { login } = useAuth(); 
