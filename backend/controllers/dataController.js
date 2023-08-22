@@ -7,15 +7,18 @@ const registerUser = async (userData) => {
   const selectUserQuery = 'SELECT COUNT(*) FROM cliente WHERE correo = $1 OR numero_de_documento = $2';
   const values = [userData.nombre, userData.email, userData.password, userData.telefono, userData.tipo_de_documento, userData.numero_de_documento];
 
- 
-  const existingUserCount = await pool.query(selectUserQuery, [userData.email, userData.numero_de_documento]);
-  const count = parseInt(existingUserCount.rows[0].count);
+  try {
+    const existingUserCount = await pool.query(selectUserQuery, [userData.email, userData.numero_de_documento]);
+    const count = parseInt(existingUserCount.rows[0].count);
 
-  if (count > 0) {
-    throw new Error('Este usuario ya está registrado.');
+    if (count > 0) {
+      throw new Error('Este usuario ya está registrado.');
+    }
+
+    return pool.query(insertUserQuery, values);
+  } catch (error) {
+    throw error;
   }
-
-  return pool.query(insertUserQuery, values);
 };
 
 

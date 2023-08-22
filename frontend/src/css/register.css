@@ -70,12 +70,19 @@ h1 {
   border: 1px solid #ccc;
   border-radius: 10px;
 }
-.registration-status {
-  margin-top: 20px;
+.registration-message-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(76, 175, 80, 0.9);
+  color: white;
+  padding: 10px 20px;
   text-align: center;
   font-size: 18px;
-  color: green; /* Color del mensaje de éxito */
+  z-index: 9999;
 }
+
 .button-container {
   display: flex;
   justify-content: space-between;
@@ -177,8 +184,8 @@ h1 {
     display: none;
   }
   .close-button {
-    top: 100px;
-    right: 285px;
+    top: 240px;
+    right: 185px;
 }
 h1 {
   text-align: center;

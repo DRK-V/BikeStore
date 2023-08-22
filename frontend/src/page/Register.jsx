@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/register.css';
 
@@ -64,19 +64,24 @@ export const Register = () => {
         },
         body: JSON.stringify(userData),
       });
-
+  
       if (response.status === 201) {
         setShowRegistrationMessage(true);
         const countdownInterval = setInterval(() => {
           setRedirectCountdown((prevCountdown) => prevCountdown - 1);
         }, 1000);
-
+  
         setTimeout(() => {
           clearInterval(countdownInterval);
           navigate('/login');
         }, 3000);
       } else {
-        setRegistrationStatus('Error al registrarse. Intente nuevamente.');
+        const responseData = await response.json();
+        if (response.status === 409 && responseData.error === 'duplicate') {
+          setRegistrationStatus('El correo electrónico o el número de cédula ya están registrados.');
+        } else {
+          setRegistrationStatus('El correo electrónico o el número de cédula ya están registrados.');
+        }
       }
     } catch (error) {
       console.error('Error en la solicitud al backend:', error);
@@ -136,11 +141,9 @@ export const Register = () => {
                   name="password"
                   required
                   minLength="8"
-                  onChange={(e) => {
-                    handlePasswordInput(e.target.value);
-                    handleChange(e);
-                  }}
+                  onChange={(e) => handlePasswordInput(e.target.value)}
                 />
+
                 <i className="fas fa-lock"></i>
                 <input type="password" placeholder='Confirmar contraseña:' name="confirmPassword" required />
               </div>
@@ -177,11 +180,15 @@ export const Register = () => {
             </form>
             <div className="registration-status">
               {showRegistrationMessage && (
-                <div>
-                  Te has registrado. Serás redirigido en {redirectCountdown} segundos...
+                <div className="registration-message-overlay">
+                  Te has registrado.
                 </div>
               )}
-              {registrationStatus && <div>{registrationStatus}</div>}
+              {registrationStatus && (
+                <div className="error-message">
+                  {registrationStatus}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -189,3 +196,4 @@ export const Register = () => {
     </div>
   );
 };
+
