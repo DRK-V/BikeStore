@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/register.css';
 
-const leftImage = 'https://i.blogs.es/b00143/img_1513/840_560.jpeg';
+import leftImage from '../assets/bici_login.png';
+
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -116,9 +117,11 @@ console.log(userData)
 
   return (
     <div className="App">
-      <div className="split-container">
+      <div className="split-container1">
         <button className="close-button" onClick={() => navigate('/')}>
-          <i className="fas fa-times"></i>
+        <span className="material-icons">
+close
+</span>
         </button>
         <div className="left-side">
           <img src={leftImage} alt="Image on the left" />
@@ -127,14 +130,19 @@ console.log(userData)
           <div className="form-container">
             <h1>Registrate</h1>
             <form id="form1" onSubmit={handleSubmit}>
+              <div className="form-row1">
               <div className="form-row">
-                <i className="fas fa-user"></i>
+                 <i className="fas fa-user"></i>
                 <input type="text" placeholder='Nombre' name="nombre" required onInput={handleAlphaInput} />
-                <i className="fas fa-envelope"></i>
-                <input type="email" placeholder='Correo electrónico:' name="email" required />
               </div>
               <div className="form-row">
-                <i className="fas fa-lock"></i>
+                 <i className="fas fa-envelope"></i>
+                <input type="email" placeholder='Correo electrónico:' name="email" required />
+              </div>
+              </div>
+              <div className="form-row1">
+              <div className="form-row">
+              <i className="fas fa-lock"></i>
                 <input
                   type="password"
                   placeholder='Contraseña:'
@@ -143,14 +151,19 @@ console.log(userData)
                   minLength="8"
                   onChange={(e) => handlePasswordInput(e.target.value)}
                 />
-
-                <i className="fas fa-lock"></i>
-                <input type="password" placeholder='Confirmar contraseña:' name="confirmPassword" required />
               </div>
               <div className="form-row">
-                <i className="fas fa-phone"></i>
+              <i className="fas fa-lock"></i>
+                <input type="password" placeholder='Confirmar contraseña:' name="confirmPassword" required />
+              </div>
+                 </div>
+              <div className="form-row1">
+              <div className="form-row">
+                 <i className="fas fa-phone"></i>
                 <input type="tel" placeholder='Teléfono:' name="telefono" required onInput={handleNumericInput} />
-                <i className="fas fa-id-card"></i>
+              </div>
+              <div className="form-row">
+                 <i className="fas fa-id-card"></i>
                 <select className="form-row" name="tipo_de_documento" required>
                   <option value="" disabled selected>
                     Tipo de documento
@@ -159,6 +172,8 @@ console.log(userData)
                   <option value="CE">Cédula extranjera</option>
                 </select>
               </div>
+              </div>
+              <div className="form-row1">
               <div className="form-row">
                 <i className="fas fa-user"></i>
                 <input
@@ -170,6 +185,8 @@ console.log(userData)
                   maxLength="10"
                   onInput={handleNumericInput}
                 />
+              </div>
+                
               </div>
               {missingParams.length > 0 && (
                 <div className="missing-params">
