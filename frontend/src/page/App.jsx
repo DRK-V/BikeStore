@@ -9,9 +9,11 @@ import { AuthProvider } from '../components/AuthContext';
 import {Loading} from '../components/Loading';
 import { Payment } from './Payment';
 import { Carrito_compras } from './Carrito_compras';
+import { Usuario_usu } from './Usuario_usu';
 
 import '../css/animation.css'
 import '../css/main.css'
+
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -38,6 +40,7 @@ function App() {
             <Route path="/details" element={<Bike_details />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/payment" element={<Payment />} />
+            <Route path="/Usuario_usu" element={<Usuario_usu/>} />
             <Route path="/Carrito_compras" element={<Carrito_compras />} />
           </Routes>
         </>
