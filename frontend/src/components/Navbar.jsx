@@ -154,7 +154,9 @@ export const Navbar = () => {
                 className={`user-icon ${isLoggedIn === false ? "desactivar_opcion" : ""}`}
                 onClick={toggleProfileMenu}
               >
-                <AiOutlineUser />
+                <li>
+                  <AiOutlineUser />
+                </li>
               </div>
             </Link>
           </ul>
