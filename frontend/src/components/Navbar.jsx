@@ -1,5 +1,6 @@
 import "../css/nav.css";
 import "../css/submenu_categories.css";
+import '../css/menu_profile.css'
 import icon from "../assets/bici.png";
 import carrito from "../assets/carrito.png";
 import menuu from "../assets/menu.png";
@@ -13,13 +14,20 @@ import b6 from "../assets/icons/b6.png";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "./AuthContext";
-
+import { Menu_profile } from "./Menu_profile";
 import React from "react";
-
+import { AiOutlineUser } from 'react-icons/ai';
 export const Navbar = () => {
   const [submenuVisible, setSubmenuVisible] = useState(false);
   const [menu, setMenu] = useState(false);
+  const [profileMenuVisible, setProfileMenuVisible] = useState(false);
   const { isLoggedIn } = useAuth();
+
+
+  const toggleProfileMenu = () => {
+    setProfileMenuVisible(!profileMenuVisible);
+  };
+
 
   const handleMenuClick = () => {
     setMenu(!menu);
@@ -135,11 +143,21 @@ export const Navbar = () => {
               </li>
             </Link>
             <Link to="#">
-              <li>Mis compras</li>
+              <li className={isLoggedIn === false ? "desactivar_opcion" : ""}>Mis compras</li>
             </Link>
             <i></i>
             <Link to="/Carrito_compras">
               <img src={carrito} alt="carrito" className="car" />
+            </Link>
+            <Link to="#">
+              <div
+                className={`user-icon ${isLoggedIn === false ? "desactivar_opcion" : ""}`}
+                onClick={toggleProfileMenu}
+              >
+                <li>
+                  <AiOutlineUser />
+                </li>
+              </div>
             </Link>
           </ul>
         </div>
@@ -178,6 +196,10 @@ export const Navbar = () => {
           </ul>
         </div>
       )}
+      {/* aqui va el menu de perfil */}
+      <div className={`menu_profile_container ${profileMenuVisible ? "active" : ""}`}>
+        <Menu_profile is_active={profileMenuVisible} onClose={toggleProfileMenu} />
+      </div>
     </>
   );
 };

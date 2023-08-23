@@ -1,0 +1,104 @@
+/* estos son los estilos del menu de usuario */
+ .menu_profile_container{
+    position: fixed;
+    float: right;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 23em;
+    z-index: 10;
+    background-color: white;
+}
+.menu_profile_container {
+    display: none;
+  }
+  
+  .menu_profile_container.active {
+    display: block;
+  }
+
+.menu_profile{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Sidebar.css */
+
+.sidebar {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    position: fixed;
+    top: 0;
+    left: -300px;
+    transition: left 0.3s ease-in-out;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sidebar.open {
+    left: 0;
+  }
+  
+  
+  .profile-section {
+    text-align: center;
+    padding: 20px 0;
+    width: 100%;
+    height: 40vh;
+  }
+  
+  .close-button-profile {
+    position: absolute; 
+    width: 15%;
+    height:0;
+    right: 0;
+    border: none;
+    color: #333;
+    font-size: 24px;
+    top: 0;
+    cursor: pointer;
+  }
+  
+  .profile-image {
+    width: 8em;    
+    height: 20vh;
+    background-color: gray;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .profile-section h3 {
+    margin-top: 10px;
+    font-size: 18px;
+  }
+  
+  .options-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    width: 95%;
+    left: 2.5%;
+  }
+  
+  .options-list li {
+    display: flex;
+    align-items: center;
+    padding: 1em 20px;
+    cursor: pointer;
+    &:hover{
+        background-color: #7ee29a;
+    }
+  }
+  
+  .options-list li svg {
+    margin-right: 10px;
+  }
+  
+  .options-list li span {
+    font-size: 16px;
+  }
+  
+  /* Add more styles as needed */
+  
