@@ -53,7 +53,7 @@ h1 {
 .left-side img {
   height: 100%;
   border-radius: 15px;
-  width: 28em;
+  width: 100%;
 }
 
 /* Formulario */
@@ -85,6 +85,7 @@ h1 {
 .form-row input {
   width: 170px;
   padding: 10px;
+  border-radius: 0.3em;
 }
 .registration-message-overlay {
   position: absolute;
@@ -123,8 +124,8 @@ h1 {
 .close-button {
   position: absolute;
   margin-right: 5px;
-  top: 100px;
-  right: 210px;
+  top: 80px;
+  right: 200px;
   font-size: 30px;
   border: none;
   border-radius: 10px;
@@ -140,12 +141,15 @@ h1 {
 /* Puntos de interrupción */
 @media screen and (min-width: 1023px) and (max-width: 1300px){
   .close-button {
-    top: 95px;
-    right: 115px;
+    right: 110px;
   }
   .form-container {
 
     margin: 0 auto;
+}
+
+.split-container1{
+  min-width: 80%;
 }
 .split-container {
   max-width: 80%;
@@ -161,7 +165,12 @@ h1 {
 
     display: none;
 }
-  .left-side,
+.split-container1{
+  box-shadow: none
+}
+  .left-side{
+    display: none;
+  }
   .right-side {
     width: 100%;
     margin-right: 0;
@@ -176,10 +185,13 @@ h1 {
     right: 10px;
   }
 
-  .form-row {
+  .form-row1 {
     flex-direction: column;
   }
-
+  .split-container {
+    height: 60%;
+    box-shadow: none;
+}
   h1 {
     font-size: 18px;
     text-align: center;
@@ -188,7 +200,9 @@ h1 {
 
 /* Tablets y pantallas más grandes */
 @media screen and (min-width: 768px) and (max-width: 1023px) {
-  .left-side,
+  .left-side{
+    display: none;
+  }
   .right-side {
     width: 100%; /* Cambia el ancho a 100% para tablets */
     height: auto;
@@ -199,8 +213,8 @@ h1 {
     display: none;
   }
   .close-button {
-    top: 240px;
-    right: 185px;
+    top: 75px;
+    right: 140px;
 }
 h1 {
   text-align: center;
@@ -209,6 +223,9 @@ h1 {
 margin: auto;
 }
 .split-container {
-height: 60%;
+  
+    height: 60%;
+    box-shadow: none;
+
 }
 }
