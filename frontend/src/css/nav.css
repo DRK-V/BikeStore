@@ -185,7 +185,9 @@ ul {
 li {
   margin-left: 10px;
   color: black;
-
+}
+.left-side>ul>a>li,
+.right-side>ul>a>li {
   &:hover {
     transition: .3s;
     color: white;
