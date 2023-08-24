@@ -42,7 +42,6 @@ const router = express.Router();
  *         description: Internal server error.
  */
 router.get('/images', dataController.getImages);
-
 router.get('/images/:id_imagen', dataController.getImages);
 /**
  * @openapi
@@ -92,8 +91,10 @@ router.get('/images/:id_imagen', dataController.getImages);
  *       500:
  *         description: Internal server error.
  */
+router.get('/products/:id_producto', dataController.getProductsWithImages);
+router.get('/products/:id_producto', dataController.getProductsWithImages);
+router.get('/products-with-images', dataController.getAllProductsWithImages);
 router.get('/products', dataController.getAllProducts);
-
 router.get('/products/:id_producto', dataController.getAllProducts);
 /**
  * @openapi
@@ -109,8 +110,6 @@ router.get('/products/:id_producto', dataController.getAllProducts);
  *         description: Internal server error.
  */
 router.get('/cliente', dataController.getAllClientes);
-
-
 router.post('/api/register', async (req, res) => {
   const userData = req.body;
 
@@ -119,8 +118,8 @@ router.post('/api/register', async (req, res) => {
     res.status(201).json({ message: 'Registro exitoso' });
   } catch (error) {
     if (error.message === 'Este usuario ya está registrado.') {
-      res.status(409).json({ error: 'duplicate' }); 
-      } else {
+      res.status(409).json({ error: 'duplicate' });
+    } else {
       console.error('Error al insertar en la base de datos:', error);
       res.status(500).json({ message: 'Error en el servidor' });
     }

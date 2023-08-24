@@ -32,60 +32,45 @@ const getRandomNumber = (min, max) => {
 
 export const Card_container = (props) => {
 
-    const numCards = 4;
-
+    const numCards = 6;
     const [cardsData, setCardsData] = useState([]);
 
-    const fetchRandomCards = async () => {
-        const imagesBaseUrl = 'http://localhost:3060/images/';
-        const productsBaseUrl = 'http://localhost:3060/products/';
+    const fetchProductsWithImages = async () => {
+        const baseUrl = 'http://localhost:3060/';
         try {
-            const productResponses = await Promise.all(
-                Array.from({ length: numCards }, (_, index) =>
-                    fetch(productsBaseUrl + (index + 1))
-                )
-            );
-
-
-            const productData = await Promise.all(productResponses.map(response => response.json()));
-
-            const cardsData = productData.map((product, index) => {
-                return {
-                    id: index,
-                    discount: `${getRandomNumber(1, 50)}%`,
-                    imagen: imagesBaseUrl + (index + 1),
-                    descuento: `${getRandomNumber(7, 15)}.000.000`,
-                    nombre:product.product.nombre_producto,
-                    precio: product.product.precio,
-
-                    cuotas: '35 cuotas en 250.000',
-                };
-            });
-            setCardsData(cardsData);
+            const response = await fetch(baseUrl + 'products-with-images');
+            const data = await response.json();
+            setCardsData(data);
         } catch (error) {
-            console.error('Error fetching random cards:', error);
+            console.error('Error fetching products with images:', error);
         }
     };
 
     useEffect(() => {
-        fetchRandomCards();
+        fetchProductsWithImages();
     }, []);
+
 
     return (
         <article className={getCardContainerClass(props.is_categories, props.is_similar)}>
-        {cardsData.map((card) => (
-          <Card
-            key={card.id} // Agregar una prop "key" única
-            card_clase={getCardClase(props.is_categories, props.is_similar)}
-            discount={card.discount}
-            imagen={card.imagen}
-            descuento={card.descuento}
-            nombre={card.nombre}
-            precio={card.precio}
-            cuotas={card.cuotas}
-          />
-        ))}
-      </article>
+        {cardsData.map((card) => {
+            const imagenPortada = card.images.find(image => image.nombre_imagen === 'imagen portada');
+            const imagenURL = imagenPortada ? `http://localhost:3060/images/${imagenPortada.id_imagen}` : '';
+
+            return (
+                <Card
+                    key={card.id} // Agregar una prop "key" única
+                    card_clase={getCardClase(props.is_categories, props.is_similar)}
+                    discount={`${getRandomNumber(1, 50)}%`} // Aquí puedes cambiarlo como lo necesites
+                    imagen={imagenURL}
+                    descuento={`${getRandomNumber(7, 15)}.000.000`} // Aquí puedes cambiarlo como lo necesites
+                    nombre={card.product.nombre_producto}
+                    precio={card.product.precio}
+                    cuotas="35 cuotas en 250.000" // Aquí puedes cambiarlo como lo necesites
+                />
+            );
+        })}
+    </article>
     );
 
 };
