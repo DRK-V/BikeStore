@@ -5,7 +5,6 @@ import { AuthProvider } from './components/AuthContext';
 import { createRoot } from 'react-dom/client'; // Importa createRoot
 
 import App from './page/App';
-
 const root = document.getElementById('root');
 
 // Usar createRoot en lugar de render

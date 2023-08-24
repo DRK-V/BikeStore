@@ -52,6 +52,8 @@
   padding-left: 3%;
   font-size: 1em;
   text-decoration: wavy;
+  font-family: 'Karla';
+
 }
 
 .buscar {
@@ -189,8 +191,28 @@ li {
     color: white;
   }
 }
-
-
+@media (min-width:760px) {
+  .menudes2 {
+    display: none;
+    z-index: -1;
+    }
+    .menu_res {
+      display: none;
+      z-index: -1;
+    }
+    .activar-active {
+      display: none;
+      z-index: -1;
+    }
+    .desactivar-off {
+      display: none;
+      z-index: -1;
+    }
+    .menu_resp .activar-active{
+      display: none;
+      z-index: -1;
+    }
+  }
 /*responsive*/
 @media (max-width:1030px) {
   .car {
@@ -211,7 +233,6 @@ li {
 
   .busque {
     width: 65%;
-    padding-left: 5%;
   }
 
   .buscar {
@@ -239,17 +260,6 @@ li {
 
   }
 
-  .menudes2 {
-    width: 17%;
-    height: 4%;
-    display: flex;
-    background-color: transparent;
-    padding: 0px;
-    justify-content: center;
-    align-items: center;
-    margin: 3%;
-  }
-
   .car2 {
     display: flex;
     width: 5%;
@@ -266,7 +276,6 @@ li {
 
 .desactivar-off {
   opacity: 0;
-  display: flex;
   position: fixed;
   width: 70%;
   height: 100%;
@@ -303,6 +312,17 @@ li {
   justify-content: center;
   align-items: center;
 }
+.menudes2 {
+  width: 17%;
+  height: 4%;
+  display: flex;
+  background-color: transparent;
+  padding: 0px;
+  justify-content: center;
+  align-items: center;
+  margin: 3%;
+}
+
 
 @media (max-width:650px) {
   .bike {
