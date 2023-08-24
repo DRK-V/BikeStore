@@ -8,7 +8,7 @@ export const Usuario_usu = () => {
     <>
       <div className="pa_usu">
         <div className="usu_ini">
-          <Menu_profile />
+          <Menu_profile is_link_active={true}/>
         </div>
         <div className="usu_detall">
           <div className="titulo1">

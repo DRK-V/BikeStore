@@ -1,22 +1,28 @@
 import React from 'react'
 import logoExample from '../assets/profile.jpg'
+import { Link } from "react-router-dom";
+
 import { FiX, FiUser, FiSettings, FiShoppingBag, FiUserPlus, FiLogOut } from 'react-icons/fi';
-export const Menu_profile = ({ is_active, onClose }) => {
+export const Menu_profile = ({ is_active, onClose,is_link_active }) => {
+    let url_profile = is_link_active ? "#profile":"/Usuario_usu";
     return (
         <>
             <div className={`menu_profile ${is_active ? "active" : ""}`}>
                 <div className="profile-section">
-                    <button className="close-button-profile" onClick={onClose}>
+                    <button className={is_link_active ? "close-button-profile-desactive":"close-button-profile"} onClick={onClose}>
                         <FiX />
                     </button>
                     <img src={logoExample} alt="Perfil" className="profile-image" />
                     <h3>Nombre de Usuario</h3>
                 </div>
                 <ul className="options-list">
-                    <li>
-                        <FiUser />
-                        <span>Perfil</span>
-                    </li>
+                    <Link to={url_profile}>
+                        <li>
+                            <FiUser />
+                            <span>Perfil</span>
+                        </li>
+                    </Link>
+
                     <li>
                         <FiSettings />
                         <span>Configuraciones</span>
