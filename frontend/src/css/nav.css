@@ -1,7 +1,9 @@
 .desactivar_opcion {
   display: none;
 }
+
 .nav1 {
+  position: relative;
   display: flex;
   width: 100%;
   height: 12vh;
@@ -9,6 +11,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 3;
 }
 
 .bike {
@@ -16,6 +19,14 @@
   width: 9%;
   height: 100%;
   object-fit: contain;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bike>img {
+  width: 70%;
+  height: 100%;
 }
 
 .car {
@@ -38,6 +49,9 @@
   height: 7vh;
   box-shadow: 1px 5px 1px 1px rgba(128, 128, 128, 0.452);
   display: flex;
+  padding-left: 3%;
+  font-size: 1em;
+  text-decoration: wavy;
 }
 
 .buscar {
@@ -48,7 +62,7 @@
   left: -8%;
   position: relative;
   background-image: url("../assets/lupa.png");
-  background-size: 70%;
+  background-size: 50%;
   background-repeat: no-repeat;
   background-color: white;
   background-position: center;
@@ -94,6 +108,7 @@ form {
 }
 
 .nav2 {
+  position: relative;
   display: flex;
   width: 100%;
   height: 8vh;
@@ -101,6 +116,8 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 1px 5px 10px 2px rgba(0, 0, 0, 0.429);
+  z-index: 2;
 }
 
 ul {
@@ -140,7 +157,7 @@ ul {
   margin-left: 15%;
 }
 
-.right-side>ul{
+.right-side>ul {
   display: flex;
   position: relative;
   flex-direction: row;
@@ -151,23 +168,37 @@ ul {
   align-items: center;
 
 }
-.right-side > ul > a{
+
+.right-side>ul>a {
   height: 100%;
   max-width: 8em;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .right-side>a,
-li,
+.li,
 .left-sideul>a,
 li {
   margin-left: 10px;
   color: black;
+
+  &:hover {
+    transition: .3s;
+    color: white;
+  }
 }
 
 
 /*responsive*/
+@media (max-width:1030px) {
+  .car {
+    width: 20%;
+    background-size: 20%;
+    object-fit: contain;
+  }
+}
 
 @media (max-width:760px) {
   .nav2 {
@@ -179,11 +210,12 @@ li {
   }
 
   .busque {
-    width: 70%;
+    width: 65%;
+    padding-left: 5%;
   }
 
   .buscar {
-    width: 16%;
+    padding-left: 5%;
   }
 
   .nav1 {
@@ -272,6 +304,34 @@ li {
   align-items: center;
 }
 
+@media (max-width:650px) {
+  .bike {
+    width: 16%;
+    height: 73%;
+    object-fit: contain;
+  }
+
+  .bike>img {
+    width: 67%;
+    height: 100%;
+  }
+  .buscar {
+    width: 15%;
+  }
+}
+@media (max-width:520px){
+  .bike>img {
+    width: 90%;
+  }
+}
+@media (max-width:375px) {
+  .bike>img {
+    width: 120%;
+  }
+  .buscar {
+    width: 20%;
+  }
+}
 @media (max-width:375px) {
   .bike {
     padding: 3px;
