@@ -3,21 +3,21 @@
     min-height: 90vh;
     display: flex;
     position: relative;
-    background-color: antiquewhite;
+    /* background-color: antiquewhite; */
 }
 
 .usu_ini{
     width: 27%;
     min-height:90vh;
     position: relative;
-    background-color: aqua;
+    /* background-color: aqua; */
 }
 
 .usu_detall{
     width: 73%;
     min-height: 90vh;
     position: relative;
-    background-color: azure;
+    /* background-color: azure; */
 }
 
 .formulario_usu{
@@ -52,9 +52,26 @@
 }
 
 .input1{
-    width: 86%;
+    width: 72%;
     border-radius: 0.5em;
-    padding: 8%;
+    padding: 4%;
     margin: 4%;
     border: solid 3px rgba(128, 128, 128, 0.174);
+}
+
+.input2{
+    width: 37%;
+    border-radius: 0.5em;
+    padding: 2.4%;
+    margin: 4%;
+    border: solid 3px rgba(128, 128, 128, 0.174);
+}
+
+/*here is the css of the title */
+.titulo1{
+    width: 100%;
+    min-height: 15vh;
+    display: flex;
+    align-items: center;
+    margin-left: 3%;
 }
