@@ -6,7 +6,7 @@ import icon_brand from '../assets/icons/bbike-red-logo.png'
 import { Navbar } from '../components/Navbar'
 import Container_comments from '../components/Comments/Container_comments'
 import Similar_container from '../components/Similar_container'
-import {Footer} from '../components/Footer'
+import { Footer } from '../components/Footer'
 const Bike_details = () => {
     return (
         <>
@@ -73,8 +73,8 @@ const Bike_details = () => {
                         <img src={icon_brand} alt="" className="icon_bike_brand" />
                     </div>
                 </form>
-                <Similar_container/>
-                <Footer/>
+                <Similar_container />
+                <Footer />
             </div>
         </>
     )

@@ -180,7 +180,7 @@ const getProductsWithImages = async (req, res) => {
     const productValues = [id_producto];
 
     const selectImagesQuery = 'SELECT * FROM imagen_producto WHERE codigo_producto = $1';
-    const imagesValues = [id_producto]; // Usamos el mismo id_producto como código para buscar imágenes
+    const imagesValues = [id_producto];
 
     const productResult = await pool.query(selectProductQuery, productValues);
     const imagesResult = await pool.query(selectImagesQuery, imagesValues);
@@ -198,6 +198,7 @@ const getProductsWithImages = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener producto y sus imágenes' });
   }
 };
+
 const getAllProductsWithImages = async (req, res) => {
   try {
     const selectProductsQuery = 'SELECT * FROM producto';

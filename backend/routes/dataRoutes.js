@@ -92,10 +92,11 @@ router.get('/images/:id_imagen', dataController.getImages);
  *         description: Internal server error.
  */
 router.get('/products/:id_producto', dataController.getProductsWithImages);
-router.get('/products/:id_producto', dataController.getProductsWithImages);
 router.get('/products-with-images', dataController.getAllProductsWithImages);
 router.get('/products', dataController.getAllProducts);
 router.get('/products/:id_producto', dataController.getAllProducts);
+
+router.get('/products-with-images/:id_producto', dataController.getProductsWithImages);
 /**
  * @openapi
  * /api/cliente:
