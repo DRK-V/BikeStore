@@ -1,0 +1,60 @@
+.pa_usu{
+    width: 100%;
+    min-height: 90vh;
+    display: flex;
+    position: relative;
+    background-color: antiquewhite;
+}
+
+.usu_ini{
+    width: 27%;
+    min-height:90vh;
+    position: relative;
+    background-color: aqua;
+}
+
+.usu_detall{
+    width: 73%;
+    min-height: 90vh;
+    position: relative;
+    background-color: azure;
+}
+
+.formulario_usu{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 85.6vh;
+    float: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.formu_usu{
+    display: flex;
+    width: 91%;
+    min-height: 80vh;
+    flex-direction: column;
+}
+
+.fila1{
+    display: flex;
+    width: 100%;
+    height: 28%;
+}
+
+
+.fila{
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    width: 90%;
+}
+
+.input1{
+    width: 86%;
+    border-radius: 0.5em;
+    padding: 8%;
+    margin: 4%;
+    border: solid 3px rgba(128, 128, 128, 0.174);
+}
