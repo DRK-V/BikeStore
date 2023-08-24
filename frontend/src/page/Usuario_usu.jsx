@@ -2,6 +2,8 @@ import { Footer } from "../components/Footer";
 import "../css/Usuario_config.css";
 import "../css/menu_profile.css";
 import { Menu_profile } from "../components/Menu_profile"
+import { FiX} from 'react-icons/fi';
+import { Link } from "react-router-dom";
 
 export const Usuario_usu = () => {
   return (
@@ -13,6 +15,8 @@ export const Usuario_usu = () => {
         <div className="usu_detall">
           <div className="titulo1">
             <h2>Mi perfil</h2>
+           
+            <button className="exit_button">  <Link className="exit_image" to="/"><FiX className="exit_image" /></Link> </button>
           </div>
           <form action="" className="formulario_usu">
             <div className="formu_usu">
