@@ -18,7 +18,7 @@
     min-height: 80vh;
     height: 80vh;
     overflow-y: auto;
-    background-color: rgb(238, 238, 238);
+    background-color: white;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     justify-items: center;
