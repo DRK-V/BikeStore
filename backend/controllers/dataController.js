@@ -1,7 +1,8 @@
 //datacontroller
-
 const { pool } = require('../config/db');
 
+
+//registro de clients
 const registerUser = async (userData) => {
   const insertUserQuery = 'INSERT INTO cliente (nombre_usuario, correo, contrasena, telefono, tipo_de_documento, numero_de_documento) VALUES ($1, $2, $3, $4, $5, $6)';
   const selectUserQuery = 'SELECT COUNT(*) FROM cliente WHERE correo = $1 OR numero_de_documento = $2';
@@ -20,8 +21,34 @@ const registerUser = async (userData) => {
     throw error;
   }
 };
+//fin registro
+
+//comienzo login
+const loginUser = (req, res) => {
+  const { email, password } = req.body;
+
+  const selectUserQuery = 'SELECT * FROM cliente WHERE correo = $1 AND contrasena = $2';
+  const values = [email, password];
+
+  pool.query(selectUserQuery, values)
+    .then((result) => {
+      if (result.rowCount === 1) {
+
+        res.status(200).json({ message: 'Inicio de sesión exitoso' });
+      } else {
+
+        res.status(401).json({ message: 'Credenciales inválidas' });
+      }
+    })
+    .catch((error) => {
+      console.error('Error al consultar en la base de datos:', error);
+      res.status(500).json({ message: 'Error en el servidor' });
+    });
+};
+//fin login
 
 
+//api clientes
 const getAllClientes = (req, res) => {
   const selectAllClientesQuery = 'SELECT * FROM cliente';
 
@@ -35,30 +62,11 @@ const getAllClientes = (req, res) => {
       res.status(500).json({ message: 'Error en el servidor' });
     });
 };
-
-const loginUser = (req, res) => {
-  const { email, password } = req.body;
-
-  const selectUserQuery = 'SELECT * FROM cliente WHERE correo = $1 AND contrasena = $2';
-  const values = [email, password];
-
-  pool.query(selectUserQuery, values)
-    .then((result) => {
-      if (result.rowCount === 1) {
-      
-        res.status(200).json({ message: 'Inicio de sesión exitoso' });
-      } else {
-     
-        res.status(401).json({ message: 'Credenciales inválidas' });
-      }
-    })
-    .catch((error) => {
-      console.error('Error al consultar en la base de datos:', error);
-      res.status(500).json({ message: 'Error en el servidor' });
-    });
-};
+//fin clientes
 
 
+
+//api imagenes
 const getImages = (req, res) => {
   const { id_imagen, nombre, ruta } = req.params;
 
@@ -83,7 +91,7 @@ const getImages = (req, res) => {
           const rutaImagen = result.rows[0].ruta_imagen;
           const decodedRutaImagen = decodeURIComponent(rutaImagen);
 
-        
+
           res.redirect(decodedRutaImagen);
         } else {
           res.status(404).json({ message: 'Imagen no encontrada' });
@@ -111,11 +119,13 @@ const getImages = (req, res) => {
         res.status(500).json({ error: 'Error al obtener imágenes' });
       });
   } else {
-   
+
   }
 };
+//fin imagenes
 
 
+//api productos
 const getAllProducts = (req, res) => {
   const { id_producto } = req.params;
   const { nombre_producto } = req.query;
@@ -161,12 +171,64 @@ const getAllProducts = (req, res) => {
       });
   }
 };
+//fin productos
+const getProductsWithImages = async (req, res) => {
+  try {
+    const { id_producto } = req.params;
 
+    const selectProductQuery = 'SELECT * FROM producto WHERE id_producto = $1';
+    const productValues = [id_producto];
 
+    const selectImagesQuery = 'SELECT * FROM imagen_producto WHERE codigo_producto = $1';
+    const imagesValues = [id_producto]; // Usamos el mismo id_producto como código para buscar imágenes
+
+    const productResult = await pool.query(selectProductQuery, productValues);
+    const imagesResult = await pool.query(selectImagesQuery, imagesValues);
+
+    if (productResult.rows.length > 0) {
+      const product = productResult.rows[0];
+      const images = imagesResult.rows;
+
+      res.json({ product, images });
+    } else {
+      res.status(404).json({ message: 'Producto no encontrado' });
+    }
+  } catch (error) {
+    console.error('Error al obtener producto y sus imágenes:', error.message);
+    res.status(500).json({ error: 'Error al obtener producto y sus imágenes' });
+  }
+};
+const getAllProductsWithImages = async (req, res) => {
+  try {
+    const selectProductsQuery = 'SELECT * FROM producto';
+
+    const productsResult = await pool.query(selectProductsQuery);
+    const products = productsResult.rows;
+
+    const productsWithImages = [];
+
+    for (const product of products) {
+      const selectImagesQuery = 'SELECT * FROM imagen_producto WHERE codigo_producto = $1';
+      const imagesValues = [product.id_producto];
+
+      const imagesResult = await pool.query(selectImagesQuery, imagesValues);
+      const images = imagesResult.rows;
+
+      productsWithImages.push({ product, images });
+    }
+
+    res.json(productsWithImages);
+  } catch (error) {
+    console.error('Error al obtener productos y sus imágenes:', error.message);
+    res.status(500).json({ error: 'Error al obtener productos y sus imágenes' });
+  }
+};
 module.exports = {
   registerUser,
   getImages,
   getAllClientes,
+  getProductsWithImages,
+  getAllProductsWithImages,
   loginUser,
   getAllProducts,
 };
