@@ -12,7 +12,7 @@ import Container_comments from '../components/Comments/Container_comments'
 
 import { Footer } from '../components/Footer'
 const Bike_details = () => {
-    const { id_producto } = useParams();
+  const { id_producto } = useParams();
     const [productDetails, setProductDetails] = useState(null);
 
     useEffect(() => {
@@ -28,6 +28,16 @@ const Bike_details = () => {
 
         fetchProductDetails();
     }, [id_producto]);
+
+    const imagenPortada = productDetails?.images?.find(image => image.nombre_imagen === 'imagen portada');
+    const imagenVista1 = productDetails?.images?.find(image => image.nombre_imagen === 'vista 1');
+    const imagenVista2 = productDetails?.images?.find(image => image.nombre_imagen === 'vista 2');
+    const imagenVista3 = productDetails?.images?.find(image => image.nombre_imagen === 'vista 3');
+    const imagenURL = imagenPortada ? `http://localhost:3060/images/${imagenPortada.id_imagen}` : '';
+    const imagenVista1URL = imagenVista1 ? `http://localhost:3060/images/${imagenVista1.id_imagen}` : '';
+    const imagenVista2URL = imagenVista2 ? `http://localhost:3060/images/${imagenVista2.id_imagen}` : '';
+    const imagenVista3URL = imagenVista3 ? `http://localhost:3060/images/${imagenVista3.id_imagen}` : '';
+
     return (
     <>
       <Navbar />
@@ -35,20 +45,21 @@ const Bike_details = () => {
         {productDetails && (
           <>
             <div className="container_images">
-              <img className="sub_images" src={productDetails.imagen}></img>
-              <img className="sub_images" src={productDetails.imagen}></img>
-              <img className="sub_images" src={productDetails.imagen}></img>
+            <img className="sub_images1" src={imagenVista1URL} alt="Vista 1" />
+                        <img className="sub_images2" src={imagenVista2URL} alt="Vista 2" />
+                        <img className="sub_images3" src={imagenVista3URL} alt="Vista 3" />
+                    
             </div>
-            <img className="main_image" src={productDetails.imagen}></img>
+            <img className="main_image" src={imagenURL} alt="Imagen Principal" />
 
             <form action="dialog" className="form_add_item_cart">
-              <label className='bike_name'>{productDetails.nombre_producto}</label>
-              <label htmlFor="" className="price_text">
-                <p>Precio:</p> ${productDetails.precio}
-                {productDetails.descuento && (
-                  <small className="descuento_text">${productDetails.descuento}</small>
-                )}
-              </label>
+            <label className='bike_name'>{productDetails.nombre_producto}</label>
+                        <label htmlFor="" className="price_text">
+                            <p>Precio:</p> ${productDetails.precio}
+                            {productDetails.descuento && (
+                                <small className="descuento_text">${productDetails.descuento}</small>
+                            )}
+                        </label>
               <div className="container_color_details">
                 <label htmlFor="" className="color_text">Color:<strong>Azul Aguamarina</strong></label>
                 <input type="color" name="color_bike" id="" value="#7ABBDC" />
@@ -84,26 +95,27 @@ const Bike_details = () => {
             <h1>Valoracion del producto</h1>
                     <div className="container_stars">
                         <input className='option_star' id="radio1" type="radio" name="estrellas" value="5" />
-                        <label for="radio1">★</label>
+                        <label htmlFor="radio1">★</label>
                         <input className='option_star' id="radio2" type="radio" name="estrellas" value="4" />
-                        <label for="radio2">★</label>
+                        <label htmlFor="radio2">★</label>
                         <input className='option_star' id="radio3" type="radio" name="estrellas" value="3" />
-                        <label for="radio3">★</label>
+                        <label htmlFor="radio3">★</label>
                         <input className='option_star' id="radio4" type="radio" name="estrellas" value="2" />
-                        <label for="radio4">★</label>
+                        <label htmlFor="radio4">★</label>
                         <input className='option_star' id="radio5" type="radio" name="estrellas" value="1" />
-                        <label for="radio5">★</label>
+                        <label htmlFor="radio5">★</label>
                     </div>
                     <div className="brand">
                         <h1>Marca del producto</h1>
                         <img src={icon_brand} alt="" className="icon_bike_brand" />
                     </div>
             </form>
+            <SimilarContainer />
+      <Footer />
           </>
         )}
       </div>
-      <SimilarContainer />
-      <Footer />
+     
     </>
   );
 }

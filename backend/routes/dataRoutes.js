@@ -1,7 +1,7 @@
 //routes
 
-const express = require('express');
-const dataController = require('../controllers/dataController');
+const express = require("express");
+const dataController = require("../controllers/dataController");
 const router = express.Router();
 /**
  * @openapi
@@ -41,8 +41,8 @@ const router = express.Router();
  *       500:
  *         description: Internal server error.
  */
-router.get('/images', dataController.getImages);
-router.get('/images/:id_imagen', dataController.getImages);
+router.get("/images", dataController.getImages);
+router.get("/images/:id_imagen", dataController.getImages);
 /**
  * @openapi
  * /products:
@@ -57,46 +57,49 @@ router.get('/images/:id_imagen', dataController.getImages);
  *           application/json:
  *             example:
  *               - id: 1
-  *                 name: Bike
-  *                 price: 500
-  *                 description: this is an example
-  *                 stock: 2
-  *                 type: Mountain
-  *                 color: red
-  *                 image_code: 2
+ *                 name: Bike
+ *                 price: 500
+ *                 description: this is an example
+ *                 stock: 2
+ *                 type: Mountain
+ *                 color: red
+ *                 image_code: 2
  *               - id: 2
-  *                 name: Helmet
-  *                 price: 50
-  *                 description: this is an example
-  *                 stock: 2
-  *                 type: Mountain
-  *                 color: red
-  *                 image_code: 2
+ *                 name: Helmet
+ *                 price: 50
+ *                 description: this is an example
+ *                 stock: 2
+ *                 type: Mountain
+ *                 color: red
+ *                 image_code: 2
  *               - id: 3
-  *                 name: Bike
-  *                 price: 500
-  *                 description: this is an example
-  *                 stock: 2
-  *                 type: Mountain
-  *                 color: red
-  *                 image_code: 3
+ *                 name: Bike
+ *                 price: 500
+ *                 description: this is an example
+ *                 stock: 2
+ *                 type: Mountain
+ *                 color: red
+ *                 image_code: 3
  *               - id: 4
-  *                 name: Helmet
-  *                 price: 50
-  *                 description: this is an example
-  *                 stock: 2
-  *                 type: Mountain
-  *                 color: red
-  *                 image_code: 2
+ *                 name: Helmet
+ *                 price: 50
+ *                 description: this is an example
+ *                 stock: 2
+ *                 type: Mountain
+ *                 color: red
+ *                 image_code: 2
  *       500:
  *         description: Internal server error.
  */
-router.get('/products/:id_producto', dataController.getProductsWithImages);
-router.get('/products-with-images', dataController.getAllProductsWithImages);
-router.get('/products', dataController.getAllProducts);
-router.get('/products/:id_producto', dataController.getAllProducts);
+router.get("/products/:id_producto", dataController.getProductsWithImages);
+router.get("/products-with-images", dataController.getAllProductsWithImages);
+router.get("/products", dataController.getAllProducts);
+router.get("/products/:id_producto", dataController.getAllProducts);
 
-router.get('/products-with-images/:id_producto', dataController.getProductsWithImages);
+router.get(
+  "/products-with-images/:id_producto",
+  dataController.getProductsWithImages
+);
 /**
  * @openapi
  * /api/cliente:
@@ -110,23 +113,22 @@ router.get('/products-with-images/:id_producto', dataController.getProductsWithI
  *       500:
  *         description: Internal server error.
  */
-router.get('/cliente', dataController.getAllClientes);
-router.post('/api/register', async (req, res) => {
+router.get("/cliente", dataController.getAllClientes);
+router.post("/api/register", async (req, res) => {
   const userData = req.body;
 
   try {
     await dataController.registerUser(userData);
-    res.status(201).json({ message: 'Registro exitoso' });
+    res.status(201).json({ message: "Registro exitoso" });
   } catch (error) {
-    if (error.message === 'Este usuario ya está registrado.') {
-      res.status(409).json({ error: 'duplicate' });
+    if (error.message === "Este usuario ya está registrado.") {
+      res.status(409).json({ error: "duplicate" });
     } else {
-      console.error('Error al insertar en la base de datos:', error);
-      res.status(500).json({ message: 'Error en el servidor' });
+      console.error("Error al insertar en la base de datos:", error);
+      res.status(500).json({ message: "Error en el servidor" });
     }
   }
 });
-
 
 /**
  * @openapi
@@ -155,7 +157,6 @@ router.post('/api/register', async (req, res) => {
  *       500:
  *         description: Internal server error.
  */
-router.post('/api/login', dataController.loginUser);
+router.post("/api/login", dataController.loginUser);
 
 module.exports = router;
-
