@@ -1,4 +1,4 @@
-.pa_usu{
+.pa_usu {
     width: 100%;
     min-height: 90vh;
     display: flex;
@@ -6,21 +6,21 @@
     /* background-color: antiquewhite; */
 }
 
-.usu_ini{
+.usu_ini {
     width: 27%;
-    min-height:90vh;
+    min-height: 90vh;
     position: relative;
     /* background-color: aqua; */
 }
 
-.usu_detall{
+.usu_detall {
     width: 73%;
     min-height: 90vh;
     position: relative;
     /* background-color: azure; */
 }
 
-.formulario_usu{
+.formulario_usu {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -30,28 +30,28 @@
     align-items: center;
 }
 
-.formu_usu{
+.formu_usu {
     display: flex;
     width: 91%;
     min-height: 80vh;
     flex-direction: column;
 }
 
-.fila1{
+.fila1 {
     display: flex;
     width: 100%;
     height: 28%;
 }
 
 
-.fila{
+.fila {
     display: flex;
     flex-direction: column;
     margin: 10px;
     width: 90%;
 }
 
-.input1{
+.input1 {
     width: 72%;
     border-radius: 0.5em;
     padding: 4%;
@@ -59,16 +59,17 @@
     border: solid 3px rgba(128, 128, 128, 0.174);
 }
 
-.input2{
-    width: 37%;
+.input2 {
+    width: 38.5%;
     border-radius: 0.5em;
     padding: 2.4%;
-    margin: 4%;
+    margin-top: 4%;
+    margin-left: 2%;
     border: solid 3px rgba(128, 128, 128, 0.174);
 }
 
 /*here is the css of the title */
-.titulo1{
+.titulo1 {
     width: 100%;
     min-height: 15vh;
     display: flex;
@@ -76,7 +77,7 @@
     margin-left: 3%;
 }
 
-.exit_button{
+.exit_button {
     border: none;
     background-color: transparent;
     left: 84%;
@@ -85,7 +86,7 @@
     position: relative;
 }
 
-.exit_image{
+.exit_image {
     width: 100%;
     height: 100%;
 }
@@ -93,14 +94,129 @@
 
 /*configuracion de opciones del menu perfil*/
 
-.container_my_usu{
+.container_my_usu {
     display: none;
 }
 
-.container_my_config{
+.container_my_config {
+    display: none;
+}
+
+/* estilos para la pestana de pedidos */
+.container_my_order {
     display: 0;
+    width: 100%;
+    height: 100vh;
+    font-family: 'Karla';
+    padding: 3em;
+    padding-left: 5%;
 }
 
-.container_my_order{
-    display: none;
+.container_list_section_orders {
+    min-height: 30vh;
+    max-height: 80%;
+    width: 100%;
+    display: block;
+    overflow-y: auto;
+    height: fit-content;
+    padding: 10px;
+    /* Agrega un espacio alrededor del contenido */
+}
+
+
+/* Estilos para el scrollbar */
+.container_list_section_orders::-webkit-scrollbar {
+    width: 8px;
+    /* Ancho del scrollbar */
+}
+
+.container_list_section_orders::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    /* Color del fondo del scrollbar */
+}
+
+.container_list_section_orders::-webkit-scrollbar-thumb {
+    background: #7ee29a;
+    /* Color del thumb del scrollbar */
+    border-radius: 4px;
+    /* Borde redondeado del thumb */
+}
+
+.section_order {
+    flex-wrap: wrap;
+    width: 80%;
+    min-height: 8vh;
+    height: auto;
+    margin-top: 1em;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 1em;
+    border: solid 2px rgb(84, 206, 84);
+}
+
+.section_order_preview {
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    flex-direction: row;
+}
+
+.section_order_preview>b {
+    height: 100%;
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+}
+
+.section_order>table {
+    /* display: none; */
+    width: 100%;
+    position: relative;
+    height: auto;
+}
+
+.header_columns_orders {
+    width: 80%;
+    height: 8vh;
+    margin-top: 1em;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 1em;
+    border: solid 1px transparent;
+}
+
+.header_columns_orders>b {
+    height: 100%;
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    /* border-right: solid 1px gray; */
+}
+
+.icon-open-section {
+    position: relative;
+    left: 30%;
+    transform: rotate(90deg);
+    cursor: pointer;
+}
+
+.section_order>table>thead {
+    height: 8vh;
+    border-right: solid 1px black;
+    border-bottom: solid 1px black;
+}
+
+.tableBody{
+    text-align: center;
+}
+.tableBody > td{
+    height: 6vh;
 }
