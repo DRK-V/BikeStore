@@ -37,7 +37,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
             <Route path="/filters" element={<Categories />} />
-            <Route path="/details" element={<Bike_details />} />
+            <Route path="/details/:id_producto" element={<Bike_details />} />
+
             <Route path="/Login" element={<Login />} />
             <Route path="/payment" element={<Payment />} />
             <Route path="/Usuario_usu" element={<Usuario_usu />} />
