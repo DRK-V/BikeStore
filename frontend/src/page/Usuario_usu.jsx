@@ -127,7 +127,7 @@ export const Usuario_usu = () => {
             className={`container_my_config ${isMyConfigActive ? "container_active" : ""}`}
           >
             <div className="titulo1">
-              <h2>Mi perfil</h2>
+              <h2>Configurar perfil</h2>
             </div>
             <form action="" className="formulario_usu">
               <div className="formu_usu">

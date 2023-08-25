@@ -2,11 +2,11 @@ import React from 'react'
 import '../css/Bike_details.css'
 import imagen_ejemplo from '../assets/beneli.png'
 import icon_brand from '../assets/icons/bbike-red-logo.png'
-
+import { Link } from 'react-router-dom'
 import { Navbar } from '../components/Navbar'
 import Container_comments from '../components/Comments/Container_comments'
 import Similar_container from '../components/Similar_container'
-import {Footer} from '../components/Footer'
+import { Footer } from '../components/Footer'
 const Bike_details = () => {
     return (
         <>
@@ -42,9 +42,11 @@ const Bike_details = () => {
                     <p className="text_descripcion_details">
                         Descripcion:bicicleta fabricada en 60501 aluminio, modelo 2016,Unisex
                     </p>
-                    <button className="btn_buy">
-                        <i></i>
-                        Comprar
+                    <button className="btn_buy" type='submit'>
+                        <Link to="/Carrito_compras" className="btn_buy">
+                            <i></i>
+                            Comprar
+                        </Link>
                     </button>
                     <button className="btn_add_item_cart">
                         <i></i>
@@ -73,8 +75,8 @@ const Bike_details = () => {
                         <img src={icon_brand} alt="" className="icon_bike_brand" />
                     </div>
                 </form>
-                <Similar_container/>
-                <Footer/>
+                <Similar_container />
+                <Footer />
             </div>
         </>
     )

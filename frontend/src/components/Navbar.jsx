@@ -200,10 +200,7 @@ export const Navbar = () => {
       <div className={`menu_profile_container ${profileMenuVisible ? "active" : ""}`}>
 
       <Menu_profile
-            is_link_active={true}
-            activateMyUsu={activateMyUsu}
-            activateMyConfig={activateMyConfig}
-            activateMyOrder={activateMyOrder}
+            is_link_active={false}
             onClose={toggleProfileMenu}
           />
 
