@@ -14,35 +14,54 @@ import { Footer } from '../components/Footer'
 const Bike_details = () => {
   const { id_producto } = useParams();
     const [productDetails, setProductDetails] = useState(null);
+    const [additionalProductDetails, setAdditionalProductDetails] = useState(null); // Asegúrate de haber declarado esta línea
 
-    useEffect(() => {
-        const fetchProductDetails = async () => {
-            try {
-                const response = await fetch(`http://localhost:3060/product-details/${id_producto}`);
-                const data = await response.json();
-                setProductDetails(data);
-            } catch (error) {
-                console.error('Error fetching product details:', error);
-            }
-        };
 
-        fetchProductDetails();
-    }, [id_producto]);
+  useEffect(() => {
+      const fetchProductDetails = async () => {
+          try {
+              const response = await fetch(`http://localhost:3060/product-details/${id_producto}`);
+              const data = await response.json();
+              setProductDetails(data);
+          } catch (error) {
+              console.error('Error fetching product details:', error);
+          }
+      };
 
-    const imagenPortada = productDetails?.images?.find(image => image.nombre_imagen === 'imagen portada');
-    const imagenVista1 = productDetails?.images?.find(image => image.nombre_imagen === 'vista 1');
-    const imagenVista2 = productDetails?.images?.find(image => image.nombre_imagen === 'vista 2');
-    const imagenVista3 = productDetails?.images?.find(image => image.nombre_imagen === 'vista 3');
-    const imagenURL = imagenPortada ? `http://localhost:3060/images/${imagenPortada.id_imagen}` : '';
-    const imagenVista1URL = imagenVista1 ? `http://localhost:3060/images/${imagenVista1.id_imagen}` : '';
-    const imagenVista2URL = imagenVista2 ? `http://localhost:3060/images/${imagenVista2.id_imagen}` : '';
-    const imagenVista3URL = imagenVista3 ? `http://localhost:3060/images/${imagenVista3.id_imagen}` : '';
+      fetchProductDetails();
+  }, [id_producto]);
 
+  useEffect(() => {
+      const fetchAdditionalProductDetails = async () => {
+          try {
+              const response = await fetch(`http://localhost:3060/products-with-images/${id_producto}`);
+              const data = await response.json();
+              setAdditionalProductDetails(data); // Asegúrate de que la estructura de data coincida con lo que se espera
+          } catch (error) {
+              console.error('Error fetching additional product details:', error);
+          }
+      };
+
+      if (id_producto) {
+          fetchAdditionalProductDetails();
+      }
+  }, [id_producto]);
+
+  const imagenPortada = productDetails?.images?.find(image => image.nombre_imagen === 'imagen portada');
+  const imagenVista1 = productDetails?.images?.find(image => image.nombre_imagen === 'vista 1');
+  const imagenVista2 = productDetails?.images?.find(image => image.nombre_imagen === 'vista 2');
+  const imagenVista3 = productDetails?.images?.find(image => image.nombre_imagen === 'vista 3');
+  const imagenURL = imagenPortada ? `http://localhost:3060/images/${imagenPortada.id_imagen}` : '';
+  const imagenVista1URL = imagenVista1 ? `http://localhost:3060/images/${imagenVista1.id_imagen}` : '';
+  const imagenVista2URL = imagenVista2 ? `http://localhost:3060/images/${imagenVista2.id_imagen}` : '';
+  const imagenVista3URL = imagenVista3 ? `http://localhost:3060/images/${imagenVista3.id_imagen}` : '';
+
+  console.log('additionalProductDetails:', additionalProductDetails);
     return (
     <>
       <Navbar />
       <div className="container_view_details">
-        {productDetails && (
+      {productDetails && additionalProductDetails &&  (
           <>
             <div className="container_images">
             <img className="sub_images1" src={imagenVista1URL} alt="Vista 1" />
@@ -53,17 +72,14 @@ const Bike_details = () => {
             <img className="main_image" src={imagenURL} alt="Imagen Principal" />
 
             <form action="dialog" className="form_add_item_cart">
-            <label className='bike_name'>{productDetails.nombre_producto}</label>
-                        <label htmlFor="" className="price_text">
-                            <p>Precio:</p> ${productDetails.precio}
-                            {productDetails.descuento && (
-                                <small className="descuento_text">${productDetails.descuento}</small>
-                            )}
-                        </label>
+            <label className='bike_name'>{additionalProductDetails?.product?.nombre_producto}</label>
+    <label htmlFor="" className="price_text">
+        <p>Precio:</p> ${additionalProductDetails?.product?.precio}
+    </label>
               <div className="container_color_details">
-                <label htmlFor="" className="color_text">Color:<strong>Azul Aguamarina</strong></label>
-                <input type="color" name="color_bike" id="" value="#7ABBDC" />
-              </div>
+              <label htmlFor="" className="color_text">Color:<strong>{additionalProductDetails?.product?.color}</strong></label>
+        <input type="color" name="color_bike" id="" value="#7ABBDC" />
+      </div>
               <label htmlFor="" className="text_tamano">Tamaño:</label>
               <select name="size_bike" id="">
                 <option value="">seleccionar</option>
