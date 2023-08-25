@@ -87,7 +87,7 @@ const Bike_details = () => {
                 <option value="M">Medium</option>
                 <option value="s">Small</option>
               </select>
-              <label htmlFor="" className="text_bike_type">Tipo de bicleta: Ruta</label>
+              <label htmlFor="" className="text_bike_type">Tipo de bicleta:{ additionalProductDetails?.product?.tipo}</label>
               <div className="container_count">
                 <label htmlFor="">Cantidad:</label>
                 <input type="number" name="count_bike" min="1" max="5" id="" />
