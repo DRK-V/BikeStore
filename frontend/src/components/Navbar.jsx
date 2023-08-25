@@ -198,7 +198,15 @@ export const Navbar = () => {
       )}
       {/* aqui va el menu de perfil */}
       <div className={`menu_profile_container ${profileMenuVisible ? "active" : ""}`}>
-        <Menu_profile is_active={profileMenuVisible} onClose={toggleProfileMenu} is_link_active={false} />
+
+      <Menu_profile
+            is_link_active={true}
+            activateMyUsu={activateMyUsu}
+            activateMyConfig={activateMyConfig}
+            activateMyOrder={activateMyOrder}
+            onClose={toggleProfileMenu}
+          />
+
       </div>
     </>
   );

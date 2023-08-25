@@ -4,24 +4,54 @@ import "../css/menu_profile.css";
 import { Menu_profile } from "../components/Menu_profile";
 import { FiX } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 export const Usuario_usu = () => {
+  const [viewMenu, setViewMenu] = useState(true);
+  const [isMyUsuActive, setIsMyUsuActive] = useState(true);
+  const [isMyConfigActive, setIsMyConfigActive] = useState(false);
+  const [isMyOrderActive, setIsMyOrderActive] = useState(false);
+
+  const activateMyUsu = () => {
+    setIsMyUsuActive(true);
+    setIsMyConfigActive(false);
+    setIsMyOrderActive(false);
+  };
+
+  const activateMyConfig = () => {
+    setIsMyUsuActive(false);
+    setIsMyConfigActive(true);
+    setIsMyOrderActive(false);
+  };
+
+  const activateMyOrder = () => {
+    setIsMyUsuActive(false);
+    setIsMyConfigActive(false);
+    setIsMyOrderActive(true);
+  };
+  console.log(viewMenu)
   return (
     <>
       <div className="pa_usu">
         <div className="usu_ini">
-          <Menu_profile is_link_active={true} />
+          <Menu_profile
+            is_link_active={true}
+            activateMyUsu={activateMyUsu}
+            activateMyConfig={activateMyConfig}
+            activateMyOrder={activateMyOrder}
+          />
         </div>
         <div className="usu_detall">
-          <div className="container_my_usu">
+          <button className="exit_button">
+            {" "}
+            <Link className="exit_image" to="/">
+              <FiX className="exit_image" />
+            </Link>{" "}
+          </button>
+          <div
+            className={`container_my_usu ${isMyUsuActive ? "container_active" : ""}`}
+          >
             <div className="titulo1">
               <h2>Mi perfil</h2>
-
-              <button className="exit_button">
-                {" "}
-                <Link className="exit_image" to="/">
-                  <FiX className="exit_image" />
-                </Link>{" "}
-              </button>
             </div>
             <form action="" className="formulario_usu">
               <div className="formu_usu">
@@ -93,15 +123,11 @@ export const Usuario_usu = () => {
               </div>
             </form>
           </div>
-          <div className="container_my_config">
+          <div
+            className={`container_my_config ${isMyConfigActive ? "container_active" : ""}`}
+          >
             <div className="titulo1">
               <h2>Mi perfil</h2>
-
-              <button className="exit_button">
-                <Link className="exit_image" to="/">
-                  <FiX className="exit_image" />
-                </Link>{" "}
-              </button>
             </div>
             <form action="" className="formulario_usu">
               <div className="formu_usu">
@@ -168,7 +194,9 @@ export const Usuario_usu = () => {
               </div>
             </form>
           </div>
-          <div className="container_my_order">
+          <div
+            className={`container_my_order ${isMyOrderActive ? "container_active" : ""}`}
+          >
             <h2>Orders</h2>
             <div className="header_columns_orders">
               <b>ID pedido</b>
@@ -185,7 +213,6 @@ export const Usuario_usu = () => {
                     arrow_forward_ios
                   </span>
                 </div>
-
                 {/* aqui debe de ir la tabla que aparece y desaparece 
                 esta tabla debe de tener la informacion del pedido */}
                 <table>
@@ -199,10 +226,12 @@ export const Usuario_usu = () => {
                   </thead>
                   <tbody class="tableBody">
                     {/* <!-- Filas de productos se agregarán aquí --> */}
-                    <td>#1</td>
-                    <td>Cicla beneli</td>
-                    <td>3</td>
-                    <td>$ 800.000</td>
+                    <tr>
+                      <td>#1</td>
+                      <td>Cicla beneli</td>
+                      <td>3</td>
+                      <td>$ 800.000</td>
+                    </tr>
                   </tbody>
 
 
@@ -230,10 +259,24 @@ export const Usuario_usu = () => {
                     </tr>
                   </thead>
                   <tbody class="tableBody">
-                    <td>#1</td>
-                    <td>Cicla beneli</td>
-                    <td>3</td>
-                    <td>$ 800.000</td>
+                    <tr>
+                      <td>#1</td>
+                      <td>Cicla beneli</td>
+                      <td>3</td>
+                      <td>$ 800.000</td>
+                    </tr>
+                    <tr>
+                      <td>#1</td>
+                      <td>Cicla beneli</td>
+                      <td>3</td>
+                      <td>$ 800.000</td>
+                    </tr>
+                    <tr>
+                      <td>#1</td>
+                      <td>Cicla beneli</td>
+                      <td>3</td>
+                      <td>$ 800.000</td>
+                    </tr>
                   </tbody>
 
 
