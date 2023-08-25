@@ -14,19 +14,19 @@ import { Footer } from '../components/Footer'
 const Bike_details = () => {
     const { id_producto } = useParams();
     const [productDetails, setProductDetails] = useState(null);
-  
+
     useEffect(() => {
-      const fetchProductDetails = async () => {
-        try {
-          const response = await fetch(`http://localhost:3060/product-details/${id_producto}`);
-          const data = await response.json();
-          setProductDetails(data);
-        } catch (error) {
-          console.error('Error fetching product details:', error);
-        }
-      };
-  
-      fetchProductDetails();
+        const fetchProductDetails = async () => {
+            try {
+                const response = await fetch(`http://localhost:3060/product-details/${id_producto}`);
+                const data = await response.json();
+                setProductDetails(data);
+            } catch (error) {
+                console.error('Error fetching product details:', error);
+            }
+        };
+
+        fetchProductDetails();
     }, [id_producto]);
     return (
     <>
