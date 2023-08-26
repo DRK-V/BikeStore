@@ -56,21 +56,23 @@ export const Card_container = (props) => {
         {cardsData.map((card) => {
             const imagenPortada = card.images.find(image => image.nombre_imagen === 'imagen portada');
             const imagenURL = imagenPortada ? `http://localhost:3060/images/${imagenPortada.id_imagen}` : '';
-
+    
             return (
                 <Card
-                    key={card.id} // Agregar una prop "key" única
+                    key={card.product.id_producto} // Utiliza el ID correcto para la key
+                    id_producto={card.product.id_producto} // Pasa el id_producto como prop
                     card_clase={getCardClase(props.is_categories, props.is_similar)}
-                    discount={`${getRandomNumber(1, 50)}%`} // Aquí puedes cambiarlo como lo necesites
+                    discount={`${getRandomNumber(1, 50)}%`}
                     imagen={imagenURL}
-                    descuento={`${getRandomNumber(7, 15)}.000.000`} // Aquí puedes cambiarlo como lo necesites
+                    descuento={`${getRandomNumber(7, 15)}.000.000`}
                     nombre={card.product.nombre_producto}
                     precio={card.product.precio}
-                    cuotas="35 cuotas en 250.000" // Aquí puedes cambiarlo como lo necesites
+                    cuotas="35 cuotas en 250.000"
                 />
             );
         })}
     </article>
+    
     );
 
 };

@@ -16,7 +16,7 @@
     align-items: center;
 }
 
-.sub_images {
+.sub_images1 {
     width: 100%;
     height: 20%;
     background-color: white;
@@ -25,7 +25,33 @@
     cursor: pointer;
 }
 
-.sub_images:hover {
+.sub_images1:hover {
+    transition: .3s;
+    border: solid 1px gray;
+}
+.sub_images2 {
+    width: 100%;
+    height: 20%;
+    background-color: white;
+    margin: 10px;
+    border-radius: .4rem;
+    cursor: pointer;
+}
+
+.sub_images2:hover {
+    transition: .3s;
+    border: solid 1px gray;
+}
+.sub_images3 {
+    width: 100%;
+    height: 20%;
+    background-color: white;
+    margin: 10px;
+    border-radius: .4rem;
+    cursor: pointer;
+}
+
+.sub_images3:hover {
     transition: .3s;
     border: solid 1px gray;
 }
