@@ -5,10 +5,10 @@ import { useParams } from 'react-router-dom';
 import '../css/Bike_details.css'
 
 import icon_brand from '../assets/icons/bbike-red-logo.png'
-import SimilarContainer from '../components/Similar_container';
-
+import { Link } from 'react-router-dom'
 import { Navbar } from '../components/Navbar'
 import Container_comments from '../components/Comments/Container_comments'
+import Similar_container from '../components/Similar_container'
 
 import { Footer } from '../components/Footer'
 const Bike_details = () => {
@@ -71,6 +71,7 @@ const Bike_details = () => {
             </div>
             <img className="main_image" src={imagenURL} alt="Imagen Principal" />
 
+
             <form action="dialog" className="form_add_item_cart">
             <label className='bike_name'>{additionalProductDetails?.product?.nombre_producto}</label>
     <label htmlFor="" className="price_text">
@@ -125,6 +126,7 @@ const Bike_details = () => {
                         <h1>Marca del producto</h1>
                         <img src={icon_brand} alt="" className="icon_bike_brand" />
                     </div>
+
             </form>
             <SimilarContainer />
       <Footer />
