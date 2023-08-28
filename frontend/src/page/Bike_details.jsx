@@ -128,7 +128,7 @@ const Bike_details = () => {
                     </div>
 
             </form>
-            <SimilarContainer />
+            <Similar_container />
       <Footer />
           </>
         )}
