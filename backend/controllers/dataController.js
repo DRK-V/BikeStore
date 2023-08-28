@@ -4,7 +4,7 @@ const { pool } = require("../config/db");
 //registro de clients
 const registerUser = async (userData) => {
   const insertUserQuery =
-    "INSERT INTO cliente (nombre_usuario, correo, contrasena, telefono, tipo_de_documento, numero_de_documento) VALUES ($1, $2, $3, $4, $5, $6)";
+    "INSERT INTO cliente (nombre_usuario, correo, contrasena, telefono, tipo_de_documento, numero_de_documento,rol_usuario) VALUES ($1, $2, $3, $4, $5, $6,$7)";
   const selectUserQuery =
     "SELECT COUNT(*) FROM cliente WHERE correo = $1 OR numero_de_documento = $2";
   const values = [
@@ -14,6 +14,7 @@ const registerUser = async (userData) => {
     userData.telefono,
     userData.tipo_de_documento,
     userData.numero_de_documento,
+    userData.rol_usuario
   ];
 
   try {

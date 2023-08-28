@@ -80,10 +80,12 @@
 .exit_button {
     border: none;
     background-color: transparent;
-    left: 84%;
-    width: 2.8%;
+    left: 96%;
+    top: 1%;
+    width: 3%;
     display: flex;
     position: relative;
+    filter: grayscale(1);
 }
 
 .exit_image {
