@@ -149,7 +149,7 @@ export const Usuario_usu = () => {
                     </label>
                     <input
                       className="input1"
-                      placeholder="Nombre"
+                      placeholder={user ? user.nombre_usuario : ""}
                       type="text"
                     />
                   </div>
@@ -160,7 +160,7 @@ export const Usuario_usu = () => {
                     </label>
                     <input
                       className="input1"
-                      placeholder="Correo"
+                      placeholder= {user ? user.correo : ""}
                       type="text"
                     />
                   </div>
@@ -173,7 +173,7 @@ export const Usuario_usu = () => {
                     </label>
                     <input
                       className="input1"
-                      placeholder="Numero de Documento"
+                      placeholder={user ? user.numero_de_documento : ""}
                       type="text"
                     />
                   </div>
@@ -184,7 +184,7 @@ export const Usuario_usu = () => {
                     </label>
                     <input
                       className="input1"
-                      placeholder="Ciudad"
+                      placeholder={user ? user.ciudad : ""}
                       type="text"
                     />
                   </div>
@@ -197,10 +197,11 @@ export const Usuario_usu = () => {
                     </label>
                     <input
                       className="input2"
-                      placeholder="Telefono"
+                      placeholder={user ? user.telefono : ""}
                       type="text"
                     />
                   </div>
+                  <button className="boton_cambiar">Guardar cambios</button>
                 </div>
               </div>
             </form>
@@ -238,7 +239,7 @@ export const Usuario_usu = () => {
                       <th>Precio Unitario</th>
                     </tr>
                   </thead>
-                  <tbody class="tableBody">
+                  <tbody className="tableBody">
                     {/* <!-- Filas de productos se agregarán aquí --> */}
                     <tr>
                       <td>#1</td>
@@ -256,7 +257,7 @@ export const Usuario_usu = () => {
                   <b>#123412</b>
                   <b>10/08/2023</b>
                   <b>$ 4.500.000</b>
-                  <span class="material-symbols-outlined icon-open-section">
+                  <span className="material-symbols-outlined icon-open-section">
                     arrow_forward_ios
                   </span>
                 </div>
