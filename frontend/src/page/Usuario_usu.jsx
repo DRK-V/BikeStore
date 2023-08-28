@@ -196,7 +196,7 @@ export const Usuario_usu = () => {
                       <b>Telefono</b>
                     </label>
                     <input
-                      className="input2"
+                      className="input22"
                       placeholder={user ? user.telefono : ""}
                       type="text"
                     />
