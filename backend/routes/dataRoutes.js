@@ -159,4 +159,7 @@ router.post("/api/register", async (req, res) => {
  */
 router.post("/api/login", dataController.loginUser);
 
+router.get('/api/user/:email', dataController.getUserByEmail);
+
+
 module.exports = router;
