@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/login.css';
 import { useAuth } from '../components/AuthContext';
@@ -7,21 +7,42 @@ import leftImage from '../assets/bici_login.png';
 export const Login = () => {
   const navigate = useNavigate(); 
   const [loginStatus, setLoginStatus] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState(null);
 
   const { login } = useAuth();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  useEffect(() => {
-    if (isLoggedIn) {
-      const redirectTimeout = setTimeout(() => {
-        navigate('/');
-      }, 3000);
 
-      return () => {
-        clearTimeout(redirectTimeout);
-      };
+  const handleSuccessfulLogin = async (email) => {
+    setLoginStatus('¡Inicio de sesión exitoso!');
+
+    // Hacer una solicitud para obtener los datos del usuario
+    try {
+      const response = await fetch(`http://localhost:3060/api/user/${email}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 200) {
+        const userData = await response.json();
+        setUserData(userData); // Establecer los datos del usuario en el estado
+        login(userData); // Establecer los datos del usuario en el contexto
+        console.log('Información del usuario:', userData); // Mostrar en la consola
+      }
+    } catch (error) {
+      console.error('Error en la solicitud al backend:', error);
     }
-  }, [isLoggedIn, navigate]);
 
+    // Redireccionar después de 3 segundos
+    const redirectTimeout = setTimeout(() => {
+      navigate('/');
+    }, 3000);
+
+    return () => {
+      clearTimeout(redirectTimeout);
+    };
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -32,12 +53,10 @@ export const Login = () => {
     });
 
     try {
-
       if (!userData.email || !userData.password) {
         setLoginStatus('Por favor, complete todos los campos.');
         return;
       }
-
 
       const response = await fetch('http://localhost:3060/api/login', {
         method: 'POST',
@@ -48,19 +67,12 @@ export const Login = () => {
       });
 
       if (response.status === 200) {
-
-        setLoginStatus('¡Inicio de sesión exitoso!');
-
-
-        login();
         setIsLoggedIn(true);
-
+        handleSuccessfulLogin(userData.email);
       } else {
-
         setLoginStatus('Credenciales inválidas. Intente nuevamente.');
       }
     } catch (error) {
-
       console.error('Error en la solicitud al backend:', error);
       setLoginStatus('Error en el servidor. Intente nuevamente más tarde.');
     }
@@ -70,9 +82,9 @@ export const Login = () => {
     <div className="App">
       <div className="split-container">
         <button className="close-button2" onClick={() => navigate('/')}>
-        <span className="material-icons">
-close
-</span>
+          <span className="material-icons">
+            close
+          </span>
         </button>
         <div className="left-side">
           <img src={leftImage} alt="Image on the left" />
