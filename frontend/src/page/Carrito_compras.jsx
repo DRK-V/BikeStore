@@ -1,3 +1,4 @@
+//carrito_compras
 import { Footer } from '../components/Footer'
 import { Item_cart } from '../components/Item_cart'
 import { Navbar } from '../components/Navbar'

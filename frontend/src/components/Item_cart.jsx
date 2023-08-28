@@ -1,7 +1,7 @@
 import '../css/carrito_compras.css'
 const bicii =  "https://www.incolmotos-yamaha.com.co/bicicletas/images/civante.png"
 
-
+//item_card
 export const Item_cart = () => {
   return (
     <div className="Cart_compras_carrito">
