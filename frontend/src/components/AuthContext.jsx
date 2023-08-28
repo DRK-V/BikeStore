@@ -1,4 +1,3 @@
-// AuthProvider.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
@@ -9,31 +8,35 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') === 'true');
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || null);
 
-  const login = () => {
+  const login = (userData) => {
     setIsLoggedIn(true);
-    localStorage.setItem('isLoggedIn', 'true'); // Guarda el estado en localStorage
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('user', JSON.stringify(userData));
+    setUser(userData);
   };
 
   const logout = () => {
     setIsLoggedIn(false);
-    localStorage.removeItem('isLoggedIn'); // Elimina el estado de localStorage
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('user');
+    setUser(null);
     window.location.reload();
   };
 
-  // Verifica si la sesión expiró al cargar la página
   useEffect(() => {
     const storedIsLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     if (storedIsLoggedIn) {
-      // Realiza aquí la verificación del tiempo de expiración si lo deseas
-      // Por ejemplo, si la sesión debería expirar después de cierto tiempo,
-      // puedes comparar la hora actual con la hora de inicio de sesión almacenada.
-      // Si ha expirado, llama a logout().
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+      if (storedUser) {
+        setUser(storedUser);
+      }
     }
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
