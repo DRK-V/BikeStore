@@ -31,6 +31,8 @@ const swaggerDocs = (app, port) => {
     console.log(`v1 docs are available at http://localhost:${port}/api/v1/docs`);
 };
 
+
+
 module.exports = {
     swaggerDocs,
 };

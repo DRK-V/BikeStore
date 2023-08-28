@@ -269,6 +269,33 @@ const getProductDetailsWithImages = async (req, res) => {
     res.status(500).json({ error: "Error al obtener producto y sus imágenes" });
   }
 };
+
+
+//para obtener la informacion del usuario al iniciar sesion:
+const getUserByEmail = async (req, res) => {
+  const { email } = req.params;
+
+  try {
+    const selectUserQuery = 'SELECT * FROM cliente WHERE correo = $1';
+    const values = [email];
+
+    const result = await pool.query(selectUserQuery, values);
+
+    if (result.rows.length > 0) {
+      const userData = result.rows[0];
+      console.log('Información del usuario:', userData); // Agrega esta línea para imprimir en la consola
+      res.status(200).json(userData);
+    } else {
+      console.log('Usuario no encontrado para el correo:', email); // Agrega esta línea para imprimir en la consola
+      res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+  } catch (error) {
+    console.error('Error al consultar en la base de datos:', error);
+    res.status(500).json({ message: 'Error en el servidor' });
+  }
+};
+
+
 module.exports = {
   registerUser,
   getImages,
@@ -278,4 +305,5 @@ module.exports = {
   loginUser,
   getAllProducts,
   getProductDetailsWithImages,
+  getUserByEmail,
 };
