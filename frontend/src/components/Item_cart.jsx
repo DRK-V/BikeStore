@@ -1,4 +1,5 @@
 import '../css/carrito_compras.css'
+ 
 const bicii =  "https://www.incolmotos-yamaha.com.co/bicicletas/images/civante.png"
 
 
@@ -21,7 +22,7 @@ export const Item_cart = () => {
           <button className='su_re'>-</button>
           </div>
           <button className='boton1'>buscar</button>
-          <button className='boton1'>delete</button>
+          <button className='boton1'></button>
       </div>
       </div>
 
