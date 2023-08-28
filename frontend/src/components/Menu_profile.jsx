@@ -7,12 +7,19 @@ import { useAuth } from '../components/AuthContext';
 export const Menu_profile = ({ is_link_active, is_active, onClose, activateMyUsu, activateMyConfig, activateMyOrder }) => {
     const { user, logout } = useAuth();
     let url_profile = is_link_active ? '#profile' : '/Usuario_usu';
-
+    let rol = "";
     const handleLogout = () => {
         logout();
         onClose();
     };
 
+    if (user && !user.rol_usuario) {
+        rol = "usuario";
+    } else if (user) {
+        rol = user.rol_usuario;
+    } else {
+        rol = "usuario"; // Tratarlo como "usuario" si user es null
+    }
     return (
         <>
             <div className={`menu_profile ${is_active ? "active" : ""}`}>
@@ -30,19 +37,23 @@ export const Menu_profile = ({ is_link_active, is_active, onClose, activateMyUsu
                             <span>Perfil</span>
                         </li>
                     </Link>
-
-                    <li onClick={activateMyConfig}>
-                        <FiSettings />
-                        <span>Configuraciones</span>
-                    </li>
+                    <Link to={url_profile}>
+                        <li onClick={activateMyConfig}>
+                            <FiSettings />
+                            <span>Configuraciones</span>
+                        </li>
+                    </Link>
                     <li onClick={activateMyOrder}>
                         <FiShoppingBag />
                         <span>Pedidos</span>
                     </li>
-                    <li>
-                        <FiUserPlus />
-                        <span>Administrar</span>
-                    </li>
+                    <Link to={url_profile} className={rol === "Administrador" ? '' : 'desactive_option'}>
+                        <li>
+                            <FiUserPlus />
+                            <span>Administrar</span>
+                        </li>
+                    </Link>
+
                     <li onClick={handleLogout}>
                         <FiLogOut />
                         <span>Cerrar Sesión</span>

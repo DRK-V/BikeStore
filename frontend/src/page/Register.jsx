@@ -20,6 +20,7 @@ export const Register = () => {
     formData.forEach((value, key) => {
       userData[key] = value;
     });
+    userData.rol_usuario = 'usuario'; // Agregar la constante "usuario" al objeto userData
 
     const missing = [];
     if (!userData.nombre) missing.push('nombre');
@@ -56,7 +57,7 @@ export const Register = () => {
       setRegistrationStatus('El número de teléfono debe tener exactamente 10 dígitos.');
       return;
     }
-console.log(userData)
+    console.log(userData)
     try {
       const response = await fetch('http://localhost:3060/api/register', {
         method: 'POST',
@@ -65,13 +66,13 @@ console.log(userData)
         },
         body: JSON.stringify(userData),
       });
-  
+
       if (response.status === 201) {
         setShowRegistrationMessage(true);
         const countdownInterval = setInterval(() => {
           setRedirectCountdown((prevCountdown) => prevCountdown - 1);
         }, 1000);
-  
+
         setTimeout(() => {
           clearInterval(countdownInterval);
           navigate('/login');
@@ -119,9 +120,9 @@ console.log(userData)
     <div className="App">
       <div className="split-container1">
         <button className="close-button" onClick={() => navigate('/')}>
-        <span className="material-icons">
-close
-</span>
+          <span className="material-icons">
+            close
+          </span>
         </button>
         <div className="left-side">
           <img src={leftImage} alt="Image on the left" />
@@ -131,62 +132,62 @@ close
             <h1>Registrate</h1>
             <form id="form1" onSubmit={handleSubmit}>
               <div className="form-row1">
-              <div className="form-row">
-                 <i className="fas fa-user"></i>
-                <input type="text" placeholder='Nombre' name="nombre" required onInput={handleAlphaInput} />
-              </div>
-              <div className="form-row">
-                 <i className="fas fa-envelope"></i>
-                <input type="email" placeholder='Correo electrónico:' name="email" required />
-              </div>
-              </div>
-              <div className="form-row1">
-              <div className="form-row">
-              <i className="fas fa-lock"></i>
-                <input
-                  type="password"
-                  placeholder='Contraseña:'
-                  name="password"
-                  required
-                  minLength="8"
-                  onChange={(e) => handlePasswordInput(e.target.value)}
-                />
-              </div>
-              <div className="form-row">
-              <i className="fas fa-lock"></i>
-                <input type="password" placeholder='Confirmar contraseña:' name="confirmPassword" required />
-              </div>
-                 </div>
-              <div className="form-row1">
-              <div className="form-row">
-                 <i className="fas fa-phone"></i>
-                <input type="tel" placeholder='Teléfono:' name="telefono" required onInput={handleNumericInput} />
-              </div>
-              <div className="form-row">
-                 <i className="fas fa-id-card"></i>
-                <select className="form-row" name="tipo_de_documento" required>
-                  <option value="" disabled selected>
-                    Tipo de documento
-                  </option>
-                  <option value="CC">Cédula de ciudadanía</option>
-                  <option value="CE">Cédula extranjera</option>
-                </select>
-              </div>
+                <div className="form-row">
+                  <i className="fas fa-user"></i>
+                  <input type="text" placeholder='Nombre' name="nombre" required onInput={handleAlphaInput} />
+                </div>
+                <div className="form-row">
+                  <i className="fas fa-envelope"></i>
+                  <input type="email" placeholder='Correo electrónico:' name="email" required />
+                </div>
               </div>
               <div className="form-row1">
-              <div className="form-row">
-                <i className="fas fa-user"></i>
-                <input
-                  type="text"
-                  placeholder="Número de documento"
-                  name="numero_de_documento"
-                  required
-                  minLength="8"
-                  maxLength="10"
-                  onInput={handleNumericInput}
-                />
+                <div className="form-row">
+                  <i className="fas fa-lock"></i>
+                  <input
+                    type="password"
+                    placeholder='Contraseña:'
+                    name="password"
+                    required
+                    minLength="8"
+                    onChange={(e) => handlePasswordInput(e.target.value)}
+                  />
+                </div>
+                <div className="form-row">
+                  <i className="fas fa-lock"></i>
+                  <input type="password" placeholder='Confirmar contraseña:' name="confirmPassword" required />
+                </div>
               </div>
-                
+              <div className="form-row1">
+                <div className="form-row">
+                  <i className="fas fa-phone"></i>
+                  <input type="tel" placeholder='Teléfono:' name="telefono" required onInput={handleNumericInput} />
+                </div>
+                <div className="form-row">
+                  <i className="fas fa-id-card"></i>
+                  <select className="form-row" name="tipo_de_documento" required>
+                    <option value="" disabled selected>
+                      Tipo de documento
+                    </option>
+                    <option value="CC">Cédula de ciudadanía</option>
+                    <option value="CE">Cédula extranjera</option>
+                  </select>
+                </div>
+              </div>
+              <div className="form-row1">
+                <div className="form-row">
+                  <i className="fas fa-user"></i>
+                  <input
+                    type="text"
+                    placeholder="Número de documento"
+                    name="numero_de_documento"
+                    required
+                    minLength="8"
+                    maxLength="10"
+                    onInput={handleNumericInput}
+                  />
+                </div>
+
               </div>
               {missingParams.length > 0 && (
                 <div className="missing-params">
