@@ -5,7 +5,7 @@ import { FiX, FiUser, FiSettings, FiShoppingBag, FiUserPlus, FiLogOut } from 're
 import { useAuth } from '../components/AuthContext';
 
 export const Menu_profile = ({ is_link_active, is_active, onClose, activateMyUsu, activateMyConfig, activateMyOrder }) => {
-    const { user, logout } = useAuth(); // Obtiene la información del usuario y la función logout del contexto
+    const { user, logout } = useAuth();
     let url_profile = is_link_active ? '#profile' : '/Usuario_usu';
 
     const handleLogout = () => {
@@ -21,7 +21,7 @@ export const Menu_profile = ({ is_link_active, is_active, onClose, activateMyUsu
                         <FiX />
                     </button>
                     <img src={logoExample} alt="Perfil" className="profile-image" />
-                    <h3>{user ? user.nombre : "Nombre de Usuario"}</h3>
+                    <h3>{user ? user.nombre_usuario : "Nombre de Usuario"}</h3>
                 </div>
                 <ul className="options-list">
                     <Link to={url_profile} onClick={activateMyUsu}>
@@ -50,5 +50,5 @@ export const Menu_profile = ({ is_link_active, is_active, onClose, activateMyUsu
                 </ul>
             </div>
         </>
-    )
-}
+    );
+};

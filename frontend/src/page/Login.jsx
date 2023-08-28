@@ -5,17 +5,15 @@ import { useAuth } from '../components/AuthContext';
 import leftImage from '../assets/bici_login.png';
 
 export const Login = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [loginStatus, setLoginStatus] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userData, setUserData] = useState(null);
 
   const { login } = useAuth();
 
   const handleSuccessfulLogin = async (email) => {
     setLoginStatus('¡Inicio de sesión exitoso!');
 
-    // Hacer una solicitud para obtener los datos del usuario
     try {
       const response = await fetch(`http://localhost:3060/api/user/${email}`, {
         method: 'GET',
@@ -26,7 +24,6 @@ export const Login = () => {
 
       if (response.status === 200) {
         const userData = await response.json();
-        setUserData(userData); // Establecer los datos del usuario en el estado
         login(userData); // Establecer los datos del usuario en el contexto
         console.log('Información del usuario:', userData); // Mostrar en la consola
       }
@@ -34,7 +31,6 @@ export const Login = () => {
       console.error('Error en la solicitud al backend:', error);
     }
 
-    // Redireccionar después de 3 segundos
     const redirectTimeout = setTimeout(() => {
       navigate('/');
     }, 3000);
@@ -77,7 +73,6 @@ export const Login = () => {
       setLoginStatus('Error en el servidor. Intente nuevamente más tarde.');
     }
   };
-
   return (
     <div className="App">
       <div className="split-container">

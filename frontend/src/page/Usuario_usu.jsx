@@ -5,7 +5,12 @@ import { Menu_profile } from "../components/Menu_profile";
 import { FiX } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useAuth } from '../components/AuthContext';
+
 export const Usuario_usu = () => {
+
+  const { user } = useAuth();
+
   const [viewMenu, setViewMenu] = useState(true);
   const [isMyUsuActive, setIsMyUsuActive] = useState(true);
   const [isMyConfigActive, setIsMyConfigActive] = useState(false);
@@ -47,9 +52,9 @@ export const Usuario_usu = () => {
               <FiX className="exit_image" />
             </Link>{" "}
           </button>
-          <div
-            className={`container_my_usu ${isMyUsuActive ? "container_active" : ""}`}
-          >
+
+
+          <div className={`container_my_usu ${isMyUsuActive ? "container_active" : ""}`}>
             <div className="titulo1">
               <h2>Mi perfil</h2>
             </div>
@@ -65,6 +70,7 @@ export const Usuario_usu = () => {
                       className="input1"
                       placeholder="Nombre"
                       type="text"
+                      value={user ? user.nombre_usuario : ""}
                     />
                   </div>
 
@@ -77,6 +83,7 @@ export const Usuario_usu = () => {
                       className="input1"
                       placeholder="Correo"
                       type="text"
+                      value={user ? user.correo : ""}
                     />
                   </div>
                 </div>
@@ -91,6 +98,7 @@ export const Usuario_usu = () => {
                       className="input1"
                       placeholder="Numero de Documento"
                       type="text"
+                      value={user ? user.numero_de_documento : ""}
                     />
                   </div>
 
@@ -103,6 +111,7 @@ export const Usuario_usu = () => {
                       className="input1"
                       placeholder="Ciudad"
                       type="text"
+                      value={user ? user.ciudad : ""}
                     />
                   </div>
                 </div>
@@ -117,12 +126,14 @@ export const Usuario_usu = () => {
                       className="input2"
                       placeholder="Telefono"
                       type="text"
+                      value={user ? user.telefono : ""}
                     />
                   </div>
                 </div>
               </div>
             </form>
           </div>
+
           <div
             className={`container_my_config ${isMyConfigActive ? "container_active" : ""}`}
           >
@@ -194,6 +205,9 @@ export const Usuario_usu = () => {
               </div>
             </form>
           </div>
+
+
+
           <div
             className={`container_my_order ${isMyOrderActive ? "container_active" : ""}`}
           >
@@ -209,7 +223,7 @@ export const Usuario_usu = () => {
                   <b>#123412</b>
                   <b>10/08/2023</b>
                   <b>$ 4.500.000</b>
-                  <span class="material-symbols-outlined icon-open-section">
+                  <span className="material-symbols-outlined icon-open-section">
                     arrow_forward_ios
                   </span>
                 </div>
