@@ -60,9 +60,9 @@
 }
 
 .input2 {
-    width: 66%;
+    width: 37.6%;
     border-radius: 0.5em;
-    padding: 3.4%;
+    padding: 2.4%;
     margin-top: 4%;
     margin-left: 2%;
     border: solid 3px rgba(128, 128, 128, 0.174);
@@ -241,5 +241,14 @@
     background-color: #7ee29aa6;
     border: none;
     border-radius: 0.5em;
-    
+
+}
+
+.input22{
+    width: 66%;
+    border-radius: 0.5em;
+    padding: 3.4%;
+    margin-top: 4%;
+    margin-left: 2%;
+    border: solid 3px rgba(128, 128, 128, 0.174);
 }
