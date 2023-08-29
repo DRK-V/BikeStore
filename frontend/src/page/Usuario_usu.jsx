@@ -6,19 +6,44 @@ import { Menu_profile } from "../components/Menu_profile";
 import { FiX } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useAuth } from '../components/AuthContext';
+import { useLocation } from 'react-router-dom';
 
 export const Usuario_usu = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const activeSection = queryParams.get('section');//para obtener la seccion que se deberia mostrar
   const { user } = useAuth();
+
+
+  useEffect(() => {
+    if (activeSection === 'profile') {
+      activateMyUsu();
+    } else if (activeSection === 'settings') {
+      activateMyConfig();
+    } else if (activeSection === 'orders') {
+      activateMyOrder();
+    }
+  }, [activeSection]);
+
+  //estado para cambiar la orientacion del boton 180 grados
+  const [isTableExpanded, setIsTableExpanded] = useState(false);
 
   //para mostrar y ocultar las tablas hijas
   const [expandedOrderId, setExpandedOrderId] = useState(null);
+  const [expandedOrders, setExpandedOrders] = useState([]);//para rastrear el estado de expansión de cada pedido
+
+  const isOrderExpanded = (orderId) => {
+    return expandedOrders.includes(orderId);
+  };
 
   // Función para manejar el clic en el botón de expansión
   const handleExpandOrder = (orderId) => {
-    setExpandedOrderId(orderId === expandedOrderId ? null : orderId);
+    if (expandedOrders.includes(orderId)) {
+      setExpandedOrders(expandedOrders.filter(id => id !== orderId));
+    } else {
+      setExpandedOrders([...expandedOrders, orderId]);
+    }
   };
-
-
 
   const [viewMenu, setViewMenu] = useState(true);
   const [isMyUsuActive, setIsMyUsuActive] = useState(true);
@@ -159,9 +184,7 @@ export const Usuario_usu = () => {
             </form>
           </div>
 
-          <div
-            className={`container_my_config ${isMyConfigActive ? "container_active" : ""}`}
-          >
+          <div className={`container_my_config ${isMyConfigActive ? "container_active" : ""}`}>
             <div className="titulo1">
               <h2>Configurar perfil</h2>
             </div>
@@ -232,10 +255,7 @@ export const Usuario_usu = () => {
             </form>
           </div>
 
-
-          <div
-            className={`container_my_order ${isMyOrderActive ? "container_active" : ""}`}
-          >
+          <div className={`container_my_order ${isMyOrderActive ? "container_active" : ""}`}>
             <h2>Orders</h2>
             <div className="header_columns_orders">
               <b>ID pedido</b>
@@ -243,47 +263,66 @@ export const Usuario_usu = () => {
               <b>Total</b>
             </div>
             <div className="container_list_section_orders">
-              {orders.map(detalle => (
-                <div className="section_order" key={detalle.id_detalle}>
-                   <div
-                    className="section_order_preview"
-                    onClick={() => handleExpandOrder(detalle.id_detalle)} // Manejar el clic en la preview
-                  >
-                    <b>#{detalle.id_detalle}</b>
-                    <b>{detalle.fecha_pedido}</b>
-                    <b>$ {detalle.precio}</b>
-                    <span className="material-symbols-outlined icon-open-section">
-                      arrow_forward_ios
-                    </span>
-                  </div>
-                  <table className={expandedOrderId === detalle.id_detalle ? '' : 'hidden-table'}>
-                    <thead>
-                      <tr>
-                        <th>ID Producto</th>
-                        <th>Nombre Producto</th>
-                        <th>Cantidad</th>
-                        <th>Precio Unitario</th>
-                      </tr>
-                    </thead>
-                    <tbody className="tableBody">
-                      {detalle.productos.map(producto => (
-                        <tr key={producto.id_producto}>
-                          <td>#{producto.id_producto}</td>
-                          <td>{producto.nombre_producto}</td>
-                          <td>{producto.cantidad_producto}</td> {/* Agregar cantidad de producto */}
-                          <td>${producto.precio}</td>
+              {orders.map(detalle => {
+                const orderTotal = detalle.productos.reduce(
+                  (total, producto) => total + producto.precio * producto.cantidad_producto,
+                  0
+                );
+
+                const formattedFechaPedido = detalle.fecha_pedido.substring(0, 10);
+
+                return (
+                  <div className="section_order" key={detalle.id_detalle}>
+                    <div
+                      className="section_order_preview"
+                      onClick={() => handleExpandOrder(detalle.id_detalle)}
+                    >
+                      <b>#{detalle.id_detalle}</b>
+                      <b>{formattedFechaPedido}</b>
+                      <b>$ {detalle.precio}</b>
+                      <span
+                        className="material-symbols-outlined icon-open-section" id={expandedOrders.includes(detalle.id_detalle) ? "rotate-icon" : ""}
+                        onClick={() => handleExpandOrder(detalle.id_detalle)}
+                      >
+                        arrow_forward_ios
+                      </span>
+                    </div>
+                    <table
+                      className={isOrderExpanded(detalle.id_detalle) ? "" : "hidden-table"}
+                    >
+                      <thead>
+                        <tr>
+                          <th>ID Producto</th>
+                          <th>Nombre Producto</th>
+                          <th>Cantidad</th>
+                          <th>Precio Unitario</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ))}
+                      </thead>
+                      <tbody className="tableBody">
+                        {detalle.productos.map(producto => (
+                          <tr key={producto.id_producto}>
+                            <td>#{producto.id_producto}</td>
+                            <td>{producto.nombre_producto}</td>
+                            <td>{producto.cantidad_producto}</td>
+                            <td>${producto.precio}</td>
+                          </tr>
+                        ))}
+                        <tr>
+                          <td colSpan="3"></td>
+                          <td><b>Total: ${orderTotal.toLocaleString("es-ES", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}</b></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                );
+              })}
             </div>
           </div>
-
         </div>
       </div>
-
       <Footer />
     </>
   );
