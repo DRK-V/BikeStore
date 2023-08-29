@@ -17,7 +17,6 @@ import '../css/main.css'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
     // Simula una tarea asincrónica que tarda 3 segundos en cargar la aplicación
@@ -42,8 +41,7 @@ function App() {
             <Route path="/Login" element={<Login />} />
             <Route path="/payment" element={<Payment />} />
             <Route path="/Usuario_usu" element={<Usuario_usu />} />
-            <Route path="/Carrito_compras" element={<Carrito_compras cartItems={cartItems} />} />
-        
+            <Route path="/Carrito_compras" element={<Carrito_compras />} />
           </Routes>
         </>
       )}

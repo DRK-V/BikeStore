@@ -1,36 +1,33 @@
 import '../css/carrito_compras.css'
+ 
+const bicii =  "https://www.incolmotos-yamaha.com.co/bicicletas/images/civante.png"
 
-export const Item_cart = ({ item }) => {
-  const [additionalProductDetails, setAdditionalProductDetails] = useState(null);
-  useEffect(() => {
-    const fetchAdditionalProductDetails = async () => {
-      try {
-        const response = await fetch(`http://localhost:3060/products-with-images/${item.id}`);
-        const data = await response.json();
-        setAdditionalProductDetails(data);
-      } catch (error) {
-        console.error('Error fetching additional product details:', error);
-      }
-    };
 
-    fetchAdditionalProductDetails();
-  }, [item.id]);
-  console.log('Item in Item_cart:', item); // Log the item data
+export const Item_cart = () => {
   return (
     <div className="Cart_compras_carrito">
-      <h2>{item.name}</h2>
-      {/* Display the fetched product details */}
-      {additionalProductDetails && (
-        <div>
-          {/* Display images, price, or any other relevant information */}
-          <img src={additionalProductDetails.images[0].url} alt="Product" />
-          <p>Price: ${additionalProductDetails.product.precio}</p>
-          {/* ... */}
-        </div>
-      )}
-      <div className='botones_compra'>
-        {/* ... */}
+      <h2>Montaña</h2>
+      <div className='info_bici_compra'>
+        <img className='img_bicci' src={bicii} alt=""  />
+        <div className='descrip_produc'>
+        <p>Cicla Civante - marco en fibra de vidrio</p>
+        <p>$ 9.500.000.0  -20%</p><br />
+        <b><p>$ 7.600.000.0</p></b>
+        
       </div>
+      <div className='botones_compra'>
+        <div className='boton2'>
+          <button className='su_re'>+</button>
+           2
+          <button className='su_re'>-</button>
+          </div>
+          <button className='boton1'>buscar</button>
+          <button className='boton1'></button>
+      </div>
+      </div>
+
+
+
     </div>
-  );
-};
+  )
+}
