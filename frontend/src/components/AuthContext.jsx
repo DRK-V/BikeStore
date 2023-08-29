@@ -1,7 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-
 const AuthContext = createContext();
-
 export const useAuth = () => {
   return useContext(AuthContext);
 };
@@ -22,7 +20,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('user');
     setUser(null);
-    window.location.reload();
+    window.location.href = '/';
   };
 
   useEffect(() => {

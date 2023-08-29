@@ -4,7 +4,7 @@ const { pool } = require("../config/db");
 //registro de clients
 const registerUser = async (userData) => {
   const insertUserQuery =
-    "INSERT INTO cliente (nombre_usuario, correo, contrasena, telefono, tipo_de_documento, numero_de_documento) VALUES ($1, $2, $3, $4, $5, $6)";
+    "INSERT INTO cliente (nombre_usuario, correo, contrasena, telefono, tipo_de_documento, numero_de_documento,rol_usuario) VALUES ($1, $2, $3, $4, $5, $6,$7)";
   const selectUserQuery =
     "SELECT COUNT(*) FROM cliente WHERE correo = $1 OR numero_de_documento = $2";
   const values = [
@@ -14,6 +14,7 @@ const registerUser = async (userData) => {
     userData.telefono,
     userData.tipo_de_documento,
     userData.numero_de_documento,
+    userData.rol_usuario
   ];
 
   try {
@@ -296,6 +297,45 @@ const getUserByEmail = async (req, res) => {
 };
 
 
+const getUserDetalleCompra = async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const detallesCompraQuery = `
+      SELECT detalle_compra.id_detalle, detalle_compra.fecha_pedido, detalle_compra.precio
+      FROM detalle_compra
+      WHERE detalle_compra.codigo_cliente = $1;
+    `;
+    const detallesCompraValues = [userId];
+
+    const detallesCompraResult = await pool.query(detallesCompraQuery, detallesCompraValues);
+    const detallesCompra = detallesCompraResult.rows;
+
+    for (const detalle of detallesCompra) {
+      const productosQuery = `
+        SELECT producto.id_producto, producto.nombre_producto, producto.precio, pedido_producto.cantidad_producto
+        FROM pedido_producto
+        INNER JOIN producto ON pedido_producto.id_producto = producto.id_producto
+        WHERE pedido_producto.id_pedido = $1;
+      `;
+      const productosValues = [detalle.id_detalle];
+
+      const productosResult = await pool.query(productosQuery, productosValues);
+      detalle.productos = productosResult.rows;
+    }
+
+    res.status(200).json(detallesCompra);
+  } catch (error) {
+    console.error('Error al obtener los detalles de compra:', error.message);
+    res.status(500).json({ error: 'Error al obtener los detalles de compra' });
+  }
+};
+
+module.exports = {
+  getUserDetalleCompra
+};
+
+
+
 module.exports = {
   registerUser,
   getImages,
@@ -306,4 +346,5 @@ module.exports = {
   getAllProducts,
   getProductDetailsWithImages,
   getUserByEmail,
+  getUserDetalleCompra,
 };
