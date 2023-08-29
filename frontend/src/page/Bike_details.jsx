@@ -106,9 +106,9 @@ const Bike_details = () => {
                 Comprar
               </button>
               <button className="btn_add_item_cart" onClick={handleAddToCart}>
-          <i></i>
-          Agregar al carrito
-        </button>
+  <i></i>
+  Agregar al carrito
+</button>
             </form>
             <div className="container_comments">
               <Container_comments />
