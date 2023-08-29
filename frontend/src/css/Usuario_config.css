@@ -12,7 +12,9 @@
     position: relative;
     /* background-color: aqua; */
 }
-
+.hidden-table {
+    display: none;
+  }
 .usu_detall {
     width: 73%;
     min-height: 90vh;

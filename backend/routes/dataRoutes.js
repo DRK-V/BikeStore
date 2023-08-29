@@ -160,6 +160,9 @@ router.post("/api/register", async (req, res) => {
 router.post("/api/login", dataController.loginUser);
 
 router.get('/api/user/:email', dataController.getUserByEmail);
+//esta ruta es para traer la informacion de pedidos del usuario
+
+router.get('/user/:userId/detalle_compra', dataController.getUserDetalleCompra);
 
 
 module.exports = router;
