@@ -329,12 +329,27 @@ const getUserDetalleCompra = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener los detalles de compra' });
   }
 };
+const updateUserImage = async (req, res) => {
+  const userId = req.params.userId;
+  const image = req.file; // Assuming you're sending the image in a "multipart/form-data" format
 
-module.exports = {
-  getUserDetalleCompra
+  try {
+    if (!image) {
+      res.status(400).json({ error: "No se proporcionó ninguna imagen" });
+      return;
+    }
+
+    const updateImageQuery = "UPDATE cliente SET imagen_usuario = $1 WHERE id_cliente = $2";
+    const values = [image.path, userId]; // Assuming image.path is the path where you saved the image
+
+    await pool.query(updateImageQuery, values);
+
+    res.status(200).json({ message: "Imagen de usuario actualizada exitosamente" });
+  } catch (error) {
+    console.error("Error al actualizar la imagen de usuario:", error.message);
+    res.status(500).json({ error: "Error al actualizar la imagen de usuario" });
+  }
 };
-
-
 
 module.exports = {
   registerUser,
@@ -347,4 +362,5 @@ module.exports = {
   getProductDetailsWithImages,
   getUserByEmail,
   getUserDetalleCompra,
+  updateUserImage,
 };

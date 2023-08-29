@@ -1,117 +1,138 @@
 /* estos son los estilos del menu de usuario */
- .menu_profile_container{
-    position: fixed;
-    float: right;
-    top: 0;
-    right: 0;
-    height: 100vh;
-    width: 23em;
-    z-index: 10;
-    background-color: white;
-}
 .menu_profile_container {
-    display: none;
-  }
-  
-  .menu_profile_container.active {
-    display: block;
-  }
-.desactive_option{
+  position: fixed;
+  float: right;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 23em;
+  z-index: 10;
+  background-color: white;
+}
+
+.menu_profile_container {
   display: none;
 }
-.menu_profile{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+
+.menu_profile_container.active {
+  display: block;
+}
+
+.desactive_option {
+  display: none;
+}
+
+.menu_profile {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Sidebar.css */
 
 .sidebar {
-    width: 100%;
-    height: 100%;
-    background-color: #fff;
-    position: fixed;
-    top: 0;
-    left: -300px;
-    transition: left 0.3s ease-in-out;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  position: fixed;
+  top: 0;
+  left: -300px;
+  transition: left 0.3s ease-in-out;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+
+.profile-section {
+  text-align: center;
+  padding: 20px 0;
+  width: 100%;
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.close-button-profile-desactive {
+  display: none;
+  opacity: 0;
+}
+
+.close-button-profile {
+  position: absolute;
+  width: 15%;
+  height: 8%;
+  right: 0;
+  border: none;
+  color: #333;
+  font-size: 24px;
+  top: 0;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.profile-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: gray;
+  clip-path: circle();
+  object-fit: cover;
+  left: 0;
+}
+.image-no-found{
+  background-image: url('../assets/profile.jpg');
+  background-size: 160%;
+  background-repeat: no-repeat;
+  background-position: center;
+  object-fit: cover;
+}
+.profile-image-label {
+  position: relative;
+  cursor: pointer;
+  width: 10em;
+  height: 20vh;
+}
+
+.profile-image-input {
+  display: none;
+}
+
+.profile-section h3 {
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+.options-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  width: 95%;
+  left: 2.5%;
+}
+
+.options-list li {
+  display: flex;
+  align-items: center;
+  padding: 1em 20px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #7ee29a;
   }
-  
-  .sidebar.open {
-    left: 0;
-  }
-  
-  
-  .profile-section {
-    text-align: center;
-    padding: 20px 0;
-    width: 100%;
-    height: 50vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  
-  .close-button-profile-desactive
-  {
-    display: none;
-    opacity: 0;
-  }
-  .close-button-profile {
-    position: absolute; 
-    width: 15%;
-    height:8%;
-    right: 0;
-    border: none;
-    color: #333;
-    font-size: 24px;
-    top: 0;
-    cursor: pointer;
-    background-color: transparent;
-  }
-  
-  .profile-image {
-    width: 10em;    
-    height: 20vh;
-    background-color: gray;
-    clip-path: circle();
-    object-fit: cover;
-  }
-  
-  .profile-section h3 {
-    margin-top: 10px;
-    font-size: 18px;
-  }
-  
-  .options-list {
-    list-style: none;
-    padding: 0;
-    margin: 20px 0;
-    width: 95%;
-    left: 2.5%;
-  }
-  
-  .options-list li {
-    display: flex;
-    align-items: center;
-    padding: 1em 20px;
-    cursor: pointer;
-    &:hover{
-        background-color: #7ee29a;
-    }
-  }
-  
-  .options-list li svg {
-    margin-right: 10px;
-  }
-  
-  .options-list li span {
-    font-size: 16px;
-  }
-  
-  /* Add more styles as needed */
-  
+}
+
+.options-list li svg {
+  margin-right: 10px;
+}
+
+.options-list li span {
+  font-size: 16px;
+}
+
+/* Add more styles as needed */

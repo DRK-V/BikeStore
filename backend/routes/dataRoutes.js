@@ -1,8 +1,21 @@
-//routes
-
 const express = require("express");
 const dataController = require("../controllers/dataController");
 const router = express.Router();
+
+const multer = require('multer');
+
+// Configuración de Multer
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/') // Aquí define la carpeta donde se guardarán los archivos
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + '.jpg') // Cambia la extensión según tus necesidades
+  }
+});
+
+const upload = multer({ storage: storage });
 /**
  * @openapi
  * tags:
@@ -163,6 +176,10 @@ router.get('/api/user/:email', dataController.getUserByEmail);
 //esta ruta es para traer la informacion de pedidos del usuario
 
 router.get('/user/:userId/detalle_compra', dataController.getUserDetalleCompra);
+
+
+router.post('/user/:userId/updateImage', upload.single('image'), dataController.updateUserImage);
+
 
 
 module.exports = router;
