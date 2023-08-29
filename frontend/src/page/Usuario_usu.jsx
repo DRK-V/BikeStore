@@ -49,6 +49,9 @@ export const Usuario_usu = () => {
   const [isMyUsuActive, setIsMyUsuActive] = useState(true);
   const [isMyConfigActive, setIsMyConfigActive] = useState(false);
   const [isMyOrderActive, setIsMyOrderActive] = useState(false);
+  const [formulario, setformulario] = useState({
+    nombre_usuario: "",
+  });
 
   const [orders, setOrders] = useState([]); // Estado para almacenar los pedidos y productos
 
@@ -84,6 +87,35 @@ export const Usuario_usu = () => {
   }, [user]);
 
   console.log(viewMenu);
+
+
+
+  /*esto es para poder editar los input  */
+  const [nombreUsuario, setNombreUsuario] = useState(user ? user.nombre_usuario : "");
+  const [correo, setCorreo] = useState(user ? user.correo : "");
+  const [numeroDocumento, setNumeroDocumento] = useState(user ? user.numero_de_documento : "");
+  const [ciudad, setCiudad] = useState(user ? user.ciudad : "");
+  const [telefono, setTelefono] = useState(user ? user.telefono : "");
+
+  const handleTelefonoChange = (e) => {
+    setTelefono(e.target.value);
+  };
+  const handleCiudadChange = (e) => {
+    setCiudad(e.target.value);
+  };
+  const handleNumeroDocumentoChange = (e) => {
+    setNumeroDocumento(e.target.value);
+  };
+
+  const handleNombreUsuarioChange = (e) => {
+    setNombreUsuario(e.target.value);
+  };
+
+  const handleCorreoChange = (e) => {
+    setCorreo(e.target.value);
+  };
+/*a qui termina los estados para poder editar los input */
+
   return (
     <>
       <div className="pa_usu">
@@ -199,9 +231,10 @@ export const Usuario_usu = () => {
                       className="input1"
                       placeholder={user ? user.nombre_usuario : ""}
                       type="text"
+                      value={nombreUsuario}
+                      onChange={handleNombreUsuarioChange}
                     />
                   </div>
-
                   <div className="fila">
                     <label htmlFor="">
                       <b>Correo</b>
@@ -209,7 +242,9 @@ export const Usuario_usu = () => {
                     <input
                       className="input1"
                       placeholder={user ? user.correo : ""}
+                      value={correo}
                       type="text"
+                      onChange={handleCorreoChange}
                     />
                   </div>
                 </div>
@@ -222,7 +257,9 @@ export const Usuario_usu = () => {
                     <input
                       className="input1"
                       placeholder={user ? user.numero_de_documento : ""}
+                      value={numeroDocumento}
                       type="text"
+                      onChange={handleNumeroDocumentoChange}
                     />
                   </div>
 
@@ -233,7 +270,9 @@ export const Usuario_usu = () => {
                     <input
                       className="input1"
                       placeholder={user ? user.ciudad : ""}
+                      value={ciudad}
                       type="text"
+                      onChange={handleCiudadChange}
                     />
                   </div>
                 </div>
@@ -246,7 +285,9 @@ export const Usuario_usu = () => {
                     <input
                       className="input22"
                       placeholder={user ? user.telefono : ""}
+                      value={telefono}
                       type="text"
+                      onChange={handleTelefonoChange}
                     />
                   </div>
                   <button className="boton_cambiar">Guardar cambios</button>
