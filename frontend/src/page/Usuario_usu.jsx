@@ -1,20 +1,31 @@
+import { useEffect, useState } from 'react';
 import { Footer } from "../components/Footer";
 import "../css/Usuario_config.css";
 import "../css/menu_profile.css";
 import { Menu_profile } from "../components/Menu_profile";
 import { FiX } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { useAuth } from '../components/AuthContext';
 
 export const Usuario_usu = () => {
-
   const { user } = useAuth();
+
+  //para mostrar y ocultar las tablas hijas
+  const [expandedOrderId, setExpandedOrderId] = useState(null);
+
+  // Función para manejar el clic en el botón de expansión
+  const handleExpandOrder = (orderId) => {
+    setExpandedOrderId(orderId === expandedOrderId ? null : orderId);
+  };
+
+
 
   const [viewMenu, setViewMenu] = useState(true);
   const [isMyUsuActive, setIsMyUsuActive] = useState(true);
   const [isMyConfigActive, setIsMyConfigActive] = useState(false);
   const [isMyOrderActive, setIsMyOrderActive] = useState(false);
+
+  const [orders, setOrders] = useState([]); // Estado para almacenar los pedidos y productos
 
   const activateMyUsu = () => {
     setIsMyUsuActive(true);
@@ -33,7 +44,21 @@ export const Usuario_usu = () => {
     setIsMyConfigActive(false);
     setIsMyOrderActive(true);
   };
-  console.log(viewMenu)
+
+  useEffect(() => {
+    if (user) {
+      fetch(`http://localhost:3060/user/${user.id_cliente}/detalle_compra`) // Hacer la petición GET al servidor
+        .then(response => response.json())
+        .then(data => {
+          setOrders(data); // Actualizar el estado con los datos recibidos
+        })
+        .catch(error => {
+          console.error('Error al obtener los detalles de compra:', error);
+        });
+    }
+  }, [user]);
+
+  console.log(viewMenu);
   return (
     <>
       <div className="pa_usu">
@@ -160,7 +185,7 @@ export const Usuario_usu = () => {
                     </label>
                     <input
                       className="input1"
-                      placeholder= {user ? user.correo : ""}
+                      placeholder={user ? user.correo : ""}
                       type="text"
                     />
                   </div>
@@ -208,7 +233,6 @@ export const Usuario_usu = () => {
           </div>
 
 
-
           <div
             className={`container_my_order ${isMyOrderActive ? "container_active" : ""}`}
           >
@@ -219,87 +243,44 @@ export const Usuario_usu = () => {
               <b>Total</b>
             </div>
             <div className="container_list_section_orders">
-              <div className="section_order">
-                <div className="section_order_preview">
-                  <b>#123412</b>
-                  <b>10/08/2023</b>
-                  <b>$ 4.500.000</b>
-                  <span className="material-symbols-outlined icon-open-section">
-                    arrow_forward_ios
-                  </span>
+              {orders.map(detalle => (
+                <div className="section_order" key={detalle.id_detalle}>
+                   <div
+                    className="section_order_preview"
+                    onClick={() => handleExpandOrder(detalle.id_detalle)} // Manejar el clic en la preview
+                  >
+                    <b>#{detalle.id_detalle}</b>
+                    <b>{detalle.fecha_pedido}</b>
+                    <b>$ {detalle.precio}</b>
+                    <span className="material-symbols-outlined icon-open-section">
+                      arrow_forward_ios
+                    </span>
+                  </div>
+                  <table className={expandedOrderId === detalle.id_detalle ? '' : 'hidden-table'}>
+                    <thead>
+                      <tr>
+                        <th>ID Producto</th>
+                        <th>Nombre Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                      </tr>
+                    </thead>
+                    <tbody className="tableBody">
+                      {detalle.productos.map(producto => (
+                        <tr key={producto.id_producto}>
+                          <td>#{producto.id_producto}</td>
+                          <td>{producto.nombre_producto}</td>
+                          <td>{producto.cantidad_producto}</td> {/* Agregar cantidad de producto */}
+                          <td>${producto.precio}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-                {/* aqui debe de ir la tabla que aparece y desaparece 
-                esta tabla debe de tener la informacion del pedido */}
-                <table>
-                  <thead>
-                    <tr>
-                      <th>ID Producto</th>
-                      <th>Nombre Producto</th>
-                      <th>Cantidad</th>
-                      <th>Precio Unitario</th>
-                    </tr>
-                  </thead>
-                  <tbody className="tableBody">
-                    {/* <!-- Filas de productos se agregarán aquí --> */}
-                    <tr>
-                      <td>#1</td>
-                      <td>Cicla beneli</td>
-                      <td>3</td>
-                      <td>$ 800.000</td>
-                    </tr>
-                  </tbody>
-
-
-                </table>
-              </div>
-              <div className="section_order">
-                <div className="section_order_preview">
-                  <b>#123412</b>
-                  <b>10/08/2023</b>
-                  <b>$ 4.500.000</b>
-                  <span className="material-symbols-outlined icon-open-section">
-                    arrow_forward_ios
-                  </span>
-                </div>
-
-                {/* aqui debe de ir la tabla que aparece y desaparece 
-                esta tabla debe de tener la informacion del pedido */}
-                {/* <table>
-                  <thead>
-                    <tr>
-                      <th>ID Producto</th>
-                      <th>Nombre Producto</th>
-                      <th>Cantidad</th>
-                      <th>Precio Unitario</th>
-                    </tr>
-                  </thead>
-                  <tbody class="tableBody">
-                    <tr>
-                      <td>#1</td>
-                      <td>Cicla beneli</td>
-                      <td>3</td>
-                      <td>$ 800.000</td>
-                    </tr>
-                    <tr>
-                      <td>#1</td>
-                      <td>Cicla beneli</td>
-                      <td>3</td>
-                      <td>$ 800.000</td>
-                    </tr>
-                    <tr>
-                      <td>#1</td>
-                      <td>Cicla beneli</td>
-                      <td>3</td>
-                      <td>$ 800.000</td>
-                    </tr>
-                  </tbody>
-
-
-                </table> */}
-              </div>
-
+              ))}
             </div>
           </div>
+
         </div>
       </div>
 
