@@ -13,20 +13,20 @@ import Similar_container from '../components/Similar_container'
 import { Footer } from '../components/Footer'
 const Bike_details = () => {
   const { id_producto } = useParams();
-    const [productDetails, setProductDetails] = useState(null);
-    const [additionalProductDetails, setAdditionalProductDetails] = useState(null); // Asegúrate de haber declarado esta línea
-
+  const [productDetails, setProductDetails] = useState(null);
+  const [additionalProductDetails, setAdditionalProductDetails] = useState(null);
+  const [cart, setCart] = useState([]); // Estado para almacenar productos en el carrito
 
   useEffect(() => {
-      const fetchProductDetails = async () => {
-          try {
-              const response = await fetch(`http://localhost:3060/product-details/${id_producto}`);
-              const data = await response.json();
-              setProductDetails(data);
-          } catch (error) {
-              console.error('Error fetching product details:', error);
-          }
-      };
+    const fetchProductDetails = async () => {
+      try {
+        const response = await fetch(`http://localhost:3060/product-details/${id_producto}`);
+        const data = await response.json();
+        setProductDetails(data);
+      } catch (error) {
+        console.error('Error fetching product details:', error);
+      }
+    };
 
       fetchProductDetails();
   }, [id_producto]);
@@ -57,10 +57,18 @@ const Bike_details = () => {
   const imagenVista3URL = imagenVista3 ? `http://localhost:3060/images/${imagenVista3.id_imagen}` : '';
 
   console.log('additionalProductDetails:', additionalProductDetails);
-  const handleAddToCart = (event) => {
-    event.preventDefault();
-    addToCart(id_producto);
-    console.log('Item added to cart');
+
+  const handleAddToCart = () => {
+    if (additionalProductDetails) {
+      const productToAdd = {
+        id: additionalProductDetails.product.id_producto,
+        name: additionalProductDetails.product.nombre_producto,
+        price: additionalProductDetails.product.precio,
+      };
+
+      setCart([...cart, productToAdd]);
+      console.log('Item added to cart:', productToAdd);
+    }
   };
     return (
     <>
@@ -106,9 +114,9 @@ const Bike_details = () => {
                 Comprar
               </button>
               <button className="btn_add_item_cart" onClick={handleAddToCart}>
-  <i></i>
-  Agregar al carrito
-</button>
+        <i></i>
+        Agregar al carrito
+      </button>
             </form>
             <div className="container_comments">
               <Container_comments />
