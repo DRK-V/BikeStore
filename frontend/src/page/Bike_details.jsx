@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import '../css/Bike_details.css'
 
 import icon_brand from '../assets/icons/bbike-red-logo.png'
-import { Link } from 'react-router-dom'
+
 import { Navbar } from '../components/Navbar'
 import Container_comments from '../components/Comments/Container_comments'
 import Similar_container from '../components/Similar_container'
@@ -57,6 +57,11 @@ const Bike_details = () => {
   const imagenVista3URL = imagenVista3 ? `http://localhost:3060/images/${imagenVista3.id_imagen}` : '';
 
   console.log('additionalProductDetails:', additionalProductDetails);
+  const handleAddToCart = (event) => {
+    event.preventDefault();
+    addToCart(id_producto);
+    console.log('Item added to cart');
+  };
     return (
     <>
       <Navbar />
@@ -100,10 +105,10 @@ const Bike_details = () => {
                 <i></i>
                 Comprar
               </button>
-              <button className="btn_add_item_cart">
-                <i></i>
-                Agregar al carrito
-              </button>
+              <button className="btn_add_item_cart" onClick={handleAddToCart}>
+          <i></i>
+          Agregar al carrito
+        </button>
             </form>
             <div className="container_comments">
               <Container_comments />
