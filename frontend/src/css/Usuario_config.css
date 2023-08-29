@@ -12,9 +12,9 @@
     position: relative;
     /* background-color: aqua; */
 }
-.hidden-table {
-    display: none;
-  }
+
+
+
 .usu_detall {
     width: 73%;
     min-height: 90vh;
@@ -106,11 +106,11 @@
     display: none;
 }
 
-.container_my_order{
+.container_my_order {
     display: none;
 }
 
-.container_active{
+.container_active {
     display: block;
 }
 
@@ -184,6 +184,15 @@
     font-size: 1.2em;
 }
 
+.hidden-table {
+    display: none;
+}
+
+#rotate-icon{
+    transform: rotate(270deg);
+    left: 36.5%;
+}
+
 .section_order>table {
     /* display: none; */
     width: 100%;
@@ -226,17 +235,39 @@
     border-bottom: solid 1px black;
 }
 
-.tableBody{
+table{
+    margin: 20px;
+}
+.tableBody {
     text-align: center;
 }
-.tableBody > tr{
+thead>tr>th{
+    border-bottom: solid 2px black;
+    border-right: solid 2px black;
+}
+thead>tr>th:nth-child(4){
+    border-bottom: solid 2px black;
+    border-right: none;
+}
+
+.tableBody>tr {
+    position: relative;
     height: 6vh;
+    top:-2%;
+}
+.tableBody>tr>td {
+    height: 6vh;
+    border-right: solid 2px black;
+}
+.tableBody>tr>td:nth-child(4){
+    border-bottom: solid 2px black;
+    border-right: none;
 }
 
 
 /*shift button configurations */
 
-.boton_cambiar{
+.boton_cambiar {
     width: 35%;
     margin: 24px;
     margin-right: 20%;
@@ -246,7 +277,7 @@
 
 }
 
-.input22{
+.input22 {
     width: 66%;
     border-radius: 0.5em;
     padding: 3.4%;

@@ -31,22 +31,24 @@ export const Menu_profile = ({ is_link_active, is_active, onClose, activateMyUsu
                     <h3>{user ? user.nombre_usuario : "Nombre de Usuario"}</h3>
                 </div>
                 <ul className="options-list">
-                    <Link to={url_profile} onClick={activateMyUsu}>
+                    <Link to={{ pathname: '/Usuario_usu', search: '?section=profile' }} onClick={activateMyUsu}>
                         <li>
                             <FiUser />
                             <span>Perfil</span>
                         </li>
                     </Link>
-                    <Link to={url_profile}>
+                    <Link to={{ pathname: '/Usuario_usu', search: '?section=settings' }}>
                         <li onClick={activateMyConfig}>
                             <FiSettings />
                             <span>Configuraciones</span>
                         </li>
                     </Link>
-                    <li onClick={activateMyOrder}>
-                        <FiShoppingBag />
-                        <span>Pedidos</span>
-                    </li>
+                    <Link to={{ pathname: '/Usuario_usu', search: '?section=orders' }}>
+                        <li onClick={activateMyOrder}>
+                            <FiShoppingBag />
+                            <span>Pedidos</span>
+                        </li>
+                    </Link>
                     <Link to={url_profile} className={rol === "Administrador" ? '' : 'desactive_option'}>
                         <li>
                             <FiUserPlus />
