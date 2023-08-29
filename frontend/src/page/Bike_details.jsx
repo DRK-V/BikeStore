@@ -1,4 +1,3 @@
-
 //bike_details
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
@@ -12,21 +11,22 @@ import Similar_container from '../components/Similar_container'
 
 import { Footer } from '../components/Footer'
 const Bike_details = () => {
+  const [cartItems, setCartItems] = useState([]);
   const { id_producto } = useParams();
-  const [productDetails, setProductDetails] = useState(null);
-  const [additionalProductDetails, setAdditionalProductDetails] = useState(null);
-  const [cart, setCart] = useState([]); // Estado para almacenar productos en el carrito
+    const [productDetails, setProductDetails] = useState(null);
+    const [additionalProductDetails, setAdditionalProductDetails] = useState(null); // Asegúrate de haber declarado esta línea
+
 
   useEffect(() => {
-    const fetchProductDetails = async () => {
-      try {
-        const response = await fetch(`http://localhost:3060/product-details/${id_producto}`);
-        const data = await response.json();
-        setProductDetails(data);
-      } catch (error) {
-        console.error('Error fetching product details:', error);
-      }
-    };
+      const fetchProductDetails = async () => {
+          try {
+              const response = await fetch(`http://localhost:3060/product-details/${id_producto}`);
+              const data = await response.json();
+              setProductDetails(data);
+          } catch (error) {
+              console.error('Error fetching product details:', error);
+          }
+      };
 
       fetchProductDetails();
   }, [id_producto]);
@@ -57,19 +57,17 @@ const Bike_details = () => {
   const imagenVista3URL = imagenVista3 ? `http://localhost:3060/images/${imagenVista3.id_imagen}` : '';
 
   console.log('additionalProductDetails:', additionalProductDetails);
-
-  const handleAddToCart = () => {
-    if (additionalProductDetails) {
-      const productToAdd = {
-        id: additionalProductDetails.product.id_producto,
-        name: additionalProductDetails.product.nombre_producto,
-        price: additionalProductDetails.product.precio,
-      };
-
-      setCart([...cart, productToAdd]);
-      console.log('Item added to cart:', productToAdd);
-    }
+  const handleAddToCart = (event) => {
+    event.preventDefault();
+    const newItem = {
+      id: id_producto,
+      name: additionalProductDetails?.product?.nombre_producto,
+      imageUrl: imagenURL,
+    };
+    setCartItems([...cartItems, newItem]); // Update cartItems state
+    console.log('Item added to cart:', newItem);
   };
+  
     return (
     <>
       <Navbar />
@@ -152,4 +150,3 @@ const Bike_details = () => {
 }
 
 export default Bike_details
-
