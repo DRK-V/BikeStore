@@ -1,5 +1,24 @@
+
+const fs = require('fs');
+const path = require('path');
+const multer = require('multer');
 //datacontroller
 const { pool } = require("../config/db");
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const userId = req.params.userId;
+    const destinationPath = path.join(__dirname, `../images_profile/user_${userId}`);
+    cb(null, destinationPath);
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  }
+});
+
+const upload = multer({ storage: storage });
+
 
 //registro de clients
 const registerUser = async (userData) => {
@@ -340,52 +359,26 @@ const getUserDetalleCompra = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener los detalles de compra' });
   }
 };
-
-
 const updateUserImage = async (req, res) => {
   const userId = req.params.userId;
-  const imageData = req.body;
 
   try {
-      if (!imageData) {
-          res.status(400).json({ error: "No se proporcionó ninguna imagen" });
-          return;
-      }
-
-      const updateImageQuery = "UPDATE cliente SET imagen_usuario = $1 WHERE id_cliente = $2";
-      const values = [imageData, userId];
-
-      await pool.query(updateImageQuery, values);
-
-      res.status(200).json({ message: "Imagen de usuario actualizada exitosamente" });
-  } catch (error) {
-      console.error("Error al actualizar la imagen de usuario:", error.message);
-      res.status(500).json({ error: "Error al actualizar la imagen de usuario" });
-  }
-};
-
-const getUserImageById = async (req, res) => {
-  try {
-    const userId = req.params.id;
-    const query = 'SELECT imagen_usuario FROM cliente WHERE id_cliente = $1;';
-    const result = await pool.query(query, [userId]);
-
-    if (result.rows.length > 0) {
-      res.writeHead(200, {
-        'Content-Type': 'image/jpeg',
-        'Content-Length': result.rows[0].imagen_usuario.length,
-      });
-      res.end(result.rows[0].imagen_usuario);
-    } else {
-      res.status(404).json({ message: 'Imagen no encontrada' });
+    if (!req.file) {
+      return res.status(400).json({ error: "No se proporcionó ninguna imagen" });
     }
+
+    const imagePath = `images_profile/user_${userId}/${req.file.originalname}`;
+    const updateImageQuery = "UPDATE cliente SET imagen_usuario = $1 WHERE id_cliente = $2";
+    const values = [imagePath, userId];
+
+    await pool.query(updateImageQuery, values);
+
+    res.status(200).json({ message: "Imagen de usuario actualizada exitosamente" });
   } catch (error) {
-    console.error('Error al obtener la imagen:', error);
-    res.status(500).json({ message: 'Error en el servidor' });
+    console.error("Error al actualizar la imagen de usuario:", error.message);
+    res.status(500).json({ error: "Error al actualizar la imagen de usuario", details: error.message });
   }
 };
-
-
 
 module.exports = {
   registerUser,
@@ -399,5 +392,4 @@ module.exports = {
   getUserByEmail,
   getUserDetalleCompra,
   updateUserImage,
-  getUserImageById,
 };

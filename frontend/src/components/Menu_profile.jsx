@@ -15,23 +15,6 @@ export const Menu_profile = ({
     const { user, logout } = useAuth();
     const [imageBase64, setImageBase64] = useState(null);
 
-    useEffect(() => {
-        if (user && user.id_cliente) {
-            fetch(`http://localhost:3060/user/${user.id_cliente}/imageprofile`)
-                .then(response => response.blob())
-                .then(blob => {
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                        const base64String = reader.result.split(',')[1];
-                        setImageBase64(base64String);
-                    };
-                    reader.readAsDataURL(blob);
-                })
-                .catch(error => {
-                    console.error('Error al obtener la imagen:', error);
-                });
-        }
-    }, [user]);
 
     let url_profile = is_link_active ? "#profile" : "/Usuario_usu";
     let rol = "";
@@ -41,39 +24,30 @@ export const Menu_profile = ({
         onClose();
     };
 
+
     const handleImageUpload = async (event) => {
         const image = event.target.files[0];
+        const formData = new FormData();
+        formData.append('image', image);
 
         try {
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                const imageData = e.target.result;
-                const byteArray = new Uint8Array(imageData);
+            console.log(user.id_cliente);
+            const response = await fetch(`http://localhost:3060/user/${user.id_cliente}/updateImage`, {
+                method: 'POST',
+                body: formData,
+            });
 
-                try {
-                    const response = await fetch(`http://localhost:3060/user/${user.id_cliente}/updateImage`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/octet-stream',
-                        },
-                        body: byteArray,
-                    });
-
-                    if (response.ok) {
-                        console.log('Imagen actualizada exitosamente');
-                    } else {
-                        console.error('Error al actualizar la imagen');
-                    }
-                } catch (error) {
-                    console.error('Error al comunicarse con el servidor:', error);
-                }
-            };
-
-            reader.readAsArrayBuffer(image);
+            if (response.status === 200) {
+                console.log('Imagen actualizada exitosamente');
+            } else {
+                console.error('Error al actualizar la imagen');
+            }
         } catch (error) {
-            console.error('Error al leer la imagen:', error);
+            console.error('Error al comunicarse con el servidor:', error);
         }
     };
+
+
 
     if (user && !user.rol_usuario) {
         rol = "usuario";
@@ -82,13 +56,12 @@ export const Menu_profile = ({
     } else {
         rol = "usuario";
     }
-    const imageClasses =
-        imageBase64 ? "profile-image" : "profile-image image-no-found";
+    const imageClasses = imageBase64 ? "profile-image" : "profile-image image-no-found";
 
     return (
         <div className={`menu_profile ${is_active ? "active" : ""}`}>
-            <div className="profile-section">
-                <button
+            <form className="profile-section" onChange={handleImageUpload}>
+                <button type="button"
                     className={is_link_active ? "close-button-profile-desactive" : "close-button-profile"}
                     onClick={onClose}
                 >
@@ -98,8 +71,8 @@ export const Menu_profile = ({
                     <input
                         type="file"
                         accept="image/*"
-                        onChange={handleImageUpload}
                         className="profile-image-input"
+                        name="image"  // Asegúrate de que el nombre sea "image"
                     />
                     <img
                         src={`data:image/jpeg;base64,${imageBase64}` || logoExample}
@@ -108,7 +81,7 @@ export const Menu_profile = ({
                     />
                 </label>
                 <h3>{user ? user.nombre_usuario : "Nombre de Usuario"}</h3>
-            </div>
+            </form>
 
             <ul className="options-list">
                 <Link to={{ pathname: '/Usuario_usu', search: '?section=profile' }} onClick={activateMyUsu}>
