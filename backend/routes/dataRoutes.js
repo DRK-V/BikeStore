@@ -164,5 +164,6 @@ router.get('/api/user/:email', dataController.getUserByEmail);
 
 router.get('/user/:userId/detalle_compra', dataController.getUserDetalleCompra);
 
+router.put('/api/update_user', dataController.updateUser);
 
 module.exports = router;
