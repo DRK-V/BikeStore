@@ -10,6 +10,7 @@ import { Loading } from '../components/Loading';
 import { Payment } from './Payment';
 import { Carrito_compras } from './Carrito_compras';
 import { Usuario_usu } from './Usuario_usu';
+import { CartProvider } from '../components/CartContext';
 
 import '../css/animation.css'
 import '../css/main.css'
@@ -27,6 +28,7 @@ function App() {
 
   return (
     <AuthProvider> {/* Agrega el AuthProvider aquí para envolver la aplicación */}
+    <CartProvider>
       {isLoading ? (
         // si esta cargando
         <Loading />
@@ -45,6 +47,7 @@ function App() {
           </Routes>
         </>
       )}
+      </CartProvider>
     </AuthProvider>
   );
 }

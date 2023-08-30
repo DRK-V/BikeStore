@@ -1,50 +1,60 @@
-
 //bike_details
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import '../css/Bike_details.css'
+import '../css/Bike_details.css';
+import { useCart } from '../components/CartContext';
+import { Navbar } from '../components/Navbar';
+import Container_comments from '../components/Comments/Container_comments';
+import Similar_container from '../components/Similar_container';
+import { Footer } from '../components/Footer';
+import icon_brand from '../assets/icons/bbike-red-logo.png';
 
-import icon_brand from '../assets/icons/bbike-red-logo.png'
-import { Link } from 'react-router-dom'
-import { Navbar } from '../components/Navbar'
-import Container_comments from '../components/Comments/Container_comments'
-import Similar_container from '../components/Similar_container'
-
-import { Footer } from '../components/Footer'
 const Bike_details = () => {
+  const { addItemToCart, setSelectedProductId } = useCart();
   const { id_producto } = useParams();
-    const [productDetails, setProductDetails] = useState(null);
-    const [additionalProductDetails, setAdditionalProductDetails] = useState(null); // Asegúrate de haber declarado esta línea
 
+  const handleAddToCart = (event) => {
+    event.preventDefault();
+    if (additionalProductDetails) {
+      setSelectedProductId(id_producto);
+      addItemToCart({
+        product: additionalProductDetails.product,
+        image: imagenURL, // Pass the image URL
+      });
+    }
+  };
+
+  const [productDetails, setProductDetails] = useState(null);
+  const [additionalProductDetails, setAdditionalProductDetails] = useState(null);
 
   useEffect(() => {
-      const fetchProductDetails = async () => {
-          try {
-              const response = await fetch(`http://localhost:3060/product-details/${id_producto}`);
-              const data = await response.json();
-              setProductDetails(data);
-          } catch (error) {
-              console.error('Error fetching product details:', error);
-          }
-      };
+    const fetchProductDetails = async () => {
+      try {
+        const response = await fetch(`http://localhost:3060/product-details/${id_producto}`);
+        const data = await response.json();
+        setProductDetails(data);
+      } catch (error) {
+        console.error('Error fetching product details:', error);
+      }
+    };
 
-      fetchProductDetails();
+    fetchProductDetails();
   }, [id_producto]);
 
   useEffect(() => {
-      const fetchAdditionalProductDetails = async () => {
-          try {
-              const response = await fetch(`http://localhost:3060/products-with-images/${id_producto}`);
-              const data = await response.json();
-              setAdditionalProductDetails(data); // Asegúrate de que la estructura de data coincida con lo que se espera
-          } catch (error) {
-              console.error('Error fetching additional product details:', error);
-          }
-      };
-
-      if (id_producto) {
-          fetchAdditionalProductDetails();
+    const fetchAdditionalProductDetails = async () => {
+      try {
+        const response = await fetch(`http://localhost:3060/products-with-images/${id_producto}`);
+        const data = await response.json();
+        setAdditionalProductDetails(data);
+      } catch (error) {
+        console.error('Error fetching additional product details:', error);
       }
+    };
+
+    if (id_producto) {
+      fetchAdditionalProductDetails();
+    }
   }, [id_producto]);
 
   const imagenPortada = productDetails?.images?.find(image => image.nombre_imagen === 'imagen portada');
@@ -55,8 +65,10 @@ const Bike_details = () => {
   const imagenVista1URL = imagenVista1 ? `http://localhost:3060/images/${imagenVista1.id_imagen}` : '';
   const imagenVista2URL = imagenVista2 ? `http://localhost:3060/images/${imagenVista2.id_imagen}` : '';
   const imagenVista3URL = imagenVista3 ? `http://localhost:3060/images/${imagenVista3.id_imagen}` : '';
-
+  console.log('id_producto in Bike_details:', id_producto);
   console.log('additionalProductDetails:', additionalProductDetails);
+  console.log('id_producto:', id_producto);
+
     return (
     <>
       <Navbar />
@@ -72,7 +84,7 @@ const Bike_details = () => {
             <img className="main_image" src={imagenURL} alt="Imagen Principal" />
 
 
-            <form action="dialog" className="form_add_item_cart">
+            <form onSubmit={handleAddToCart}  action="dialog" className="form_add_item_cart">
             <label className='bike_name'>{additionalProductDetails?.product?.nombre_producto}</label>
     <label htmlFor="" className="price_text">
         <p>Precio:</p> ${additionalProductDetails?.product?.precio}
@@ -100,7 +112,7 @@ const Bike_details = () => {
                 <i></i>
                 Comprar
               </button>
-              <button className="btn_add_item_cart">
+              <button className="btn_add_item_cart" type="submit">
                 <i></i>
                 Agregar al carrito
               </button>
@@ -130,10 +142,14 @@ const Bike_details = () => {
             </form>
             <Similar_container />
       <Footer />
+      
+     
+
+
           </>
         )}
       </div>
-     
+      
     </>
   );
 }
