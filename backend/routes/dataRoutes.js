@@ -2,6 +2,7 @@ const express = require("express");
 const dataController = require("../controllers/dataController");
 const router = express.Router();
 const multer = require('multer');
+const path = require("path")
 
 /**
  * @openapi
@@ -179,7 +180,7 @@ router.get('/user/:userId/detalle_compra', dataController.getUserDetalleCompra);
 
 
 // router.post('/user/:userId/updateImage', upload.single('image'), dataController.updateUserImage);
-router.post("/:userId/updateImage", upload.single("image"), dataController.updateUserImage);
+router.post("/user/:userId/updateImage", upload.single("image"), dataController.updateUserImage);
 
 
 

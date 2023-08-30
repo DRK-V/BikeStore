@@ -31,10 +31,16 @@ export const Menu_profile = ({
         formData.append('image', image);
 
         try {
-            console.log(user.id_cliente);
             const response = await fetch(`http://localhost:3060/user/${user.id_cliente}/updateImage`, {
                 method: 'POST',
-                body: formData,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: user.id_cliente,
+                    imageName: image.name,
+                    imageData: formData.get('image'),
+                }),
             });
 
             if (response.status === 200) {
@@ -49,6 +55,7 @@ export const Menu_profile = ({
 
 
 
+
     if (user && !user.rol_usuario) {
         rol = "usuario";
     } else if (user) {
@@ -60,7 +67,7 @@ export const Menu_profile = ({
 
     return (
         <div className={`menu_profile ${is_active ? "active" : ""}`}>
-            <form className="profile-section" onChange={handleImageUpload}>
+            <form className="profile-section" >
                 <button type="button"
                     className={is_link_active ? "close-button-profile-desactive" : "close-button-profile"}
                     onClick={onClose}
@@ -73,6 +80,7 @@ export const Menu_profile = ({
                         accept="image/*"
                         className="profile-image-input"
                         name="image"  // Asegúrate de que el nombre sea "image"
+                        onChange={handleImageUpload}
                     />
                     <img
                         src={`data:image/jpeg;base64,${imageBase64}` || logoExample}

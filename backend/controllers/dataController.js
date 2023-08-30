@@ -304,14 +304,14 @@ const getUserByEmail = async (req, res) => {
     if (result.rows.length > 0) {
       const userData = result.rows[0];
 
-      // Extraer los datos bytea de la columna imagen_usuario
-      const byteaData = userData.imagen_usuario;
+      // // Extraer los datos bytea de la columna imagen_usuario
+      // const byteaData = userData.imagen_usuario;
 
-      // Convertir los datos bytea en una cadena Base64
-      const imageBase64 = byteaData.toString('base64');
+      // // Convertir los datos bytea en una cadena Base64
+      // const imageBase64 = byteaData.toString('base64');
 
-      // Agregar la cadena Base64 al objeto userData
-      userData.imageBase64 = imageBase64;
+      // // Agregar la cadena Base64 al objeto userData
+      // userData.imageBase64 = imageBase64;
 
       // Enviar el objeto userData al cliente
       res.status(200).json(userData);
@@ -359,15 +359,16 @@ const getUserDetalleCompra = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener los detalles de compra' });
   }
 };
+
 const updateUserImage = async (req, res) => {
-  const userId = req.params.userId;
+  const { userId } = req.body;
 
   try {
-    if (!req.file) {
+    if (!req.body.imageData) {
       return res.status(400).json({ error: "No se proporcionó ninguna imagen" });
     }
 
-    const imagePath = `images_profile/user_${userId}/${req.file.originalname}`;
+    const imagePath = `profile_images/user_${userId}/${req.body.imageName}`;
     const updateImageQuery = "UPDATE cliente SET imagen_usuario = $1 WHERE id_cliente = $2";
     const values = [imagePath, userId];
 
@@ -379,6 +380,7 @@ const updateUserImage = async (req, res) => {
     res.status(500).json({ error: "Error al actualizar la imagen de usuario", details: error.message });
   }
 };
+
 
 module.exports = {
   registerUser,
