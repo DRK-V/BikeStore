@@ -1,29 +1,26 @@
-
 //bike_details
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import '../css/Bike_details.css'
+import '../css/Bike_details.css';
 import { useCart } from '../components/CartContext';
-import icon_brand from '../assets/icons/bbike-red-logo.png'
-import Item_cart from '../components/Item_cart'; 
+import { Navbar } from '../components/Navbar';
+import Container_comments from '../components/Comments/Container_comments';
+import Similar_container from '../components/Similar_container';
+import { Footer } from '../components/Footer';
+import icon_brand from '../assets/icons/bbike-red-logo.png';
 
-import { Navbar } from '../components/Navbar'
-import Container_comments from '../components/Comments/Container_comments'
-import Similar_container from '../components/Similar_container'
-
-import { Footer } from '../components/Footer'
 const Bike_details = () => {
-  const { addItemToCart } = useCart();
+  const { addItemToCart, setSelectedProductId } = useCart();
   const { id_producto } = useParams();
 
- 
   const handleAddToCart = (event) => {
     event.preventDefault();
     if (additionalProductDetails) {
+      setSelectedProductId(id_producto); // Establece el id_producto en el contexto
       addItemToCart(additionalProductDetails.product);
     }
   };
- 
+
   const [productDetails, setProductDetails] = useState(null);
   const [additionalProductDetails, setAdditionalProductDetails] = useState(null);
 
@@ -65,11 +62,10 @@ const Bike_details = () => {
   const imagenVista1URL = imagenVista1 ? `http://localhost:3060/images/${imagenVista1.id_imagen}` : '';
   const imagenVista2URL = imagenVista2 ? `http://localhost:3060/images/${imagenVista2.id_imagen}` : '';
   const imagenVista3URL = imagenVista3 ? `http://localhost:3060/images/${imagenVista3.id_imagen}` : '';
-
   console.log('id_producto in Bike_details:', id_producto);
-
   console.log('additionalProductDetails:', additionalProductDetails);
   console.log('id_producto:', id_producto);
+
     return (
     <>
       <Navbar />
@@ -114,9 +110,9 @@ const Bike_details = () => {
                 Comprar
               </button>
               <button className="btn_add_item_cart" type="submit">
-            <i></i>
-            Agregar al carrito
-          </button>
+                <i></i>
+                Agregar al carrito
+              </button>
             </form>
             <div className="container_comments">
               <Container_comments />
@@ -143,9 +139,9 @@ const Bike_details = () => {
             </form>
             <Similar_container />
       <Footer />
-      {id_producto && (
-    <Item_cart id_producto={id_producto} />
-  )}
+      
+     
+
 
           </>
         )}
@@ -156,4 +152,3 @@ const Bike_details = () => {
 }
 
 export default Bike_details
-

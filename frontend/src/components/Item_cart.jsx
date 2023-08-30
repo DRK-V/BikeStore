@@ -1,15 +1,15 @@
-// item_card.jsx
-import '../css/carrito_compras.css';
 
+//item_card
 import React, { useState, useEffect } from 'react';
+import { useCart } from './CartContext';
 
-const Item_cart = ({ id_producto }) => {
+const Item_cart = () => {
+  const { selectedProductId } = useCart();
   const [productDetails, setProductDetails] = useState(null);
-
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:3060/product-details/${id_producto}`);
+        const response = await fetch(`http://localhost:3060/product-details/${selectedProductId}`);
         const data = await response.json();
         setProductDetails(data);
       } catch (error) {
@@ -17,16 +17,16 @@ const Item_cart = ({ id_producto }) => {
       }
     };
 
-    if (id_producto) {
+    if (selectedProductId) {
       fetchProductDetails();
     }
-  }, [id_producto]);
+  }, [selectedProductId]);
 
   return (
     <div className="Cart_compras_carrito">
       {productDetails ? (
         <>
-        <h2>{additionalProductDetails?.product?.nombre_producto}</h2>
+          <h2>{productDetails.product.nombre_producto}</h2>
           <div className='info_bici_compra'>
             <img className='img_bicci' src={productDetails.product.imagenURL} alt="" />
             <div className='descrip_produc'>
@@ -49,7 +49,8 @@ const Item_cart = ({ id_producto }) => {
       )}
     </div>
   );
-  
-}
+};
 
 export default Item_cart;
+
+

@@ -9,6 +9,7 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
+  const [selectedProductId, setSelectedProductId] = useState(null); // Nuevo estado
 
   const addItemToCart = (item) => {
     setCartItems([...cartItems, item]);
@@ -27,7 +28,16 @@ export const CartProvider = ({ children }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cartItems, addItemToCart, removeItemFromCart, getCartItemCount }}>
+    <CartContext.Provider
+      value={{
+        cartItems,
+        addItemToCart,
+        removeItemFromCart,
+        getCartItemCount,
+        selectedProductId, // Agregado el nuevo estado al contexto
+        setSelectedProductId, // Agregado el nuevo método al contexto
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
