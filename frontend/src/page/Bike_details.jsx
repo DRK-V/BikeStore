@@ -16,8 +16,11 @@ const Bike_details = () => {
   const handleAddToCart = (event) => {
     event.preventDefault();
     if (additionalProductDetails) {
-      setSelectedProductId(id_producto); // Establece el id_producto en el contexto
-      addItemToCart(additionalProductDetails.product);
+      setSelectedProductId(id_producto);
+      addItemToCart({
+        product: additionalProductDetails.product,
+        image: imagenURL, // Pass the image URL
+      });
     }
   };
 
@@ -152,3 +155,4 @@ const Bike_details = () => {
 }
 
 export default Bike_details
+

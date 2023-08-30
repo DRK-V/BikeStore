@@ -1,37 +1,18 @@
-
 //item_card
 import React, { useState, useEffect } from 'react';
 import { useCart } from './CartContext';
 
-const Item_cart = () => {
-  const { selectedProductId } = useCart();
-  const [productDetails, setProductDetails] = useState(null);
-  useEffect(() => {
-    const fetchProductDetails = async () => {
-      try {
-        const response = await fetch(`http://localhost:3060/product-details/${selectedProductId}`);
-        const data = await response.json();
-        setProductDetails(data);
-      } catch (error) {
-        console.error('Error fetching product details:', error);
-      }
-    };
-
-    if (selectedProductId) {
-      fetchProductDetails();
-    }
-  }, [selectedProductId]);
-
+const Item_cart = ({ product, image }) => {
   return (
     <div className="Cart_compras_carrito">
-      {productDetails ? (
+      {product ? (
         <>
-          <h2>{productDetails.product.nombre_producto}</h2>
+          <h2>{product.nombre_producto}</h2>
           <div className='info_bici_compra'>
-            <img className='img_bicci' src={productDetails.product.imagenURL} alt="" />
+            <img className='img_bicci' src={image} alt="" /> {/* Use the provided image prop */}
             <div className='descrip_produc'>
-              <p>{productDetails.product.nombre_producto}</p>
-              <p>$ {productDetails.product.precio}</p><br />
+              <p>{product.nombre_producto}</p>
+              <p>$ {product.precio}</p><br />
             </div>
             <div className='botones_compra'>
               <div className='boton2'>
@@ -52,5 +33,3 @@ const Item_cart = () => {
 };
 
 export default Item_cart;
-
-
