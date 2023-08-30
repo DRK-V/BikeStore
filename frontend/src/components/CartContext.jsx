@@ -1,5 +1,5 @@
-// CartContext.js
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useAuth } from './authcontext';
 
 const CartContext = createContext();
 
@@ -9,22 +9,49 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
-  const [selectedProductId, setSelectedProductId] = useState(null); // Nuevo estado
+  const [selectedProductId, setSelectedProductId] = useState(null);
+  const { isLoggedIn, user } = useAuth();
+
+  // Load cart items from local storage on component mount
+  useEffect(() => {
+    const storedCartItems = localStorage.getItem('cartItems');
+    if (storedCartItems) {
+      setCartItems(JSON.parse(storedCartItems));
+    }
+  }, []);
+
+  // Update local storage whenever cartItems change
+  useEffect(() => {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  useEffect(() => {
+    if (isLoggedIn && user) {
+      // If the user is logged in, save cartItems to user's data
+      // Example: user.cartItems = cartItems
+    } else {
+      // If the user is not logged in, just set the cartItems state
+    }
+  }, [cartItems, isLoggedIn, user]);
 
   const addItemToCart = (item) => {
     setCartItems([...cartItems, item]);
-    // Update local storage
-    // You can also handle duplicates, increase quantity, etc.
   };
 
-  const removeItemFromCart = (item) => {
-    const updatedCart = cartItems.filter((cartItem) => cartItem.id !== item.id);
+  const removeItemFromCart = (productId) => {
+    const updatedCart = cartItems.filter((cartItem) => cartItem.product.id !== productId);
     setCartItems(updatedCart);
-    // Update local storage
   };
 
   const getCartItemCount = () => {
     return cartItems.length;
+  };
+
+  const getTotalPrice = () => {
+    const totalPrice = cartItems.reduce((total, cartItem) => {
+      return total + cartItem.product.precio;
+    }, 0);
+    return totalPrice;
   };
 
   return (
@@ -34,8 +61,9 @@ export const CartProvider = ({ children }) => {
         addItemToCart,
         removeItemFromCart,
         getCartItemCount,
-        selectedProductId, // Agregado el nuevo estado al contexto
-        setSelectedProductId, // Agregado el nuevo método al contexto
+        selectedProductId,
+        setSelectedProductId,
+        getTotalPrice, // Add the getTotalPrice function to the context
       }}
     >
       {children}
