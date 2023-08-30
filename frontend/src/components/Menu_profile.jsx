@@ -33,14 +33,11 @@ export const Menu_profile = ({
         try {
             const response = await fetch(`http://localhost:3060/user/${user.id_cliente}/updateImage`, {
                 method: 'POST',
+                body: formData,
                 headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userId: user.id_cliente,
-                    imageName: image.name,
-                    imageData: formData.get('image'),
-                }),
+                    'Current-Image-Path': user.imagen_usuario, // Ruta actual de la imagen
+                    'New-Image-Path': `profile_images/user_${user.id_cliente}/${image.name}` // Nueva ruta deseada
+                }
             });
 
             if (response.status === 200) {
@@ -52,8 +49,6 @@ export const Menu_profile = ({
             console.error('Error al comunicarse con el servidor:', error);
         }
     };
-
-
 
 
     if (user && !user.rol_usuario) {

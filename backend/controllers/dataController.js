@@ -360,26 +360,38 @@ const getUserDetalleCompra = async (req, res) => {
   }
 };
 
+
 const updateUserImage = async (req, res) => {
-  const { userId } = req.body;
+  const userId = req.params.userId;
+  const currentImagePath = req.headers['current-image-path'];
+  const newImagePath = req.headers['new-image-path'];
 
   try {
-    if (!req.body.imageData) {
+    if (!req.file) {
       return res.status(400).json({ error: "No se proporcionó ninguna imagen" });
     }
 
-    const imagePath = `profile_images/user_${userId}/${req.body.imageName}`;
+    const destinationPath = path.join(__dirname, `../profile_images/user_${userId}`);
+    const currentImagePathOnServer = path.join(destinationPath, path.basename(currentImagePath));
+    const newImagePathOnServer = path.join(destinationPath, path.basename(newImagePath));
+
+    // Verificar si el archivo actual existe y moverlo al nuevo destino
+    if (fs.existsSync(currentImagePathOnServer)) {
+      fs.renameSync(currentImagePathOnServer, newImagePathOnServer);
+    }
+
     const updateImageQuery = "UPDATE cliente SET imagen_usuario = $1 WHERE id_cliente = $2";
-    const values = [imagePath, userId];
+    const values = [newImagePath, userId];
 
     await pool.query(updateImageQuery, values);
 
-    res.status(200).json({ message: "Imagen de usuario actualizada exitosamente" });
+    res.status(200).json({ message: "Imagen de usuario movida exitosamente" });
   } catch (error) {
-    console.error("Error al actualizar la imagen de usuario:", error.message);
-    res.status(500).json({ error: "Error al actualizar la imagen de usuario", details: error.message });
+    console.error("Error al mover la imagen de usuario:", error.message);
+    res.status(500).json({ error: "Error al mover la imagen de usuario", details: error.message });
   }
 };
+
 
 
 module.exports = {

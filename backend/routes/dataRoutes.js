@@ -3,6 +3,7 @@ const dataController = require("../controllers/dataController");
 const router = express.Router();
 const multer = require('multer');
 const path = require("path")
+const fs = require("fs")
 
 /**
  * @openapi
@@ -15,13 +16,20 @@ const path = require("path")
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const userId = req.params.userId;
-    const destinationPath = path.join(__dirname, `../images_profile/user_${userId}`);
+    const destinationPath = path.join(__dirname, `../profile_images/user_${userId}`);
+
+    // Verificar si la carpeta de destino existe, si no, crearla
+    if (!fs.existsSync(destinationPath)) {
+      fs.mkdirSync(destinationPath, { recursive: true });
+    }
+
     cb(null, destinationPath);
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
   }
 });
+
 const upload = multer({ storage: storage });
 
 /**
