@@ -5,13 +5,24 @@ import { useParams } from 'react-router-dom';
 import '../css/Bike_details.css'
 
 import icon_brand from '../assets/icons/bbike-red-logo.png'
-import { Link } from 'react-router-dom'
+
 import { Navbar } from '../components/Navbar'
 import Container_comments from '../components/Comments/Container_comments'
 import Similar_container from '../components/Similar_container'
-
+import { useCart } from '../components/CartContext';
+import { useAuth } from '../components/AuthContext';
 import { Footer } from '../components/Footer'
-const Bike_details = () => {
+
+
+const Bike_details = ({ id_producto }) => {
+  console.log('id_producto:', props.id_producto);
+  const { addToCart } = useCart();
+  const { isLoggedIn } = useAuth();
+  const handleAddToCart = (event) => {
+    event.preventDefault(); // Prevent button's default form submission
+    addToCart(id_producto); // Pass the id_producto
+  };
+
   const { id_producto } = useParams();
     const [productDetails, setProductDetails] = useState(null);
     const [additionalProductDetails, setAdditionalProductDetails] = useState(null); // Asegúrate de haber declarado esta línea
@@ -100,10 +111,12 @@ const Bike_details = () => {
                 <i></i>
                 Comprar
               </button>
-              <button className="btn_add_item_cart">
-                <i></i>
-                Agregar al carrito
-              </button>
+              {isLoggedIn && (
+      <button className="btn_add_item_cart" onClick={handleAddToCart}>
+        <i></i>
+        Agregar al carrito
+      </button>
+    )}
             </form>
             <div className="container_comments">
               <Container_comments />
