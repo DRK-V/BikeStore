@@ -360,39 +360,49 @@ const getUserDetalleCompra = async (req, res) => {
   }
 };
 
-
 const updateUserImage = async (req, res) => {
   const userId = req.params.userId;
-  const currentImagePath = req.headers['current-image-path'];
-  const newImagePath = req.headers['new-image-path'];
 
   try {
     if (!req.file) {
       return res.status(400).json({ error: "No se proporcionó ninguna imagen" });
     }
 
+    const imageName = req.file.originalname;
     const destinationPath = path.join(__dirname, `../profile_images/user_${userId}`);
-    const currentImagePathOnServer = path.join(destinationPath, path.basename(currentImagePath));
-    const newImagePathOnServer = path.join(destinationPath, path.basename(newImagePath));
+    const imagePath = path.join(destinationPath, imageName);
 
-    // Verificar si el archivo actual existe y moverlo al nuevo destino
-    if (fs.existsSync(currentImagePathOnServer)) {
-      fs.renameSync(currentImagePathOnServer, newImagePathOnServer);
+    // Verificar si la carpeta de destino existe, si no, crearla
+    if (!fs.existsSync(destinationPath)) {
+      fs.mkdirSync(destinationPath, { recursive: true });
     }
 
+    // Eliminar la imagen anterior si existe
+    const existingImage = await pool.query("SELECT imagen_usuario FROM cliente WHERE id_cliente = $1", [userId]);
+    if (existingImage.rows.length > 0) {
+      const previousImagePath = existingImage.rows[0].imagen_usuario;
+      if (fs.existsSync(previousImagePath)) {
+        fs.unlinkSync(previousImagePath);
+      }
+    }
+
+    // Mover el archivo a la carpeta de destino
+    fs.renameSync(req.file.path, imagePath);
+
+    // Construir la ruta relativa para almacenar en la base de datos
+    const relativeImagePath = path.relative(path.join(__dirname, ".."), imagePath).replace(/\\/g, "/");
+
     const updateImageQuery = "UPDATE cliente SET imagen_usuario = $1 WHERE id_cliente = $2";
-    const values = [newImagePath, userId];
+    const values = [relativeImagePath, userId];
 
     await pool.query(updateImageQuery, values);
 
-    res.status(200).json({ message: "Imagen de usuario movida exitosamente" });
+    res.status(200).json({ message: "Imagen de usuario actualizada exitosamente" });
   } catch (error) {
     console.error("Error al mover la imagen de usuario:", error.message);
     res.status(500).json({ error: "Error al mover la imagen de usuario", details: error.message });
   }
 };
-
-
 
 module.exports = {
   registerUser,
