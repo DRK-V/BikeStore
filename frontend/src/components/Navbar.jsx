@@ -1,3 +1,4 @@
+//naubar
 import "../css/nav.css";
 import "../css/submenu_categories.css";
 import '../css/menu_profile.css'
@@ -12,12 +13,16 @@ import b4 from "../assets/icons/b4.png";
 import b5 from "../assets/icons/b5.png";
 import b6 from "../assets/icons/b6.png";
 import { useState } from "react";
+import { useCart } from './CartContext';
 import { Link } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 import { Menu_profile } from "./Menu_profile";
 import React from "react";
 import { AiOutlineUser } from 'react-icons/ai';
+
+
 export const Navbar = () => {
+  const { getCartItemCount } = useCart();
   const [submenuVisible, setSubmenuVisible] = useState(false);
   const [menu, setMenu] = useState(false);
   const [profileMenuVisible, setProfileMenuVisible] = useState(false);
@@ -147,8 +152,11 @@ export const Navbar = () => {
             </Link>
             <i></i>
             <Link to="/Carrito_compras">
-              <img src={carrito} alt="carrito" className="car" />
-            </Link>
+    <div className="cart-icon">
+    <img src={carrito} alt="carrito" className="car" />
+      <span className="cart-item-count">{getCartItemCount()}</span>
+    </div>
+  </Link>
             <Link to="#">
               <div
                 className={`user-icon ${isLoggedIn === false ? "desactivar_opcion" : ""}`}
@@ -208,3 +216,4 @@ export const Navbar = () => {
     </>
   );
 };
+
