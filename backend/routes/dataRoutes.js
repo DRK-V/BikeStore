@@ -178,8 +178,12 @@ router.get('/api/user/:email', dataController.getUserByEmail);
 router.get('/user/:userId/detalle_compra', dataController.getUserDetalleCompra);
 
 
-router.post('/user/:userId/updateImage', upload.single('image'), dataController.updateUserImage);
+// router.post('/user/:userId/updateImage', upload.single('image'), dataController.updateUserImage);
 
 
+// Definir ruta para actualizar la imagen de usuario
+router.post("/user/:userId/updateImage", dataController.updateUserImage);
+
+router.get("/user/:id/imageprofile", dataController.getUserImageById);
 
 module.exports = router;

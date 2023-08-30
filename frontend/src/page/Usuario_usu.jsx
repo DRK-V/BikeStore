@@ -86,7 +86,7 @@ export const Usuario_usu = () => {
     }
   }, [user]);
 
-  console.log(viewMenu);
+  // console.log(viewMenu);
 
 
 

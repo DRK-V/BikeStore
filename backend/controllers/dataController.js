@@ -284,10 +284,20 @@ const getUserByEmail = async (req, res) => {
 
     if (result.rows.length > 0) {
       const userData = result.rows[0];
-      console.log('Información del usuario:', userData); // Agrega esta línea para imprimir en la consola
+
+      // Extraer los datos bytea de la columna imagen_usuario
+      const byteaData = userData.imagen_usuario;
+
+      // Convertir los datos bytea en una cadena Base64
+      const imageBase64 = byteaData.toString('base64');
+
+      // Agregar la cadena Base64 al objeto userData
+      userData.imageBase64 = imageBase64;
+
+      // Enviar el objeto userData al cliente
       res.status(200).json(userData);
     } else {
-      console.log('Usuario no encontrado para el correo:', email); // Agrega esta línea para imprimir en la consola
+      console.log('Usuario no encontrado para el correo:', email);
       res.status(404).json({ message: 'Usuario no encontrado' });
     }
   } catch (error) {
@@ -295,6 +305,7 @@ const getUserByEmail = async (req, res) => {
     res.status(500).json({ message: 'Error en el servidor' });
   }
 };
+
 
 
 const getUserDetalleCompra = async (req, res) => {
@@ -329,27 +340,52 @@ const getUserDetalleCompra = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener los detalles de compra' });
   }
 };
+
+
 const updateUserImage = async (req, res) => {
   const userId = req.params.userId;
-  const image = req.file; // Assuming you're sending the image in a "multipart/form-data" format
+  const imageData = req.body;
 
   try {
-    if (!image) {
-      res.status(400).json({ error: "No se proporcionó ninguna imagen" });
-      return;
-    }
+      if (!imageData) {
+          res.status(400).json({ error: "No se proporcionó ninguna imagen" });
+          return;
+      }
 
-    const updateImageQuery = "UPDATE cliente SET imagen_usuario = $1 WHERE id_cliente = $2";
-    const values = [image.path, userId]; // Assuming image.path is the path where you saved the image
+      const updateImageQuery = "UPDATE cliente SET imagen_usuario = $1 WHERE id_cliente = $2";
+      const values = [imageData, userId];
 
-    await pool.query(updateImageQuery, values);
+      await pool.query(updateImageQuery, values);
 
-    res.status(200).json({ message: "Imagen de usuario actualizada exitosamente" });
+      res.status(200).json({ message: "Imagen de usuario actualizada exitosamente" });
   } catch (error) {
-    console.error("Error al actualizar la imagen de usuario:", error.message);
-    res.status(500).json({ error: "Error al actualizar la imagen de usuario" });
+      console.error("Error al actualizar la imagen de usuario:", error.message);
+      res.status(500).json({ error: "Error al actualizar la imagen de usuario" });
   }
 };
+
+const getUserImageById = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const query = 'SELECT imagen_usuario FROM cliente WHERE id_cliente = $1;';
+    const result = await pool.query(query, [userId]);
+
+    if (result.rows.length > 0) {
+      res.writeHead(200, {
+        'Content-Type': 'image/jpeg',
+        'Content-Length': result.rows[0].imagen_usuario.length,
+      });
+      res.end(result.rows[0].imagen_usuario);
+    } else {
+      res.status(404).json({ message: 'Imagen no encontrada' });
+    }
+  } catch (error) {
+    console.error('Error al obtener la imagen:', error);
+    res.status(500).json({ message: 'Error en el servidor' });
+  }
+};
+
+
 
 module.exports = {
   registerUser,
@@ -363,4 +399,5 @@ module.exports = {
   getUserByEmail,
   getUserDetalleCompra,
   updateUserImage,
+  getUserImageById,
 };
