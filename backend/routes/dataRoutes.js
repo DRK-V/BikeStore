@@ -16,7 +16,9 @@ const fs = require("fs")
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const userId = req.params.userId;
-    const destinationPath = path.join(__dirname, `../profile_images/user_${userId}`);
+    const frontendPublicPath = path.join(__dirname, '../../frontend/public');
+    const userImagePath = `profile_images/user_${userId}`;
+    const destinationPath = path.join(frontendPublicPath, userImagePath);
 
     // Verificar si la carpeta de destino existe, si no, crearla
     if (!fs.existsSync(destinationPath)) {
@@ -29,7 +31,6 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   }
 });
-
 const upload = multer({ storage: storage });
 
 /**

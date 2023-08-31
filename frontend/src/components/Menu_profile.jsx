@@ -13,8 +13,14 @@ export const Menu_profile = ({
     activateMyOrder,
 }) => {
     const { user, logout } = useAuth();
-    const [imageBase64, setImageBase64] = useState(null);
+    const [imageSrc, setImageSrc] = useState(null);
 
+    useEffect(() => {
+        // Cargar la imagen del usuario si está disponible
+        if (user && user.imagen_usuario) {
+            setImageSrc(`../../public/${user.imagen_usuario}`);
+        }
+    }, [user]);
 
     let url_profile = is_link_active ? "#profile" : "/Usuario_usu";
     let rol = "";
@@ -23,7 +29,6 @@ export const Menu_profile = ({
         logout();
         onClose();
     };
-
 
     const handleImageUpload = async (event) => {
         const image = event.target.files[0];
@@ -42,6 +47,9 @@ export const Menu_profile = ({
 
             if (response.status === 200) {
                 console.log('Imagen actualizada exitosamente');
+
+                // Actualizar el estado para reflejar la nueva imagen
+                setImageSrc(`../../public/profile_images/user_${user.id_cliente}/${image.name}`);
             } else {
                 console.error('Error al actualizar la imagen');
             }
@@ -50,7 +58,6 @@ export const Menu_profile = ({
         }
     };
 
-
     if (user && !user.rol_usuario) {
         rol = "usuario";
     } else if (user) {
@@ -58,12 +65,13 @@ export const Menu_profile = ({
     } else {
         rol = "usuario";
     }
-    const imageClasses = imageBase64 ? "profile-image" : "profile-image image-no-found";
+    const imageClasses = imageSrc ? "profile-image" : "profile-image image-no-found";
 
     return (
         <div className={`menu_profile ${is_active ? "active" : ""}`}>
-            <form className="profile-section" >
-                <button type="button"
+            <form className="profile-section">
+                <button
+                    type="button"
                     className={is_link_active ? "close-button-profile-desactive" : "close-button-profile"}
                     onClick={onClose}
                 >
@@ -74,14 +82,10 @@ export const Menu_profile = ({
                         type="file"
                         accept="image/*"
                         className="profile-image-input"
-                        name="image"  // Asegúrate de que el nombre sea "image"
+                        name="image" // Asegúrate de que el nombre sea "image"
                         onChange={handleImageUpload}
                     />
-                    <img
-                        src={`data:image/jpeg;base64,${imageBase64}` || logoExample}
-                        alt=""
-                        className={imageClasses}
-                    />
+                    <img src={imageSrc || logoExample} alt="" className={imageClasses} />
                 </label>
                 <h3>{user ? user.nombre_usuario : "Nombre de Usuario"}</h3>
             </form>

@@ -369,7 +369,9 @@ const updateUserImage = async (req, res) => {
     }
 
     const imageName = req.file.originalname;
-    const destinationPath = path.join(__dirname, `../profile_images/user_${userId}`);
+    const frontendPublicPath = path.join(__dirname, '../../frontend/public');
+    const userImagePath = `profile_images/user_${userId}`;
+    const destinationPath = path.join(frontendPublicPath, userImagePath);
     const imagePath = path.join(destinationPath, imageName);
 
     // Verificar si la carpeta de destino existe, si no, crearla
@@ -379,8 +381,8 @@ const updateUserImage = async (req, res) => {
 
     // Eliminar la imagen anterior si existe
     const existingImage = await pool.query("SELECT imagen_usuario FROM cliente WHERE id_cliente = $1", [userId]);
-    if (existingImage.rows.length > 0) {
-      const previousImagePath = existingImage.rows[0].imagen_usuario;
+    if (existingImage.rows.length > 0 && existingImage.rows[0].imagen_usuario) {
+      const previousImagePath = path.join(frontendPublicPath, existingImage.rows[0].imagen_usuario);
       if (fs.existsSync(previousImagePath)) {
         fs.unlinkSync(previousImagePath);
       }
@@ -390,7 +392,7 @@ const updateUserImage = async (req, res) => {
     fs.renameSync(req.file.path, imagePath);
 
     // Construir la ruta relativa para almacenar en la base de datos
-    const relativeImagePath = path.relative(path.join(__dirname, ".."), imagePath).replace(/\\/g, "/");
+    const relativeImagePath = path.join(userImagePath, imageName).replace(/\\/g, "/");
 
     const updateImageQuery = "UPDATE cliente SET imagen_usuario = $1 WHERE id_cliente = $2";
     const values = [relativeImagePath, userId];
@@ -403,6 +405,7 @@ const updateUserImage = async (req, res) => {
     res.status(500).json({ error: "Error al mover la imagen de usuario", details: error.message });
   }
 };
+
 
 module.exports = {
   registerUser,
