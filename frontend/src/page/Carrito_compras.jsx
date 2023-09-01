@@ -1,3 +1,4 @@
+//carrito_compras
 import React from 'react';
 import { Footer } from '../components/Footer';
 import Item_cart from '../components/Item_cart';
@@ -25,3 +26,4 @@ export const Carrito_compras = () => {
     </>
   );
 };
+

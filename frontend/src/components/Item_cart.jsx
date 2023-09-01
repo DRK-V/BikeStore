@@ -3,19 +3,19 @@ import React, { useState } from 'react';
 import { useCart } from './CartContext';
 
 const Item_cart = ({ product, image }) => {
-  const { removeItemFromCart } = useCart(); // Make sure you're using useCart here
+  const { removeItemFromCart } = useCart(); 
   const [quantity, setQuantity] = useState(0);
   const handleRemoveFromCart = () => {
-    removeItemFromCart(product.id); // Pass the product ID to remove
+    removeItemFromCart(product.id); 
   };
 
   const handleIncreaseQuantity = () => {
-    setQuantity(quantity + 1); // Increment the quantity by 1
+    setQuantity(quantity + 1); 
   };
 
   const handleDecreaseQuantity = () => {
     if (quantity > 0) {
-      setQuantity(quantity - 1); // Decrement the quantity by 1 if it's greater than 0
+      setQuantity(quantity - 1); 
     }
   };
   return (
@@ -56,3 +56,4 @@ const Item_cart = ({ product, image }) => {
 };
 
 export default Item_cart;
+
