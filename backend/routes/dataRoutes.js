@@ -1,14 +1,37 @@
-//routes
-
 const express = require("express");
 const dataController = require("../controllers/dataController");
 const router = express.Router();
+const multer = require('multer');
+const path = require("path")
+const fs = require("fs")
+
 /**
  * @openapi
  * tags:
  *   name: Images
  *   description: API endpoints for images
  */
+
+// Define la instancia de multer con el almacenamiento
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const userId = req.params.userId;
+    const frontendPublicPath = path.join(__dirname, '../../frontend/public');
+    const userImagePath = `profile_images/user_${userId}`;
+    const destinationPath = path.join(frontendPublicPath, userImagePath);
+
+    // Verificar si la carpeta de destino existe, si no, crearla
+    if (!fs.existsSync(destinationPath)) {
+      fs.mkdirSync(destinationPath, { recursive: true });
+    }
+
+    cb(null, destinationPath);
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  }
+});
+const upload = multer({ storage: storage });
 
 /**
  * @openapi
@@ -165,5 +188,10 @@ router.get('/api/user/:email', dataController.getUserByEmail);
 router.get('/user/:userId/detalle_compra', dataController.getUserDetalleCompra);
 
 router.put('/api/update_user', dataController.updateUser);
+
+// router.post('/user/:userId/updateImage', upload.single('image'), dataController.updateUserImage);
+router.post("/user/:userId/updateImage", upload.single("image"), dataController.updateUserImage);
+
+
 
 module.exports = router;

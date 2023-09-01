@@ -1,7 +1,25 @@
+
+const fs = require('fs');
+const path = require('path');
+const multer = require('multer');
 //datacontroller
 const { pool } = require("../config/db");
 
-//actualizacion de datos del cliente
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const userId = req.params.userId;
+    const destinationPath = path.join(__dirname, `../images_profile/user_${userId}`);
+    cb(null, destinationPath);
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  }
+});
+
+const upload = multer({ storage: storage });
+
+
 
 const updateUser = async (req, res) => {
   const updatedUserData = req.body;
@@ -34,9 +52,7 @@ const updateUser = async (req, res) => {
   });
 };
 
-module.exports = {
-  updateUser
-};
+
 
 
 //fin de acutalizacion de datos del cliente
@@ -323,10 +339,20 @@ const getUserByEmail = async (req, res) => {
 
     if (result.rows.length > 0) {
       const userData = result.rows[0];
-      console.log('Información del usuario:', userData); // Agrega esta línea para imprimir en la consola
+
+      // // Extraer los datos bytea de la columna imagen_usuario
+      // const byteaData = userData.imagen_usuario;
+
+      // // Convertir los datos bytea en una cadena Base64
+      // const imageBase64 = byteaData.toString('base64');
+
+      // // Agregar la cadena Base64 al objeto userData
+      // userData.imageBase64 = imageBase64;
+
+      // Enviar el objeto userData al cliente
       res.status(200).json(userData);
     } else {
-      console.log('Usuario no encontrado para el correo:', email); // Agrega esta línea para imprimir en la consola
+      console.log('Usuario no encontrado para el correo:', email);
       res.status(404).json({ message: 'Usuario no encontrado' });
     }
   } catch (error) {
@@ -334,6 +360,7 @@ const getUserByEmail = async (req, res) => {
     res.status(500).json({ message: 'Error en el servidor' });
   }
 };
+
 
 
 const getUserDetalleCompra = async (req, res) => {
@@ -369,10 +396,51 @@ const getUserDetalleCompra = async (req, res) => {
   }
 };
 
-module.exports = {
-  getUserDetalleCompra
-};
+const updateUserImage = async (req, res) => {
+  const userId = req.params.userId;
 
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No se proporcionó ninguna imagen" });
+    }
+
+    const imageName = req.file.originalname;
+    const frontendPublicPath = path.join(__dirname, '../../frontend/public');
+    const userImagePath = `profile_images/user_${userId}`;
+    const destinationPath = path.join(frontendPublicPath, userImagePath);
+    const imagePath = path.join(destinationPath, imageName);
+
+    // Verificar si la carpeta de destino existe, si no, crearla
+    if (!fs.existsSync(destinationPath)) {
+      fs.mkdirSync(destinationPath, { recursive: true });
+    }
+
+    // Eliminar la imagen anterior si existe
+    const existingImage = await pool.query("SELECT imagen_usuario FROM cliente WHERE id_cliente = $1", [userId]);
+    if (existingImage.rows.length > 0 && existingImage.rows[0].imagen_usuario) {
+      const previousImagePath = path.join(frontendPublicPath, existingImage.rows[0].imagen_usuario);
+      if (fs.existsSync(previousImagePath)) {
+        fs.unlinkSync(previousImagePath);
+      }
+    }
+
+    // Mover el archivo a la carpeta de destino
+    fs.renameSync(req.file.path, imagePath);
+
+    // Construir la ruta relativa para almacenar en la base de datos
+    const relativeImagePath = path.join(userImagePath, imageName).replace(/\\/g, "/");
+
+    const updateImageQuery = "UPDATE cliente SET imagen_usuario = $1 WHERE id_cliente = $2";
+    const values = [relativeImagePath, userId];
+
+    await pool.query(updateImageQuery, values);
+
+    res.status(200).json({ message: "Imagen de usuario actualizada exitosamente" });
+  } catch (error) {
+    console.error("Error al mover la imagen de usuario:", error.message);
+    res.status(500).json({ error: "Error al mover la imagen de usuario", details: error.message });
+  }
+};
 
 
 module.exports = {
@@ -386,5 +454,6 @@ module.exports = {
   getProductDetailsWithImages,
   getUserByEmail,
   getUserDetalleCompra,
+  updateUserImage,
   updateUser,
 };
