@@ -6,15 +6,14 @@
     height: 80vh;
     left: 10%;
     background-color: rgb(255, 255, 255);
-    border-radius: .5rem;
-    display: flex;
+    border-radius: 0.5rem;
+    display: inline-flex;
     flex-direction: column;
     align-items: center;
     box-shadow: 4px 5px 4px 4px rgba(128, 128, 128, 0.452);
-
-
+    overflow: hidden;
+    overflow-y: auto;
 }
-
 
 
 .car_comp>h1 {
@@ -24,6 +23,10 @@
     justify-content: center;
     align-items: center;
     font-size: 1.2em;
+}
+
+.descrip_produc {
+    font-size: .5em;
 }
 
 /* aca va el de los conotenedores */
@@ -36,16 +39,14 @@
     border-radius: 0 .5rem .5rem 0;
     border: none;
     border-left: solid 5px #7EE29A;
-
-
-
+    margin-top: .5em;
 }
 
 .Cart_compras_carrito::after {
     content: "";
     width: 1em;
     height: 1em;
-    left: -1.8%;
+    left: -1.3%;
     top: 20%;
     clip-path: circle();
     background-color: #7EE29A;
@@ -67,7 +68,7 @@
 }
 
 /*botones de aumentar productos*/
-.botones_compra{
+.botones_compra {
     width: 36%;
     margin-left: 2%;
     align-items: end;
@@ -83,11 +84,15 @@
     border-radius: 0.9em;
     background-color: transparent;
 }
+
 .boton1 i {
-    margin-right: 5px; /* Añade un margen derecho al ícono */
-    color: #000000; /* Cambia el color del ícono */
-  }
-.boton2{
+    margin-right: 5px;
+    /* Añade un margen derecho al ícono */
+    color: #000000;
+    /* Cambia el color del ícono */
+}
+
+.boton2 {
     margin: 1%;
     width: 38%;
     height: 32%;
@@ -99,14 +104,16 @@
     align-items: center;
 }
 
-.su_su{
+.su_su {
     background-color: transparent;
     border: none;
 }
-.su_re{
+
+.su_re {
     background-color: transparent;
     border: none;
 }
+
 /*imagen de contenedor de compras*/
 .img_bicci {
     width: 27%;
