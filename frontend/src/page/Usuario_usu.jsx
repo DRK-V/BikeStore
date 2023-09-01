@@ -94,14 +94,14 @@ export const Usuario_usu = () => {
   const [nombreUsuario, setNombreUsuario] = useState(user ? user.nombre_usuario : "");
   const [correo, setCorreo] = useState(user ? user.correo : "");
   const [numeroDocumento, setNumeroDocumento] = useState(user ? user.numero_de_documento : "");
-  const [ciudad, setCiudad] = useState(user ? user.ciudad : "");
+  const [direccion, setdireccion] = useState(user ? user.direccion : "");
   const [telefono, setTelefono] = useState(user ? user.telefono : "");
 
   const handleTelefonoChange = (e) => {
     setTelefono(e.target.value);
   };
-  const handleCiudadChange = (e) => {
-    setCiudad(e.target.value);
+  const handledireccionChange = (e) => {
+    setdireccion(e.target.value);
   };
   const handleNumeroDocumentoChange = (e) => {
     setNumeroDocumento(e.target.value);
@@ -114,7 +114,38 @@ export const Usuario_usu = () => {
   const handleCorreoChange = (e) => {
     setCorreo(e.target.value);
   };
-/*a qui termina los estados para poder editar los input */
+  /*a qui termina los estados para poder editar los input */
+
+  //se recogera la informacion de configuracion perfil
+  const handleGuardarCambios = () => {
+    const updatedUser = {
+      id_cliente: user.id_cliente, // Asegúrate de tener una forma de obtener el ID del usuario
+      nombre_usuario: nombreUsuario,
+      correo: correo,
+      numero_de_documento: numeroDocumento,
+      direccion: direccion,
+      telefono: telefono
+    };
+
+    fetch('http://localhost:3060/api/update_user', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updatedUser)
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Usuario actualizado:', data);
+        // Realiza acciones después de actualizar los datos si es necesario
+      })
+      .catch(error => {
+        console.error('Error al actualizar el usuario:', error);
+        // Maneja el error en caso necesario
+      });
+  };
+  // fin de recoleccion de informacion de configuracion perfil
+
 
   return (
     <>
@@ -186,14 +217,14 @@ export const Usuario_usu = () => {
 
                   <div className="fila">
                     <label htmlFor="">
-                      <b>Ciudad</b>
+                      <b>Direccion</b>
                     </label>
                     <input
                       disabled
                       className="input1"
-                      placeholder="Ciudad"
+                      placeholder="Direccion"
                       type="text"
-                      value={user ? user.ciudad : ""}
+                      value={user ? user.direccion : ""}
                     />
                   </div>
                 </div>
@@ -265,14 +296,14 @@ export const Usuario_usu = () => {
 
                   <div className="fila">
                     <label htmlFor="">
-                      <b>Ciudad</b>
+                      <b>Direccion</b>
                     </label>
                     <input
                       className="input1"
-                      placeholder={user ? user.ciudad : ""}
-                      value={ciudad}
+                      placeholder={user ? user.direccion : ""}
+                      value={direccion}
                       type="text"
-                      onChange={handleCiudadChange}
+                      onChange={handledireccionChange}
                     />
                   </div>
                 </div>
@@ -290,7 +321,7 @@ export const Usuario_usu = () => {
                       onChange={handleTelefonoChange}
                     />
                   </div>
-                  <button className="boton_cambiar">Guardar cambios</button>
+                  <button type="button" className="boton_cambiar" onClick={handleGuardarCambios}>Guardar cambios</button>
                 </div>
               </div>
             </form>

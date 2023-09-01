@@ -83,6 +83,10 @@
     border-radius: 0.9em;
     background-color: transparent;
 }
+.boton1 i {
+    margin-right: 5px; /* Añade un margen derecho al ícono */
+    color: #000000; /* Cambia el color del ícono */
+  }
 .boton2{
     margin: 1%;
     width: 38%;
@@ -95,11 +99,14 @@
     align-items: center;
 }
 
+.su_su{
+    background-color: transparent;
+    border: none;
+}
 .su_re{
     background-color: transparent;
     border: none;
 }
-
 /*imagen de contenedor de compras*/
 .img_bicci {
     width: 27%;

@@ -20,6 +20,42 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
+
+const updateUser = async (req, res) => {
+  const updatedUserData = req.body;
+
+  const sql = `UPDATE cliente SET
+    nombre_usuario = $1,
+    correo = $2,
+    numero_de_documento = $3,
+    direccion = $4,
+    telefono = $5
+    WHERE id_cliente = $6`;
+
+  const values = [
+    updatedUserData.nombre_usuario,
+    updatedUserData.correo,
+    updatedUserData.numero_de_documento,
+    updatedUserData.direccion,
+    updatedUserData.telefono,
+    updatedUserData.id_cliente
+  ];
+
+  pool.query(sql, values, (err, results) => {
+    if (err) {
+      console.error('Error al actualizar el usuario en la base de datos:', err);
+      res.status(500).json({ message: 'Error al actualizar el usuario' });
+    } else {
+      console.log('Usuario actualizado en la base de datos');
+      res.json({ message: 'Usuario actualizado exitosamente' });
+    }
+  });
+};
+
+
+
+
+//fin de acutalizacion de datos del cliente
 //registro de clients
 const registerUser = async (userData) => {
   const insertUserQuery =
@@ -419,4 +455,5 @@ module.exports = {
   getUserByEmail,
   getUserDetalleCompra,
   updateUserImage,
+  updateUser,
 };
