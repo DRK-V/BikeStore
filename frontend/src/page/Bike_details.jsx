@@ -1,4 +1,3 @@
-//bike_details
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import '../css/Bike_details.css';
@@ -26,6 +25,7 @@ const Bike_details = () => {
 
   const [productDetails, setProductDetails] = useState(null);
   const [additionalProductDetails, setAdditionalProductDetails] = useState(null);
+  const [mainImageURL, setMainImageURL] = useState('');
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -47,6 +47,13 @@ const Bike_details = () => {
         const response = await fetch(`http://localhost:3060/products-with-images/${id_producto}`);
         const data = await response.json();
         setAdditionalProductDetails(data);
+        if (data.images && data.images.length > 0) {
+          // Establecer la imagen de portada como la imagen principal
+          const imagenPortada = data.images.find(image => image.nombre_imagen === 'imagen portada');
+          if (imagenPortada) {
+            setMainImageURL(`http://localhost:3060/images/${imagenPortada.id_imagen}`);
+          }
+        }
       } catch (error) {
         console.error('Error fetching additional product details:', error);
       }
@@ -57,38 +64,35 @@ const Bike_details = () => {
     }
   }, [id_producto]);
 
-  const imagenPortada = productDetails?.images?.find(image => image.nombre_imagen === 'imagen portada');
-  const imagenVista1 = productDetails?.images?.find(image => image.nombre_imagen === 'vista 1');
-  const imagenVista2 = productDetails?.images?.find(image => image.nombre_imagen === 'vista 2');
-  const imagenVista3 = productDetails?.images?.find(image => image.nombre_imagen === 'vista 3');
-  const imagenURL = imagenPortada ? `http://localhost:3060/images/${imagenPortada.id_imagen}` : '';
-  const imagenVista1URL = imagenVista1 ? `http://localhost:3060/images/${imagenVista1.id_imagen}` : '';
-  const imagenVista2URL = imagenVista2 ? `http://localhost:3060/images/${imagenVista2.id_imagen}` : '';
-  const imagenVista3URL = imagenVista3 ? `http://localhost:3060/images/${imagenVista3.id_imagen}` : '';
-  console.log('id_producto in Bike_details:', id_producto);
-  console.log('additionalProductDetails:', additionalProductDetails);
-  console.log('id_producto:', id_producto);
+  // Función para cambiar la imagen principal cuando se hace clic en una vista
+  const handleSubImageClick = (subImageURL) => {
+    setMainImageURL(subImageURL);
+  };
 
     return (
     <>
       <Navbar />
       <div className="container_view_details">
-      {productDetails && additionalProductDetails &&  (
+        {productDetails && additionalProductDetails && additionalProductDetails.product && (
           <>
             <div className="container_images">
-            <img className="sub_images1" src={imagenVista1URL} alt="Vista 1" />
-                        <img className="sub_images2" src={imagenVista2URL} alt="Vista 2" />
-                        <img className="sub_images3" src={imagenVista3URL} alt="Vista 3" />
-                    
+            {additionalProductDetails.images.map((image) => (
+                <img
+                  key={image.id_imagen}
+                  className="sub_images"
+                  src={`http://localhost:3060/images/${image.id_imagen}`}
+                  alt={image.nombre_imagen}
+                  onClick={() => handleSubImageClick(`http://localhost:3060/images/${image.id_imagen}`)}
+                />
+              ))}
             </div>
-            <img className="main_image" src={imagenURL} alt="Imagen Principal" />
-
-
-            <form onSubmit={handleAddToCart}  action="dialog" className="form_add_item_cart">
-            <label className='bike_name'>{additionalProductDetails?.product?.nombre_producto}</label>
-    <label htmlFor="" className="price_text">
-        <p>Precio:</p> ${additionalProductDetails?.product?.precio}
-    </label>
+            <img className="main_image" src={mainImageURL} alt="Imagen Principal" />
+           
+            <form onSubmit={handleAddToCart} action="dialog" className="form_add_item_cart">
+              <label className='bike_name'>{additionalProductDetails.product.nombre_producto}</label>
+              <label htmlFor="" className="price_text">
+                <p>Precio:</p> ${additionalProductDetails.product.precio}
+              </label>
               <div className="container_color_details">
               <label htmlFor="" className="color_text">Color:<strong>{additionalProductDetails?.product?.color}</strong></label>
         <input type="color" name="color_bike" id="" value="#7ABBDC" />
