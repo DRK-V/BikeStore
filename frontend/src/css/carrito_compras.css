@@ -3,7 +3,7 @@
     position: relative;
     margin: 20px;
     width: 80%;
-    height: 80vh;
+    height: auto;
     left: 10%;
     background-color: rgb(255, 255, 255);
     border-radius: .5rem;
@@ -76,36 +76,46 @@
 
 .boton1 {
     margin: 1%;
-    width: 21%;
-    height: 32%;
+    width: 22%;
+    height: 14%;
     color: transparent;
     border: solid 2px #bef6c4a2;
     border-radius: 0.9em;
     background-color: transparent;
 }
-.boton1 i {
-    margin-right: 5px; /* Añade un margen derecho al ícono */
+.boton1 > i {
+    margin: 0; /* Añade un margen derecho al ícono */
     color: #000000; /* Cambia el color del ícono */
   }
 .boton2{
     margin: 1%;
-    width: 38%;
-    height: 32%;
+    width: auto;
+    height: 14%;
     border: solid 2px #bef6c4a2;
     border-radius: 0.5em;
-    padding: 3%;
+    padding: 6%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .su_su{
+    margin-right: 11%;
     background-color: transparent;
     border: none;
 }
+
+.su_su > i{
+    margin: 0;
+}
 .su_re{
+    margin-left: 11%;
     background-color: transparent;
     border: none;
+}
+
+.su_re > i{
+    margin: 0;
 }
 /*imagen de contenedor de compras*/
 .img_bicci {
@@ -136,7 +146,7 @@
     justify-content: flex-end;
     align-items: flex-end;
     flex-direction: column;
-    margin-right: 6%;
+    margin: 6%;
 }
 
 
@@ -148,12 +158,13 @@
     height: 100%;
     object-fit: contain;
     margin-right: 10px;
+    margin-left: 6px;
 
 }
 
 .pagar {
-    width: 45%;
-    height: 26%;
+    width: 54%;
+    height: 28%;
     display: flex;
     align-items: center;
     justify-content: center;

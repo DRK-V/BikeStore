@@ -21,14 +21,23 @@ import React from "react";
 import { AiOutlineUser } from 'react-icons/ai';
 
 
-export const Navbar = () => {
+export const Navbar = ({
+  onSearchClick,
+  onFormSubmit,
+  setSelectedCategory,
+  selectedCategory, // Add selectedCategory prop
+}) => {
+  
   const { getCartItemCount } = useCart();
   const [submenuVisible, setSubmenuVisible] = useState(false);
   const [menu, setMenu] = useState(false);
   const [profileMenuVisible, setProfileMenuVisible] = useState(false);
   const { isLoggedIn } = useAuth();
 
-
+  const handleCategoryClick = (category) => {
+     setSelectedCategory(category);// Resto del código para actualizar el estado con la categoría seleccionada
+  };
+  
   const toggleProfileMenu = () => {
     setProfileMenuVisible(!profileMenuVisible);
   };
@@ -53,7 +62,12 @@ export const Navbar = () => {
   const handleSubmenuMouseLeave = () => {
     setSubmenuVisible(false);
   };
-
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    const searchQuery = event.target.elements.searchInput.value;
+    onFormSubmit(event); // Call the passed onFormSubmit function
+    onSearchClick(searchQuery); // Trigger search
+  };
   return (
     <>
       <div className={`menu_resp ${menu ? "activar-active" : "desactivar-off"}`}>
@@ -101,8 +115,8 @@ export const Navbar = () => {
         <Link to="/" className="bike">
           <img src={icon} alt="" />
         </Link>
-        <form action="">
-          <input type="text" className="busque" />
+        <form action="" onSubmit={handleFormSubmit}>
+          <input type="text" className="busque" name="searchInput" />
           <button className="buscar"></button>
         </form>
         <button className="descu">Cupones 20% de descuento</button>
@@ -177,30 +191,32 @@ export const Navbar = () => {
           onMouseLeave={handleSubmenuMouseLeave}
         >
           <ul className="sub-menu">
-            <li className="sub-menu-item">
+          <li
+              className="sub-menu-item"
+              onClick={() => handleCategoryClick("Bicicleta de montaña")} // Add click handler for each category
+            >
               <img src={b1} alt="Icono Bicicleta" />
               <span>Bicicleta de montaña</span>
             </li>
-            <li className="sub-menu-item">
+            <li className="sub-menu-item"
+            onClick={() => handleCategoryClick("Bicicleta de gravel")}
+            >
               <img src={b2} alt="Icono Bicicleta" />
               <span>Bicicleta de gravel</span>
             </li>
-            <li className="sub-menu-item">
+            <li className="sub-menu-item"
+            onClick={() => handleCategoryClick("Bicicleta de carretera")}
+            >
               <img src={b3} alt="Icono Bicicleta" />
               <span>Bicicleta de carretera</span>
             </li>
-            <li className="sub-menu-item">
+            <li className="sub-menu-item"
+            onClick={() => handleCategoryClick("Bicicleta de ciudad")}
+            >
               <img src={b4} alt="Icono Bicicleta" />
               <span>Bicicleta de ciudad</span>
             </li>
-            <li className="sub-menu-item">
-              <img src={b5} alt="Icono Bicicleta" />
-              <span>Bicicleta plegable</span>
-            </li>
-            <li className="sub-menu-item">
-              <img src={b6} alt="Icono Bicicleta" />
-              <span>Bicicleta eléctrica</span>
-            </li>
+            
           </ul>
         </div>
       )}
