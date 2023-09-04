@@ -26,7 +26,7 @@ const getRandomNumber = (min, max) => {
 };
 
 export const Card_container = (props) => {
-  const numCards = 6;
+  const numCards = 24;
   const [cardsData, setCardsData] = useState([]);
   const [filteredCards, setFilteredCards] = useState([]);
 
