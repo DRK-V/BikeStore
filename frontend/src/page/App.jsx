@@ -45,7 +45,7 @@ function App() {
             <Route path="/payment" element={<Payment />} />
             <Route path="/Usuario_usu" element={<Usuario_usu />} />
             <Route path="/Carrito_compras" element={<Carrito_compras />} />
-        
+            <Route path="/search" element={<Card_container />} />
           </Routes>
         </>
       )}

@@ -19,10 +19,13 @@ import { useAuth } from "./AuthContext";
 import { Menu_profile } from "./Menu_profile";
 import React from "react";
 import { AiOutlineUser } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
 
 
 export const Navbar = ({ onSearchClick, onFormSubmit }) => {
-  
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
   const { getCartItemCount } = useCart();
   const [submenuVisible, setSubmenuVisible] = useState(false);
   const [menu, setMenu] = useState(false);
@@ -56,10 +59,15 @@ export const Navbar = ({ onSearchClick, onFormSubmit }) => {
   };
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    const searchQuery = event.target.elements.searchInput.value;
-    onFormSubmit(event); // Call the passed onFormSubmit function
-    onSearchClick(searchQuery); // Trigger search
+    if (searchQuery) {
+      const encodedSearchQuery = encodeURIComponent(searchQuery);
+      navigate(`/search?query=${encodedSearchQuery}`); // Actualiza la URL con el parámetro de búsqueda
+      onSearchClick(searchQuery); // Realiza la búsqueda aquí si es necesario
+    }
   };
+  
+  
+  
   return (
     <>
       <div className={`menu_resp ${menu ? "activar-active" : "desactivar-off"}`}>
@@ -107,10 +115,19 @@ export const Navbar = ({ onSearchClick, onFormSubmit }) => {
         <Link to="/" className="bike">
           <img src={icon} alt="" />
         </Link>
-        <form action="" onSubmit={handleFormSubmit}>
-          <input type="text" className="busque" name="searchInput" />
-          <button className="buscar"></button>
-        </form>
+        
+         <form onSubmit={handleFormSubmit}>
+  <input
+    className="busque"
+    name="searchInput"
+    type="text"
+    value={searchQuery}
+    onChange={(e) => setSearchQuery(e.target.value)}
+    placeholder="Buscar..."
+  />
+  <button className="buscar" type="submit"></button>
+</form>
+
         <button className="descu">Cupones 20% de descuento</button>
         <button className="menudes">
           <img
