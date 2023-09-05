@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from './Card';
-import { useParams, Link, useLocation } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 
 const getCardClase = (isCategories, isSimilar) => {
   if (isCategories === 'true' && isSimilar === 'false') {
@@ -49,7 +49,7 @@ export const Card_container = (props) => {
   }, []);
 
   useEffect(() => {
-    // Filtra tarjetas según el parámetro de categoría (tipo)
+    
     if (tipo) {
       const filtered = cardsData.filter(
         (card) => card.product.tipo.toLowerCase() === tipo.toLowerCase()

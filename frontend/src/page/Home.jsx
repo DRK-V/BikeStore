@@ -60,7 +60,7 @@ export const Home = () => {
         setSelectedCategory={handleCategoryClick}
         selectedCategory={selectedCategory}
       />
-      {renderCategoryHeader()} {/* Renderizar el encabezado de categoría y el botón */}
+      {renderCategoryHeader()} 
       {renderCarouselAndContainer()}
       <Card_container
         selectedCategory={selectedCategory}

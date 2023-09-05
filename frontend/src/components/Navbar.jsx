@@ -61,8 +61,8 @@ export const Navbar = ({ onSearchClick, onFormSubmit }) => {
     event.preventDefault();
     if (searchQuery) {
       const encodedSearchQuery = encodeURIComponent(searchQuery);
-      navigate(`/search?query=${encodedSearchQuery}`); // Actualiza la URL con el parámetro de búsqueda
-      onSearchClick(searchQuery); // Realiza la búsqueda aquí si es necesario
+      navigate(`/search?query=${encodedSearchQuery}`); 
+      onSearchClick(searchQuery); 
     }
   };
   
@@ -239,7 +239,7 @@ export const Navbar = ({ onSearchClick, onFormSubmit }) => {
           </ul>
         </div>
       )}
-      {/* aqui va el menu de perfil */}
+    
       <div className={`menu_profile_container ${profileMenuVisible ? "active" : ""}`}>
 
       <Menu_profile
