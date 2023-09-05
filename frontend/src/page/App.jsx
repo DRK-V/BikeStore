@@ -14,7 +14,7 @@ import { CartProvider } from '../components/CartContext';
 
 import '../css/animation.css'
 import '../css/main.css'
-
+import { Card_container } from "../components/Card_container";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -37,6 +37,7 @@ function App() {
           {/* No es necesario pasar ninguna prop al Navbar */}
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/categoria/:tipo" element={<Card_container />} />
             <Route path="/register" element={<Register />} />
             <Route path="/filters" element={<Categories />} />
             <Route path="/details/:id_producto" element={<Bike_details />} />
@@ -44,6 +45,7 @@ function App() {
             <Route path="/payment" element={<Payment />} />
             <Route path="/Usuario_usu" element={<Usuario_usu />} />
             <Route path="/Carrito_compras" element={<Carrito_compras />} />
+        
           </Routes>
         </>
       )}
