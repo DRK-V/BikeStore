@@ -84,7 +84,7 @@ export const Card_container = (props) => {
       {tipo && (
         <div>
           <h1>{tipo}</h1>
-          <Link to="/">Ir al inicio</Link>
+          
         </div>
       )}
       <article
