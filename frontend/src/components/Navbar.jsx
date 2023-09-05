@@ -19,25 +19,20 @@ import { useAuth } from "./AuthContext";
 import { Menu_profile } from "./Menu_profile";
 import React from "react";
 import { AiOutlineUser } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
 
 
-export const Navbar = ({
-  onSearchClick,
-  onFormSubmit,
-  setSelectedCategory,
-  selectedCategory, // Add selectedCategory prop
-}) => {
-  
+export const Navbar = ({ onSearchClick, onFormSubmit }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
   const { getCartItemCount } = useCart();
   const [submenuVisible, setSubmenuVisible] = useState(false);
   const [menu, setMenu] = useState(false);
   const [profileMenuVisible, setProfileMenuVisible] = useState(false);
   const { isLoggedIn } = useAuth();
 
-  const handleCategoryClick = (category) => {
-     setSelectedCategory(category);// Resto del código para actualizar el estado con la categoría seleccionada
-  };
-  
+
   const toggleProfileMenu = () => {
     setProfileMenuVisible(!profileMenuVisible);
   };
@@ -64,10 +59,15 @@ export const Navbar = ({
   };
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    const searchQuery = event.target.elements.searchInput.value;
-    onFormSubmit(event); // Call the passed onFormSubmit function
-    onSearchClick(searchQuery); // Trigger search
+    if (searchQuery) {
+      const encodedSearchQuery = encodeURIComponent(searchQuery);
+      navigate(`/search?query=${encodedSearchQuery}`); // Actualiza la URL con el parámetro de búsqueda
+      onSearchClick(searchQuery); // Realiza la búsqueda aquí si es necesario
+    }
   };
+  
+  
+  
   return (
     <>
       <div className={`menu_resp ${menu ? "activar-active" : "desactivar-off"}`}>
@@ -115,10 +115,19 @@ export const Navbar = ({
         <Link to="/" className="bike">
           <img src={icon} alt="" />
         </Link>
-        <form action="" onSubmit={handleFormSubmit}>
-          <input type="text" className="busque" name="searchInput" />
-          <button className="buscar"></button>
-        </form>
+        
+         <form onSubmit={handleFormSubmit}>
+  <input
+    className="busque"
+    name="searchInput"
+    type="text"
+    value={searchQuery}
+    onChange={(e) => setSearchQuery(e.target.value)}
+    placeholder="Buscar..."
+  />
+  <button className="buscar" type="submit"></button>
+</form>
+
         <button className="descu">Cupones 20% de descuento</button>
         <button className="menudes">
           <img
@@ -191,32 +200,42 @@ export const Navbar = ({
           onMouseLeave={handleSubmenuMouseLeave}
         >
           <ul className="sub-menu">
-          <li
-              className="sub-menu-item"
-              onClick={() => handleCategoryClick("Bicicleta de montaña")} // Add click handler for each category
-            >
-              <img src={b1} alt="Icono Bicicleta" />
-              <span>Bicicleta de montaña</span>
-            </li>
-            <li className="sub-menu-item"
-            onClick={() => handleCategoryClick("Bicicleta de gravel")}
-            >
-              <img src={b2} alt="Icono Bicicleta" />
+           <Link to="/categoria/montaña">
+            <li className="sub-menu-item">
+            <img src={b1} alt="Icono Bicicleta" />
+            <span>Bicicleta de montaña</span>
+           </li>
+            </Link>
+            <Link to="/categoria/gravel">
+            <li className="sub-menu-item">
+            <img src={b2} alt="Icono Bicicleta" />
               <span>Bicicleta de gravel</span>
             </li>
-            <li className="sub-menu-item"
-            onClick={() => handleCategoryClick("Bicicleta de carretera")}
-            >
-              <img src={b3} alt="Icono Bicicleta" />
+                </Link>
+            <Link to="/categoria/carretera">
+            <li className="sub-menu-item">
+            <img src={b3} alt="Icono Bicicleta" />
               <span>Bicicleta de carretera</span>
             </li>
-            <li className="sub-menu-item"
-            onClick={() => handleCategoryClick("Bicicleta de ciudad")}
-            >
-              <img src={b4} alt="Icono Bicicleta" />
+             </Link>
+             <Link to="/categoria/ciudad">
+            <li className="sub-menu-item">
+            <img src={b4} alt="Icono Bicicleta" />
               <span>Bicicleta de ciudad</span>
             </li>
-            
+            </Link>
+            <Link to="/categoria/plegable">
+            <li className="sub-menu-item">
+            <img src={b5} alt="Icono Bicicleta" />
+              <span>Bicicleta plegable</span>
+            </li>
+            </Link>
+            <Link to="/categoria/electrica">
+            <li className="sub-menu-item">
+              <img src={b6} alt="Icono Bicicleta" />
+              <span>Bicicleta eléctrica</span>
+            </li>
+            </Link>
           </ul>
         </div>
       )}
@@ -232,4 +251,3 @@ export const Navbar = ({
     </>
   );
 };
-

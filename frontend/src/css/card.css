@@ -168,7 +168,31 @@
 .texto_cuotas {
     font-size: 14px;
 }
-
+.category-title {
+    text-align: center; /* Centra el texto horizontalmente */
+    margin-top: 10px; /* Ajusta el margen superior según sea necesario */
+    margin-bottom: 10px; /* Ajusta el margen inferior según sea necesario */
+  }
+  .arrow-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 20px;
+    color: #333;
+    position: relative;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Estilos para el ícono de Font Awesome */
+  .arrow-icon {
+    margin-right: 10px; /* Espacio entre el ícono y el texto del botón */
+  }
+  
+  /* Estilo de fondo al pasar el ratón */
+  .arrow-button:hover {
+    background-color: #f0f0f0;
+  }
 /*responsive*/
 
 @media (max-width:1200px) {
