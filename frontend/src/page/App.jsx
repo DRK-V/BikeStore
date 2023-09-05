@@ -19,18 +19,18 @@ import { Card_container } from "../components/Card_container";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const location = useLocation(); // Obtiene la ubicación actual
-  const isSearchRoute = location.pathname.includes('/search'); // Verifica si la ruta incluye "/search"
+  const location = useLocation(); 
+  const isSearchRoute = location.pathname.includes('/search'); 
   const isCategoryRoute = location.pathname.includes('/categoria/');
   useEffect(() => {
-    // Simula una tarea asincrónica que tarda 3 segundos en cargar la aplicación
+    
     setTimeout(() => {
       setIsLoading(false);
     }, 1000);
   }, []);
 
   return (
-    <AuthProvider> {/* Agrega el AuthProvider aquí para envolver la aplicación */}
+    <AuthProvider> 
     <CartProvider>
       {isLoading ? (
         // si esta cargando
@@ -38,7 +38,7 @@ function App() {
       ) : (
         <>
         {isSearchRoute && <Navbar />}
-        {isCategoryRoute  && <Navbar />}{/* No es necesario pasar ninguna prop al Navbar */}
+        {isCategoryRoute  && <Navbar />}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/categoria/:tipo" element={<Card_container />} />
