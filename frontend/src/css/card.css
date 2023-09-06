@@ -14,7 +14,7 @@
 
 .card_container_categories {
     position: relative;
-    width: 70%;
+   
     min-height: 80vh;
     height: 80vh;
     overflow-y: auto;
@@ -201,9 +201,7 @@
         left: 0;
     }
 
-    .card_container_categories {
-        width: 80%;
-    }
+   
 
     .card {
         width: 98%;
