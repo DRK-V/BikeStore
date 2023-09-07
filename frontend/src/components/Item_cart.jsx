@@ -3,21 +3,29 @@ import React, { useState } from 'react';
 import { useCart } from './CartContext';
 
 const Item_cart = ({ product, image }) => {
-  const { removeItemFromCart } = useCart(); 
-  const [quantity, setQuantity] = useState(0);
+  const { removeItemFromCart, updateCartItemQuantity } = useCart();
+ const [quantity, setQuantity] = useState(1);
+  
+ const handleIncreaseQuantity = () => {
+  const newQuantity = quantity + 1;
+  setQuantity(newQuantity);
+  // Actualiza la cantidad del producto en el carrito
+  updateCartItemQuantity(product.id_producto, newQuantity);
+};
+
+const handleDecreaseQuantity = () => {
+  if (quantity > 1) {
+    const newQuantity = quantity - 1;
+    setQuantity(newQuantity);
+    // Actualiza la cantidad del producto en el carrito
+    updateCartItemQuantity(product.id_producto, newQuantity);
+  }
+};
   const handleRemoveFromCart = () => {
-    removeItemFromCart(product.id); 
+    console.log("Eliminando producto con id_producto:", product.id_producto);
+    removeItemFromCart(product.id_producto);
   };
-
-  const handleIncreaseQuantity = () => {
-    setQuantity(quantity + 1); 
-  };
-
-  const handleDecreaseQuantity = () => {
-    if (quantity > 0) {
-      setQuantity(quantity - 1); 
-    }
-  };
+  
   return (
     <div className="Cart_compras_carrito">
       {product ? (
@@ -26,23 +34,24 @@ const Item_cart = ({ product, image }) => {
           <div className='info_bici_compra'>
             <img className='img_bicci' src={image} alt="" /> {/* Use the provided image prop */}
             <div className='descrip_produc'>
-              <p>{product.descripcion_producto}</p>
+              <p>{product.tipo}</p>
               <p>$ {product.precio}</p><br />
             </div>
             <div className='botones_compra'>
             <div className='boton2'>
-                <button className="su_su" onClick={handleIncreaseQuantity}>
-                  <i className="fas fa-plus"></i>
-                </button>
-                {quantity}
-                <button className='su_re' onClick={handleDecreaseQuantity}>
-                  <i className="fa fa-minus"></i>
-                </button>
-              </div>
+            <button className="su_su" onClick={handleIncreaseQuantity}>
+              <i className="fas fa-plus"></i>
+            </button>
+            {quantity}
+            <button className='su_re' onClick={handleDecreaseQuantity}>
+              <i className="fa fa-minus"></i>
+            </button>
+          </div>
+          
               <button className='boton1'>buscar</button>
               <button className='boton1' onClick={handleRemoveFromCart}>
-                <i className="fas fa-trash"></i>
-              </button>
+        <i className="fas fa-trash"></i>
+      </button>
 
             </div>
           </div>

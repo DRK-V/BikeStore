@@ -1,3 +1,4 @@
+//BIKE_DETAILS
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import '../css/Bike_details.css';
@@ -15,11 +16,12 @@ const Bike_details = () => {
   const handleAddToCart = (event) => {
     event.preventDefault();
     if (additionalProductDetails) {
-      setSelectedProductId(id_producto);
-      addItemToCart({
+      const cartItem = {
         product: additionalProductDetails.product,
-        image: imagenURL, // Pass the image URL
-      });
+        image: mainImageURL, // Usar la imagen principal
+      };
+      addItemToCart(cartItem);
+      setSelectedProductId(id_producto);
     }
   };
 
