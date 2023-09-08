@@ -11,9 +11,8 @@ import { useLocation } from 'react-router-dom';
 export const Usuario_usu = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const activeSection = queryParams.get('section');//para obtener la seccion que se deberia mostrar
+  const activeSection = queryParams.get('section');
   const { user } = useAuth();
-
 
   useEffect(() => {
     if (activeSection === 'profile') {
@@ -25,18 +24,14 @@ export const Usuario_usu = () => {
     }
   }, [activeSection]);
 
-  //estado para cambiar la orientacion del boton 180 grados
   const [isTableExpanded, setIsTableExpanded] = useState(false);
-
-  //para mostrar y ocultar las tablas hijas
   const [expandedOrderId, setExpandedOrderId] = useState(null);
-  const [expandedOrders, setExpandedOrders] = useState([]);//para rastrear el estado de expansión de cada pedido
+  const [expandedOrders, setExpandedOrders] = useState([]);
 
   const isOrderExpanded = (orderId) => {
     return expandedOrders.includes(orderId);
   };
 
-  // Función para manejar el clic en el botón de expansión
   const handleExpandOrder = (orderId) => {
     if (expandedOrders.includes(orderId)) {
       setExpandedOrders(expandedOrders.filter(id => id !== orderId));
@@ -45,15 +40,11 @@ export const Usuario_usu = () => {
     }
   };
 
-  const [viewMenu, setViewMenu] = useState(true);
   const [isMyUsuActive, setIsMyUsuActive] = useState(true);
   const [isMyConfigActive, setIsMyConfigActive] = useState(false);
   const [isMyOrderActive, setIsMyOrderActive] = useState(false);
-  const [formulario, setformulario] = useState({
-    nombre_usuario: "",
-  });
 
-  const [orders, setOrders] = useState([]); // Estado para almacenar los pedidos y productos
+  const [orders, setOrders] = useState([]);
 
   const activateMyUsu = () => {
     setIsMyUsuActive(true);
@@ -75,34 +66,32 @@ export const Usuario_usu = () => {
 
   useEffect(() => {
     if (user) {
-      fetch(`http://localhost:3060/user/${user.id_cliente}/detalle_compra`) // Hacer la petición GET al servidor
+      fetch(`http://localhost:3060/user/${user.id_cliente}/detalle_compra`) // Cambiar la URL de la petición
         .then(response => response.json())
         .then(data => {
-          setOrders(data); // Actualizar el estado con los datos recibidos
+          console.log('Datos de ventas:', data);
+          setOrders(data);
         })
         .catch(error => {
-          console.error('Error al obtener los detalles de compra:', error);
+          console.error('Error al obtener las ventas:', error);
         });
     }
   }, [user]);
 
-  // console.log(viewMenu);
-
-
-
-  /*esto es para poder editar los input  */
   const [nombreUsuario, setNombreUsuario] = useState(user ? user.nombre_usuario : "");
   const [correo, setCorreo] = useState(user ? user.correo : "");
   const [numeroDocumento, setNumeroDocumento] = useState(user ? user.numero_de_documento : "");
-  const [direccion, setdireccion] = useState(user ? user.direccion : "");
+  const [direccion, setDireccion] = useState(user ? user.direccion : "");
   const [telefono, setTelefono] = useState(user ? user.telefono : "");
 
   const handleTelefonoChange = (e) => {
     setTelefono(e.target.value);
   };
-  const handledireccionChange = (e) => {
-    setdireccion(e.target.value);
+
+  const handleDireccionChange = (e) => {
+    setDireccion(e.target.value);
   };
+
   const handleNumeroDocumentoChange = (e) => {
     setNumeroDocumento(e.target.value);
   };
@@ -114,12 +103,10 @@ export const Usuario_usu = () => {
   const handleCorreoChange = (e) => {
     setCorreo(e.target.value);
   };
-  /*a qui termina los estados para poder editar los input */
 
-  //se recogera la informacion de configuracion perfil
   const handleGuardarCambios = () => {
     const updatedUser = {
-      id_cliente: user.id_cliente, // Asegúrate de tener una forma de obtener el ID del usuario
+      id_cliente: user.id_cliente,
       nombre_usuario: nombreUsuario,
       correo: correo,
       numero_de_documento: numeroDocumento,
@@ -137,15 +124,11 @@ export const Usuario_usu = () => {
       .then(response => response.json())
       .then(data => {
         console.log('Usuario actualizado:', data);
-        // Realiza acciones después de actualizar los datos si es necesario
       })
       .catch(error => {
         console.error('Error al actualizar el usuario:', error);
-        // Maneja el error en caso necesario
       });
   };
-  // fin de recoleccion de informacion de configuracion perfil
-
 
   return (
     <>
@@ -165,7 +148,6 @@ export const Usuario_usu = () => {
               <FiX className="exit_image" />
             </Link>{" "}
           </button>
-
 
           <div className={`container_my_usu ${isMyUsuActive ? "container_active" : ""}`}>
             <div className="titulo1">
@@ -303,7 +285,7 @@ export const Usuario_usu = () => {
                       placeholder={user ? user.direccion : ""}
                       value={direccion}
                       type="text"
-                      onChange={handledireccionChange}
+                      onChange={handleDireccionChange}
                     />
                   </div>
                 </div>
@@ -335,32 +317,32 @@ export const Usuario_usu = () => {
               <b>Total</b>
             </div>
             <div className="container_list_section_orders">
-              {orders.map(detalle => {
-                const orderTotal = detalle.productos.reduce(
+              {orders.map(venta => {
+                const orderTotal = venta?.productos?.reduce(
                   (total, producto) => total + producto.precio * producto.cantidad_producto,
                   0
-                );
+                ) || 0;
 
-                const formattedFechaPedido = detalle.fecha_pedido.substring(0, 10);
+                const formattedFechaPedido = venta.fecha_pedido.substring(0, 10);
 
                 return (
-                  <div className="section_order" key={detalle.id_detalle}>
+                  <div className="section_order" key={venta.id_venta}>
                     <div
                       className="section_order_preview"
-                      onClick={() => handleExpandOrder(detalle.id_detalle)}
+                      onClick={() => handleExpandOrder(venta.id_venta)}
                     >
-                      <b>#{detalle.id_detalle}</b>
+                      <b>#{venta.id_venta}</b>
                       <b>{formattedFechaPedido}</b>
-                      <b>$ {detalle.precio}</b>
+                      <b>$ {venta.total_venta}</b>
                       <span
-                        className="material-symbols-outlined icon-open-section" id={expandedOrders.includes(detalle.id_detalle) ? "rotate-icon" : ""}
-                        onClick={() => handleExpandOrder(detalle.id_detalle)}
+                        className="material-symbols-outlined icon-open-section" id={expandedOrders.includes(venta.id_venta) ? "rotate-icon" : ""}
+                        onClick={() => handleExpandOrder(venta.id_venta)}
                       >
                         arrow_forward_ios
                       </span>
                     </div>
                     <table
-                      className={isOrderExpanded(detalle.id_detalle) ? "" : "hidden-table"}
+                      className={isOrderExpanded(venta.id_venta) ? "" : "hidden-table"}
                     >
                       <thead>
                         <tr>
@@ -371,7 +353,7 @@ export const Usuario_usu = () => {
                         </tr>
                       </thead>
                       <tbody className="tableBody">
-                        {detalle.productos.map(producto => (
+                        {venta.productos.map(producto => (
                           <tr key={producto.id_producto}>
                             <td>#{producto.id_producto}</td>
                             <td>{producto.nombre_producto}</td>

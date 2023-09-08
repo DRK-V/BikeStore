@@ -381,33 +381,27 @@ const getUserByEmail = async (req, res) => {
   }
 };
 
-
-
 const getUserDetalleCompra = async (req, res) => {
   const userId = req.params.userId;
   try {
     const detallesCompraQuery = `
-      SELECT detalle_compra.id_detalle, detalle_compra.fecha_pedido, detalle_compra.precio
-      FROM detalle_compra
-      WHERE detalle_compra.codigo_cliente = $1;
+      SELECT
+        venta.id_venta,
+        venta.fecha_venta,
+        venta.monto_final,
+        producto.id_producto,
+        producto.nombre_producto,
+        producto.precio
+      FROM venta
+      INNER JOIN venta_producto ON venta.id_venta = venta_producto.codigo_venta
+      INNER JOIN producto ON venta_producto.codigo_producto = producto.id_producto
+      WHERE venta.codigo_cliente = $1
+      AND venta.estado_venta = 'finalizado';
     `;
     const detallesCompraValues = [userId];
 
     const detallesCompraResult = await pool.query(detallesCompraQuery, detallesCompraValues);
     const detallesCompra = detallesCompraResult.rows;
-
-    for (const detalle of detallesCompra) {
-      const productosQuery = `
-        SELECT producto.id_producto, producto.nombre_producto, producto.precio, pedido_producto.cantidad_producto
-        FROM pedido_producto
-        INNER JOIN producto ON pedido_producto.id_producto = producto.id_producto
-        WHERE pedido_producto.id_pedido = $1;
-      `;
-      const productosValues = [detalle.id_detalle];
-
-      const productosResult = await pool.query(productosQuery, productosValues);
-      detalle.productos = productosResult.rows;
-    }
 
     res.status(200).json(detallesCompra);
   } catch (error) {
@@ -415,6 +409,7 @@ const getUserDetalleCompra = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener los detalles de compra' });
   }
 };
+
 
 const updateUserImage = async (req, res) => {
   const userId = req.params.userId;
