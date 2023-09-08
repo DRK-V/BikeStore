@@ -44,7 +44,7 @@ export const Usuario_usu = () => {
   const [isMyConfigActive, setIsMyConfigActive] = useState(false);
   const [isMyOrderActive, setIsMyOrderActive] = useState(false);
 
-  const [orders, setOrders] = useState([]);
+  const [ventas, setVentas] = useState([]);
 
   const activateMyUsu = () => {
     setIsMyUsuActive(true);
@@ -63,14 +63,13 @@ export const Usuario_usu = () => {
     setIsMyConfigActive(false);
     setIsMyOrderActive(true);
   };
-
   useEffect(() => {
     if (user) {
-      fetch(`http://localhost:3060/user/${user.id_cliente}/detalle_compra`) // Cambiar la URL de la petición
+      fetch(`http://localhost:3060/user/${user.id_cliente}/ventas`) // Cambiar la URL de la petición
         .then(response => response.json())
         .then(data => {
           console.log('Datos de ventas:', data);
-          setOrders(data);
+          setVentas(data); // Actualizar el estado con los datos de ventas
         })
         .catch(error => {
           console.error('Error al obtener las ventas:', error);
@@ -317,13 +316,8 @@ export const Usuario_usu = () => {
               <b>Total</b>
             </div>
             <div className="container_list_section_orders">
-              {orders.map(venta => {
-                const orderTotal = venta?.productos?.reduce(
-                  (total, producto) => total + producto.precio * producto.cantidad_producto,
-                  0
-                ) || 0;
-
-                const formattedFechaPedido = venta.fecha_pedido.substring(0, 10);
+              {ventas.map(venta => { // Cambiar "ventas" aquí
+                const formattedFechaPedido = venta.fecha_venta.substring(0, 10);
 
                 return (
                   <div className="section_order" key={venta.id_venta}>
@@ -333,7 +327,7 @@ export const Usuario_usu = () => {
                     >
                       <b>#{venta.id_venta}</b>
                       <b>{formattedFechaPedido}</b>
-                      <b>$ {venta.total_venta}</b>
+                      <b>$ {venta.monto_final}</b>
                       <span
                         className="material-symbols-outlined icon-open-section" id={expandedOrders.includes(venta.id_venta) ? "rotate-icon" : ""}
                         onClick={() => handleExpandOrder(venta.id_venta)}
@@ -353,9 +347,9 @@ export const Usuario_usu = () => {
                         </tr>
                       </thead>
                       <tbody className="tableBody">
-                        {venta.productos.map(producto => (
+                        {venta.productos.map(producto => ( // Iterar sobre los productos de la venta actual
                           <tr key={producto.id_producto}>
-                            <td>#{producto.id_producto}</td>
+                            <td>{producto.id_producto}</td>
                             <td>{producto.nombre_producto}</td>
                             <td>{producto.cantidad_producto}</td>
                             <td>${producto.precio}</td>
@@ -363,10 +357,7 @@ export const Usuario_usu = () => {
                         ))}
                         <tr>
                           <td colSpan="3"></td>
-                          <td><b>Total: ${orderTotal.toLocaleString("es-ES", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}</b></td>
+                          <td><b>Total: ${venta.monto_final}</b></td>
                         </tr>
                       </tbody>
                     </table>

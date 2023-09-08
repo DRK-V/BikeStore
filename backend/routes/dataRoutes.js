@@ -186,7 +186,7 @@ router.post("/api/login", dataController.loginUser);
 router.get('/api/user/:email', dataController.getUserByEmail);
 //esta ruta es para traer la informacion de pedidos del usuario
 
-router.get('/user/:userId/detalle_compra', dataController.getUserDetalleCompra);
+router.get('/user/:userId/ventas', dataController.getUserDetalleCompra);
 
 router.put('/api/update_user', dataController.updateUser);
 
