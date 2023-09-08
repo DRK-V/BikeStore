@@ -442,8 +442,38 @@ const updateUserImage = async (req, res) => {
   }
 };
 
+//ensayo
+const añadirComentario = async (req, res) => {
+  const { codigo_cliente, texto } = req.body;
 
+  const insertQuery = 'INSERT INTO comentario (codigo_cliente, texto) VALUES ($1, $2)';
+  const values = [codigo_cliente, texto];
+
+  try {
+    await pool.query(insertQuery, values);
+    res.status(201).json({ message: 'Comentario añadido con éxito' });
+  } catch (error) {
+    console.error('Error al añadir el comentario:', error);
+    res.status(500).json({ error: 'Error al añadir el comentario' });
+  }
+};
+const verComentarios = async (req, res) => {
+  const selectQuery = 'SELECT * FROM comentario';
+
+  try {
+    const result = await pool.query(selectQuery);
+    const comentarios = result.rows;
+    res.status(200).json(comentarios);
+  } catch (error) {
+    console.error('Error al obtener los comentarios:', error);
+    res.status(500).json({ error: 'Error al obtener los comentarios' });
+  }
+};
+
+//fin ensayo
 module.exports = {
+  añadirComentario,
+  verComentarios,
   registerUser,
   getImages,
   getAllClientes,

@@ -193,5 +193,8 @@ router.put('/api/update_user', dataController.updateUser);
 router.post("/user/:userId/updateImage", upload.single("image"), dataController.updateUserImage);
 
 
+router.post('/comentarios', dataController.añadirComentario);
+router.get('/coments', dataController.verComentarios);
+
 
 module.exports = router;
