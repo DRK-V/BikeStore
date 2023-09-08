@@ -3,46 +3,59 @@ import React, { useState } from 'react';
 import { useCart } from './CartContext';
 
 const Item_cart = ({ product, image }) => {
-  const { removeItemFromCart } = useCart(); 
-  const [quantity, setQuantity] = useState(0);
+  const { removeItemFromCart, updateCartItemQuantity } = useCart();
+ const [quantity, setQuantity] = useState(1);
+  
+ const handleIncreaseQuantity = () => {
+  const newQuantity = quantity + 1;
+  setQuantity(newQuantity);
+ 
+  updateCartItemQuantity(product.id_producto, newQuantity);
+};
+
+const handleDecreaseQuantity = () => {
+  if (quantity > 1) {
+    const newQuantity = quantity - 1;
+    setQuantity(newQuantity);
+    
+    updateCartItemQuantity(product.id_producto, newQuantity);
+  }
+};
   const handleRemoveFromCart = () => {
-    removeItemFromCart(product.id); 
+    console.log("Eliminando producto con id_producto:", product.id_producto);
+    removeItemFromCart(product.id_producto);
   };
-
-  const handleIncreaseQuantity = () => {
-    setQuantity(quantity + 1); 
-  };
-
-  const handleDecreaseQuantity = () => {
-    if (quantity > 0) {
-      setQuantity(quantity - 1); 
-    }
-  };
+  
+          const precioConPuntos = product.precio.toLocaleString('es-ES', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          });
   return (
     <div className="Cart_compras_carrito">
       {product ? (
         <>
           <h2>{product.nombre_producto}</h2>
           <div className='info_bici_compra'>
-            <img className='img_bicci' src={image} alt="" /> {/* Use the provided image prop */}
+            <img className='img_bicci' src={image} alt="" />
             <div className='descrip_produc'>
-              <p>{product.descripcion_producto}</p>
-              <p>$ {product.precio}</p><br />
+              <p>{product.tipo}</p>
+              <p>$ {precioConPuntos}</p><br />
             </div>
             <div className='botones_compra'>
             <div className='boton2'>
-                <button className="su_su" onClick={handleIncreaseQuantity}>
-                  <i className="fas fa-plus"></i>
-                </button>
-                {quantity}
-                <button className='su_re' onClick={handleDecreaseQuantity}>
-                  <i className="fa fa-minus"></i>
-                </button>
-              </div>
+            <button className="su_su" onClick={handleIncreaseQuantity}>
+              <i className="fas fa-plus"></i>
+            </button>
+            {quantity}
+            <button className='su_re' onClick={handleDecreaseQuantity}>
+              <i className="fa fa-minus"></i>
+            </button>
+          </div>
+          
               <button className='boton1'>buscar</button>
               <button className='boton1' onClick={handleRemoveFromCart}>
-                <i className="fas fa-trash"></i>
-              </button>
+        <i className="fas fa-trash"></i>
+      </button>
 
             </div>
           </div>

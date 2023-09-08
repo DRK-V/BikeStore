@@ -137,6 +137,7 @@ router.get(
  *         description: Internal server error.
  */
 router.get("/cliente", dataController.getAllClientes);
+router.get('/cliente/:id', dataController.getClientePorId);
 router.post("/api/register", async (req, res) => {
   const userData = req.body;
 
@@ -192,6 +193,9 @@ router.put('/api/update_user', dataController.updateUser);
 // router.post('/user/:userId/updateImage', upload.single('image'), dataController.updateUserImage);
 router.post("/user/:userId/updateImage", upload.single("image"), dataController.updateUserImage);
 
+
+router.post('/comentarios', dataController.añadirComentario);
+router.get('/coments', dataController.verComentarios);
 
 
 module.exports = router;

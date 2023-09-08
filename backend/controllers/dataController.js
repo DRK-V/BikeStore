@@ -129,6 +129,26 @@ const getAllClientes = (req, res) => {
       res.status(500).json({ message: "Error en el servidor" });
     });
 };
+
+// Función para buscar un cliente por id_cliente
+const getClientePorId = async (req, res) => {
+  const { id } = req.params; // Obtén el valor de id_cliente de los parámetros de la URL
+
+  try {
+    const selectClientePorIdQuery = 'SELECT * FROM cliente WHERE id_usuario = $1';
+    const result = await pool.query(selectClientePorIdQuery, [id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Cliente no encontrado' });
+    }
+
+    const cliente = result.rows[0];
+    res.status(200).json(cliente);
+  } catch (error) {
+    console.error('Error al buscar cliente por id:', error);
+    res.status(500).json({ message: 'Error en el servidor' });
+  }
+};
 //fin clientes
 
 //api imagenes
@@ -442,8 +462,39 @@ const updateUserImage = async (req, res) => {
   }
 };
 
+//ensayo
+const añadirComentario = async (req, res) => {
+  const { codigo_cliente, texto } = req.body;
 
+  const insertQuery = 'INSERT INTO comentario (codigo_cliente, texto) VALUES ($1, $2)';
+  const values = [codigo_cliente, texto];
+
+  try {
+    await pool.query(insertQuery, values);
+    res.status(201).json({ message: 'Comentario añadido con éxito' });
+  } catch (error) {
+    console.error('Error al añadir el comentario:', error);
+    res.status(500).json({ error: 'Error al añadir el comentario' });
+  }
+};
+const verComentarios = async (req, res) => {
+  const selectQuery = 'SELECT * FROM comentario';
+
+  try {
+    const result = await pool.query(selectQuery);
+    const comentarios = result.rows;
+    res.status(200).json(comentarios);
+  } catch (error) {
+    console.error('Error al obtener los comentarios:', error);
+    res.status(500).json({ error: 'Error al obtener los comentarios' });
+  }
+};
+
+//fin ensayo
 module.exports = {
+  getClientePorId,
+  añadirComentario,
+  verComentarios,
   registerUser,
   getImages,
   getAllClientes,

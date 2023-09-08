@@ -14,7 +14,7 @@
 
 .card_container_categories {
     position: relative;
-    width: 70%;
+   
     min-height: 80vh;
     height: 80vh;
     overflow-y: auto;
@@ -31,8 +31,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 80%;
-    height: 35vh;
+    width: 100%;
+    height: 45vh;
     border-radius: .4rem;
     box-shadow: 1px 10px 10px 5px rgb(136, 136, 136);
     flex-direction: column;
@@ -129,9 +129,9 @@
 }
 
 .card>img {
-    width: 100%;
     height: 40%;
-    object-fit: contain;
+    width: 12em;
+    object-fit: cover;
 }
 
 .texto_descuento,
@@ -201,9 +201,7 @@
         left: 0;
     }
 
-    .card_container_categories {
-        width: 80%;
-    }
+   
 
     .card {
         width: 98%;
