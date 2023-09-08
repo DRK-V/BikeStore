@@ -137,6 +137,7 @@ router.get(
  *         description: Internal server error.
  */
 router.get("/cliente", dataController.getAllClientes);
+router.get('/cliente/:id', dataController.getClientePorId);
 router.post("/api/register", async (req, res) => {
   const userData = req.body;
 

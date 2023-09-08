@@ -10,7 +10,34 @@ const Container_comments = () => {
     fetch('http://localhost:3060/coments')
       .then((response) => response.json())
       .then((data) => {
-        setCommentsData(data); // Establecer los datos de los comentarios en el estado
+        // Obtener los comentarios
+        setCommentsData(data);
+
+        // Obtener el código de cliente único de los comentarios
+        const uniqueClientCodes = Array.from(new Set(data.map((comment) => comment.codigo_cliente)));
+
+        // Hacer una solicitud para obtener el nombre de usuario de cada código de cliente
+        uniqueClientCodes.forEach((clientCode) => {
+          fetch(`http://localhost:3060/cliente/${clientCode}`)
+            .then((response) => response.json())
+            .then((userData) => {
+              // Actualizar los datos del cliente en los comentarios
+              setCommentsData((prevData) =>
+                prevData.map((comment) => {
+                  if (comment.codigo_cliente === clientCode) {
+                    return {
+                      ...comment,
+                      clientName: userData.nombre_usuario,
+                    };
+                  }
+                  return comment;
+                })
+              );
+            })
+            .catch((error) => {
+              console.error(`Error al obtener el nombre de usuario para el código de cliente ${clientCode}:`, error);
+            });
+        });
       })
       .catch((error) => {
         console.error('Error al obtener los comentarios:', error);
@@ -24,7 +51,7 @@ const Container_comments = () => {
         <Comments
           key={index}
           name={comment.clientName}
-          time={comment.fecha_comentario}
+          time={comment.fecha_creacion}
           content={comment.texto}
         />
       ))}

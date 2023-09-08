@@ -129,6 +129,26 @@ const getAllClientes = (req, res) => {
       res.status(500).json({ message: "Error en el servidor" });
     });
 };
+
+// Función para buscar un cliente por id_cliente
+const getClientePorId = async (req, res) => {
+  const { id } = req.params; // Obtén el valor de id_cliente de los parámetros de la URL
+
+  try {
+    const selectClientePorIdQuery = 'SELECT * FROM cliente WHERE id_usuario = $1';
+    const result = await pool.query(selectClientePorIdQuery, [id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Cliente no encontrado' });
+    }
+
+    const cliente = result.rows[0];
+    res.status(200).json(cliente);
+  } catch (error) {
+    console.error('Error al buscar cliente por id:', error);
+    res.status(500).json({ message: 'Error en el servidor' });
+  }
+};
 //fin clientes
 
 //api imagenes
@@ -472,6 +492,7 @@ const verComentarios = async (req, res) => {
 
 //fin ensayo
 module.exports = {
+  getClientePorId,
   añadirComentario,
   verComentarios,
   registerUser,
