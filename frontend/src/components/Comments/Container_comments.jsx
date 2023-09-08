@@ -58,6 +58,13 @@ const Container_comments = () => {
     // Limpia el campo de entrada después de enviar el comentario
     setNewComment('');
   };
+  const formatDateTime = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    const day = date.getDate().toString().padStart(2, '0'); // Obtener el día con ceros a la izquierda
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Obtener el mes con ceros a la izquierda
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
   return (
     <div className='Comments'>
       <h1 className="title_comments">Comentarios</h1>
@@ -65,7 +72,7 @@ const Container_comments = () => {
         <Comments
           key={index}
           name={comment.clientName}
-          time={comment.fecha_creacion}
+          time={formatDateTime(comment.fecha_creacion)}
           content={comment.texto}
         />
       ))}
