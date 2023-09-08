@@ -93,8 +93,12 @@ const Bike_details = () => {
             <form onSubmit={handleAddToCart} action="dialog" className="form_add_item_cart">
               <label className='bike_name'>{additionalProductDetails.product.nombre_producto}</label>
               <label htmlFor="" className="price_text">
-                <p>Precio:</p> ${additionalProductDetails.product.precio}
-              </label>
+  <p>Precio:</p> ${additionalProductDetails.product.precio.toLocaleString('es-ES', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}
+</label>
+
               <div className="container_color_details">
               <label htmlFor="" className="color_text">Color:<strong>{additionalProductDetails?.product?.color}</strong></label>
         <input type="color" name="color_bike" id="" value="#7ABBDC" />

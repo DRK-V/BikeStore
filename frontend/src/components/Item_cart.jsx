@@ -25,7 +25,11 @@ const handleDecreaseQuantity = () => {
     console.log("Eliminando producto con id_producto:", product.id_producto);
     removeItemFromCart(product.id_producto);
   };
-  
+   // Formatear el precio con puntos decimales
+          const precioConPuntos = product.precio.toLocaleString('es-ES', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          });
   return (
     <div className="Cart_compras_carrito">
       {product ? (
@@ -35,7 +39,7 @@ const handleDecreaseQuantity = () => {
             <img className='img_bicci' src={image} alt="" /> {/* Use the provided image prop */}
             <div className='descrip_produc'>
               <p>{product.tipo}</p>
-              <p>$ {product.precio}</p><br />
+              <p>$ {precioConPuntos}</p><br />
             </div>
             <div className='botones_compra'>
             <div className='boton2'>
