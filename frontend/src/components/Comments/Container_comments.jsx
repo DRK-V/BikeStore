@@ -4,7 +4,7 @@ import Comments from './Comments';
 
 const Container_comments = () => {
   const [commentsData, setCommentsData] = useState([]);
-
+  const [newComment, setNewComment] = useState('');
   useEffect(() => {
     // Hacer una solicitud a la API para obtener los comentarios
     fetch('http://localhost:3060/coments')
@@ -43,7 +43,21 @@ const Container_comments = () => {
         console.error('Error al obtener los comentarios:', error);
       });
   }, []); // El [] como segundo argumento significa que se ejecutará una vez al montar el componente
+  const handleCommentChange = (e) => {
+    // Actualizar el estado del nuevo comentario cuando se modifica el campo de entrada
+    setNewComment(e.target.value);
+  };
 
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Evitar que se recargue la página al enviar el formulario
+
+    // Enviar el nuevo comentario a la API o realizar cualquier acción necesaria
+
+    // Después de enviar el comentario, puedes actualizar la lista de comentarios si es necesario.
+
+    // Limpia el campo de entrada después de enviar el comentario
+    setNewComment('');
+  };
   return (
     <div className='Comments'>
       <h1 className="title_comments">Comentarios</h1>
@@ -55,7 +69,17 @@ const Container_comments = () => {
           content={comment.texto}
         />
       ))}
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Escribe tu comentario"
+          value={newComment}
+          onChange={handleCommentChange}
+        />
+        <button type="submit">Enviar</button>
+      </form>
     </div>
+    
   );
 };
 
