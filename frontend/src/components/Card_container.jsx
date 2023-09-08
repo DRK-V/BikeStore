@@ -97,7 +97,7 @@ export const Card_container = (props) => {
           const imagenURL = imagenPortada
             ? `http://localhost:3060/images/${imagenPortada.id_imagen}`
             : '';
- // Formatear el precio con puntos decimales
+
  const precioConPuntos = card.product.precio.toLocaleString('es-ES', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,

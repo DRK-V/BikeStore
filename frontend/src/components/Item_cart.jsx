@@ -9,7 +9,7 @@ const Item_cart = ({ product, image }) => {
  const handleIncreaseQuantity = () => {
   const newQuantity = quantity + 1;
   setQuantity(newQuantity);
-  // Actualiza la cantidad del producto en el carrito
+ 
   updateCartItemQuantity(product.id_producto, newQuantity);
 };
 
@@ -17,7 +17,7 @@ const handleDecreaseQuantity = () => {
   if (quantity > 1) {
     const newQuantity = quantity - 1;
     setQuantity(newQuantity);
-    // Actualiza la cantidad del producto en el carrito
+    
     updateCartItemQuantity(product.id_producto, newQuantity);
   }
 };
@@ -25,7 +25,7 @@ const handleDecreaseQuantity = () => {
     console.log("Eliminando producto con id_producto:", product.id_producto);
     removeItemFromCart(product.id_producto);
   };
-   // Formatear el precio con puntos decimales
+  
           const precioConPuntos = product.precio.toLocaleString('es-ES', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
@@ -36,7 +36,7 @@ const handleDecreaseQuantity = () => {
         <>
           <h2>{product.nombre_producto}</h2>
           <div className='info_bici_compra'>
-            <img className='img_bicci' src={image} alt="" /> {/* Use the provided image prop */}
+            <img className='img_bicci' src={image} alt="" />
             <div className='descrip_produc'>
               <p>{product.tipo}</p>
               <p>$ {precioConPuntos}</p><br />
