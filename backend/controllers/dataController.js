@@ -381,40 +381,57 @@ const getUserByEmail = async (req, res) => {
   }
 };
 
-
-
 const getUserDetalleCompra = async (req, res) => {
   const userId = req.params.userId;
   try {
     const detallesCompraQuery = `
-      SELECT detalle_compra.id_detalle, detalle_compra.fecha_pedido, detalle_compra.precio
-      FROM detalle_compra
-      WHERE detalle_compra.codigo_cliente = $1;
+      SELECT
+        venta.id_venta,
+        venta.fecha_venta,
+        venta.monto_final,
+        producto.id_producto,
+        producto.nombre_producto,
+        producto.precio,
+        venta_producto.cantidad_producto
+      FROM venta
+      INNER JOIN venta_producto ON venta.id_venta = venta_producto.codigo_venta
+      INNER JOIN producto ON venta_producto.codigo_producto = producto.id_producto
+      WHERE venta.codigo_cliente = $1
+      AND venta.estado_venta = 'finalizado';
     `;
     const detallesCompraValues = [userId];
 
     const detallesCompraResult = await pool.query(detallesCompraQuery, detallesCompraValues);
     const detallesCompra = detallesCompraResult.rows;
 
-    for (const detalle of detallesCompra) {
-      const productosQuery = `
-        SELECT producto.id_producto, producto.nombre_producto, producto.precio, pedido_producto.cantidad_producto
-        FROM pedido_producto
-        INNER JOIN producto ON pedido_producto.id_producto = producto.id_producto
-        WHERE pedido_producto.id_pedido = $1;
-      `;
-      const productosValues = [detalle.id_detalle];
+    // Organiza los detalles de la compra en un objeto que agrupe las ventas y sus productos
+    const ventasConProductos = {};
+    detallesCompra.forEach((detalle) => {
+      const { id_venta, fecha_venta, monto_final, cantidad_producto, ...producto } = detalle;
+      if (!ventasConProductos[id_venta]) {
+        ventasConProductos[id_venta] = {
+          id_venta,
+          fecha_venta,
+          monto_final,
+          productos: [{ ...producto, cantidad_producto }],
+        };
+      } else {
+        ventasConProductos[id_venta].productos.push({ ...producto, cantidad_producto });
+      }
+    });
 
-      const productosResult = await pool.query(productosQuery, productosValues);
-      detalle.productos = productosResult.rows;
-    }
+    // Convierte el objeto en un array de ventas
+    const ventasArray = Object.values(ventasConProductos);
 
-    res.status(200).json(detallesCompra);
+    res.status(200).json(ventasArray);
   } catch (error) {
     console.error('Error al obtener los detalles de compra:', error.message);
     res.status(500).json({ error: 'Error al obtener los detalles de compra' });
   }
 };
+
+
+
 
 const updateUserImage = async (req, res) => {
   const userId = req.params.userId;
