@@ -11,6 +11,7 @@ export const Menu_profile = ({
     activateMyUsu,
     activateMyConfig,
     activateMyOrder,
+    activateManage
 }) => {
     const { user, logout } = useAuth();
     const [imageSrc, setImageSrc] = useState(null);
@@ -109,7 +110,7 @@ export const Menu_profile = ({
                         <span>Pedidos</span>
                     </li>
                 </Link>
-                <Link to={url_profile} className={rol === "Administrador" ? '' : 'desactive_option'}>
+                <Link to={{ pathname: '/Usuario_usu', search: '?section=manage' }} className={rol === "Administrador" ? '' : 'desactive_option'} onClick={activateManage}>
                     <li>
                         <FiUserPlus />
                         <span>Administrar</span>
