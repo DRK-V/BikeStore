@@ -110,6 +110,10 @@
     display: none;
 }
 
+.container_manage_products {
+    display: none;
+}
+
 .container_active {
     display: block;
 }
@@ -291,12 +295,8 @@ thead>tr>th:nth-child(4) {
     border: solid 3px rgba(128, 128, 128, 0.174);
 }
 
-.container_manage_products {
-    display: none;
-}
 
 .container_manage_products {
-    display: flex;
     flex-direction: column;
     width: 98%;
     height: 100%;
@@ -386,8 +386,9 @@ thead>tr>th:nth-child(4) {
     font-size: 2em;
 }
 .table_manage_products{
+    position: relative;
+    top: 20px;
     width: 90%;
-    left: 5%;
     min-height: 10vh;
     height:auto;
     border-collapse: collapse;
@@ -401,15 +402,14 @@ thead>tr>th:nth-child(4) {
     background-color: #f2f2f2;
     text-align: left;
     padding: 10px;
-    border: 1px solid #ddd;
   }
   
   /* Estilos para las celdas de datos */
   .table_manage_products td {
     text-align: center;
     padding: 10px;
-    border: 1px solid #ddd;
-  }
+    height: 8vh;
+}
   
   /* Estilos para los botones en las celdas */
   .table_manage_products button {
