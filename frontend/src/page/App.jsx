@@ -16,6 +16,8 @@ import {Footer} from '../components/Footer';
 import '../css/animation.css'
 import '../css/main.css'
 import { Card_container } from "../components/Card_container";
+import { ComenProvider } from '../components/comencontex';
+
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -32,6 +34,7 @@ function App() {
   return (
     <AuthProvider> 
     <CartProvider>
+    <ComenProvider>
       {isLoading ? (
         // si esta cargando
         <Loading />
@@ -55,6 +58,7 @@ function App() {
           {isCategoryRoute && <Footer />}
         </>
       )}
+       </ComenProvider>
       </CartProvider>
     </AuthProvider>
   );

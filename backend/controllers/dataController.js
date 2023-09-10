@@ -508,10 +508,10 @@ const verComentarios = async (req, res) => {
   }
 };
 const verComentariosPorCodigoProducto = async (req, res) => {
-  const { codigo_producto } = req.params; // Obtener el código de producto de los parámetros de la URL
+  const { codigo_producto } = req.params; 
   let selectQuery = 'SELECT * FROM comentario';
 
-  // Si se proporciona el código de producto, filtrar por él
+ 
   if (codigo_producto) {
     selectQuery = `SELECT * FROM comentario WHERE codigo_producto = ${codigo_producto}`;
   }
