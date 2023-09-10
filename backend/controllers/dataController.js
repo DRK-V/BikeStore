@@ -135,7 +135,7 @@ const getClientePorId = async (req, res) => {
   const { id } = req.params; // Obtén el valor de id_cliente de los parámetros de la URL
 
   try {
-    const selectClientePorIdQuery = 'SELECT * FROM cliente WHERE id_usuario = $1';
+    const selectClientePorIdQuery = 'SELECT * FROM cliente WHERE id_cliente = $1';
     const result = await pool.query(selectClientePorIdQuery, [id]);
 
     if (result.rows.length === 0) {
@@ -481,10 +481,10 @@ const updateUserImage = async (req, res) => {
 
 //ensayo
 const añadirComentario = async (req, res) => {
-  const { codigo_cliente, texto } = req.body;
+  const { codigo_cliente, codigo_producto, texto } = req.body;
 
-  const insertQuery = 'INSERT INTO comentario (codigo_cliente, texto) VALUES ($1, $2)';
-  const values = [codigo_cliente, texto];
+  const insertQuery = 'INSERT INTO comentario (codigo_cliente, codigo_producto, texto) VALUES ($1, $2, $3)';
+  const values = [codigo_cliente, codigo_producto, texto];
 
   try {
     await pool.query(insertQuery, values);
@@ -494,6 +494,7 @@ const añadirComentario = async (req, res) => {
     res.status(500).json({ error: 'Error al añadir el comentario' });
   }
 };
+
 const verComentarios = async (req, res) => {
   const selectQuery = 'SELECT * FROM comentario';
 
@@ -506,9 +507,27 @@ const verComentarios = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener los comentarios' });
   }
 };
+const verComentariosPorCodigoProducto = async (req, res) => {
+  const { codigo_producto } = req.params; // Obtener el código de producto de los parámetros de la URL
+  let selectQuery = 'SELECT * FROM comentario';
 
+  // Si se proporciona el código de producto, filtrar por él
+  if (codigo_producto) {
+    selectQuery = `SELECT * FROM comentario WHERE codigo_producto = ${codigo_producto}`;
+  }
+
+  try {
+    const result = await pool.query(selectQuery);
+    const comentarios = result.rows;
+    res.status(200).json(comentarios);
+  } catch (error) {
+    console.error('Error al obtener los comentarios:', error);
+    res.status(500).json({ error: 'Error al obtener los comentarios' });
+  }
+};
 //fin ensayo
 module.exports = {
+  verComentariosPorCodigoProducto,
   getClientePorId,
   añadirComentario,
   verComentarios,

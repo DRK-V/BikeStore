@@ -196,6 +196,7 @@ router.post("/user/:userId/updateImage", upload.single("image"), dataController.
 
 router.post('/comentarios', dataController.añadirComentario);
 router.get('/coments', dataController.verComentarios);
+router.get('/coments/:codigo_producto', dataController.verComentariosPorCodigoProducto);
 
 
 module.exports = router;
