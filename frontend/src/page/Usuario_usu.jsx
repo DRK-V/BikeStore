@@ -7,6 +7,7 @@ import { FiX } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useAuth } from '../components/AuthContext';
 import { useLocation } from 'react-router-dom';
+import { AiOutlineSearch } from 'react-icons/ai';
 
 export const Usuario_usu = () => {
   const location = useLocation();
@@ -21,6 +22,8 @@ export const Usuario_usu = () => {
       activateMyConfig();
     } else if (activeSection === 'orders') {
       activateMyOrder();
+    } else if (activeSection === 'manage') {
+      activateManage();
     }
   }, [activeSection]);
 
@@ -43,6 +46,7 @@ export const Usuario_usu = () => {
   const [isMyUsuActive, setIsMyUsuActive] = useState(true);
   const [isMyConfigActive, setIsMyConfigActive] = useState(false);
   const [isMyOrderActive, setIsMyOrderActive] = useState(false);
+  const [isManageActive, setIsManageActive] = useState(false);
 
   const [ventas, setVentas] = useState([]);
 
@@ -50,18 +54,27 @@ export const Usuario_usu = () => {
     setIsMyUsuActive(true);
     setIsMyConfigActive(false);
     setIsMyOrderActive(false);
+    setIsManageActive(false)
   };
 
   const activateMyConfig = () => {
     setIsMyUsuActive(false);
     setIsMyConfigActive(true);
     setIsMyOrderActive(false);
+    setIsManageActive(false);
   };
 
   const activateMyOrder = () => {
     setIsMyUsuActive(false);
     setIsMyConfigActive(false);
     setIsMyOrderActive(true);
+    setIsManageActive(false)
+  };
+  const activateManage = () => {
+    setIsMyUsuActive(false);
+    setIsMyConfigActive(false);
+    setIsMyOrderActive(false);
+    setIsManageActive(true)
   };
   useEffect(() => {
     if (user) {
@@ -138,6 +151,7 @@ export const Usuario_usu = () => {
             activateMyUsu={activateMyUsu}
             activateMyConfig={activateMyConfig}
             activateMyOrder={activateMyOrder}
+            activateManage={activateManage}
           />
         </div>
         <div className="usu_detall">
@@ -366,6 +380,75 @@ export const Usuario_usu = () => {
               })}
             </div>
           </div>
+
+          <div className={`container_manage_products ${isManageActive ? "container_active" : ""}`}>
+            <header className="cabecera_administrar">
+              <h1>Administrar productos</h1>
+              <div className="search-container">
+                <input type="text" placeholder="Buscar por ID o nombre" />
+                <button className="search-button">
+                
+                </button>
+              </div>
+              <button className="agregar-button">
+                Agregar producto
+              </button>
+            </header>
+            {/* aqui va la tabla */}
+            <table className="table_manage_products">
+              <thead>
+                <td>id</td>
+                <td>nombre</td>
+                <td>color</td>
+                <td>tipo</td>
+                <td>precio</td>
+                <td>stock_disponible</td>
+                <td></td>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Evo montanera</td>
+                  <td>rojo, negra</td>
+                  <td>montana</td>
+                  <td>$1.000.000</td>
+                  <td>10</td>
+                  <td>
+                    <button className='boton_editar_producto'></button>
+                    <button className='boton_eliminar_producto'></button>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>1</td>
+                  <td>Evo montanera</td>
+                  <td>rojo, negra</td>
+                  <td>montana</td>
+                  <td>$1.000.000</td>
+                  <td>10</td>
+                  <td>
+                    <button className='boton_editar_producto'></button>
+                    <button className='boton_eliminar_producto'></button>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>1</td>
+                  <td>Evo montanera</td>
+                  <td>rojo, negra</td>
+                  <td>montana</td>
+                  <td>$1.000.000</td>
+                  <td>10</td>
+                  <td>
+                    <button className='boton_editar_producto'></button>
+                    <button className='boton_eliminar_producto'></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+
         </div>
       </div>
       <Footer />
