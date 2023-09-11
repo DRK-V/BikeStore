@@ -194,7 +194,7 @@ export const Register = () => {
                 <div className="form-row">
                   <i className="fas fa-id-card"></i>
                   <select className="form-row" name="tipo_de_documento" required defaultValue="">
-                    <option value="" disabled>
+                    <option value="" disabled select>
                       Tipo de documento
                     </option>
                     <option value="CC">Cédula de ciudadanía</option>
