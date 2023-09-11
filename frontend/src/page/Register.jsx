@@ -1,9 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/register.css';
 
 import leftImage from '../assets/bici_login.png';
-
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -69,6 +68,10 @@ export const Register = () => {
 
       if (response.status === 201) {
         setShowRegistrationMessage(true);
+        setTimeout(() => {
+          setShowRegistrationMessage(false);
+        }, 1000); // Ocultar el mensaje de registro exitoso después de 1 segundo
+
         const countdownInterval = setInterval(() => {
           setRedirectCountdown((prevCountdown) => prevCountdown - 1);
         }, 1000);
@@ -84,10 +87,18 @@ export const Register = () => {
         } else {
           setRegistrationStatus('El correo electrónico o el número de cédula ya están registrados.');
         }
+
+        setTimeout(() => {
+          setRegistrationStatus('');
+        }, 1000); // Ocultar el mensaje de error después de 1 segundo
       }
     } catch (error) {
       console.error('Error en la solicitud al backend:', error);
       setRegistrationStatus('Error en el servidor. Intente nuevamente más tarde.');
+
+      setTimeout(() => {
+        setRegistrationStatus('');
+      }, 1000); // Ocultar el mensaje de error después de 1 segundo
     }
   };
 
@@ -115,6 +126,23 @@ export const Register = () => {
       input.value = input.value.replace(/[^0-9]/g, '');
     }
   };
+
+  useEffect(() => {
+    // Función para ocultar el mensaje de registro exitoso después de 1 segundo
+    const hideRegistrationMessage = setTimeout(() => {
+      setShowRegistrationMessage(false);
+    }, 1000);
+
+    // Función para ocultar el mensaje de error después de 1 segundo
+    const hideErrorStatus = setTimeout(() => {
+      setRegistrationStatus('');
+    }, 1000);
+
+    return () => {
+      clearTimeout(hideRegistrationMessage);
+      clearTimeout(hideErrorStatus);
+    };
+  }, [showRegistrationMessage, registrationStatus]);
 
   return (
     <div className="App">
@@ -165,8 +193,8 @@ export const Register = () => {
                 </div>
                 <div className="form-row">
                   <i className="fas fa-id-card"></i>
-                  <select className="form-row" name="tipo_de_documento" required>
-                    <option value="" disabled selected>
+                  <select className="form-row" name="tipo_de_documento" required defaultValue="">
+                    <option value="" disabled>
                       Tipo de documento
                     </option>
                     <option value="CC">Cédula de ciudadanía</option>
@@ -187,16 +215,7 @@ export const Register = () => {
                     onInput={handleNumericInput}
                   />
                 </div>
-
               </div>
-              {missingParams.length > 0 && (
-                <div className="missing-params">
-                  Faltan los siguientes parámetros: {missingParams.join(', ')}
-                </div>
-              )}
-              <button className='regis-button' type="submit">Registrarse</button>
-            </form>
-            <div className="registration-status">
               {showRegistrationMessage && (
                 <div className="registration-message-overlay">
                   Te has registrado.
@@ -207,11 +226,16 @@ export const Register = () => {
                   {registrationStatus}
                 </div>
               )}
-            </div>
+              {missingParams.length > 0 && (
+                <div className="missing-params">
+                  Faltan los siguientes parámetros: {missingParams.join(', ')}
+                </div>
+              )}
+              <button className='regis-button' type="submit">Registrarse</button>
+            </form>
           </div>
         </div>
       </div>
     </div>
   );
 };
-

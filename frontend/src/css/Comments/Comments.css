@@ -15,6 +15,41 @@
     font-size: 1.3em;
     padding: 2%;
 }
+.for_coment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto; 
+    max-width: 400px;
+  }
+  
+  .coments {
+    flex: 1;
+    padding: 10px;
+    margin-right: 10px; 
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .coments_buton {
+    background-color: #007bff; 
+    color: #fff; 
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+ 
+  .material-symbols-outlined {
+    font-family: 'Material Icons'; 
+    font-size: 24px; 
+    vertical-align: middle; 
+  }
+  
+
 
 .section_comment_profile {
     position: relative;

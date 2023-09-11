@@ -16,14 +16,23 @@ const Bike_details = () => {
   const handleAddToCart = (event) => {
     event.preventDefault();
     if (additionalProductDetails) {
-      const cartItem = {
-        product: additionalProductDetails.product,
-        image: mainImageURL, // Usar la imagen principal
-      };
-      addItemToCart(cartItem);
-      setSelectedProductId(id_producto);
+      const productPrice = parseFloat(additionalProductDetails.product.precio);
+      if (!isNaN(productPrice)) {
+        const cartItem = {
+          product: {
+            id_producto: additionalProductDetails.product.id_producto, // Asegúrate de incluir el ID u otros datos relevantes del producto
+            precio: productPrice, // Establecer el precio como número
+          },
+          image: mainImageURL, // Usar la imagen principal
+        };
+        addItemToCart(cartItem);
+        setSelectedProductId(id_producto);
+      } else {
+        console.error('Precio no válido para el producto.');
+      }
     }
   };
+  
 
   const [productDetails, setProductDetails] = useState(null);
   const [additionalProductDetails, setAdditionalProductDetails] = useState(null);
