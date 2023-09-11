@@ -85,7 +85,8 @@ const registerUser = async (userData) => {
 
     return pool.query(insertUserQuery, values);
   } catch (error) {
-    throw error;
+    console.error('Error al registrar usuario:', error);
+    throw error; // Asegúrate de volver a lanzar el error para que el servidor lo maneje adecuadamente
   }
 };
 //fin registro

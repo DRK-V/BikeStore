@@ -1,21 +1,21 @@
+//payment
 import React, { useState } from 'react';
 import { Navbar } from '../components/Navbar';
 import '../css/cart_shopping.css';
 import { Footer } from '../components/Footer';
+import { useAuth } from "../components/AuthContext";
 
 export const Payment = () => {
+    const { user } = useAuth();
     // Estado para almacenar los valores de los campos
     const [formValues, setFormValues] = useState({
-        nombreTitular: '',
-        tipoDocumento: '',
-        numeroDocumento: '',
-        tipoCuenta: '',
-        banco: '',
-        numeroCuenta: '',
-        correoElectronico: '',
-        confirmacionCorreo: '',
+        nombreTitular: user.nombre_usuario || '', // Rellena con el nombre de usuario
+        tipoDocumento: user.tipo_de_documento || '', // Rellena con el tipo de documento
+        numeroDocumento: user.numero_de_documento || '', // Rellena con el número de documento
+        correoElectronico: user.correo|| '', // Rellena con el correo electrónico
+        confirmacionCorreo: user.correo,
         valorPagar: '',
-    });
+      });
 
     // Función para manejar los cambios en los campos del formulario
     const handleChange = (e) => {
