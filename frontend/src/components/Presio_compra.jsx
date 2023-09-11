@@ -1,36 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import { useCart } from './CartContext';
+//presio_compra
+import React, { useEffect, useState } from "react";
+import { useCart } from "./CartContext";
 import carritoo from "../assets/bolsa-de-la-compra.png";
-import { Link } from 'react-router-dom';
-import { useAuth } from './AuthContext';
+import { Link } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 
 const Presio_compra = () => {
   const { cartItems } = useCart();
-  const [totalPrice, setTotalPrice] = useState(0); 
+  const [totalPrice, setTotalPrice] = useState(0);
   const { isLoggedIn } = useAuth(); // Obtén el estado de inicio de sesión desde el contexto
   const [showPagar, setShowPagar] = useState(false); // Estado para mostrar el mensaje
+  const [shippingCost, setShippingCost] = useState(0);
 
   const updateTotalPrice = (addedPrice) => {
     setTotalPrice((prevTotalPrice) => prevTotalPrice + addedPrice);
   };
 
   const calculateTotalPrice = () => {
-    const newTotalPrice = cartItems.reduce(
-      (total, cartItem) => {
-        const productPrice = parseFloat(cartItem.product.precio); 
-        const quantity = parseInt(cartItem.quantity); 
+    const newTotalPrice = cartItems.reduce((total, cartItem) => {
+      const productPrice = parseFloat(cartItem.product.precio);
+      const quantity = parseInt(cartItem.quantity);
 
-        if (isNaN(productPrice) || isNaN(quantity)) {
-          console.error('Producto con precio o cantidad no válidos:', cartItem);
-          return total; 
-        }
-        return total + productPrice * quantity;
-      },
-      0
-    );
+      if (isNaN(productPrice) || isNaN(quantity)) {
+        console.error("Producto con precio o cantidad no válidos:", cartItem);
+        return total;
+      }
+      return total + productPrice * quantity;
+    }, 0);
 
     if (isNaN(newTotalPrice)) {
-      console.error('El nuevo precio total calculado es NaN');
+      console.error("El nuevo precio total calculado es NaN");
     }
 
     setTotalPrice(newTotalPrice);
@@ -38,6 +37,9 @@ const Presio_compra = () => {
 
   useEffect(() => {
     calculateTotalPrice();
+    // Calcula el 2% del total y actualiza el estado de costo de envío
+    const calculatedShippingCost = totalPrice * 0.02;
+    setShippingCost(calculatedShippingCost);
   }, [cartItems]);
 
   // Agrega esta función para ocultar el mensaje después de 2 segundos
@@ -48,24 +50,30 @@ const Presio_compra = () => {
   };
 
   return (
-    <div className='info_pc'>
-      <h2>Envío $0.0</h2>
+    <div className="info_pc">
+      <h2>Envío ${shippingCost.toFixed(2)}</h2>
       <h1>Costo Total {totalPrice.toLocaleString()}</h1>
       {isLoggedIn ? (
-        <Link className="pagar-1" to="/payment">
-          <button className='pagar'>
-            <img src={carritoo} alt="carrito" className="carro_pagar" />Continuar compra
+        <Link
+          to="/payment"
+          state={{ valorPagar: totalPrice }} // Pasa el precio total como estado en la URL
+          className="pagar-1"
+        >
+          <button className="pagar">
+            <img src={carritoo} alt="carrito" className="carro_pagar" />
+            Continuar compra
           </button>
         </Link>
       ) : (
         <button
-          className='pagar-1'
+          className="pagar-1"
           onClick={() => {
             setShowPagar(true);
             hidePagarMessage(); // Llama a la función para ocultar el mensaje después de 2 segundos
           }}
         >
-          <img src={carritoo} alt="carrito" className="carro_pagar" />Continuar compra
+          <img src={carritoo} alt="carrito" className="carro_pagar" />
+          Continuar compra
         </button>
       )}
       {showPagar && (
