@@ -110,6 +110,10 @@
     display: none;
 }
 
+.container_manage_products {
+    display: none;
+}
+
 .container_active {
     display: block;
 }
@@ -188,7 +192,7 @@
     display: none;
 }
 
-#rotate-icon{
+#rotate-icon {
     transform: rotate(270deg);
     left: 36.5%;
 }
@@ -235,17 +239,20 @@
     border-bottom: solid 1px black;
 }
 
-table{
+table {
     margin: 20px;
 }
+
 .tableBody {
     text-align: center;
 }
-thead>tr>th{
+
+thead>tr>th {
     border-bottom: solid 2px black;
     border-right: solid 2px black;
 }
-thead>tr>th:nth-child(4){
+
+thead>tr>th:nth-child(4) {
     border-bottom: solid 2px black;
     border-right: none;
 }
@@ -253,13 +260,15 @@ thead>tr>th:nth-child(4){
 .tableBody>tr {
     position: relative;
     height: 6vh;
-    top:-2%;
+    top: -2%;
 }
+
 .tableBody>tr>td {
     height: 6vh;
     border-right: solid 2px black;
 }
-.tableBody>tr>td:nth-child(4){
+
+.tableBody>tr>td:nth-child(4) {
     border-bottom: solid 2px black;
     border-right: none;
 }
@@ -285,3 +294,144 @@ thead>tr>th:nth-child(4){
     margin-left: 2%;
     border: solid 3px rgba(128, 128, 128, 0.174);
 }
+
+
+.container_manage_products {
+    flex-direction: column;
+    width: 98%;
+    height: 100%;
+    background-color: rgb(206, 201, 201);
+    background-color: white;
+}
+
+.cabecera_administrar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 15vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    justify-content: space-around;
+    margin: 20px;
+}
+
+.cabecera_administrar>h1 {
+    position: relative;
+    font-size: 1.5em;
+    width: 100%;
+    height: auto;
+    text-align: left;
+}
+
+.search-container {
+    position: relative;
+    width: 35%;
+    height: 7vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-container>input {
+    position: relative;
+    width: 100%;
+    padding-left: 5%;
+    height: 100%;
+    border: solid 1px gray;
+    font-family: 'Karla';
+    border: none;
+    box-shadow: 1px 8px 8px 2px rgba(0, 0, 0, 0.493);
+    border-radius: .2em .2em .2em .2em;
+}
+
+.search-container>button {
+    position: relative;
+    background-color: white;
+    width: 15%;
+    left: -15%;
+    height: 100%;
+    font-family: 'Karla';
+    background-color: reds;
+    border-radius: 0 .2em .2em 0;
+    border: none;
+    cursor: pointer;
+    background-image: url('https://icons.veryicon.com/png/o/internet--web/website-common-icons/search-search-6.png');
+    background-size: 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.search-container>input::placeholder{
+    color: rgb(167, 167, 167);
+}
+
+.agregar-button {
+    background-color: #7ee29a;
+    width: 20%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    font-weight: bold;
+    border: none;
+    border-radius: .5em;
+    height: 50%;
+    cursor: pointer;
+    box-shadow: 1px 8px 8px 2px rgba(0, 0, 0, 0.325);
+}
+.agregar-button:hover{
+    animation: hover_button .3s alternate ease-in forwards;
+}
+.agregar-button::before{
+    content: "+";
+    font-size: 2em;
+}
+.table_manage_products{
+    position: relative;
+    top: 20px;
+    width: 90%;
+    min-height: 10vh;
+    height:auto;
+    border-collapse: collapse;
+    border-radius: 1em;
+    box-shadow: 1px 8px 8px 2px rgba(0, 0, 0, 0.325);
+
+}
+
+  /* Estilos para las celdas de encabezado */
+  .table_manage_products th {
+    background-color: #f2f2f2;
+    text-align: left;
+    padding: 10px;
+  }
+  
+  /* Estilos para las celdas de datos */
+  .table_manage_products td {
+    text-align: center;
+    padding: 10px;
+    height: 8vh;
+}
+  
+  /* Estilos para los botones en las celdas */
+  .table_manage_products button {
+    padding: 5px 10px;
+    background-color: #fff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  
+  .table_manage_products button{
+    width: 2em;
+    height: 2em;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+  .boton_editar_producto{
+    background-image: url('https://icons.veryicon.com/png/o/education-technology/onemind/edit-97.png');
+    background-size: 110%;
+  }
+  .boton_eliminar_producto{
+    background-image: url('https://icons.veryicon.com/png/o/miscellaneous/ios-icon-library/delete-delete.png');
+    background-size: 80%;
+  }
