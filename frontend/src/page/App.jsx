@@ -17,6 +17,7 @@ import '../css/animation.css'
 import '../css/main.css'
 import { Card_container } from "../components/Card_container";
 import { ComenProvider } from '../components/comencontex';
+import Actualizar_productos_admin from './actualizar_productos_admin';
 
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
             <Route path="/Usuario_usu" element={<Usuario_usu />} />
             <Route path="/Carrito_compras" element={<Carrito_compras />} />
             <Route path="/search" element={<Card_container />} />
+            <Route path="/Actualizar_productos_admin" element={<Actualizar_productos_admin />} />
           </Routes>
           {isSearchRoute && <Footer />}
           {isCategoryRoute && <Footer />}
