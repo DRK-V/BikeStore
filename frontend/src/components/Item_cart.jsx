@@ -12,10 +12,10 @@ const Item_cart = ({ product, image }) => {
 
   updateCartItemQuantity(product.id_producto, newQuantity);
   
-  // Calcula el precio total del producto recién agregado
+  
   const addedPrice = product.precio;
   
-  // Llama a la función para actualizar el precio total
+
   updateTotalPrice(addedPrice);
 };
 
@@ -26,10 +26,10 @@ const handleDecreaseQuantity = () => {
     
     updateCartItemQuantity(product.id_producto, newQuantity);
     
-    // Calcula el precio total del producto recién agregado
+   
     const addedPrice = product.precio;
     
-    // Llama a la función para actualizar el precio total
+ 
     updateTotalPrice(addedPrice);
   }
 };
