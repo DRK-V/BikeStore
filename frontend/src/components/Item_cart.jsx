@@ -9,8 +9,14 @@ const Item_cart = ({ product, image }) => {
  const handleIncreaseQuantity = () => {
   const newQuantity = quantity + 1;
   setQuantity(newQuantity);
- 
+
   updateCartItemQuantity(product.id_producto, newQuantity);
+  
+  // Calcula el precio total del producto recién agregado
+  const addedPrice = product.precio;
+  
+  // Llama a la función para actualizar el precio total
+  updateTotalPrice(addedPrice);
 };
 
 const handleDecreaseQuantity = () => {
@@ -19,6 +25,12 @@ const handleDecreaseQuantity = () => {
     setQuantity(newQuantity);
     
     updateCartItemQuantity(product.id_producto, newQuantity);
+    
+    // Calcula el precio total del producto recién agregado
+    const addedPrice = product.precio;
+    
+    // Llama a la función para actualizar el precio total
+    updateTotalPrice(addedPrice);
   }
 };
   const handleRemoveFromCart = () => {

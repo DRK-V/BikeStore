@@ -41,26 +41,29 @@ export const CartProvider = ({ children }) => {
   const addItemToCart = (item) => {
     // Verificar si el producto ya está en el carrito
     const isItemInCart = cartItems.some((cartItem) => cartItem.product.id_producto === item.product.id_producto);
-
+  
     if (isItemInCart) {
       // Si el producto ya está en el carrito, puedes manejarlo de acuerdo a tus necesidades.
       // Puedes mostrar un mensaje de error, incrementar la cantidad, etc.
       console.log('El producto ya está en el carrito');
       return;
     }
-
-    // Si el producto no está en el carrito, agrégalo normalmente
-    setCartItems([...cartItems, item]);
-
+  
+    // Si el producto no está en el carrito, agrégalo con cantidad inicial de 1
+    setCartItems([...cartItems, { ...item, quantity: 1 }]);
+  
     if (isLoggedIn) {
       // Si el usuario está autenticado, guardar el carrito en las cookies
-      saveCartToCookie([...cartItems, item]);
+      saveCartToCookie([...cartItems, { ...item, quantity: 1 }]);
     }
-
+  
     // Calcula el costo total después de agregar un nuevo producto
-    const newTotalPrice = cartItems.reduce((total, cartItem) => total + cartItem.product.precio * cartItem.quantity, 0) + item.product.precio * item.quantity;
+    const newTotalPrice =
+      cartItems.reduce((total, cartItem) => total + cartItem.product.precio * cartItem.quantity, 0) +
+      item.product.precio * 1; // Aquí inicializamos la cantidad en 1
     setTotalPrice(newTotalPrice);
   };
+  
 
   const removeItemFromCart = (id_producto) => {
     const updatedCart = cartItems.filter((cartItem) => cartItem.product.id_producto !== id_producto);
