@@ -173,3 +173,11 @@
   max-width: 100%;
   min-height: 100%;
 }
+
+.dzu-inputLabel {
+  color: transparent;
+  width: 20%;
+  left: 0;
+}
+
+.dzu-inputLabel>input {}
