@@ -101,6 +101,9 @@ export const Login = () => {
                 <input type="password" placeholder='Contraseña' name="password" required></input>
               </div>
               <button className='button-ini' type="submit">Iniciar</button>
+              <button className='button-reg' onClick={() => navigate('/register')}>
+    Registrarse
+  </button>
             </form>
             <div className="login-status">{loginStatus}</div>
           </div>
