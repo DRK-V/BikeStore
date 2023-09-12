@@ -103,7 +103,13 @@ export const CartProvider = ({ children }) => {
     const newTotalPrice = updatedCart.reduce((total, cartItem) => total + cartItem.product.precio * cartItem.quantity, 0);
     setTotalPrice(newTotalPrice);
   };
-
+  const clearCart = () => {
+    setCartItems([]);
+    setTotalPrice(0);
+    if (isLoggedIn) {
+      saveCartToCookie([]); // Limpiar la cookie del carrito si el usuario está autenticado
+    }
+  };
   return (
     <CartContext.Provider
       value={{
@@ -115,6 +121,7 @@ export const CartProvider = ({ children }) => {
         setSelectedProductId,
         updateCartItemQuantity,
         totalPrice, 
+        clearCart,
       }}
     >
       {children}
