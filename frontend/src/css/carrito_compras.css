@@ -224,4 +224,11 @@
     text-align: center;
     z-index: 1000; /* Asegura que esté en la parte superior de otros elementos */
   }
+  /* CSS para el mensaje de error */
+
+  /* CSS para el botón deshabilitado */
+  .pagar.disabled {
+   /* Color de fondo gris para el botón deshabilitado */
+    cursor: not-allowed; /* Cambia el cursor a 'no permitido' */
+  }
   

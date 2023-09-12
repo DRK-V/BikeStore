@@ -10,7 +10,7 @@ const Presio_compra = () => {
   const [shippingCost, setShippingCost] = useState(0);
   const { isLoggedIn } = useAuth();
   const [showPagar, setShowPagar] = useState(false);
-  const navigate = useNavigate(); // Importa useNavigate para la navegación
+  const navigate = useNavigate();
 
   const updateTotalPrice = (addedPrice) => {
     setTotalPrice((prevTotalPrice) => prevTotalPrice + addedPrice);
@@ -42,10 +42,14 @@ const Presio_compra = () => {
     calculateTotalPrice();
   }, [cartItems]);
 
-  const hidePagarMessage = () => {
-    setTimeout(() => {
-      setShowPagar(false);
-    }, 2000);
+  const handleButtonClick = () => {
+    if (totalPrice === 0) {
+      // Si el precio total es 0, muestra el mensaje y evita la redirección
+      setShowPagar(true);
+    } else {
+      // Si el precio total no es 0, redirige a la página de pago
+      navigate("/payment", { state: { valorPagar: totalPrice + parseFloat(shippingCost) } });
+    }
   };
 
   return (
@@ -58,26 +62,26 @@ const Presio_compra = () => {
           state={{ valorPagar: totalPrice + parseFloat(shippingCost) }}
           className="pagar-1"
         >
-          <button className="pagar">
+          <button
+            className={`pagar ${totalPrice === 0 ? "disabled" : ""}`}
+            onClick={handleButtonClick}
+            disabled={totalPrice === 0}
+          >
             <img src={carritoo} alt="carrito" className="carro_pagar" />
             Continuar compra
           </button>
         </Link>
       ) : (
-        <button
-          className="pagar-1"
-          onClick={() => {
-            setShowPagar(true);
-            hidePagarMessage();
-          }}
-        >
-          <img src={carritoo} alt="carrito" className="carro_pagar" />
-          Continuar compra
-        </button>
+        <Link to="/login" className="pagar-1">
+          <button className={`pagar ${totalPrice === 0 ? "disabled" : ""}`} onClick={handleButtonClick}>
+            <img src={carritoo} alt="carrito" className="carro_pagar" />
+            Continuar compra
+          </button>
+        </Link>
       )}
       {showPagar && (
         <div className="pagar-3">
-          Debes iniciar sesión o registrarte para continuar.
+          Debes añadir un producto para continuar.
         </div>
       )}
     </div>

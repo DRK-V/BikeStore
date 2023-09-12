@@ -50,4 +50,27 @@
   i {
     margin-left: 10px; /* Espacio entre el input y el icono */
   }
-  
+  /* CSS para centrar un mensaje en la pantalla con fondo y texto personalizados */
+.success-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Esto asegura que ocupe toda la altura de la pantalla */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999; /* Asegura que esté por encima de otros elementos */
+}
+
+/* Estilos para el mensaje en sí */
+.success-message-content {
+  background-color: #7ee29a; /* Color de fondo personalizado */
+  color: white; /* Color del texto */
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
