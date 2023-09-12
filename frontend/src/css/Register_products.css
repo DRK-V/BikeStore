@@ -19,6 +19,9 @@
   float: right;
   right: 0;
   top: 0;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }
 
 .form-section {

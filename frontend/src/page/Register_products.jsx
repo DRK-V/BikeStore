@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Dropzone from 'react-dropzone-uploader';
 import '../css/Register_products.css'; // Asegúrate de que esta sea la ruta correcta a tu archivo CSS
-
+import { Link } from "react-router-dom";
 export const Register_products = () => {
   const [product, setProduct] = useState({
     nombre: '',
@@ -39,8 +39,9 @@ export const Register_products = () => {
 
   return (
     <div className="container">
-      {/* <Link to="/Register_products" className="close_register_products"></Link>
-       */}
+      <Link to="/Register_products" className="close_register_products">
+        <button></button>
+      </Link>
       <div className="image-section">
         <Dropzone
           getUploadParams={() => ({ url: 'https://example.com/upload' })}
