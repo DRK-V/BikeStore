@@ -40,7 +40,6 @@ export const Register_products = () => {
   return (
     <div className="container">
       <div className="image-section">
-        <h2>Imágenes</h2>
         <Dropzone
           getUploadParams={() => ({ url: 'https://example.com/upload' })}
           onChangeStatus={handleImageUpload}
