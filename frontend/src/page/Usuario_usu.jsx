@@ -387,12 +387,12 @@ export const Usuario_usu = () => {
               <div className="search-container">
                 <input type="text" placeholder="Buscar por ID o nombre" />
                 <button className="search-button">
-                
+
                 </button>
               </div>
-              <button className="agregar-button">
-                Agregar producto
-              </button>
+              <Link className="agregar-button" to="/Register_products">
+                  Agregar producto
+              </Link>
             </header>
             {/* aqui va la tabla */}
             <table className="table_manage_products">

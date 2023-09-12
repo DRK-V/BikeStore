@@ -37,21 +37,27 @@ const handleDecreaseQuantity = () => {
     console.log("Eliminando producto con id_producto:", product.id_producto);
     removeItemFromCart(product.id_producto);
   };
-  
+  console.log("Datos del producto:", product);
+
           const precioConPuntos = product.precio.toLocaleString('es-ES', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           });
+          const nombreArray = product.nombre.split(' '); // Divide el nombre en palabras
+          const nombreCorto = nombreArray.slice(0, 2).join(' ');
+          
   return (
     <div className="Cart_compras_carrito">
+      
       {product ? (
+        
         <>
-          <h2>{product.nombre_producto}</h2>
+<h2>{nombreCorto}</h2>
           <div className='info_bici_compra'>
             <img className='img_bicci' src={image} alt="" />
             <div className='descrip_produc'>
-              <p>{product.tipo}</p>
-              <p>$ {precioConPuntos}</p><br />
+              <h2>tipo:{product.tipo}</h2>
+              <h2>precio:$ {precioConPuntos}</h2><br />
             </div>
             <div className='botones_compra'>
             <div className='boton2'>
@@ -64,7 +70,7 @@ const handleDecreaseQuantity = () => {
             </button>
           </div>
           
-              <button className='boton1'>buscar</button>
+            
               <button className='boton1' onClick={handleRemoveFromCart}>
         <i className="fas fa-trash"></i>
       </button>

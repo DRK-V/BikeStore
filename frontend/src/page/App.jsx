@@ -17,7 +17,8 @@ import '../css/animation.css'
 import '../css/main.css'
 import { Card_container } from "../components/Card_container";
 import { ComenProvider } from '../components/comencontex';
-import { Actualizar_productos_admin } from './Actualizar_productos_admin';
+import Actualizar_productos_admin from './actualizar_productos_admin';
+import {Register_products} from './Register_products'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -32,34 +33,35 @@ function App() {
   }, []);
 
   return (
-    <AuthProvider>
-      <CartProvider>
-        <ComenProvider>
-          {isLoading ? (
-            // si esta cargando
-            <Loading />
-          ) : (
-            <>
-              {isSearchRoute && <Navbar />}
-              {isCategoryRoute && <Navbar />}
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/categoria/:tipo" element={<Card_container />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/filters" element={<Categories />} />
-                <Route path="/details/:id_producto" element={<Bike_details />} />
-                <Route path="/Login" element={<Login />} />
-                <Route path="/payment" element={<Payment />} />
-                <Route path="/Usuario_usu" element={<Usuario_usu />} />
-                <Route path="/Carrito_compras" element={<Carrito_compras />} />
-                <Route path="/search" element={<Card_container />} />
-                <Route path="/Actualizar_productos_admin" element={<Actualizar_productos_admin />} />
-              </Routes>
-              {isSearchRoute && <Footer />}
-              {isCategoryRoute && <Footer />}
-            </>
-          )}
-        </ComenProvider>
+    <AuthProvider> 
+    <CartProvider>
+    <ComenProvider>
+      {isLoading ? (
+        // si esta cargando
+        <Loading />
+      ) : (
+        <>
+        {isSearchRoute && <Navbar />}
+        {isCategoryRoute  && <Navbar />}
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/categoria/:tipo" element={<Card_container />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/filters" element={<Categories />} />
+            <Route path="/details/:id_producto" element={<Bike_details />} />
+            <Route path="/Login" element={<Login />} />
+            <Route path="/payment" element={<Payment />} />
+            <Route path="/Usuario_usu" element={<Usuario_usu />} />
+            <Route path="/Carrito_compras" element={<Carrito_compras />} />
+            <Route path="/search" element={<Card_container />} />
+            <Route path="/Actualizar_productos_admin" element={<Actualizar_productos_admin />} />
+            <Route path="/Register_products" element={<Register_products />} />
+          </Routes>
+          {isSearchRoute && <Footer />}
+          {isCategoryRoute && <Footer />}
+        </>
+      )}
+       </ComenProvider>
       </CartProvider>
     </AuthProvider>
   );
