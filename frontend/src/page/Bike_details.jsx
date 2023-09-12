@@ -12,8 +12,10 @@ import icon_brand from '../assets/icons/bbike-red-logo.png';
 const Bike_details = () => {
   const { addItemToCart, setSelectedProductId } = useCart();
   const { id_producto } = useParams();
+  const [cartMessage, setCartMessage] = useState('');
 
-  const handleAddToCart = (event) => {
+
+   const handleAddToCart = (event) => {
     event.preventDefault();
     if (additionalProductDetails) {
       const productPrice = parseFloat(additionalProductDetails.product.precio);
@@ -23,19 +25,23 @@ const Bike_details = () => {
             id_producto: additionalProductDetails.product.id_producto,
             precio: productPrice,
             nombre: additionalProductDetails.product.nombre_producto,
-            tipo: additionalProductDetails.product.tipo, // Agrega el tipo del producto
+            tipo: additionalProductDetails.product.tipo,
           },
           image: mainImageURL,
         };
         addItemToCart(cartItem);
         setSelectedProductId(id_producto);
+        setCartMessage('Se ha agregado el producto al carrito.');
+        
+        // Set a timer to clear the cart message after 1 second
+        setTimeout(() => {
+          setCartMessage('');
+        }, 1500); // 1000 milliseconds = 1 second
       } else {
         console.error('Precio no válido para el producto.');
       }
     }
   };
-  
-  
 
   const [productDetails, setProductDetails] = useState(null);
   const [additionalProductDetails, setAdditionalProductDetails] = useState(null);
@@ -138,7 +144,13 @@ const Bike_details = () => {
                 <i></i>
                 Agregar al carrito
               </button>
+              
             </form>
+            {cartMessage && (
+            <div className="cart-message">
+              {cartMessage}
+            </div>
+          )}
             <div className="container_comments">
               <Container_comments />
             </div>
