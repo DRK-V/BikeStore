@@ -30,6 +30,9 @@
 .boton_actualizar{
     width: 100%;
     height: 20vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: rgb(226, 125, 43);
 }
 
@@ -43,15 +46,25 @@
 }
 
 .formu_p{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 70vh;
     width: 100%;
-    padding: 3%
+    padding: 3%;
 }
 
 .p_1{
+    width: 100%;
     padding: 1%;
 }
 
 .p_2{
     margin-left: 1%;
     padding: 1%;
+}
+
+.p_3{
+    padding: 10%;
 }

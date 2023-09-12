@@ -24,13 +24,13 @@ export const Actualizar_productos_admin = () => {
                             <input className='p_2' type="text" />
                             </div>
                             <div className='p_1'>
-                            <input className='p_2' type="text" />
+                            <input className='p_3' type="text" />
                             </div>
                         </div>
 
                     </form>
                     <div className='boton_actualizar'>
-
+                        <button className='actualizar_p'>Actualizar</button>
                     </div>
                 </div>
 
