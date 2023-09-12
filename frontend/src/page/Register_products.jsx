@@ -47,14 +47,14 @@ export const Register_products = () => {
           onChangeStatus={handleImageUpload}
           accept="image/*"
           inputContent={(files, extra) =>
-            extra.reject ? 'Solo imágenes' : 'Arrastra y suelta o haz clic'
+            extra.reject ? 'Solo imágenes' : ''
           }
         />
         <div className="uploaded-images">
           {images.map((image, index) => (
             <div key={index} className="image-preview-container">
-              <img src={image} alt={`Imagen ${index}`} className="image-preview" />
-              <button onClick={() => handleImageDelete(index)} className="delete-button">Borrar</button>
+              {/* <img src={image} alt={`Imagen ${index}`} className="image-preview" />
+              <button onClick={() => handleImageDelete(index)} className="delete-button">Borrar</button> */}
             </div>
           ))}
         </div>
