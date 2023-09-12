@@ -6,7 +6,19 @@
     align-items: center;
     flex-wrap: wrap;
 }
-
+.cart-message {
+    position: fixed;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Center the message in the middle of the screen */
+    background-color: #333; /* Background color of the message */
+    color: white; /* Text color of the message */
+    padding: 10px 20px; /* Padding around the message text */
+    border-radius: 5px; /* Rounded corners */
+    z-index: 999; /* Ensure it's above other content */
+    /* Add more styles as needed */
+  }
+  
 .container_images {
     
     width: 6%;

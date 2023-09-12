@@ -58,7 +58,12 @@
     width: 100%;
     height: 26%;
 }
-
+.descrip_produc h2 {
+    margin-left: 6%;
+    width: 100%;
+    height: 26%;
+    font-size: 3em;
+}
 .info_bici_compra {
     width: 100%;
     height: 74%;
@@ -76,13 +81,16 @@
 }
 
 .boton1 {
-    margin: 1%;
-    width: 22%;
-    height: 14%;
-    color: transparent;
-    border: solid 2px #bef6c4a2;
-    border-radius: 0.9em;
     background-color: transparent;
+    margin: 1%;
+    width: auto;
+    height: 14%;
+    border: solid 2px #bef6c4a2;
+    border-radius: 0.5em;
+    padding: 6%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .boton1>i {
@@ -215,5 +223,12 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     text-align: center;
     z-index: 1000; /* Asegura que esté en la parte superior de otros elementos */
+  }
+  /* CSS para el mensaje de error */
+
+  /* CSS para el botón deshabilitado */
+  .pagar.disabled {
+   /* Color de fondo gris para el botón deshabilitado */
+    cursor: not-allowed; /* Cambia el cursor a 'no permitido' */
   }
   
