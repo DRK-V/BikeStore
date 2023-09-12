@@ -1,16 +1,16 @@
-//presio_compra
 import React, { useEffect, useState } from "react";
 import { useCart } from "./CartContext";
 import carritoo from "../assets/bolsa-de-la-compra.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 
 const Presio_compra = () => {
   const { cartItems } = useCart();
   const [totalPrice, setTotalPrice] = useState(0);
-  const { isLoggedIn } = useAuth(); // Obtén el estado de inicio de sesión desde el contexto
-  const [showPagar, setShowPagar] = useState(false); // Estado para mostrar el mensaje
   const [shippingCost, setShippingCost] = useState(0);
+  const { isLoggedIn } = useAuth();
+  const [showPagar, setShowPagar] = useState(false);
+  const navigate = useNavigate(); // Importa useNavigate para la navegación
 
   const updateTotalPrice = (addedPrice) => {
     setTotalPrice((prevTotalPrice) => prevTotalPrice + addedPrice);
@@ -33,16 +33,15 @@ const Presio_compra = () => {
     }
 
     setTotalPrice(newTotalPrice);
+
+    const calculatedShippingCost = (newTotalPrice * 0.02).toFixed(2);
+    setShippingCost(calculatedShippingCost);
   };
 
   useEffect(() => {
     calculateTotalPrice();
-    // Calcula el 2% del total y actualiza el estado de costo de envío
-    const calculatedShippingCost = totalPrice * 0.02;
-    setShippingCost(calculatedShippingCost);
   }, [cartItems]);
 
-  // Agrega esta función para ocultar el mensaje después de 2 segundos
   const hidePagarMessage = () => {
     setTimeout(() => {
       setShowPagar(false);
@@ -51,12 +50,12 @@ const Presio_compra = () => {
 
   return (
     <div className="info_pc">
-      <h2>Envío ${shippingCost.toFixed(2)}</h2>
-      <h1>Costo Total {totalPrice.toLocaleString()}</h1>
+      <h2>Envío ${shippingCost}</h2>
+      <h1>Costo Total ${(totalPrice + parseFloat(shippingCost)).toLocaleString()}</h1>
       {isLoggedIn ? (
         <Link
           to="/payment"
-          state={{ valorPagar: totalPrice }} // Pasa el precio total como estado en la URL
+          state={{ valorPagar: totalPrice + parseFloat(shippingCost) }}
           className="pagar-1"
         >
           <button className="pagar">
@@ -69,7 +68,7 @@ const Presio_compra = () => {
           className="pagar-1"
           onClick={() => {
             setShowPagar(true);
-            hidePagarMessage(); // Llama a la función para ocultar el mensaje después de 2 segundos
+            hidePagarMessage();
           }}
         >
           <img src={carritoo} alt="carrito" className="carro_pagar" />

@@ -5,19 +5,26 @@ import "../css/cart_shopping.css";
 import { Footer } from "../components/Footer";
 import { useAuth } from "../components/AuthContext";
 import { useLocation } from "react-router-dom";
+
+
+
 export const Payment = () => {
   const location = useLocation();
-  const { user } = useAuth();
-  // Estado para almacenar los valores de los campos
+  const { user, idCliente } = useAuth();
+
   const [formValues, setFormValues] = useState({
     nombreTitular: user.nombre_usuario || "",
     tipoDocumento: user.tipo_de_documento || "",
     numeroDocumento: user.numero_de_documento || "",
     correoElectronico: user.correo || "",
     confirmacionCorreo: user.correo,
-    valorPagar: location.state ? location.state.valorPagar : "", // Obtiene el valorPagar del estado pasado en la URL
+    valorPagar: location.state ? location.state.valorPagar : "",
+    tipo_de_cuenta: "",
+    banco: "",
+    numero_de_cuenta: "",
+    codigo_cliente: idCliente, 
   });
-  // Función para manejar los cambios en los campos del formulario
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues({
@@ -26,13 +33,39 @@ export const Payment = () => {
     });
   };
 
-  // Función para manejar el envío del formulario
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aquí puedes enviar los datos del formulario a través de una solicitud HTTP o realizar cualquier otra acción necesaria.
-    console.log("Formulario enviado:", formValues);
-  };
 
+    // Realiza la asignación de valorPagar a monto_total
+    const ventaData = {
+      tipo_de_cuenta: formValues.tipo_de_cuenta,
+      banco: formValues.banco,
+      numero_de_cuenta: formValues.numero_de_cuenta,
+      monto_final: formValues.valorPagar,
+      codigo_cliente: formValues.codigo_cliente,
+    };
+
+    try {
+      const response = await fetch("http://localhost:3060/crear-venta", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(ventaData),
+      });
+
+      if (response.ok) {
+        console.log("Venta creada con éxito.");
+        // Realiza cualquier acción adicional necesaria, como redirigir al usuario a una página de confirmación.
+      } else {
+        console.error("Error al crear la venta.");
+        // Puedes manejar el error de acuerdo a tus necesidades.
+      }
+    } catch (error) {
+      console.error("Error de red:", error);
+      // Maneja los errores de red, como problemas de conexión, aquí.
+    }
+  };
   return (
     <>
       <Navbar />
@@ -60,13 +93,14 @@ export const Payment = () => {
             <i className="fas fa-id-card"></i>{" "}
             {/* Icono de tipo de documento */}
             <input
-              type="text"
-              id="tipoDocumento"
-              name="tipoDocumento"
-              value={formValues.tipoDocumento}
-              onChange={handleChange}
-              required
-            />
+      type="text"
+      id="tipoDocumento"
+      name="tipoDocumento"
+      value={formValues.tipoDocumento}
+      onChange={handleChange}
+      readOnly // Agregar el atributo readOnly
+      required
+    />
           </div>
         </div>
 
@@ -87,15 +121,14 @@ export const Payment = () => {
         </div>
 
         <div className="input-container">
-          <label htmlFor="tipoCuenta">Tipo de cuenta:</label>
+          <label htmlFor="tipo_de_cuenta">Tipo de cuenta:</label>
           <div className="input-icon-container">
-            <i className="fas fa-university"></i>{" "}
-            {/* Icono de tipo de cuenta */}
+            <i className="fas fa-university"></i>
             <input
               type="text"
-              id="tipoCuenta"
-              name="tipoCuenta"
-              value={formValues.tipoCuenta}
+              id="tipo_de_cuenta"
+              name="tipo_de_cuenta"
+              value={formValues.tipo_de_cuenta}
               onChange={handleChange}
               required
             />
@@ -118,15 +151,14 @@ export const Payment = () => {
         </div>
 
         <div className="input-container">
-          <label htmlFor="numeroCuenta">Número de cuenta:</label>
+          <label htmlFor="numero_de_cuenta">Número de cuenta:</label>
           <div className="input-icon-container">
-            <i className="fas fa-credit-card"></i>{" "}
-            {/* Icono de número de cuenta */}
+            <i className="fas fa-credit-card"></i>
             <input
               type="text"
-              id="numeroCuenta"
-              name="numeroCuenta"
-              value={formValues.numeroCuenta}
+              id="numero_de_cuenta"
+              name="numero_de_cuenta"
+              value={formValues.numero_de_cuenta}
               onChange={handleChange}
               required
             />

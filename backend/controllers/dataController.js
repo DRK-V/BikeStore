@@ -479,8 +479,7 @@ const updateUserImage = async (req, res) => {
     res.status(500).json({ error: "Error al mover la imagen de usuario", details: error.message });
   }
 };
-
-//ensayo
+//comentarios
 const añadirComentario = async (req, res) => {
   const { codigo_cliente, codigo_producto, texto } = req.body;
 
@@ -526,8 +525,51 @@ const verComentariosPorCodigoProducto = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener los comentarios' });
   }
 };
+//fin comentarios
+//ensayo
+const createVenta = async (ventaData) => {
+  const insertVentaQuery =
+    "INSERT INTO venta (codigo_cliente, monto_final, tipo_de_cuenta, banco, numero_de_cuenta) VALUES ($1, $2, $3, $4, $5)";
+
+  const values = [
+    ventaData.codigo_cliente,
+    ventaData.monto_final,
+    ventaData.tipo_de_cuenta,
+    ventaData.banco,
+    ventaData.numero_de_cuenta,
+  ];
+
+  try {
+    console.log('Datos a insertar en la tabla venta:', values); // Agrega este console.log
+
+    const result = await pool.query(insertVentaQuery, values);
+
+    console.log('Resultado de la inserción:', result); // Agrega este console.log
+
+    return result;
+  } catch (error) {
+    console.error('Error al crear venta:', error);
+    throw error;
+  }
+};
+const getVentas = async () => {
+  const selectVentasQuery = "SELECT * FROM venta";
+
+  try {
+    // Ejecutar la consulta para obtener todas las ventas
+    const result = await pool.query(selectVentasQuery);
+
+    // Devolver el resultado de la consulta
+    return result.rows;
+  } catch (error) {
+    console.error('Error al obtener ventas:', error);
+    throw error; // Asegúrate de volver a lanzar el error para que el servidor lo maneje adecuadamente
+  }
+};
 //fin ensayo
 module.exports = {
+  getVentas,
+  createVenta,
   verComentariosPorCodigoProducto,
   getClientePorId,
   añadirComentario,

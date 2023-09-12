@@ -197,6 +197,21 @@ router.post("/user/:userId/updateImage", upload.single("image"), dataController.
 router.post('/comentarios', dataController.añadirComentario);
 router.get('/coments', dataController.verComentarios);
 router.get('/coments/:codigo_producto', dataController.verComentariosPorCodigoProducto);
-
-
+router.post('/crear-venta', async (req, res) => {
+  try {
+    const ventaData = req.body; // Asume que los datos se envían en el cuerpo de la solicitud
+    const result = await dataController.createVenta(ventaData);
+    res.status(201).json({ message: 'Venta creada con éxito', result });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al crear venta', message: error.message });
+  }
+});
+router.get('/ventas', async (req, res) => {
+  try {
+    const ventas = await dataController.getVentas();
+    res.status(200).json(ventas);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener ventas', message: error.message });
+  }
+});
 module.exports = router;

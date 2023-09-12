@@ -20,10 +20,12 @@ const Bike_details = () => {
       if (!isNaN(productPrice)) {
         const cartItem = {
           product: {
-            id_producto: additionalProductDetails.product.id_producto, // Asegúrate de incluir el ID u otros datos relevantes del producto
-            precio: productPrice, // Establecer el precio como número
+            id_producto: additionalProductDetails.product.id_producto,
+            precio: productPrice,
+            nombre: additionalProductDetails.product.nombre_producto,
+            tipo: additionalProductDetails.product.tipo, // Agrega el tipo del producto
           },
-          image: mainImageURL, // Usar la imagen principal
+          image: mainImageURL,
         };
         addItemToCart(cartItem);
         setSelectedProductId(id_producto);
@@ -32,6 +34,7 @@ const Bike_details = () => {
       }
     }
   };
+  
   
 
   const [productDetails, setProductDetails] = useState(null);
