@@ -6,11 +6,33 @@ export const Actualizar_productos_admin = () => {
         <>
             <div className='pa_one'>
                 <div className='img_p'>
-                    
+
                 </div>
-                <form action="" className='info_p'>
-                    
-                </form>
+                <div className='info_padre'>
+                    <form action="" className='info_p'>
+                        <div className='titulo_p'>
+                        <h2>Actualizar</h2>
+                        </div>
+                        <div className='formu_p'>
+                            <div className='p_1'>
+                            <input className='p_2' type="text" />
+                            <input className='p_2' type="text" />
+                            <input className='p_2' type="text" />
+                            </div>
+                            <div className='p_1'>
+                            <input className='p_2' type="text" />
+                            <input className='p_2' type="text" />
+                            </div>
+                            <div className='p_1'>
+                            <input className='p_2' type="text" />
+                            </div>
+                        </div>
+
+                    </form>
+                    <div className='boton_actualizar'>
+
+                    </div>
+                </div>
 
             </div>
 

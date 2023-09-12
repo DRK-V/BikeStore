@@ -17,7 +17,7 @@ import '../css/animation.css'
 import '../css/main.css'
 import { Card_container } from "../components/Card_container";
 import { ComenProvider } from '../components/comencontex';
-import Actualizar_productos_admin from './actualizar_productos_admin';
+import {Actualizar_productos_admin} from './Actualizar_productos_admin';
 import {Register_products} from './Register_products'
 
 function App() {

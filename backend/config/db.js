@@ -6,7 +6,7 @@ const pool = new Pool({
   host: 'localhost',
 
 
-  database: 'bikestore2',
+  database: 'bikestore',
   password: 'admin',
 
 
