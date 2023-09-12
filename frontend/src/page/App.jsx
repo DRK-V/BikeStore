@@ -17,12 +17,8 @@ import '../css/animation.css'
 import '../css/main.css'
 import { Card_container } from "../components/Card_container";
 import { ComenProvider } from '../components/comencontex';
-<<<<<<< HEAD
 import Actualizar_productos_admin from './actualizar_productos_admin';
-
-=======
-import { Register_products } from './Register_products';
->>>>>>> 9f0a6bc0d7c2a19a7028f6e54c949df0c2d28743
+import {Register_products} from './Register_products'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -58,12 +54,8 @@ function App() {
             <Route path="/Usuario_usu" element={<Usuario_usu />} />
             <Route path="/Carrito_compras" element={<Carrito_compras />} />
             <Route path="/search" element={<Card_container />} />
-<<<<<<< HEAD
             <Route path="/Actualizar_productos_admin" element={<Actualizar_productos_admin />} />
-=======
             <Route path="/Register_products" element={<Register_products />} />
-            
->>>>>>> 9f0a6bc0d7c2a19a7028f6e54c949df0c2d28743
           </Routes>
           {isSearchRoute && <Footer />}
           {isCategoryRoute && <Footer />}
