@@ -1,74 +1,186 @@
 .container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-  }
-  .form-section{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-        }
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: center;
+  height: 100vh;
+}
 
-  .image-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .product-form {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    max-width: 400px;
-    width: 100%;
-    height: 100%;
-  }
-  
-  .form-group {
-    display: flex;
-    width:50%;
-    flex-direction: column;
-    margin-bottom: 10px;
-    background-color: gray;
-  }
-  
-  .form-label {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .uploaded-images {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 10px;
-  }
-  
-  .image-preview-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .image-preview {
-    max-width: 100px;
-    max-height: 100px;
-  }
-  
-  .delete-button {
-    margin-top: 5px;
-    background-color: #f00;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
+.close_register_products {
+  background-image: url('https://cdn.icon-icons.com/icons2/3257/PNG/512/close_icon_206100.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
+  margin: 20px;
+  width: 3em;
+  height: 3em;
+  clip-path: circle();
+  position: absolute;
+  float: right;
+  right: 0;
+  top: 0;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.form-section {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  min-width: 120%;
+  left: -20%;
+  align-items: center;
+  flex-wrap: wrap;
+  top: 10%;
+  height: 70%;
+}
+
+.image-section {
+  width: 80%;
+  position: relative;
+  left: 5%;
+  top: 10%;
+  height: 70%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.product-form {
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 20px;
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+}
+
+.product-form>button {
+  float: right;
+  position: relative;
+  border: none;
+  color: white;
+  left: 50%;
+  width: 25%;
+  border-radius: .4rem;
+  height: 8vh;
+  background-color: green;
+  cursor: pointer;
+}
+
+.form-group {
+  display: flex;
+  width: 50%;
+  height: 10vh;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+.form-group>input {
+  width: 80%;
+  border: solid 1px gray;
+  border-radius: .3rem;
+}
+
+.form-group>textarea {
+  border: solid 1px gray;
+  height: auto;
+  min-height: 23vh;
+  border-radius: .3rem;
+  resize: none;
+  width: 80%;
+}
+
+.form-label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.uploaded-images {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.image-preview-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  width: 20%;
+  height: 20vh;
+  display: none;
+}
+
+.image-preview {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.delete-button {
+  margin-top: 5px;
+  background-color: #f00;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.dzu-dropzone {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  overflow-y: auto;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.dzu-previewContainer {
+  position: relative;
+  width: 30%;
+  height: 30%;
+  margin: 1em;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+
+  &::after {
+    content: "X";
     cursor: pointer;
+    border-radius: 0 0 0 .3em;
+    position: absolute;
+    color: white;
+    float: right;
+    right: 0;
+    top: 0;
+    text-align: center;
+    width: 1.5em;
+    background-color: rgba(255, 0, 0, 0.719);
   }
-  
+}
+
+.dzu-previewStatusContainer>progress {
+  display: none;
+}
+
+.dzu-previewImage {
+  max-width: 100%;
+  min-height: 100%;
+}
+
+.dzu-inputLabel {
+  color: transparent;
+  width: 20%;
+  left: 0;
+}
+
+.dzu-inputLabel>input {}
