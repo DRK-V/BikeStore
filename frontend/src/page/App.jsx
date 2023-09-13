@@ -11,22 +11,22 @@ import { Payment } from './Payment';
 import { Carrito_compras } from './Carrito_compras';
 import { Usuario_usu } from './Usuario_usu';
 import { CartProvider } from '../components/CartContext';
-import {Navbar} from '../components/Navbar'; 
-import {Footer} from '../components/Footer';
+import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
 import '../css/animation.css'
 import '../css/main.css'
 import { Card_container } from "../components/Card_container";
 import { ComenProvider } from '../components/comencontex';
-import Actualizar_productos_admin from './actualizar_productos_admin';
+import {Actualizar_productos_admin} from './Actualizar_productos_admin';
 import {Register_products} from './Register_products'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const location = useLocation(); 
-  const isSearchRoute = location.pathname.includes('/search'); 
+  const location = useLocation();
+  const isSearchRoute = location.pathname.includes('/search');
   const isCategoryRoute = location.pathname.includes('/categoria/');
   useEffect(() => {
-    
+
     setTimeout(() => {
       setIsLoading(false);
     }, 1000);
