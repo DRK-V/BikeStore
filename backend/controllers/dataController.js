@@ -567,8 +567,8 @@ const getVentas = async () => {
   }
 };
 const insertarProducto = async (req, res) => {
+  const productoData = req.body;
   try {
-    const productoData = req.body;
     // Validar que se proporcionen datos obligatorios
     if (!productoData.nombre_producto || !productoData.tipo || !productoData.color || !productoData.precio || !productoData.stock_disponible || !productoData.descripcion_producto) {
       const camposFaltantes = [];
@@ -583,7 +583,7 @@ const insertarProducto = async (req, res) => {
       throw new Error(mensajeError);
     }
 
-    // Inserta la información del producto en la base de datos
+    // Insertar la información del producto en la base de datos
     const insertProductQuery = `
       INSERT INTO producto (nombre_producto, descripcion_producto, stock_disponible, tipo, color, precio)
       VALUES ($1, $2, $3, $4, $5, $6)
@@ -601,27 +601,42 @@ const insertarProducto = async (req, res) => {
 
     const productResult = await pool.query(insertProductQuery, productValues);
 
-    // Obtiene el ID del producto recién insertado
+    // Obtener el ID del producto recién insertado
     const productId = productResult.rows[0].id_producto;
 
-    // Construye el nombre de la carpeta usando el nombre del producto
-    const productNameFolder = productoData.nombre // Reemplaza espacios con guiones bajos
+    res.status(200).json({ productId, message: 'Producto insertado con éxito' });
+  } catch (error) {
+    console.error('Error al insertar el producto:', error);
+    res.status(500).json({ error: 'Error al insertar el producto' });
+  }
+};
 
-    // Define la ruta de la carpeta donde se almacenarán las imágenes
-    const imageFolderPath = path.join(__dirname, `../images/${productNameFolder}`);
+const insertarImagenesProducto = async (req, res) => {
+  const productId = req.body.productId; // El ID del producto al que se asocian las imágenes
+  const images = req.files;
 
-    // Crea la carpeta si no existe
+  try {
+    // Validar productId y la existencia de imágenes
+    if (!productId || !images) {
+      res.status(400).json({error:'error en el id o al recibir imagenes'})
+      return;
+    }
+
+    // Construir el nombre de la carpeta usando el productId (código del producto)
+    const imageFolderPath = path.join(__dirname, `../images/${productId}`);
+
+    // Crear la carpeta si no existe
     if (!fs.existsSync(imageFolderPath)) {
       fs.mkdirSync(imageFolderPath, { recursive: true });
     }
 
-    // Define una función para generar el nombre de archivo secuencial para las imágenes
+    // Función para generar nombres secuenciales de archivo para las imágenes
     const generateImageFileName = (index) => {
       if (index === 0) return 'imagen_portada.jpg'; // Primera imagen como portada
       return `vista_${index}.jpg`; // Otras imágenes como vistas
     };
 
-    // Inserta las imágenes relacionadas con el producto y renómbralas
+    // Insertar las imágenes relacionadas con el producto y renombrarlas
     const insertImageQuery = `
       INSERT INTO imagen_producto (codigo_producto, nombre_imagen, ruta_imagen)
       VALUES ($1, $2, $3);
@@ -629,7 +644,7 @@ const insertarProducto = async (req, res) => {
 
     for (let i = 0; i < images.length; i++) {
       const image = images[i];
-      const imageName = generateImageFileName(i); // Genera nombres secuenciales
+      const imageName = generateImageFileName(i); // Generar nombres secuenciales
       const imagePath = path.join(imageFolderPath, imageName);
 
       fs.renameSync(image.path, imagePath);
@@ -638,11 +653,11 @@ const insertarProducto = async (req, res) => {
       await pool.query(insertImageQuery, imageValues);
     }
 
-    // Devuelve una respuesta o mensaje de éxito
-    return { message: 'Producto insertado con éxito' };
+    // Devolver una respuesta o mensaje de éxito
+    res.status(200).json({ message: 'Imágenes insertadas con éxito' });
   } catch (error) {
-    console.error('Error al insertar el producto:', error);
-    throw error;
+    console.error('Error al insertar las imágenes:', error);
+    res.status(500).json({ error: 'Error al insertar las imágenes' });
   }
 };
 
@@ -668,4 +683,5 @@ module.exports = {
   updateUserImage,
   updateUser,
   insertarProducto,
+  insertarImagenesProducto,
 };

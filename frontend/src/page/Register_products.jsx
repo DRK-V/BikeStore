@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import Dropzone from 'react-dropzone-uploader';
-import '../css/Register_products.css'; // Asegúrate de que esta sea la ruta correcta a tu archivo CSS
+import '../css/Register_products.css';
 import { Link } from "react-router-dom";
 
 export const Register_products = () => {
   const [product, setProduct] = useState({
-    nombre: '',
-    tipoBicicleta: '',
+    nombre_producto: '',
+    tipo: '',
     color: '',
     precio: '',
-    stock: '',
-    descripcion: '',
+    stock_disponible: '',
+    descripcion_producto: '',
   });
   const [images, setImages] = useState([]);
 
@@ -22,55 +22,56 @@ export const Register_products = () => {
     });
   };
 
-  const generateFormData = () => {
-    const formData = new FormData();
-
-    formData.append('nombre_producto', product.nombre);
-    formData.append('descripcion_producto', product.descripcion);
-    formData.append('stock_disponible', product.stock);
-    formData.append('tipo', product.tipoBicicleta);
-    formData.append('color', product.color);
-    formData.append('precio', product.precio);
-
-    // Agregar cada archivo de imagen al FormData
-    images.forEach((image, index) => {
-      formData.append(`image${index + 1}`, image);
-    });
-
-    return formData;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Handle submit called');
-    // Validar que se ingresen todos los campos obligatorios
-    if (!product.nombre || !product.tipoBicicleta || !product.color || !product.precio || !product.stock || !product.descripcion) {
-      alert('Todos los campos son obligatorios');
-      return;
-    }
-    const formData = generateFormData();
 
-    // Realiza una solicitud POST al servidor con los datos y las imágenes
     try {
-      const response = await fetch('http://localhost:3060/insertarProducto', {
+      // Enviar los datos del producto como JSON
+      const productResponse = await fetch('http://localhost:3060/insertarProducto', {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(product),
       });
 
-      if (response.status === 200) {
-        // Producto insertado con éxito, puedes redirigir o mostrar un mensaje de éxito
-        console.log('Producto insertado con éxito');
+      if (productResponse.status === 200) {
+        const { productId } = await productResponse.json();
+
+        // Construir un FormData para enviar imágenes
+        const formData = new FormData();
+        formData.append('productId', productId);
+
+        // Agregar las imágenes al FormData
+        for (let i = 0; i < images.length; i++) {
+          formData.append('images', images[i].file);
+        }
+
+        // Enviar las imágenes como FormData
+        const imageResponse = await fetch('http://localhost:3060/insertarImagenesProducto', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (imageResponse.status === 200) {
+          console.log('Imágenes insertadas con éxito');
+        } else {
+          console.error('Error al insertar las imágenes:', imageResponse.statusText);
+        }
       } else {
-        // Maneja el error de alguna manera
-        console.error('Error al insertar el producto:', response.statusText);
+        console.error('Error al insertar el producto:', productResponse.statusText);
       }
     } catch (error) {
-      console.error('Error al insertar el producto:', error);
+      console.error('Error al insertar el producto o las imágenes:', error);
     }
   };
 
-  const handleImageUpload = ({ file }) => {
-    setImages([...images, file]);
+  const handleImageUpload = ({ file, meta }) => {
+    // Crear un objeto con la imagen y su URL
+    const imageObject = { file, dataURL: meta.previewUrl };
+
+    // Agregar el objeto de imagen al estado 'images'
+    setImages([...images, imageObject]);
   };
 
   const handleImageDelete = (index) => {

@@ -216,5 +216,7 @@ router.get('/ventas', async (req, res) => {
 });
 
 router.post('/insertarProducto', dataController.insertarProducto);
+router.post('/insertarImagenesProducto', dataController.insertarImagenesProducto);
+
 
 module.exports = router;
