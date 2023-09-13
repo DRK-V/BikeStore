@@ -508,10 +508,10 @@ const verComentarios = async (req, res) => {
   }
 };
 const verComentariosPorCodigoProducto = async (req, res) => {
-  const { codigo_producto } = req.params; 
+  const { codigo_producto } = req.params;
   let selectQuery = 'SELECT * FROM comentario';
 
- 
+
   if (codigo_producto) {
     selectQuery = `SELECT * FROM comentario WHERE codigo_producto = ${codigo_producto}`;
   }
@@ -566,7 +566,88 @@ const getVentas = async () => {
     throw error; // Asegúrate de volver a lanzar el error para que el servidor lo maneje adecuadamente
   }
 };
-//fin ensayo
+const insertarProducto = async (req, res) => {
+  try {
+    const productoData = req.body;
+    // Validar que se proporcionen datos obligatorios
+    if (!productoData.nombre_producto || !productoData.tipo || !productoData.color || !productoData.precio || !productoData.stock_disponible || !productoData.descripcion_producto) {
+      const camposFaltantes = [];
+      if (!productoData.nombre_producto) camposFaltantes.push('Nombre');
+      if (!productoData.tipo) camposFaltantes.push('Tipo de Bicicleta');
+      if (!productoData.color) camposFaltantes.push('Color');
+      if (!productoData.precio) camposFaltantes.push('Precio');
+      if (!productoData.stock_disponible) camposFaltantes.push('Stock Disponible');
+      if (!productoData.descripcion_producto) camposFaltantes.push('Descripción');
+
+      const mensajeError = `Los siguientes campos son obligatorios: ${camposFaltantes.join(', ')}`;
+      throw new Error(mensajeError);
+    }
+
+    // Inserta la información del producto en la base de datos
+    const insertProductQuery = `
+      INSERT INTO producto (nombre_producto, descripcion_producto, stock_disponible, tipo, color, precio)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING id_producto;
+    `;
+
+    const productValues = [
+      productoData.nombre_producto,
+      productoData.descripcion_producto,
+      productoData.stock_disponible,
+      productoData.tipo,
+      productoData.color,
+      productoData.precio,
+    ];
+
+    const productResult = await pool.query(insertProductQuery, productValues);
+
+    // Obtiene el ID del producto recién insertado
+    const productId = productResult.rows[0].id_producto;
+
+    // Construye el nombre de la carpeta usando el nombre del producto
+    const productNameFolder = productoData.nombre // Reemplaza espacios con guiones bajos
+
+    // Define la ruta de la carpeta donde se almacenarán las imágenes
+    const imageFolderPath = path.join(__dirname, `../images/${productNameFolder}`);
+
+    // Crea la carpeta si no existe
+    if (!fs.existsSync(imageFolderPath)) {
+      fs.mkdirSync(imageFolderPath, { recursive: true });
+    }
+
+    // Define una función para generar el nombre de archivo secuencial para las imágenes
+    const generateImageFileName = (index) => {
+      if (index === 0) return 'imagen_portada.jpg'; // Primera imagen como portada
+      return `vista_${index}.jpg`; // Otras imágenes como vistas
+    };
+
+    // Inserta las imágenes relacionadas con el producto y renómbralas
+    const insertImageQuery = `
+      INSERT INTO imagen_producto (codigo_producto, nombre_imagen, ruta_imagen)
+      VALUES ($1, $2, $3);
+    `;
+
+    for (let i = 0; i < images.length; i++) {
+      const image = images[i];
+      const imageName = generateImageFileName(i); // Genera nombres secuenciales
+      const imagePath = path.join(imageFolderPath, imageName);
+
+      fs.renameSync(image.path, imagePath);
+
+      const imageValues = [productId, imageName, imagePath];
+      await pool.query(insertImageQuery, imageValues);
+    }
+
+    // Devuelve una respuesta o mensaje de éxito
+    return { message: 'Producto insertado con éxito' };
+  } catch (error) {
+    console.error('Error al insertar el producto:', error);
+    throw error;
+  }
+};
+
+
+
 module.exports = {
   getVentas,
   createVenta,
@@ -586,4 +667,5 @@ module.exports = {
   getUserDetalleCompra,
   updateUserImage,
   updateUser,
+  insertarProducto,
 };

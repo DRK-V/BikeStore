@@ -214,4 +214,7 @@ router.get('/ventas', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener ventas', message: error.message });
   }
 });
+
+router.post('/insertarProducto', dataController.insertarProducto);
+
 module.exports = router;

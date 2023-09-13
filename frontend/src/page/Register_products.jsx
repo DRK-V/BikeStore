@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Dropzone from 'react-dropzone-uploader';
 import '../css/Register_products.css'; // Asegúrate de que esta sea la ruta correcta a tu archivo CSS
 import { Link } from "react-router-dom";
+
 export const Register_products = () => {
   const [product, setProduct] = useState({
     nombre: '',
@@ -21,10 +22,51 @@ export const Register_products = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const generateFormData = () => {
+    const formData = new FormData();
+
+    formData.append('nombre_producto', product.nombre);
+    formData.append('descripcion_producto', product.descripcion);
+    formData.append('stock_disponible', product.stock);
+    formData.append('tipo', product.tipoBicicleta);
+    formData.append('color', product.color);
+    formData.append('precio', product.precio);
+
+    // Agregar cada archivo de imagen al FormData
+    images.forEach((image, index) => {
+      formData.append(`image${index + 1}`, image);
+    });
+
+    return formData;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aquí puedes enviar los datos del producto y las imágenes a tu servidor o hacer lo que necesites con ellos
-    console.log(product, images);
+    console.log('Handle submit called');
+    // Validar que se ingresen todos los campos obligatorios
+    if (!product.nombre || !product.tipoBicicleta || !product.color || !product.precio || !product.stock || !product.descripcion) {
+      alert('Todos los campos son obligatorios');
+      return;
+    }
+    const formData = generateFormData();
+
+    // Realiza una solicitud POST al servidor con los datos y las imágenes
+    try {
+      const response = await fetch('http://localhost:3060/insertarProducto', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.status === 200) {
+        // Producto insertado con éxito, puedes redirigir o mostrar un mensaje de éxito
+        console.log('Producto insertado con éxito');
+      } else {
+        // Maneja el error de alguna manera
+        console.error('Error al insertar el producto:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error al insertar el producto:', error);
+    }
   };
 
   const handleImageUpload = ({ file }) => {
@@ -44,7 +86,7 @@ export const Register_products = () => {
       </Link>
       <div className="image-section">
         <Dropzone
-          getUploadParams={() => ({ url: 'https://example.com/upload' })}
+          getUploadParams={() => ({})}
           onChangeStatus={handleImageUpload}
           accept="image/*"
           inputContent={(files, extra) =>
@@ -54,8 +96,8 @@ export const Register_products = () => {
         <div className="uploaded-images">
           {images.map((image, index) => (
             <div key={index} className="image-preview-container">
-              {/* <img src={image} alt={`Imagen ${index}`} className="image-preview" />
-              <button onClick={() => handleImageDelete(index)} className="delete-button">Borrar</button> */}
+              <img src={image.dataURL} alt={`Imagen ${index}`} className="image-preview" />
+              <button onClick={() => handleImageDelete(index)} className="delete-button">Borrar</button>
             </div>
           ))}
         </div>
@@ -67,7 +109,7 @@ export const Register_products = () => {
             <label className="form-label">Nombre de Producto:</label>
             <input
               type="text"
-              name="nombre"
+              name="nombre_producto"
               value={product.nombre}
               onChange={handleChange}
             />
@@ -76,7 +118,7 @@ export const Register_products = () => {
             <label className="form-label">Tipo de Bicicleta:</label>
             <input
               type="text"
-              name="tipoBicicleta"
+              name="tipo"
               value={product.tipoBicicleta}
               onChange={handleChange}
             />
@@ -103,7 +145,7 @@ export const Register_products = () => {
             <label className="form-label">Stock Disponible:</label>
             <input
               type="number"
-              name="stock"
+              name="stock_disponible"
               value={product.stock}
               onChange={handleChange}
             />
@@ -111,12 +153,12 @@ export const Register_products = () => {
           <div className="form-group">
             <label className="form-label">Descripción:</label>
             <textarea
-              name="descripcion"
+              name="descripcion_producto"
               value={product.descripcion}
               onChange={handleChange}
             />
           </div>
-          <button type="submit">Guardar</button>
+          <button type="submit">Agregar</button>
         </form>
       </div>
     </div>
