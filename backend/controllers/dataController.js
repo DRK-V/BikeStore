@@ -617,8 +617,8 @@ const insertarImagenesProducto = async (req, res) => {
 
   try {
     // Validar productId y la existencia de imágenes
-    if (!productId || !images) {
-      res.status(400).json({error:'error en el id o al recibir imagenes'})
+    if (!productId || !images || images.length === 0) {
+      res.status(400).json({ error: 'Error en el ID o al recibir imágenes' });
       return;
     }
 
@@ -636,7 +636,7 @@ const insertarImagenesProducto = async (req, res) => {
       return `vista_${index}.jpg`; // Otras imágenes como vistas
     };
 
-    // Insertar las imágenes relacionadas con el producto y renombrarlas
+    // Insertar todas las imágenes relacionadas con el producto y renombrarlas
     const insertImageQuery = `
       INSERT INTO imagen_producto (codigo_producto, nombre_imagen, ruta_imagen)
       VALUES ($1, $2, $3);
@@ -649,7 +649,7 @@ const insertarImagenesProducto = async (req, res) => {
 
       fs.renameSync(image.path, imagePath);
 
-      const imageValues = [productId, imageName, imagePath];
+      const imageValues = [productId, imageName, `../images/${productId}/${imageName}`]; // Ruta relativa
       await pool.query(insertImageQuery, imageValues);
     }
 

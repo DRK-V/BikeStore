@@ -70,14 +70,11 @@ export const Register_products = () => {
     // Crear un objeto con la imagen y su URL
     const imageObject = { file, dataURL: meta.previewUrl };
 
+    // Mostrar información de la imagen en la consola
+    console.log('Imagen cargada:', imageObject);
+
     // Agregar el objeto de imagen al estado 'images'
     setImages([...images, imageObject]);
-  };
-
-  const handleImageDelete = (index) => {
-    const updatedImages = [...images];
-    updatedImages.splice(index, 1);
-    setImages(updatedImages);
   };
 
   return (
@@ -87,18 +84,20 @@ export const Register_products = () => {
       </Link>
       <div className="image-section">
         <Dropzone
-          getUploadParams={() => ({})}
+          getUploadParams={null} // Esto deshabilitará el envío automático de imágenes
           onChangeStatus={handleImageUpload}
           accept="image/*"
           inputContent={(files, extra) =>
             extra.reject ? 'Solo imágenes' : ''
           }
         />
+
         <div className="uploaded-images">
           {images.map((image, index) => (
             <div key={index} className="image-preview-container">
+              {/* Visualizar la imagen si es necesario */}
               <img src={image.dataURL} alt={`Imagen ${index}`} className="image-preview" />
-              <button onClick={() => handleImageDelete(index)} className="delete-button">Borrar</button>
+              <button onClick={() => setImages(images.filter((_, i) => i !== index))} className="delete-button">Borrar</button>
             </div>
           ))}
         </div>
