@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Dropzone from 'react-dropzone-uploader';
 import '../css/Register_products.css';
 import { Link } from "react-router-dom";
 
@@ -13,6 +12,7 @@ export const Register_products = () => {
     descripcion_producto: '',
   });
   const [images, setImages] = useState([]);
+  const [imageInput, setImageInput] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,11 +22,30 @@ export const Register_products = () => {
     });
   };
 
+  const handleImageUpload = (e) => {
+    const selectedImages = Array.from(e.target.files);
+
+    // Create an array of image objects with dataURL and file
+    const imageObjects = selectedImages.map((image) => ({
+      file: image,
+      dataURL: URL.createObjectURL(image),
+    }));
+
+    // Update the images state with the new images
+    setImages([...images, ...imageObjects]);
+  };
+
+  const handleImageDelete = (index) => {
+    const newImages = [...images];
+    newImages.splice(index, 1);
+    setImages(newImages);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // Enviar los datos del producto como JSON
+      // Send product data as JSON
       const productResponse = await fetch('http://localhost:3060/insertarProducto', {
         method: 'POST',
         headers: {
@@ -38,16 +57,16 @@ export const Register_products = () => {
       if (productResponse.status === 200) {
         const { productId } = await productResponse.json();
 
-        // Construir un FormData para enviar imágenes
+        // Create a FormData to send images
         const formData = new FormData();
         formData.append('productId', productId);
 
-        // Agregar las imágenes al FormData
+        // Add the images to the FormData
         for (let i = 0; i < images.length; i++) {
           formData.append('images', images[i].file);
         }
 
-        // Enviar las imágenes como FormData
+        // Send images as FormData
         const imageResponse = await fetch('http://localhost:3060/insertarImagenesProducto', {
           method: 'POST',
           body: formData,
@@ -66,45 +85,36 @@ export const Register_products = () => {
     }
   };
 
-  const handleImageUpload = ({ file, meta }) => {
-    // Crear un objeto con la imagen y su URL
-    const imageObject = { file, dataURL: meta.previewUrl };
-
-    // Mostrar información de la imagen en la consola
-    console.log('Imagen cargada:', imageObject);
-
-    // Agregar el objeto de imagen al estado 'images'
-    setImages([...images, imageObject]);
-  };
-
   return (
     <div className="container">
       <Link to="/" className="close_register_products">
         <button></button>
       </Link>
       <div className="image-section">
-        <Dropzone
-          getUploadParams={null} // Esto deshabilitará el envío automático de imágenes
-          onChangeStatus={handleImageUpload}
-          accept="image/*"
-          inputContent={(files, extra) =>
-            extra.reject ? 'Solo imágenes' : ''
-          }
-        />
 
         <div className="uploaded-images">
           {images.map((image, index) => (
             <div key={index} className="image-preview-container">
-              {/* Visualizar la imagen si es necesario */}
               <img src={image.dataURL} alt={`Imagen ${index}`} className="image-preview" />
-              <button onClick={() => setImages(images.filter((_, i) => i !== index))} className="delete-button">Borrar</button>
+              <button onClick={() => handleImageDelete(index)} className="delete-button">X</button>
             </div>
           ))}
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            ref={(input) => setImageInput(input)}
+            style={{ display: 'none' }}
+            onChange={handleImageUpload}
+          />
+          <button onClick={() => imageInput && imageInput.click()}>Seleccionar Imágenes</button>
         </div>
+
       </div>
       <div className="form-section">
         <h2>Agregar Producto</h2>
         <form onSubmit={handleSubmit} className="product-form">
+
           <div className="form-group">
             <label className="form-label">Nombre de Producto:</label>
             <input
