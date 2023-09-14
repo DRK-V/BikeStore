@@ -653,7 +653,7 @@ const insertarImagenesProducto = async (req, res) => {
       const imageName = generateImageFileName(i); // Generar nombres secuenciales
       const imagePath = path.join(imageFolderPath, imageName);
 
-      fs.renameSync(toString(image.path), imagePath);
+      fs.renameSync(image.path, imagePath);
 
       const imageValues = [productId, imageName, path.join(productImageDir, imageName)]; // Ruta relativa
       await pool.query(insertImageQuery, imageValues);
