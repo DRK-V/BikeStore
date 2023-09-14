@@ -56,11 +56,10 @@ export const Register_products = () => {
 
       if (productResponse.status === 200) {
         const { productId, nombre_producto } = await productResponse.json();
-
         // Crear un FormData para enviar imágenes
         const formData = new FormData();
         formData.append('productId', productId);
-        formData.append('nombre_producto', nombre_producto);
+        formData.append('producto', product.nombre_producto);
 
         // Subir las imágenes al servidor
         for (let i = 0; i < images.length; i++) {

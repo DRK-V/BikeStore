@@ -613,7 +613,7 @@ const insertarProducto = async (req, res) => {
 
 const insertarImagenesProducto = async (req, res) => {
   const productId = req.body.productId; // El ID del producto al que se asocian las imágenes
-  const nombre_producto = req.body.nombre_producto; // El nombre del producto
+  const nombre_producto = req.body.producto; // El nombre del producto
   const images = req.files;
 
   if (!Array.isArray(images) || images.length === 0) {
@@ -636,12 +636,6 @@ const insertarImagenesProducto = async (req, res) => {
       fs.mkdirSync(imageFolderPath, { recursive: true });
     }
 
-    // Función para generar nombres secuenciales de archivo para las imágenes
-    const generateImageFileName = (index) => {
-      if (index === 0) return 'imagen_portada.jpg'; // Primera imagen como portada
-      return `vista_${index}.jpg`; // Otras imágenes como vistas
-    };
-
     // Insertar todas las imágenes relacionadas con el producto y renombrarlas
     const insertImageQuery = `
       INSERT INTO imagen_producto (codigo_producto, nombre_imagen, ruta_imagen)
@@ -650,12 +644,13 @@ const insertarImagenesProducto = async (req, res) => {
 
     for (let i = 0; i < images.length; i++) {
       const image = images[i];
-      const imageName = generateImageFileName(i); // Generar nombres secuenciales
-      const imagePath = path.join(imageFolderPath, imageName);
+      const originalImageName = image.originalname; // Obtener el nombre original de la imagen
+      const imageName = i === 0 ? 'imagen portada' : `vista_${i}`; // Cambiar el nombre de la primera imagen si es necesario
+      const imagePath = path.join(imageFolderPath, originalImageName); // Usar el nombre original
 
       fs.renameSync(image.path, imagePath);
 
-      const imageValues = [productId, imageName, path.join(productImageDir, imageName)]; // Ruta relativa
+      const imageValues = [productId, imageName, path.join(productImageDir, originalImageName)]; // Usar el nombre original en la ruta
       await pool.query(insertImageQuery, imageValues);
     }
 
