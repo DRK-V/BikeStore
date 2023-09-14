@@ -645,12 +645,14 @@ const insertarImagenesProducto = async (req, res) => {
     for (let i = 0; i < images.length; i++) {
       const image = images[i];
       const originalImageName = image.originalname; // Obtener el nombre original de la imagen
-      const imageName = i === 0 ? 'imagen portada' : `vista_${i}`; // Cambiar el nombre de la primera imagen si es necesario
+      const imageName = i === 0 ? 'imagen portada' : originalImageName; // Cambiar el nombre de la primera imagen si es necesario
       const imagePath = path.join(imageFolderPath, originalImageName); // Usar el nombre original
 
       fs.renameSync(image.path, imagePath);
 
-      const imageValues = [productId, imageName, path.join(productImageDir, originalImageName)]; // Usar el nombre original en la ruta
+      const imageUrl = `http://localhost:3060/images/${sanitizedProductName}/${originalImageName}`.replace(/\\/g, '/');
+
+      const imageValues = [productId, imageName, imageUrl]; // Usar la URL completa en la ruta
       await pool.query(insertImageQuery, imageValues);
     }
 
@@ -661,6 +663,8 @@ const insertarImagenesProducto = async (req, res) => {
     res.status(500).json({ error: 'Error al insertar las imágenes' });
   }
 };
+
+
 
 
 
