@@ -114,6 +114,7 @@ const Container_comments = () => {
         console.log("Comentario enviado exitosamente:", data);
 
         const commentWithUserName = {
+          id: data.id, // Asegúrate de obtener el ID del comentario creado
           codigo_cliente,
           clientName: authContext.user.nombre_usuario || "Nombre no encontrado",
           fecha_creacion: new Date().toISOString(),
@@ -125,6 +126,48 @@ const Container_comments = () => {
       })
       .catch((error) => {
         console.error("Error al enviar el comentario:", error);
+      });
+  };
+
+  const editComment = (commentId, newContent) => {
+    // URL del servidor y endpoint para editar comentarios
+    const editCommentUrl = `http://localhost:3060/editar-comentario/${commentId}`;
+
+    // Objeto de configuración para la solicitud PUT
+    const requestOptions = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ texto: newContent }), // Enviar el nuevo contenido
+    };
+
+    // Realizar la solicitud PUT al servidor
+    fetch(editCommentUrl, requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("No se pudo editar el comentario en el servidor");
+        }
+        return response.json();
+      })
+      .then((editedComment) => {
+        console.log("Comentario editado exitosamente:", editedComment);
+
+        // Actualizar el comentario localmente
+        const updatedComments = commentsData.map((comment) => {
+          if (comment.id === commentId) {
+            return {
+              ...comment,
+              texto: editedComment.texto, // Actualizar el contenido
+            };
+          }
+          return comment;
+        });
+
+        setCommentsData(updatedComments);
+      })
+      .catch((error) => {
+        console.error("Error al editar el comentario:", error);
       });
   };
 
@@ -145,12 +188,14 @@ const Container_comments = () => {
         <p>Error al cargar comentarios: {error.message}</p>
       ) : (
         <>
-          {commentsData.map((comment, index) => (
+          {commentsData.map((comment) => (
             <Comments
-              key={index}
+              key={comment.id}
+              id_comentario={comment.id} // Pasa el ID del comentario aquí
               name={comment.clientName}
               time={formatDateTime(comment.fecha_creacion)}
               content={comment.texto}
+              onEdit={editComment}
             />
           ))}
           {authContext.isLoggedIn && (
@@ -173,7 +218,7 @@ const Container_comments = () => {
                 type="submit"
                 disabled={!isCommentValid}
               >
-                <span class="material-symbols-outlined">send</span>
+                <span className="material-symbols-outlined">send</span>
               </button>
             </form>
           )}
