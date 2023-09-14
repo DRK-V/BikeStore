@@ -613,19 +613,25 @@ const insertarProducto = async (req, res) => {
 
 const insertarImagenesProducto = async (req, res) => {
   const productId = req.body.productId; // El ID del producto al que se asocian las imágenes
+  const nombre_producto = req.body.nombre_producto; // El nombre del producto
   const images = req.files;
 
+  if (!Array.isArray(images) || images.length === 0) {
+    return res.status(400).json({ error: 'Error al recibir imágenes', images });
+  }
+
   try {
-    // Validar productId y la existencia de imágenes
-    if (!productId || !images || images.length === 0) {
-      res.status(400).json({ error: 'Error en el ID o al recibir imágenes' });
-      return;
+    // Validar productId, nombre_producto y la existencia de imágenes
+    if (!productId || !nombre_producto || !images || images.length === 0) {
+      return res.status(400).json({ error: 'Error en el ID, nombre o al recibir imágenes' });
     }
 
-    // Construir el nombre de la carpeta usando el productId (código del producto)
-    const imageFolderPath = path.join(__dirname, `../images/${productId}`);
+    // Construir el nombre de la carpeta usando el nombre del producto (asegúrate de sanearlo para evitar problemas con caracteres inválidos)
+    const sanitizedProductName = nombre_producto.replace(/[^\w\s]/gi, ''); // Elimina caracteres especiales
+    const productImageDir = `../images/${sanitizedProductName}`;
 
-    // Crear la carpeta si no existe
+    // Verificar si la carpeta de destino existe, si no, crearla
+    const imageFolderPath = path.join(__dirname, productImageDir);
     if (!fs.existsSync(imageFolderPath)) {
       fs.mkdirSync(imageFolderPath, { recursive: true });
     }
@@ -647,9 +653,9 @@ const insertarImagenesProducto = async (req, res) => {
       const imageName = generateImageFileName(i); // Generar nombres secuenciales
       const imagePath = path.join(imageFolderPath, imageName);
 
-      fs.renameSync(image.path, imagePath);
+      fs.renameSync(toString(image.path), imagePath);
 
-      const imageValues = [productId, imageName, `../images/${productId}/${imageName}`]; // Ruta relativa
+      const imageValues = [productId, imageName, path.join(productImageDir, imageName)]; // Ruta relativa
       await pool.query(insertImageQuery, imageValues);
     }
 
@@ -660,6 +666,7 @@ const insertarImagenesProducto = async (req, res) => {
     res.status(500).json({ error: 'Error al insertar las imágenes' });
   }
 };
+
 
 
 

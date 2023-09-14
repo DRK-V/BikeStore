@@ -45,7 +45,7 @@ export const Register_products = () => {
     e.preventDefault();
 
     try {
-      // Send product data as JSON
+      // Enviar datos del producto como JSON
       const productResponse = await fetch('http://localhost:3060/insertarProducto', {
         method: 'POST',
         headers: {
@@ -55,18 +55,21 @@ export const Register_products = () => {
       });
 
       if (productResponse.status === 200) {
-        const { productId } = await productResponse.json();
+        const { productId, nombre_producto } = await productResponse.json();
 
-        // Create a FormData to send images
+        // Crear un FormData para enviar imágenes
         const formData = new FormData();
         formData.append('productId', productId);
+        formData.append('nombre_producto', nombre_producto);
 
-        // Add the images to the FormData
+        // Subir las imágenes al servidor
         for (let i = 0; i < images.length; i++) {
-          formData.append('images', images[i].file);
+          formData.append('images', images[i].file, images[i].file.name); // Asegúrate de incluir el nombre original del archivo
+        }
+        for (let i = 0; i < images.length; i++) {
+          console.log(images[i].file, images[i].file.name)
         }
 
-        // Send images as FormData
         const imageResponse = await fetch('http://localhost:3060/insertarImagenesProducto', {
           method: 'POST',
           body: formData,
@@ -120,7 +123,7 @@ export const Register_products = () => {
             <input
               type="text"
               name="nombre_producto"
-              value={product.nombre}
+              value={product.nombre_producto}
               onChange={handleChange}
             />
           </div>
@@ -129,7 +132,7 @@ export const Register_products = () => {
             <input
               type="text"
               name="tipo"
-              value={product.tipoBicicleta}
+              value={product.tipo}
               onChange={handleChange}
             />
           </div>
@@ -156,7 +159,7 @@ export const Register_products = () => {
             <input
               type="number"
               name="stock_disponible"
-              value={product.stock}
+              value={product.stock_disponible}
               onChange={handleChange}
             />
           </div>
@@ -164,7 +167,7 @@ export const Register_products = () => {
             <label className="form-label">Descripción:</label>
             <textarea
               name="descripcion_producto"
-              value={product.descripcion}
+              value={product.descripcion_producto}
               onChange={handleChange}
             />
           </div>

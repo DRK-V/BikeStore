@@ -216,7 +216,28 @@ router.get('/ventas', async (req, res) => {
 });
 
 router.post('/insertarProducto', dataController.insertarProducto);
-router.post('/insertarImagenesProducto', dataController.insertarImagenesProducto);
+
+const storage2 = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const productId = req.body.productId; // ID del producto al que se asocian las imágenes
+    const frontendPublicPath = path.join(__dirname, '../../frontend/public');
+    const productImagePath = `product_images/product_${productId}`;
+    const destinationPath = path.join(frontendPublicPath, productImagePath);
+
+    // Verificar si la carpeta de destino existe, si no, crearla
+    if (!fs.existsSync(destinationPath)) {
+      fs.mkdirSync(destinationPath, { recursive: true });
+    }
+
+    cb(null, destinationPath);
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  }
+});
+const upload2 = multer({ storage: storage2 });
+router.post('/insertarImagenesProducto', upload2.array('images'), dataController.insertarImagenesProducto);
+
 
 
 module.exports = router;
