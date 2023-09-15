@@ -76,6 +76,8 @@ export const Register_products = () => {
 
         if (imageResponse.status === 200) {
           console.log('Imágenes insertadas con éxito');
+          alert('Imágenes insertadas con éxito');
+          window.location.reload();
         } else {
           console.error('Error al insertar las imágenes:', imageResponse.statusText);
         }
