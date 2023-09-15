@@ -22,6 +22,31 @@
     margin: 20px auto; 
     max-width: 400px;
   }
+  /* Estilos para los botones en modo de edición */
+button {
+    background-color: #007bff; /* Color de fondo del botón */
+    color: #fff; /* Color del texto del botón */
+    padding: 8px 16px; /* Espaciado interno del botón */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cambia el cursor al pasar el ratón sobre el botón */
+    margin-right: 8px; /* Margen derecho entre los botones */
+  }
+  
+  /* Estilos para el botón "Guardar" */
+  button.save-button {
+    background-color: #28a745; /* Cambia el color de fondo para el botón "Guardar" */
+  }
+  
+  /* Estilos para el botón "Cancelar" */
+  button.cancel-button {
+    background-color: #dc3545; /* Cambia el color de fondo para el botón "Cancelar" */
+  }
+  
+  /* Estilos para el botón "Editar" en modo de visualización */
+  button.edit-button {
+    background-color: #007bff; /* Puedes ajustar el color si es necesario */
+    color: #fff;
+  }
   
   .coments {
     flex: 1;

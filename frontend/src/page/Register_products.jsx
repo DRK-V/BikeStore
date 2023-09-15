@@ -129,14 +129,21 @@ export const Register_products = () => {
             />
           </div>
           <div className="form-group">
-            <label className="form-label">Tipo de Bicicleta:</label>
-            <input
-              type="text"
-              name="tipo"
-              value={product.tipo}
-              onChange={handleChange}
-            />
-          </div>
+  <label className="form-label">Tipo de Bicicleta:</label>
+  <select
+    name="tipo"
+    value={product.tipo}
+    onChange={handleChange}
+  >
+    <option value="bicicleta de montaña">Bicicleta de Montaña</option>
+    <option value="bicicleta de gravel">Bicicleta de Gravel</option>
+    <option value="bicicleta de carretera">Bicicleta de Carretera</option>
+    <option value="bicicleta de ciudad">Bicicleta de Ciudad</option>
+    <option value="bicicleta electrica">Bicicleta Eléctrica</option>
+    <option value="bicicleta plegable">Bicicleta Plegable</option>
+  </select>
+</div>
+
           <div className="form-group">
             <label className="form-label">Color:</label>
             <input
