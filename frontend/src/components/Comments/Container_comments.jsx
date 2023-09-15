@@ -12,6 +12,8 @@ const Container_comments = () => {
   const comenContext = useComenContext();
   const authContext = useAuth();
   const [isCommentValid, setIsCommentValid] = useState(false);
+  const [editedComment, setEditedComment] = useState(""); // Nuevo estado para el comentario editado
+  const [editingCommentId, setEditingCommentId] = useState(null); // Nuevo estado para el ID del comentario que se está editando
 
   useEffect(() => {
     setIsLoading(true);
@@ -77,7 +79,7 @@ const Container_comments = () => {
     const comment = e.target.value;
     setNewComment(comment);
 
-    if (comment.length >= 20) {
+    if (comment.length >= 5) {
       setIsCommentValid(true);
     } else {
       setIsCommentValid(false);
@@ -158,20 +160,37 @@ const Container_comments = () => {
               className="for_coment"
               onSubmit={(e) => {
                 e.preventDefault();
-                submitComment();
+                if (editingCommentId === null) {
+                  // Si no se está editando un comentario, envía uno nuevo
+                  submitComment();
+                } else {
+                  // Si se está editando un comentario, envía la edición
+                  submitEdit();
+                }
               }}
             >
-              <input
-                className="coments"
-                type="text"
-                placeholder="Escribe tu comentario"
-                value={newComment}
-                onChange={handleCommentChange}
-              />
+              {editingCommentId === null ? ( // Cambia el texto del botón según si se está editando o enviando un nuevo comentario
+                <input
+                  className="coments"
+                  type="text"
+                  placeholder="Escribe tu comentario"
+                  value={newComment}
+                  onChange={handleCommentChange}
+                />
+              ) : (
+                <textarea
+                  className="coments"
+                  placeholder="Editar comentario..."
+                  value={editedComment}
+                  onChange={handleEditChange}
+                />
+              )}
               <button
                 className="coments_buton"
                 type="submit"
-                disabled={!isCommentValid}
+                disabled={
+                  !isCommentValid || (editingCommentId !== null && editedComment === "")
+                } // Deshabilita el botón si no es un comentario válido o el campo de edición está vacío
               >
                 <span class="material-symbols-outlined">send</span>
               </button>

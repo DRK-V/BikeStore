@@ -103,6 +103,9 @@ export const Login = () => {
               </div>
               <Link className='forgot_password' to="/Recover_password">Olvide mi contrasena</Link>
               <button className='button-ini' type="submit">Iniciar</button>
+              <button className='button-reg' onClick={() => navigate('/register')}>
+    Registrarse
+  </button>
             </form>
             <div className="login-status">{loginStatus}</div>
           </div>

@@ -1,534 +1,524 @@
 .container_view_details {
-    width: 100%;
-    height: 80vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 .cart-message {
-    position: fixed;
-    top: 50%; /* Center vertically */
-    left: 50%; /* Center horizontally */
-    transform: translate(-50%, -50%); /* Center the message in the middle of the screen */
-    background-color: #333; /* Background color of the message */
-    color: white; /* Text color of the message */
-    padding: 10px 20px; /* Padding around the message text */
-    border-radius: 5px; /* Rounded corners */
-    z-index: 999; /* Ensure it's above other content */
-    /* Add more styles as needed */
-  }
-  
+  position: fixed;
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(
+    -50%,
+    -50%
+  ); /* Center the message in the middle of the screen */
+  background-color: #333; /* Background color of the message */
+  color: white; /* Text color of the message */
+  padding: 10px 20px; /* Padding around the message text */
+  border-radius: 5px; /* Rounded corners */
+  z-index: 999; /* Ensure it's above other content */
+  /* Add more styles as needed */
+}
+
 .container_images {
-    
-    width: 6%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    
+  width: 6%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .sub_images {
-    width: 100%;
-    height: 20%;
-    background-color: white;
-    margin: 10px;
-    border-radius: .4rem;
-    cursor: pointer;
+  width: 100%;
+  height: 20%;
+  background-color: white;
+  margin: 10px;
+  border-radius: 0.4rem;
+  cursor: pointer;
 }
 
 .sub_images:hover {
-    transition: .3s;
-    border: solid 1px gray;
+  transition: 0.3s;
+  border: solid 1px gray;
 }
 
-
 .main_image {
-    width: 50%;
-    height: 80%;
-    background-color: white;
-    margin: 3%;
-    object-fit: cover;
+  width: 50%;
+  height: 80%;
+  background-color: white;
+  margin: 3%;
+  object-fit: cover;
 }
 
 .form_add_item_cart {
-    position: relative;
-    top: 20vh;
-    width: 30%;
-    height: 100vh;
-    background-color: white;
+  position: relative;
+  top: 20vh;
+  width: 30%;
+  height: 100vh;
+  background-color: white;
 }
 
 /* aqui van los estilos del formulario */
-.form_add_item_cart>label,
-.container_color_details>label {
-    font-weight: bold;
-    font-size: 1.2em;
+.form_add_item_cart > label,
+.container_color_details > label {
+  font-weight: bold;
+  font-size: 1.2em;
 }
 
 .form_add_item_cart {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: flex-start;
-    padding-left: 3%;
-    top: 18vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  padding-left: 3%;
+  top: 18vh;
 }
 
 .bike_name {
-    width: 80%;
-    font-size: 1.7em;
+  width: 80%;
+  font-size: 1.7em;
 }
 
 .price_text {
-    width: 80%;
-    color: green;
-    font-size: 1.4em;
+  width: 80%;
+  color: green;
+  font-size: 1.4em;
 }
 
-.price_text>p {
-    font-size: 1.2em;
-    color: black;
+.price_text > p {
+  font-size: 1.2em;
+  color: black;
 }
 
-.price_text>small {
-    text-decoration: line-through;
-    color: red;
+.price_text > small {
+  text-decoration: line-through;
+  color: red;
 }
 
 .color_text {
-    font-weight: bold;
-    margin-right: 5%;
+  font-weight: bold;
+  margin-right: 5%;
 }
 
-.color_text>strong {
-    margin-left: 4%;
+.color_text > strong {
+  margin-left: 4%;
 }
 
 .container_color_details {
-    width: 80%;
-    height: 10%;
-    display: flex;
-    flex-wrap: wrap;
+  width: 80%;
+  height: 10%;
+  display: flex;
+  flex-wrap: wrap;
 }
 
-.container_color_details>label {
-    width: 90%;
-    text-align: left;
+.container_color_details > label {
+  width: 90%;
+  text-align: left;
 }
 
-
-.container_color_details>input[type="color"] {
-    border: none;
-    border-radius: 2em;
-    width: 30%;
-    height: 65%;
+.container_color_details > input[type="color"] {
+  border: none;
+  border-radius: 2em;
+  width: 30%;
+  height: 65%;
 }
 
-.form_add_item_cart>select {
-    width: 26%;
-    height: 6%;
-    border-radius: .5rem;
-    font-size: 1.1em;
+.form_add_item_cart > select {
+  width: 26%;
+  height: 6%;
+  border-radius: 0.5rem;
+  font-size: 1.1em;
 }
 
 .container_count {
-    width: 80%;
-    height: 7%;
+  width: 80%;
+  height: 7%;
 }
 
-.container_count>label {
-    font-weight: bold;
-    font-size: 1.2em;
-    margin-right: 4%;
+.container_count > label {
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-right: 4%;
 }
 
-.container_count>input {
-    width: 30%;
-    height: 80%;
-    border-radius: .5rem;
-    font-size: 1.2em;
-    text-align: center;
+.container_count > input {
+  width: 30%;
+  height: 80%;
+  border-radius: 0.5rem;
+  font-size: 1.2em;
+  text-align: center;
 }
 
 .text_descripcion_details {
-    font-size: 1em;
-    font-weight: bold;
+  font-size: 1em;
+  font-weight: bold;
 }
 
 /* Estilos generales para los botones */
-.form_add_item_cart>button {
-    position: relative;
-    width: 45%;
-    height: 10%;
-    left: 30%;
-    font-size: 0.9em;
-    font-weight: bold;
-    border-radius: 0.2rem;
-    border: none;
-    cursor: pointer;
+.form_add_item_cart > button {
+  position: relative;
+  width: 45%;
+  height: 10%;
+  left: 30%;
+  font-size: 0.9em;
+  font-weight: bold;
+  border-radius: 0.2rem;
+  border: none;
+  cursor: pointer;
 }
 
 /* se llama la animacion del archivo css "animation" */
-.form_add_item_cart>button:hover {
-    animation: hover_button .2s alternate ease-in forwards;
+.form_add_item_cart > button:hover {
+  animation: hover_button 0.2s alternate ease-in forwards;
 }
 
-.btn_buy {
-    background-color: rgb(75, 199, 112);
-    color: white;
+.btn_buy_now {
+  background-color: rgb(75, 199, 112);
+  color: white;
 }
 
 .btn_add_item_cart {
-    background-color: rgb(212, 214, 77);
-    color: black;
+  background-color: rgb(212, 214, 77);
+  color: black;
 }
 
 /* Estilos para el ícono */
-.btn_buy>i,
-.btn_add_item_cart>i {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    margin-right: 8px;
-    background-size: cover;
-    /* Utiliza "cover" en lugar de "100%" */
-    background-position: center;
-    background-repeat: no-repeat;
+.btn_buy_now > i,
+.btn_add_item_cart > i {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  margin-right: 8px;
+  background-size: cover;
+  /* Utiliza "cover" en lugar de "100%" */
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-.btn_buy>i {
-    background-image: url('../assets/icons/trolley_ico.svg');
+.btn_buy_now > i {
+  background-image: url("../assets/icons/trolley_ico.svg");
 }
 
-.btn_add_item_cart>i {
-    background-image: url('../assets/icons/buy_icon.svg');
+.btn_add_item_cart > i {
+  background-image: url("../assets/icons/buy_icon.svg");
 }
 
 /* Ajusta la alineación vertical del texto con el ícono */
-.btn_buy i,
+.btn_buy_now i,
 .btn_add_item_cart i {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 .container_comments {
-    position: relative;
-    top: -10%;
-    left: -7%;
-    width: 55%;
-    height: 65vh;
-    background-color: rgb(255, 255, 255);
-    border-radius: .6rem;
-    box-shadow: 1px 1px 20px 2px rgba(207, 207, 207, 0.507);
-    overflow: hidden;
-    overflow-y: auto;
+  position: relative;
+  top: -10%;
+  left: -7%;
+  width: 55%;
+  height: 65vh;
+  background-color: rgb(255, 255, 255);
+  border-radius: 0.6rem;
+  box-shadow: 1px 1px 20px 2px rgba(207, 207, 207, 0.507);
+  overflow: hidden;
+  overflow-y: auto;
 }
 
 /* Estilos para el scrollbar */
 .container_comments::-webkit-scrollbar {
-    width: 10px;
-    /* Ancho del scrollbar */
+  width: 10px;
+  /* Ancho del scrollbar */
 }
 
 .container_comments::-webkit-scrollbar-thumb {
-    background-color: rgba(150, 218, 170, 0.8);
-    /* Color del pulgar del scrollbar */
-    border-radius: 5px;
-    /* Radio del borde del pulgar del scrollbar */
+  background-color: rgba(150, 218, 170, 0.8);
+  /* Color del pulgar del scrollbar */
+  border-radius: 5px;
+  /* Radio del borde del pulgar del scrollbar */
 }
 
 .container_comments::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(75, 199, 112, 1);
-    /* Color del pulgar del scrollbar en hover */
+  background-color: rgba(75, 199, 112, 1);
+  /* Color del pulgar del scrollbar en hover */
 }
 
 .container_comments::-webkit-scrollbar-track {
-    background-color: rgba(207, 207, 207, 0.2);
-    /* Color de la pista del scrollbar */
+  background-color: rgba(207, 207, 207, 0.2);
+  /* Color de la pista del scrollbar */
 }
 
 .container_comments::-webkit-scrollbar-track:hover {
-    background-color: rgba(207, 207, 207, 0.3);
-    /* Color de la pista del scrollbar en hover */
-    width: 10px;
-    /* Ancho del scrollbar */
+  background-color: rgba(207, 207, 207, 0.3);
+  /* Color de la pista del scrollbar en hover */
+  width: 10px;
+  /* Ancho del scrollbar */
 }
-
-
 
 .container_comments::-webkit-scrollbar-track:hover {
-    background-color: rgba(207, 207, 207, 0.3);
-    /* Color de la pista del scrollbar en hover */
+  background-color: rgba(207, 207, 207, 0.3);
+  /* Color de la pista del scrollbar en hover */
 }
-
 
 /* estilos para la valoracion "5 estrellas" */
 
-
 .assessment {
-    position: relative;
-    left: 5%;
-    margin-top: 5%;
-    width: 20%;
-    height: 30vh;
-    font-size: 4em;
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-wrap: wrap;
+  position: relative;
+  left: 5%;
+  margin-top: 5%;
+  width: 20%;
+  height: 30vh;
+  font-size: 4em;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
 }
 
 .brand {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    margin-top: 10%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 10%;
 }
-
-
 
 .icon_bike_brand {
-    width: 50%;
-    height: 15vh;
-    object-fit: cover;
+  width: 50%;
+  height: 15vh;
+  object-fit: cover;
 }
 
-.assessment>h1,
-.brand>h1 {
-    width: 100%;
-    height: 10%;
-    font-size: .3em;
-    color: green;
-    text-align: center;
+.assessment > h1,
+.brand > h1 {
+  width: 100%;
+  height: 10%;
+  font-size: 0.3em;
+  color: green;
+  text-align: center;
 }
 
 .container_stars {
-    width: 100%;
-    height: 20%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row-reverse;
+  width: 100%;
+  height: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row-reverse;
 }
 
-.container_stars>label {
-    color: rgb(218, 213, 213);
-}
-
-/* Al pasar por encima las etiquetas <label> ( o sea: las estrellas ) cambian de color */
-.container_stars>label:hover {
-    color: orange;
-}
-
-/* También cambian de color todas las etiquetas <label> precedidas ( ~ ) por aquella <label> que tiene el ratón encima ( hover ). */
-.container_stars>label:hover~label {
-    color: orange;
-}
-
-.option_star:checked~label {
-    color: orange;
-}
-
-.option_star {
-    display: none;
-}
-
-.container_stars>label {
-    color: rgb(218, 213, 213);
+.container_stars > label {
+  color: rgb(218, 213, 213);
 }
 
 /* Al pasar por encima las etiquetas <label> ( o sea: las estrellas ) cambian de color */
-.container_stars>label:hover {
-    color: orange;
+.container_stars > label:hover {
+  color: orange;
 }
 
 /* También cambian de color todas las etiquetas <label> precedidas ( ~ ) por aquella <label> que tiene el ratón encima ( hover ). */
-.container_stars>label:hover~label {
-    color: orange;
+.container_stars > label:hover ~ label {
+  color: orange;
 }
 
-.option_star:checked~label {
-    color: orange;
+.option_star:checked ~ label {
+  color: orange;
 }
 
 .option_star {
-    display: none;
+  display: none;
+}
+
+.container_stars > label {
+  color: rgb(218, 213, 213);
+}
+
+/* Al pasar por encima las etiquetas <label> ( o sea: las estrellas ) cambian de color */
+.container_stars > label:hover {
+  color: orange;
+}
+
+/* También cambian de color todas las etiquetas <label> precedidas ( ~ ) por aquella <label> que tiene el ratón encima ( hover ). */
+.container_stars > label:hover ~ label {
+  color: orange;
+}
+
+.option_star:checked ~ label {
+  color: orange;
+}
+
+.option_star {
+  display: none;
 }
 
 /*responsive*/
-@media (max-width:1150px) {
+@media (max-width: 1150px) {
+  .main_image {
+    width: 80%;
+  }
 
-    .main_image {
-        width: 80%;
-    }
+  .sub_images {
+    order: 2;
+    height: 23%;
+  }
 
-    .sub_images {
-        order: 2;
-        height: 23%;
-    }
+  .container_images {
+    width: 9%;
+  }
 
-    .container_images {
-        width: 9%;
-    }
+  .form_add_item_cart {
+    left: 4%;
+    top: 0;
+    width: 80%;
+    height: 120vh;
+  }
 
-    .form_add_item_cart {
-        left: 4%;
-        top: 0;
-        width: 80%;
-        height: 120vh;
-    }
+  .form_add_item_cart > button {
+    width: 30%;
+    display: inline;
+  }
 
-    .form_add_item_cart>button {
-        width: 30%;
-        display: inline;
-    }
+  .container_comments {
+    top: 10%;
+    width: 60%;
+  }
 
-    .container_comments {
-        top: 10%;
-        width: 60%;
-    }
+  .assessment {
+    left: 3%;
+  }
 
-    .assessment {
-        left: 3%;
-    }
+  .slider_similar_bike {
+    top: 10%;
+  }
 
-    .slider_similar_bike {
-        top: 10%;
-    }
-
-    .card_similar>img {
-        object-fit: contain;
-    }
-
+  .card_similar > img {
+    object-fit: contain;
+  }
 }
 
-@media (max-width:930px) {
-    .container_comments {
-        left: 3%;
-        width: 86%;
-        height: 100vh;
-    }
+@media (max-width: 930px) {
+  .container_comments {
+    left: 3%;
+    width: 86%;
+    height: 100vh;
+  }
 }
 
-@media (max-width:690px) {
-    .container_images {
-        width: 14%;
-    }
+@media (max-width: 690px) {
+  .container_images {
+    width: 14%;
+  }
 
-    .main_image {
-        width: 70%;
-    }
+  .main_image {
+    width: 70%;
+  }
 
-    .form_add_item_cart {
-        width: 85%;
-    }
+  .form_add_item_cart {
+    width: 85%;
+  }
 
-    .form_add_item_cart>button {
-        left: 30%;
-        height: 10%;
-        width: 40%;
-    }
+  .form_add_item_cart > button {
+    left: 30%;
+    height: 10%;
+    width: 40%;
+  }
 
-    .assessment {
-        margin-top: 2em;
-        height: 60vh;
-        width: 60%;
-    }
+  .assessment {
+    margin-top: 2em;
+    height: 60vh;
+    width: 60%;
+  }
 }
 
-@media (max-width:590px) {
-    .container_comments {
-        top: 0;
-    }
+@media (max-width: 590px) {
+  .container_comments {
+    top: 0;
+  }
 
-    .form_add_item_cart>button {
-        width: 70%;
-        left: 15%;
-    }
+  .form_add_item_cart > button {
+    width: 70%;
+    left: 15%;
+  }
 
-    .container_comments {
-        width: 100%;
-    }
+  .container_comments {
+    width: 100%;
+  }
 
-    .assessment {
-        margin-top: 1em;
-    }
+  .assessment {
+    margin-top: 1em;
+  }
 }
 
-@media (max-width:530px) {
-    .container_images {
-        margin-top: 5%;
-        width: 100%;
-        height: 15vh;
-        flex-direction: row;
-        justify-content: center;
-        order: 5;
-    }
+@media (max-width: 530px) {
+  .container_images {
+    margin-top: 5%;
+    width: 100%;
+    height: 15vh;
+    flex-direction: row;
+    justify-content: center;
+    order: 5;
+  }
 
-    .main_image {
-        margin-top: 10%;
-        width: 100%;
-        height: 40vh;
-        order: 10;
-        order: 4;
-    }
+  .main_image {
+    margin-top: 10%;
+    width: 100%;
+    height: 40vh;
+    order: 10;
+    order: 4;
+  }
 
-    .sub_images {
-        width: 20%;
-        height: 100%;
-        order: 3;
-    }
+  .sub_images {
+    width: 20%;
+    height: 100%;
+    order: 3;
+  }
 
-    .form_add_item_cart {
-        order:5 ;
-    }
-    .form_add_item_cart>select{
-        width: 40%;
-    }
-    .container_color_details>input[type="color"]{
-        margin-top: 2%;
-        width: 40%;
-    }
-    .container_count>input{
-        width: 40%;
-    }
-    .container_comments {
-        order: 7;
-    }
+  .form_add_item_cart {
+    order: 5;
+  }
+  .form_add_item_cart > select {
+    width: 40%;
+  }
+  .container_color_details > input[type="color"] {
+    margin-top: 2%;
+    width: 40%;
+  }
+  .container_count > input {
+    width: 40%;
+  }
+  .container_comments {
+    order: 7;
+  }
 
-    .assessment {
-        order: 6;
-    }
+  .assessment {
+    order: 6;
+  }
 }
-@media (max-width:450px) {
-    .text_content{
-        font-size: .8em;
-    }
-    .section_comment_profile{
-        width: 12%;
-    }
-    .container_icon_user {
-        width: 15%;
-    }
-    .icon_user {
-        height: 10%;
-        background-size: 100%;
-    }
-    .sub_images{
-        width: 26%;
-    }
-    .form_add_item_cart{
-        width: 100%;
-    }
-    .form_add_item_cart>label, .container_color_details>label{
-        width: 100%;
-        text-align: left;
-    }
-    .assessment {
-        margin-top: 0;
-    }
-    
+@media (max-width: 450px) {
+  .text_content {
+    font-size: 0.8em;
+  }
+  .section_comment_profile {
+    width: 12%;
+  }
+  .container_icon_user {
+    width: 15%;
+  }
+  .icon_user {
+    height: 10%;
+    background-size: 100%;
+  }
+  .sub_images {
+    width: 26%;
+  }
+  .form_add_item_cart {
+    width: 100%;
+  }
+  .form_add_item_cart > label,
+  .container_color_details > label {
+    width: 100%;
+    text-align: left;
+  }
+  .assessment {
+    margin-top: 0;
+  }
 }
-
