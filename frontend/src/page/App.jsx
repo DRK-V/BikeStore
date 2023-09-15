@@ -43,6 +43,7 @@ function App() {
         <>
         {isSearchRoute && <Navbar />}
         {isCategoryRoute  && <Navbar />}
+        
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/categoria/:tipo" element={<Card_container />} />

@@ -163,17 +163,15 @@ const Bike_details = () => {
                     Color:
                     <strong>{additionalProductDetails?.product?.color}</strong>
                   </label>
-                  <input type="color" name="color_bike" id="" value="#7ABBDC" />
                 </div>
-                <label htmlFor="" className="text_tamano">
-                  Tamaño:
-                </label>
-                <select name="size_bike" id="">
-                  <option value="">seleccionar</option>
-                  <option value="L">long</option>
-                  <option value="M">Medium</option>
-                  <option value="s">Small</option>
-                </select>
+                <p
+                  className="text_descripcion_details"
+                  style={{ whiteSpace: "pre-line" }}
+                >
+                  Descripción:{" "}
+                  {additionalProductDetails?.product?.descripcion_producto}
+                </p>
+
                 <label htmlFor="" className="text_bike_type">
                   Tipo de bicleta:{additionalProductDetails?.product?.tipo}
                 </label>
@@ -187,9 +185,7 @@ const Bike_details = () => {
                     id=""
                   />
                 </div>
-                <p className="text_descripcion_details">
-                  {productDetails.descripcion}
-                </p>
+
                 <button className="btn_buy_now" onClick={handleBuyNow}>
                   <i></i>
                   Comprar Ahora

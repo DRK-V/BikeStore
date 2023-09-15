@@ -94,9 +94,7 @@ export const Register = () => {
             "El correo electrónico o el número de cédula ya están registrados."
           );
         } else {
-          setRegistrationStatus(
-            "El correo electrónico o el número de cédula ya están registrados."
-          );
+          setRegistrationStatus("error en el servidor");
         }
 
         setTimeout(() => {
