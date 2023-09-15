@@ -19,6 +19,7 @@ export const CartProvider = ({ children }) => {
   
   const getCartFromCookie = () => {
     const cartCookie = Cookies.get(`cart_${idCliente}`);
+
     if (cartCookie) {
       return JSON.parse(cartCookie);
     }
@@ -110,6 +111,7 @@ export const CartProvider = ({ children }) => {
       saveCartToCookie([]); // Limpiar la cookie del carrito si el usuario está autenticado
     }
   };
+  
   return (
     <CartContext.Provider
       value={{

@@ -19,6 +19,7 @@ import { Card_container } from "../components/Card_container";
 import { ComenProvider } from '../components/comencontex';
 import {Actualizar_productos_admin} from './Actualizar_productos_admin';
 import {Register_products} from './Register_products'
+import { Recover_password } from './Recover_password';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -56,6 +57,8 @@ function App() {
             <Route path="/search" element={<Card_container />} />
             <Route path="/Actualizar_productos_admin/:id" element={<Actualizar_productos_admin />} />
             <Route path="/Register_products" element={<Register_products />} />
+            <Route path="/Recover_password" element={<Recover_password />} />
+            
           </Routes>
           {isSearchRoute && <Footer />}
           {isCategoryRoute && <Footer />}
