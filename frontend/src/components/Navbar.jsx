@@ -200,19 +200,19 @@ export const Navbar = ({ onSearchClick, onFormSubmit }) => {
           onMouseLeave={handleSubmenuMouseLeave}
         >
           <ul className="sub-menu">
-            <Link to="/categoria/montaña">
+            <Link to="/categoria/bicicleta de montaña">
               <li className="sub-menu-item">
                 <img src={b1} alt="Icono Bicicleta" />
                 <span>Bicicleta de montaña</span>
               </li>
             </Link>
-            <Link to="/categoria/gravel">
+            <Link to="/categoria/Bicicleta de gravel">
               <li className="sub-menu-item">
                 <img src={b2} alt="Icono Bicicleta" />
                 <span>Bicicleta de gravel</span>
               </li>
             </Link>
-            <Link to="/categoria/carretera">
+            <Link to="/categoria/Bicicleta de carretera">
               <li className="sub-menu-item">
                 <img src={b3} alt="Icono Bicicleta" />
                 <span>Bicicleta de carretera</span>
@@ -230,7 +230,7 @@ export const Navbar = ({ onSearchClick, onFormSubmit }) => {
                 <span>Bicicleta plegable</span>
               </li>
             </Link>
-            <Link to="/categoria/electrica">
+            <Link to="/categoria/Bicicleta eléctrica">
               <li className="sub-menu-item">
                 <img src={b6} alt="Icono Bicicleta" />
                 <span>Bicicleta eléctrica</span>

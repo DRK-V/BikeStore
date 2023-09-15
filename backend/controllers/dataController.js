@@ -1,25 +1,24 @@
-
-const fs = require('fs');
-const path = require('path');
-const multer = require('multer');
+const fs = require("fs");
+const path = require("path");
+const multer = require("multer");
 //datacontroller
 const { pool } = require("../config/db");
-
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const userId = req.params.userId;
-    const destinationPath = path.join(__dirname, `../images_profile/user_${userId}`);
+    const destinationPath = path.join(
+      __dirname,
+      `../images_profile/user_${userId}`
+    );
     cb(null, destinationPath);
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
-  }
+  },
 });
 
 const upload = multer({ storage: storage });
-
-
 
 const updateUser = async (req, res) => {
   const updatedUserData = req.body;
@@ -38,22 +37,19 @@ const updateUser = async (req, res) => {
     updatedUserData.numero_de_documento,
     updatedUserData.direccion,
     updatedUserData.telefono,
-    updatedUserData.id_cliente
+    updatedUserData.id_cliente,
   ];
 
   pool.query(sql, values, (err, results) => {
     if (err) {
-      console.error('Error al actualizar el usuario en la base de datos:', err);
-      res.status(500).json({ message: 'Error al actualizar el usuario' });
+      console.error("Error al actualizar el usuario en la base de datos:", err);
+      res.status(500).json({ message: "Error al actualizar el usuario" });
     } else {
-      console.log('Usuario actualizado en la base de datos');
-      res.json({ message: 'Usuario actualizado exitosamente' });
+      console.log("Usuario actualizado en la base de datos");
+      res.json({ message: "Usuario actualizado exitosamente" });
     }
   });
 };
-
-
-
 
 //fin de acutalizacion de datos del cliente
 //registro de clients
@@ -69,7 +65,7 @@ const registerUser = async (userData) => {
     userData.telefono,
     userData.tipo_de_documento,
     userData.numero_de_documento,
-    userData.rol_usuario
+    userData.rol_usuario,
   ];
 
   try {
@@ -85,7 +81,7 @@ const registerUser = async (userData) => {
 
     return pool.query(insertUserQuery, values);
   } catch (error) {
-    console.error('Error al registrar usuario:', error);
+    console.error("Error al registrar usuario:", error);
     throw error; // Asegúrate de volver a lanzar el error para que el servidor lo maneje adecuadamente
   }
 };
@@ -136,18 +132,19 @@ const getClientePorId = async (req, res) => {
   const { id } = req.params; // Obtén el valor de id_cliente de los parámetros de la URL
 
   try {
-    const selectClientePorIdQuery = 'SELECT * FROM cliente WHERE id_cliente = $1';
+    const selectClientePorIdQuery =
+      "SELECT * FROM cliente WHERE id_cliente = $1";
     const result = await pool.query(selectClientePorIdQuery, [id]);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'Cliente no encontrado' });
+      return res.status(404).json({ message: "Cliente no encontrado" });
     }
 
     const cliente = result.rows[0];
     res.status(200).json(cliente);
   } catch (error) {
-    console.error('Error al buscar cliente por id:', error);
-    res.status(500).json({ message: 'Error en el servidor' });
+    console.error("Error al buscar cliente por id:", error);
+    res.status(500).json({ message: "Error en el servidor" });
   }
 };
 //fin clientes
@@ -347,13 +344,12 @@ const getProductDetailsWithImages = async (req, res) => {
   }
 };
 
-
 //para obtener la informacion del usuario al iniciar sesion:
 const getUserByEmail = async (req, res) => {
   const { email } = req.params;
 
   try {
-    const selectUserQuery = 'SELECT * FROM cliente WHERE correo = $1';
+    const selectUserQuery = "SELECT * FROM cliente WHERE correo = $1";
     const values = [email];
 
     const result = await pool.query(selectUserQuery, values);
@@ -373,12 +369,12 @@ const getUserByEmail = async (req, res) => {
       // Enviar el objeto userData al cliente
       res.status(200).json(userData);
     } else {
-      console.log('Usuario no encontrado para el correo:', email);
-      res.status(404).json({ message: 'Usuario no encontrado' });
+      console.log("Usuario no encontrado para el correo:", email);
+      res.status(404).json({ message: "Usuario no encontrado" });
     }
   } catch (error) {
-    console.error('Error al consultar en la base de datos:', error);
-    res.status(500).json({ message: 'Error en el servidor' });
+    console.error("Error al consultar en la base de datos:", error);
+    res.status(500).json({ message: "Error en el servidor" });
   }
 };
 
@@ -402,13 +398,22 @@ const getUserDetalleCompra = async (req, res) => {
     `;
     const detallesCompraValues = [userId];
 
-    const detallesCompraResult = await pool.query(detallesCompraQuery, detallesCompraValues);
+    const detallesCompraResult = await pool.query(
+      detallesCompraQuery,
+      detallesCompraValues
+    );
     const detallesCompra = detallesCompraResult.rows;
 
     // Organiza los detalles de la compra en un objeto que agrupe las ventas y sus productos
     const ventasConProductos = {};
     detallesCompra.forEach((detalle) => {
-      const { id_venta, fecha_venta, monto_final, cantidad_producto, ...producto } = detalle;
+      const {
+        id_venta,
+        fecha_venta,
+        monto_final,
+        cantidad_producto,
+        ...producto
+      } = detalle;
       if (!ventasConProductos[id_venta]) {
         ventasConProductos[id_venta] = {
           id_venta,
@@ -417,7 +422,10 @@ const getUserDetalleCompra = async (req, res) => {
           productos: [{ ...producto, cantidad_producto }],
         };
       } else {
-        ventasConProductos[id_venta].productos.push({ ...producto, cantidad_producto });
+        ventasConProductos[id_venta].productos.push({
+          ...producto,
+          cantidad_producto,
+        });
       }
     });
 
@@ -426,24 +434,23 @@ const getUserDetalleCompra = async (req, res) => {
 
     res.status(200).json(ventasArray);
   } catch (error) {
-    console.error('Error al obtener los detalles de compra:', error.message);
-    res.status(500).json({ error: 'Error al obtener los detalles de compra' });
+    console.error("Error al obtener los detalles de compra:", error.message);
+    res.status(500).json({ error: "Error al obtener los detalles de compra" });
   }
 };
-
-
-
 
 const updateUserImage = async (req, res) => {
   const userId = req.params.userId;
 
   try {
     if (!req.file) {
-      return res.status(400).json({ error: "No se proporcionó ninguna imagen" });
+      return res
+        .status(400)
+        .json({ error: "No se proporcionó ninguna imagen" });
     }
 
     const imageName = req.file.originalname;
-    const frontendPublicPath = path.join(__dirname, '../../frontend/public');
+    const frontendPublicPath = path.join(__dirname, "../../frontend/public");
     const userImagePath = `profile_images/user_${userId}`;
     const destinationPath = path.join(frontendPublicPath, userImagePath);
     const imagePath = path.join(destinationPath, imageName);
@@ -454,9 +461,15 @@ const updateUserImage = async (req, res) => {
     }
 
     // Eliminar la imagen anterior si existe
-    const existingImage = await pool.query("SELECT imagen_usuario FROM cliente WHERE id_cliente = $1", [userId]);
+    const existingImage = await pool.query(
+      "SELECT imagen_usuario FROM cliente WHERE id_cliente = $1",
+      [userId]
+    );
     if (existingImage.rows.length > 0 && existingImage.rows[0].imagen_usuario) {
-      const previousImagePath = path.join(frontendPublicPath, existingImage.rows[0].imagen_usuario);
+      const previousImagePath = path.join(
+        frontendPublicPath,
+        existingImage.rows[0].imagen_usuario
+      );
       if (fs.existsSync(previousImagePath)) {
         fs.unlinkSync(previousImagePath);
       }
@@ -466,45 +479,54 @@ const updateUserImage = async (req, res) => {
     fs.renameSync(req.file.path, imagePath);
 
     // Construir la ruta relativa para almacenar en la base de datos
-    const relativeImagePath = path.join(userImagePath, imageName).replace(/\\/g, "/");
+    const relativeImagePath = path
+      .join(userImagePath, imageName)
+      .replace(/\\/g, "/");
 
-    const updateImageQuery = "UPDATE cliente SET imagen_usuario = $1 WHERE id_cliente = $2";
+    const updateImageQuery =
+      "UPDATE cliente SET imagen_usuario = $1 WHERE id_cliente = $2";
     const values = [relativeImagePath, userId];
 
     await pool.query(updateImageQuery, values);
 
-    res.status(200).json({ message: "Imagen de usuario actualizada exitosamente" });
+    res
+      .status(200)
+      .json({ message: "Imagen de usuario actualizada exitosamente" });
   } catch (error) {
     console.error("Error al mover la imagen de usuario:", error.message);
-    res.status(500).json({ error: "Error al mover la imagen de usuario", details: error.message });
+    res.status(500).json({
+      error: "Error al mover la imagen de usuario",
+      details: error.message,
+    });
   }
 };
 //comentarios
 const añadirComentario = async (req, res) => {
   const { codigo_cliente, codigo_producto, texto } = req.body;
 
-  const insertQuery = 'INSERT INTO comentario (codigo_cliente, codigo_producto, texto) VALUES ($1, $2, $3)';
+  const insertQuery =
+    "INSERT INTO comentario (codigo_cliente, codigo_producto, texto) VALUES ($1, $2, $3)";
   const values = [codigo_cliente, codigo_producto, texto];
 
   try {
     await pool.query(insertQuery, values);
-    res.status(201).json({ message: 'Comentario añadido con éxito' });
+    res.status(201).json({ message: "Comentario añadido con éxito" });
   } catch (error) {
-    console.error('Error al añadir el comentario:', error);
-    res.status(500).json({ error: 'Error al añadir el comentario' });
+    console.error("Error al añadir el comentario:", error);
+    res.status(500).json({ error: "Error al añadir el comentario" });
   }
 };
 
 const verComentarios = async (req, res) => {
-  const selectQuery = 'SELECT * FROM comentario';
+  const selectQuery = "SELECT * FROM comentario";
 
   try {
     const result = await pool.query(selectQuery);
     const comentarios = result.rows;
     res.status(200).json(comentarios);
   } catch (error) {
-    console.error('Error al obtener los comentarios:', error);
-    res.status(500).json({ error: 'Error al obtener los comentarios' });
+    console.error("Error al obtener los comentarios:", error);
+    res.status(500).json({ error: "Error al obtener los comentarios" });
   }
 };
 const verComentariosPorCodigoProducto = async (req, res) => {
@@ -521,10 +543,53 @@ const verComentariosPorCodigoProducto = async (req, res) => {
     const comentarios = result.rows;
     res.status(200).json(comentarios);
   } catch (error) {
-    console.error('Error al obtener los comentarios:', error);
-    res.status(500).json({ error: 'Error al obtener los comentarios' });
+    console.error("Error al obtener los comentarios:", error);
+    res.status(500).json({ error: "Error al obtener los comentarios" });
   }
 };
+// En comentariosController.js
+const verComentarioPorId = async (req, res) => {
+  const { id_comentario } = req.params;
+
+  const selectQuery = "SELECT * FROM comentario WHERE id_comentario = $1";
+  const values = [id_comentario];
+
+  try {
+    const result = await pool.query(selectQuery, values);
+
+    if (result.rows.length === 0) {
+      res.status(404).json({ error: "Comentario no encontrado" });
+    } else {
+      const comentario = result.rows[0];
+      res.status(200).json(comentario);
+    }
+  } catch (error) {
+    console.error("Error al obtener el comentario:", error);
+    res.status(500).json({ error: "Error al obtener el comentario" });
+  }
+};
+
+const editarComentario = async (req, res) => {
+  const { texto } = req.body;
+  const { id_comentario } = req.params; // Asegúrate de que coincida con el nombre del parámetro en la URL
+
+  // Query SQL para actualizar el comentario con el nuevo texto
+  const updateQuery =
+    "UPDATE comentario SET texto = $1 WHERE id_comentario = $2";
+  const values = [texto, id_comentario];
+
+  try {
+    // Ejecutar la consulta SQL
+    await db.none(updateQuery, values);
+
+    // Comprobar si se actualizó correctamente
+    res.status(200).json({ message: "Comentario editado con éxito" });
+  } catch (error) {
+    console.error("Error al editar el comentario:", error);
+    res.status(500).json({ error: "Error al editar el comentario" });
+  }
+};
+
 //fin comentarios
 //ensayo
 const createVenta = async (ventaData) => {
@@ -540,15 +605,15 @@ const createVenta = async (ventaData) => {
   ];
 
   try {
-    console.log('Datos a insertar en la tabla venta:', values); // Agrega este console.log
+    console.log("Datos a insertar en la tabla venta:", values); // Agrega este console.log
 
     const result = await pool.query(insertVentaQuery, values);
 
-    console.log('Resultado de la inserción:', result); // Agrega este console.log
+    console.log("Resultado de la inserción:", result); // Agrega este console.log
 
     return result;
   } catch (error) {
-    console.error('Error al crear venta:', error);
+    console.error("Error al crear venta:", error);
     throw error;
   }
 };
@@ -562,7 +627,7 @@ const getVentas = async () => {
     // Devolver el resultado de la consulta
     return result.rows;
   } catch (error) {
-    console.error('Error al obtener ventas:', error);
+    console.error("Error al obtener ventas:", error);
     throw error; // Asegúrate de volver a lanzar el error para que el servidor lo maneje adecuadamente
   }
 };
@@ -680,6 +745,8 @@ const getProductsAdmin = (req, res) => {
 
 
 module.exports = {
+  verComentarioPorId,
+  editarComentario,
   getVentas,
   createVenta,
   verComentariosPorCodigoProducto,
