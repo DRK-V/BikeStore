@@ -145,6 +145,7 @@ export const Register_products = () => {
               type="text"
               name="nombre_producto"
               value={product.nombre_producto}
+              placeholder="Escribe nombre del producto"
               onChange={handleChange}
             />
           </div>
@@ -173,6 +174,7 @@ export const Register_products = () => {
               type="text"
               name="color"
               value={product.color}
+              placeholder="Escribe el color"
               onChange={handleChange}
             />
           </div>
@@ -181,6 +183,7 @@ export const Register_products = () => {
             <input
               type="number"
               name="precio"
+              placeholder="Escribe el valor en pesos"
               value={product.precio}
               onChange={handleChange}
             />
@@ -190,6 +193,7 @@ export const Register_products = () => {
             <input
               type="number"
               name="stock_disponible"
+              placeholder="cantidad de producto"
               value={product.stock_disponible}
               onChange={handleChange}
             />
@@ -199,6 +203,7 @@ export const Register_products = () => {
             <textarea
               name="descripcion_producto"
               value={product.descripcion_producto}
+              placeholder="Breve descripcion con maximo 255 caracteres"
               onChange={handleChange}
             />
           </div>
