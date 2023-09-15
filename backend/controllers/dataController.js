@@ -664,9 +664,19 @@ const insertarImagenesProducto = async (req, res) => {
   }
 };
 
+const getProductsAdmin = (req, res) => {
+  // Realiza una consulta a la base de datos para obtener los datos de productos
+  pool.query('SELECT * FROM producto', (error, results) => {
+    if (error) {
+      console.error('Error al consultar la base de datos:', error);
+      res.status(500).json({ error: 'Error al consultar la base de datos' });
+      return;
+    }
 
-
-
+    // Si la consulta fue exitosa, envía los resultados como respuesta en formato JSON
+    res.json(results.rows);
+  });
+};
 
 
 module.exports = {
@@ -690,4 +700,5 @@ module.exports = {
   updateUser,
   insertarProducto,
   insertarImagenesProducto,
+  getProductsAdmin,
 };

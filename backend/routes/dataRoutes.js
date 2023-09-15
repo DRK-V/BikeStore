@@ -235,9 +235,12 @@ const storage2 = multer.diskStorage({
     cb(null, file.originalname);
   }
 });
+
 const upload2 = multer({ storage: storage2 });
 router.post('/insertarImagenesProducto', upload2.array('images'), dataController.insertarImagenesProducto);
 
 
+// router.get("/products/:id_imagen", dataController.getImages);
+router.get("/getproductsadmin", dataController.getProductsAdmin);
 
 module.exports = router;
