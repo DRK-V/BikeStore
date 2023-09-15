@@ -56,6 +56,43 @@ const updateUser = async (req, res) => {
 
 
 //fin de acutalizacion de datos del cliente
+
+//actualizacion de productos 
+const traerproducto = async (req, res) => {
+  const updatedUserData = req.body;
+
+  const sql = `UPDATE producto SET
+    nombre_producto = $1,
+    descripcion_producto = $2,
+    stock_disponible = $3,
+    tipo = $4,
+    color = $5
+    precio = $6
+    WHERE id_producto = $7`;
+
+  const values = [
+    updatedUserData.nombre_producto,
+    updatedUserData.descripcion_producto,
+    updatedUserData.stock_disponible,
+    updatedUserData.tipo,
+    updatedUserData.color,
+    updatedUserData.precio,
+    updatedUserData.id_producto
+  ];
+
+  pool.query(sql, values, (err, results) => {
+    if (err) {
+      console.error('Error al actualizar el usuario en la base de datos:', err);
+      res.status(500).json({ message: 'Error al actualizar el usuario' });
+    } else {
+      console.log('Usuario actualizado en la base de datos');
+      res.json({ message: 'Usuario actualizado exitosamente' });
+    }
+  });
+};
+
+//fin de actualizacion de productos
+
 //registro de clients
 const registerUser = async (userData) => {
   const insertUserQuery =
@@ -701,4 +738,5 @@ module.exports = {
   insertarProducto,
   insertarImagenesProducto,
   getProductsAdmin,
+  traerproducto,
 };

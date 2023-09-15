@@ -243,4 +243,10 @@ router.post('/insertarImagenesProducto', upload2.array('images'), dataController
 // router.get("/products/:id_imagen", dataController.getImages);
 router.get("/getproductsadmin", dataController.getProductsAdmin);
 
+//esta es para actualizar los productos con el rol de administrador
+router.post("/actualizar_producto/:id_producto", dataController.traerproducto)
+
+
 module.exports = router;
+
+
