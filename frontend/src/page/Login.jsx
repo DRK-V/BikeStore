@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+  import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/login.css';
 import { useAuth } from '../components/AuthContext';
 import leftImage from '../assets/bici_login.png';
+import { Link } from 'react-router-dom';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -100,6 +101,7 @@ export const Login = () => {
                 <i className="fas fa-lock"></i>
                 <input type="password" placeholder='Contraseña' name="password" required></input>
               </div>
+              <Link className='forgot_password' to="/Recover_password">Olvide mi contrasena</Link>
               <button className='button-ini' type="submit">Iniciar</button>
               <button className='button-reg' onClick={() => navigate('/register')}>
     Registrarse

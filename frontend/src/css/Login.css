@@ -1,9 +1,8 @@
-  
   h1 {
     margin: 20px 0;
     text-align: center;
   }
-  
+
   #form12 {
     flex-direction: column;
     align-items: center;
@@ -12,19 +11,20 @@
     margin: auto;
   }
 
-  
+
   .login-message-overlay {
     position: absolute;
-    top: 50%; 
-    left: 50%; 
-    transform: translate(-50%, -50%); 
-    background-color: rgba(76, 175, 80, 0.9); 
-    color: white; 
-    padding: 10px 20px; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(76, 175, 80, 0.9);
+    color: white;
+    padding: 10px 20px;
     text-align: center;
-    font-size: 18px; 
-    z-index: 9999; 
+    font-size: 18px;
+    z-index: 9999;
   }
+
   .form-row-pass {
     display: flex;
     align-items: center;
@@ -33,15 +33,27 @@
     border: 3px solid #ccc;
     border-radius: 5px;
   }
+
   .form-row-pass input {
     width: 135px;
     padding: 10px;
     background-color: inherit;
     border: none;
     border-radius: 10px;
-}
+  }
 
- .button-ini {
+  .forgot_password {
+    width: 100%;
+    height: auto;
+    text-align: center;
+    font-size: .8em;
+    text-decoration: underline;
+    &:hover{
+      transform: rotate(4deg);
+    }
+  }
+
+  .button-ini {
     background-color: #007bff;
     color: #fff;
     padding: 10px 20px;
@@ -51,7 +63,7 @@
     width: 170px;
   }
 
-  .close-button2{
+  .close-button2 {
     position: absolute;
     margin-right: 5px;
     top: 85px;
@@ -63,25 +75,25 @@
     width: 30px;
     background-color: inherit;
   }
-  
+
   .form-row i {
     font-size: 16px;
   }
+
   /* Puntos de interrupción */
-@media screen and (min-width: 1023px) and (max-width: 1300px){
-  .close-button2{
-    top: 80px;
-    right: 210px;
+  @media screen and (min-width: 1023px) and (max-width: 1300px) {
+    .close-button2 {
+      top: 80px;
+      right: 210px;
+    }
   }
-}
-@media screen and (max-width: 767px) {
-  .close-button2 {
-    top: 10px;
-    right: 10px;
-}
-}
 
-/* Tablets y pantallas más grandes */
-@media screen and (min-width: 768px) and (max-width: 1023px) {
+  @media screen and (max-width: 767px) {
+    .close-button2 {
+      top: 10px;
+      right: 10px;
+    }
+  }
 
-}
+  /* Tablets y pantallas más grandes */
+  @media screen and (min-width: 768px) and (max-width: 1023px) {}
