@@ -247,7 +247,7 @@ table {
     text-align: center;
 }
 
-thead>tr>th {
+.venta_thead>tr>th {
     border-bottom: solid 2px black;
     border-right: solid 2px black;
 }
@@ -390,7 +390,8 @@ thead>tr>th:nth-child(4) {
 .table_manage_products{
     position: relative;
     top: 20px;
-    width: 90%;
+    left: -5%;
+    width: 100%;
     min-height: 10vh;
     height:auto;
     border-collapse: collapse;
@@ -401,9 +402,8 @@ thead>tr>th:nth-child(4) {
 
   /* Estilos para las celdas de encabezado */
   .table_manage_products th {
-    background-color: #f2f2f2;
-    text-align: left;
-    padding: 10px;
+    text-align: center;
+    padding: 1em;
   }
   
   /* Estilos para las celdas de datos */
@@ -414,24 +414,35 @@ thead>tr>th:nth-child(4) {
 }
   
   /* Estilos para los botones en las celdas */
-  .table_manage_products button {
-    padding: 5px 10px;
-    background-color: #fff;
-    color: #fff;
+  .table_manage_products button , .boton_editar_producto{
     border: none;
     cursor: pointer;
     margin-right: 5px;
+    background-color: transparent;
+    object-fit: contain;
+    &:hover{
+        transform: scale(1.1,1.1);
+        transform:rotate(15deg);
+        background-color: rgb(130, 218, 206);
+        transition: .3s;
+    }
   }
-  
+  .columna_nombre{
+    font-size: .8em;
+  }
+  .icon_container{
+    min-width: 7em;
+  }
   .table_manage_products button{
-    width: 2em;
-    height: 2em;
+    width: 2.5em;
+    height: 2.5em;
     background-repeat: no-repeat;
     background-position: center;
 }
   .boton_editar_producto{
     background-image: url('https://icons.veryicon.com/png/o/education-technology/onemind/edit-97.png');
     background-size: 110%;
+    width: 2em;
   }
   .boton_eliminar_producto{
     background-image: url('https://icons.veryicon.com/png/o/miscellaneous/ios-icon-library/delete-delete.png');

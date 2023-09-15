@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Footer } from "../components/Footer";
 import "../css/Usuario_config.css";
 import "../css/menu_profile.css";
@@ -14,6 +15,28 @@ export const Usuario_usu = () => {
   const queryParams = new URLSearchParams(location.search);
   const activeSection = queryParams.get('section');
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const [productos, setProductos] = useState([]);
+
+
+  const handleEditarProducto = (productoId) => {
+    // Acceder al ID del producto desde el botón
+    const idProducto = productoId;
+    // Redirigir a la página de edición con el ID del producto
+    navigate(`/Actualizar_productos_admin/${idProducto}`);
+  };
+  useEffect(() => {
+    // Realiza la solicitud GET al servidor para obtener productos
+    fetch('http://localhost:3060/getproductsadmin') // Asegúrate de que la URL sea correcta
+      .then(response => response.json())
+      .then(data => {
+        setProductos(data); // Actualiza el estado con los datos de productos
+      })
+      .catch(error => {
+        console.error('Error al obtener los productos:', error);
+      });
+  }, []); // El segundo argumento es un array vacío para asegurarte de que esta solicitud solo se realice una vez al montar el componente.
+
 
   useEffect(() => {
     if (activeSection === 'profile') {
@@ -352,7 +375,7 @@ export const Usuario_usu = () => {
                     <table
                       className={isOrderExpanded(venta.id_venta) ? "" : "hidden-table"}
                     >
-                      <thead>
+                      <thead className='venta_thead'>
                         <tr>
                           <th>ID Producto</th>
                           <th>Nombre Producto</th>
@@ -391,61 +414,52 @@ export const Usuario_usu = () => {
                 </button>
               </div>
               <Link className="agregar-button" to="/Register_products">
-                  Agregar producto
+                Agregar producto
               </Link>
             </header>
             {/* aqui va la tabla */}
             <table className="table_manage_products">
               <thead>
-                <td>id</td>
-                <td>nombre</td>
-                <td>color</td>
-                <td>tipo</td>
-                <td>precio</td>
-                <td>stock_disponible</td>
-                <td></td>
+                <tr>
+                  <th>id</th>
+                  <th>nombre</th>
+                  <th>color</th>
+                  <th>tipo</th>
+                  <th>precio</th>
+                  <th>stock_disponible</th>
+                  <th></th>
+                </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Evo montanera</td>
-                  <td>rojo, negra</td>
-                  <td>montana</td>
-                  <td>$1.000.000</td>
-                  <td>10</td>
-                  <td>
-                    <button className='boton_editar_producto'></button>
-                    <button className='boton_eliminar_producto'></button>
-                  </td>
-                </tr>
+                {productos.map(producto => (
+                  <tr key={producto.id_producto}>
+                    <td className='columna_nombre'>{producto.id_producto}</td>
+                    <td className='columna_nombre'>{producto.nombre_producto}</td>
+                    <td className='columna_nombre'>{producto.color}</td>
+                    <td className='columna_nombre'>{producto.tipo}</td>
+                    <td className='columna_nombre'><span style={{ color: 'green', fontSize: '1em' }}>$</span>{producto.precio}</td>
+                    <td className='columna_nombre'>{producto.stock_disponible}</td>
+                    <td className='icon_container'>
 
-                <tr>
-                  <td>1</td>
-                  <td>Evo montanera</td>
-                  <td>rojo, negra</td>
-                  <td>montana</td>
-                  <td>$1.000.000</td>
-                  <td>10</td>
-                  <td>
-                    <button className='boton_editar_producto'></button>
-                    <button className='boton_eliminar_producto'></button>
-                  </td>
-                </tr>
+                      <Link to={`/Actualizar_productos_admin/${producto.id_producto}`}>
+                        <button
+                          className='boton_editar_producto'
+                          onClick={() => handleEditarProducto(producto.id_producto)}
+                          data-producto-id={producto.id_producto}
+                        ></button>
+                      </Link>
 
-                <tr>
-                  <td>1</td>
-                  <td>Evo montanera</td>
-                  <td>rojo, negra</td>
-                  <td>montana</td>
-                  <td>$1.000.000</td>
-                  <td>10</td>
-                  <td>
-                    <button className='boton_editar_producto'></button>
-                    <button className='boton_eliminar_producto'></button>
-                  </td>
-                </tr>
+                      <button
+                        className='boton_eliminar_producto'
+                        onClick={() => handleEliminarProducto(producto.id_producto)}
+                        data-producto-id={producto.id_producto}
+                      ></button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
+
 
           </div>
 

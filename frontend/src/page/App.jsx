@@ -54,7 +54,7 @@ function App() {
             <Route path="/Usuario_usu" element={<Usuario_usu />} />
             <Route path="/Carrito_compras" element={<Carrito_compras />} />
             <Route path="/search" element={<Card_container />} />
-            <Route path="/Actualizar_productos_admin" element={<Actualizar_productos_admin />} />
+            <Route path="/Actualizar_productos_admin/:id" element={<Actualizar_productos_admin />} />
             <Route path="/Register_products" element={<Register_products />} />
           </Routes>
           {isSearchRoute && <Footer />}
