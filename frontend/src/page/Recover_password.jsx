@@ -20,7 +20,7 @@ export const Recover_password = () => {
     return (
         <>
             <div className="main_container_recover_password">
-                <Link className="close_recover_password">X</Link>
+                <Link to="/Login" className="close_recover_password">X</Link>
                 <div className="formContainer">
                     <form action="" className="form_recover_password">
                         <h1>Recuperar contraseña</h1>
