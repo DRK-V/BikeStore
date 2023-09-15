@@ -12,8 +12,6 @@ const Container_comments = () => {
   const comenContext = useComenContext();
   const authContext = useAuth();
   const [isCommentValid, setIsCommentValid] = useState(false);
-  const [editedComment, setEditedComment] = useState(""); // Nuevo estado para el comentario editado
-  const [editingCommentId, setEditingCommentId] = useState(null); // Nuevo estado para el ID del comentario que se está editando
 
   useEffect(() => {
     setIsLoading(true);
@@ -79,7 +77,7 @@ const Container_comments = () => {
     const comment = e.target.value;
     setNewComment(comment);
 
-    if (comment.length >= 20) {
+    if (comment.length >= 5) {
       setIsCommentValid(true);
     } else {
       setIsCommentValid(false);
@@ -130,58 +128,6 @@ const Container_comments = () => {
       });
   };
 
-  const handleEditClick = (commentId) => {
-    setEditingCommentId(commentId);
-    // Establece el texto editado al contenido actual del comentario
-    const commentToEdit = commentsData.find((comment) => comment.id === commentId);
-    setEditedComment(commentToEdit.texto);
-    console.log("Editando comentario con ID:", commentId);
-  };
-  
-  
-
-  const submitEdit = () => {
-    // Verifica si se está editando un comentario
-    if (editingCommentId) {
-      const editedCommentIndex = commentsData.findIndex(
-        (comment) => comment.id === editingCommentId
-      );
-
-      if (editedCommentIndex !== -1) {
-        const editedCommentData = {
-          codigo_cliente: authContext.user.id_cliente,
-          codigo_producto: comenContext.selectedProductId,
-          texto: editedComment,
-        };
-
-        fetch(`http://localhost:3060/editar-comentario/${editingCommentId}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(editedCommentData),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("Comentario editado exitosamente:", data);
-
-            // Actualiza el comentario editado en la lista de comentarios
-            const updatedCommentsData = [...commentsData];
-            updatedCommentsData[editedCommentIndex].texto = editedComment;
-            setCommentsData(updatedCommentsData);
-
-            // Limpia el texto editado y el ID de edición
-            setEditedComment("");
-            setEditingCommentId(null);
-            console.log("Comentario editado con ID:", editingCommentId);
-          })
-          .catch((error) => {
-            console.error("Error al editar el comentario:", error);
-          });
-      }
-    }
-  };
-
   const formatDateTime = (dateTimeString) => {
     const date = new Date(dateTimeString);
     const day = date.getDate().toString().padStart(2, "0");
@@ -199,56 +145,35 @@ const Container_comments = () => {
         <p>Error al cargar comentarios: {error.message}</p>
       ) : (
         <>
-         {commentsData.map((comment, index) => (
-  <Comments
-    key={index}
-    name={comment.clientName}
-    time={formatDateTime(comment.fecha_creacion)}
-    content={comment.texto}
-    isEditable={comment.codigo_cliente === authContext.user.id_cliente}
-    onEditClick={(commentId) => handleEditClick(commentId)}
-    commentId={comment.id} // Pasa el ID del comentario
-  />
-))}
-
+          {commentsData.map((comment, index) => (
+            <Comments
+              key={index}
+              name={comment.clientName}
+              time={formatDateTime(comment.fecha_creacion)}
+              content={comment.texto}
+            />
+          ))}
           {authContext.isLoggedIn && (
             <form
               className="for_coment"
               onSubmit={(e) => {
                 e.preventDefault();
-                if (editingCommentId === null) {
-                  // Si no se está editando un comentario, envía uno nuevo
-                  submitComment();
-                } else {
-                  // Si se está editando un comentario, envía la edición
-                  submitEdit();
-                }
+                submitComment();
               }}
             >
-              {editingCommentId === null ? ( // Cambia el texto del botón según si se está editando o enviando un nuevo comentario
-                <input
-                  className="coments"
-                  type="text"
-                  placeholder="Escribe tu comentario"
-                  value={newComment}
-                  onChange={handleCommentChange}
-                />
-              ) : (
-                <textarea
-                  className="coments"
-                  placeholder="Editar comentario..."
-                  value={editedComment}
-                  onChange={handleEditChange}
-                />
-              )}
+              <input
+                className="coments"
+                type="text"
+                placeholder="Escribe tu comentario"
+                value={newComment}
+                onChange={handleCommentChange}
+              />
               <button
                 className="coments_buton"
                 type="submit"
-                disabled={
-                  !isCommentValid || (editingCommentId !== null && editedComment === "")
-                } // Deshabilita el botón si no es un comentario válido o el campo de edición está vacío
+                disabled={!isCommentValid}
               >
-                {editingCommentId === null ? "Enviar" : "Guardar"} {/* Cambia el texto del botón según si se está editando o enviando un nuevo comentario */}
+                <span class="material-symbols-outlined">send</span>
               </button>
             </form>
           )}

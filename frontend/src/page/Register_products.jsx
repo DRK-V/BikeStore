@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import '../css/Register_products.css';
+import React, { useState } from "react";
+import "../css/Register_products.css";
 import { Link } from "react-router-dom";
 
 export const Register_products = () => {
   const [product, setProduct] = useState({
-    nombre_producto: '',
-    tipo: '',
-    color: '',
-    precio: '',
-    stock_disponible: '',
-    descripcion_producto: '',
+    nombre_producto: "",
+    tipo: "",
+    color: "",
+    precio: "",
+    stock_disponible: "",
+    descripcion_producto: "",
   });
   const [images, setImages] = useState([]);
   const [imageInput, setImageInput] = useState(null);
@@ -46,46 +46,58 @@ export const Register_products = () => {
 
     try {
       // Enviar datos del producto como JSON
-      const productResponse = await fetch('http://localhost:3060/insertarProducto', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(product),
-      });
+      const productResponse = await fetch(
+        "http://localhost:3060/insertarProducto",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(product),
+        }
+      );
 
       if (productResponse.status === 200) {
         const { productId, nombre_producto } = await productResponse.json();
         // Crear un FormData para enviar imágenes
         const formData = new FormData();
-        formData.append('productId', productId);
-        formData.append('producto', product.nombre_producto);
+        formData.append("productId", productId);
+        formData.append("producto", product.nombre_producto);
 
         // Subir las imágenes al servidor
         for (let i = 0; i < images.length; i++) {
-          formData.append('images', images[i].file, images[i].file.name); // Asegúrate de incluir el nombre original del archivo
+          formData.append("images", images[i].file, images[i].file.name); // Asegúrate de incluir el nombre original del archivo
         }
         for (let i = 0; i < images.length; i++) {
-          console.log(images[i].file, images[i].file.name)
+          console.log(images[i].file, images[i].file.name);
         }
 
-        const imageResponse = await fetch('http://localhost:3060/insertarImagenesProducto', {
-          method: 'POST',
-          body: formData,
-        });
+        const imageResponse = await fetch(
+          "http://localhost:3060/insertarImagenesProducto",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
 
         if (imageResponse.status === 200) {
-          console.log('Imágenes insertadas con éxito');
-          alert('Imágenes insertadas con éxito');
+          console.log("Imágenes insertadas con éxito");
+          alert("Imágenes insertadas con éxito");
           window.location.reload();
         } else {
-          console.error('Error al insertar las imágenes:', imageResponse.statusText);
+          console.error(
+            "Error al insertar las imágenes:",
+            imageResponse.statusText
+          );
         }
       } else {
-        console.error('Error al insertar el producto:', productResponse.statusText);
+        console.error(
+          "Error al insertar el producto:",
+          productResponse.statusText
+        );
       }
     } catch (error) {
-      console.error('Error al insertar el producto o las imágenes:', error);
+      console.error("Error al insertar el producto o las imágenes:", error);
     }
   };
 
@@ -95,12 +107,20 @@ export const Register_products = () => {
         <button></button>
       </Link>
       <div className="image-section">
-
         <div className="uploaded-images">
           {images.map((image, index) => (
             <div key={index} className="image-preview-container">
-              <img src={image.dataURL} alt={`Imagen ${index}`} className="image-preview" />
-              <button onClick={() => handleImageDelete(index)} className="delete-button">X</button>
+              <img
+                src={image.dataURL}
+                alt={`Imagen ${index}`}
+                className="image-preview"
+              />
+              <button
+                onClick={() => handleImageDelete(index)}
+                className="delete-button"
+              >
+                X
+              </button>
             </div>
           ))}
           <input
@@ -108,17 +128,17 @@ export const Register_products = () => {
             accept="image/*"
             multiple
             ref={(input) => setImageInput(input)}
-            style={{ display: 'none' }}
+            style={{ display: "none" }}
             onChange={handleImageUpload}
           />
-          <button onClick={() => imageInput && imageInput.click()}>Seleccionar Imágenes</button>
+          <button onClick={() => imageInput && imageInput.click()}>
+            Seleccionar Imágenes
+          </button>
         </div>
-
       </div>
       <div className="form-section">
         <h2>Agregar Producto</h2>
         <form onSubmit={handleSubmit} className="product-form">
-
           <div className="form-group">
             <label className="form-label">Nombre de Producto:</label>
             <input
@@ -130,13 +150,23 @@ export const Register_products = () => {
           </div>
           <div className="form-group">
             <label className="form-label">Tipo de Bicicleta:</label>
-            <input
-              type="text"
+            <select
+              className="select"
               name="tipo"
               value={product.tipo}
               onChange={handleChange}
-            />
+            >
+              <option value="bicicleta de montaña">Bicicleta de Montaña</option>
+              <option value="bicicleta de gravel">Bicicleta de Gravel</option>
+              <option value="bicicleta de carretera">
+                Bicicleta de Carretera
+              </option>
+              <option value="bicicleta de ciudad">Bicicleta de Ciudad</option>
+              <option value="bicicleta electrica">Bicicleta Eléctrica</option>
+              <option value="bicicleta plegable">Bicicleta Plegable</option>
+            </select>
           </div>
+
           <div className="form-group">
             <label className="form-label">Color:</label>
             <input
