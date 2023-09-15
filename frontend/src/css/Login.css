@@ -44,11 +44,12 @@
 
   .forgot_password {
     width: 100%;
-    height: auto;
+    height: .3em;
     text-align: center;
     font-size: .8em;
     text-decoration: underline;
-    &:hover{
+
+    &:hover {
       transform: rotate(4deg);
     }
   }
