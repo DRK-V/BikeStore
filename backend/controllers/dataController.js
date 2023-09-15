@@ -531,7 +531,8 @@ const verComentarios = async (req, res) => {
 };
 const verComentariosPorCodigoProducto = async (req, res) => {
   const { codigo_producto } = req.params;
-  let selectQuery = "SELECT * FROM comentario";
+  let selectQuery = 'SELECT * FROM comentario';
+
 
   if (codigo_producto) {
     selectQuery = `SELECT * FROM comentario WHERE codigo_producto = ${codigo_producto}`;
@@ -630,7 +631,119 @@ const getVentas = async () => {
     throw error; // Asegúrate de volver a lanzar el error para que el servidor lo maneje adecuadamente
   }
 };
-//fin ensayo
+const insertarProducto = async (req, res) => {
+  const productoData = req.body;
+  try {
+    // Validar que se proporcionen datos obligatorios
+    if (!productoData.nombre_producto || !productoData.tipo || !productoData.color || !productoData.precio || !productoData.stock_disponible || !productoData.descripcion_producto) {
+      const camposFaltantes = [];
+      if (!productoData.nombre_producto) camposFaltantes.push('Nombre');
+      if (!productoData.tipo) camposFaltantes.push('Tipo de Bicicleta');
+      if (!productoData.color) camposFaltantes.push('Color');
+      if (!productoData.precio) camposFaltantes.push('Precio');
+      if (!productoData.stock_disponible) camposFaltantes.push('Stock Disponible');
+      if (!productoData.descripcion_producto) camposFaltantes.push('Descripción');
+
+      const mensajeError = `Los siguientes campos son obligatorios: ${camposFaltantes.join(', ')}`;
+      throw new Error(mensajeError);
+    }
+
+    // Insertar la información del producto en la base de datos
+    const insertProductQuery = `
+      INSERT INTO producto (nombre_producto, descripcion_producto, stock_disponible, tipo, color, precio)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING id_producto;
+    `;
+
+    const productValues = [
+      productoData.nombre_producto,
+      productoData.descripcion_producto,
+      productoData.stock_disponible,
+      productoData.tipo,
+      productoData.color,
+      productoData.precio,
+    ];
+
+    const productResult = await pool.query(insertProductQuery, productValues);
+
+    // Obtener el ID del producto recién insertado
+    const productId = productResult.rows[0].id_producto;
+
+    res.status(200).json({ productId, message: 'Producto insertado con éxito' });
+  } catch (error) {
+    console.error('Error al insertar el producto:', error);
+    res.status(500).json({ error: 'Error al insertar el producto' });
+  }
+};
+
+const insertarImagenesProducto = async (req, res) => {
+  const productId = req.body.productId; // El ID del producto al que se asocian las imágenes
+  const nombre_producto = req.body.producto; // El nombre del producto
+  const images = req.files;
+
+  if (!Array.isArray(images) || images.length === 0) {
+    return res.status(400).json({ error: 'Error al recibir imágenes', images });
+  }
+
+  try {
+    // Validar productId, nombre_producto y la existencia de imágenes
+    if (!productId || !nombre_producto || !images || images.length === 0) {
+      return res.status(400).json({ error: 'Error en el ID, nombre o al recibir imágenes' });
+    }
+
+    // Construir el nombre de la carpeta usando el nombre del producto (asegúrate de sanearlo para evitar problemas con caracteres inválidos)
+    const sanitizedProductName = nombre_producto.replace(/[^\w\s]/gi, ''); // Elimina caracteres especiales
+    const productImageDir = `../images/${sanitizedProductName}`;
+
+    // Verificar si la carpeta de destino existe, si no, crearla
+    const imageFolderPath = path.join(__dirname, productImageDir);
+    if (!fs.existsSync(imageFolderPath)) {
+      fs.mkdirSync(imageFolderPath, { recursive: true });
+    }
+
+    // Insertar todas las imágenes relacionadas con el producto y renombrarlas
+    const insertImageQuery = `
+      INSERT INTO imagen_producto (codigo_producto, nombre_imagen, ruta_imagen)
+      VALUES ($1, $2, $3);
+    `;
+
+    for (let i = 0; i < images.length; i++) {
+      const image = images[i];
+      const originalImageName = image.originalname; // Obtener el nombre original de la imagen
+      const imageName = i === 0 ? 'imagen portada' : originalImageName; // Cambiar el nombre de la primera imagen si es necesario
+      const imagePath = path.join(imageFolderPath, originalImageName); // Usar el nombre original
+
+      fs.renameSync(image.path, imagePath);
+
+      const imageUrl = `http://localhost:3060/images/${sanitizedProductName}/${originalImageName}`.replace(/\\/g, '/');
+
+      const imageValues = [productId, imageName, imageUrl]; // Usar la URL completa en la ruta
+      await pool.query(insertImageQuery, imageValues);
+    }
+
+    // Devolver una respuesta o mensaje de éxito
+    res.status(200).json({ message: 'Imágenes insertadas con éxito' });
+  } catch (error) {
+    console.error('Error al insertar las imágenes:', error);
+    res.status(500).json({ error: 'Error al insertar las imágenes' });
+  }
+};
+
+const getProductsAdmin = (req, res) => {
+  // Realiza una consulta a la base de datos para obtener los datos de productos
+  pool.query('SELECT * FROM producto', (error, results) => {
+    if (error) {
+      console.error('Error al consultar la base de datos:', error);
+      res.status(500).json({ error: 'Error al consultar la base de datos' });
+      return;
+    }
+
+    // Si la consulta fue exitosa, envía los resultados como respuesta en formato JSON
+    res.json(results.rows);
+  });
+};
+
+
 module.exports = {
   verComentarioPorId,
   editarComentario,
@@ -652,4 +765,7 @@ module.exports = {
   getUserDetalleCompra,
   updateUserImage,
   updateUser,
+  insertarProducto,
+  insertarImagenesProducto,
+  getProductsAdmin,
 };
