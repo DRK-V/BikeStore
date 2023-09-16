@@ -256,4 +256,5 @@ router.post('/insertarImagenesProducto', upload2.array('images'), dataController
 // router.get("/products/:id_imagen", dataController.getImages);
 router.get("/getproductsadmin", dataController.getProductsAdmin);
 
+router.post("/validatePassword",dataController.validatePassword)
 module.exports = router;

@@ -68,6 +68,7 @@
   filter: contrast(0%);
   background-color: transparent;
   box-shadow: 1px 1px 10px 1px black;
+  cursor: pointer;
 }
 
 .product-form {
