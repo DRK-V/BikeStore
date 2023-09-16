@@ -71,17 +71,44 @@ export const Actualizar_productos_admin = () => {
             });
     }, [id]);
 
+    const handleImageAfterClick = (e) => {
+        const idImagen = e.currentTarget.getAttribute('data-id');
+        // Ahora, `idImagen` contiene el ID único de la imagen en la que se hizo clic.
+
+        // Preguntar al usuario si realmente desea eliminar la imagen
+        const confirmDelete = window.confirm('¿Desea eliminar esta imagen? Este cambio es irreversible.');
+
+        if (confirmDelete) {
+            // Realizar la eliminación de la imagen
+            console.log('Eliminando la imagen con ID:', idImagen);
+
+            // Aquí puedes agregar la lógica para eliminar la imagen de tu estado o enviar una solicitud al servidor para eliminarla.
+        } else {
+            // El usuario canceló la eliminación, no se hace nada.
+            console.log('Cancelado');
+        }
+    };
+
+
+
+
     return (
         <>
             <div className='custom-container'>
                 <div className='custom-image-section'>
                     {imagenes.map((imagen, index) => (
-                        <img
-                            key={index}
-                            src={imagen.ruta_imagen}
-                            alt={`Imagen ${index}`}
-                            className='custom-img-product'
-                        />
+                        <div key={index} className='custom-image-container'>
+                            <img
+                                src={imagen.ruta_imagen}
+                                alt={`Imagen ${index}`}
+                                className='custom-img-product'
+                            />
+                            <div
+                                className='custom-img-after'
+                                data-id={imagen.id_imagen}
+                                onClick={(e) => handleImageAfterClick(e)}
+                            ></div>
+                        </div>
                     ))}
                     {images.map((image, index) => (
                         <div key={index} className='custom-image-preview-container'>
@@ -124,7 +151,7 @@ export const Actualizar_productos_admin = () => {
                                     placeholder='Nombre del producto'
                                     className='custom-p-2'
                                     type='text'
-                                    value={producto ? producto.nombre : ''}
+                                    value={producto.nombre || ''} // Usar valor del estado o cadena vacía
                                     onChange={handleInputChange}
                                 />
                             </div>
@@ -189,4 +216,3 @@ export const Actualizar_productos_admin = () => {
         </>
     );
 };
-    

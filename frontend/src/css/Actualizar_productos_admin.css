@@ -23,7 +23,8 @@
 .custom-image-section>button {
     position: relative;
     height: 25vh;
-    width: 25%;
+    top: -2.1%;
+    width: 20%;
     border: dashed 1px gray;
     border-radius: 0.5rem;
     color: transparent;
@@ -36,10 +37,34 @@
     box-shadow: 1px 1px 10px 1px black;
     cursor: pointer;
 }
+.custom-img-after{
+    position: relative;
+    width: 2em;
+    height: 2em;
+    background-color: red;
+    z-index: 10;
+    top: 0;
+    float: right;
+    right: 0;
+    border-radius: 0 0 0 .5rem;
+    background-image: url('https://cdn-icons-png.flaticon.com/128/3405/3405244.png?ga=GA1.1.692733878.1694872993');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
 
-.custom-img-product {
+.custom-image-container{
     width: 20%;
     min-height: 20vh;
+    border-radius: 0.5em;
+    border: solid 2px #7373739c;
+    object-fit: contain;
+}
+.custom-img-product {
+    position: absolute;
+    width: 10%;
+    height: 20vh;
     border-radius: 0.5em;
     border: solid 2px #7373739c;
     object-fit: contain;
@@ -70,14 +95,15 @@
 .custom-delete-button {
     position: relative;
     z-index: 2;
-    top: 0;
-    left: 7%;
+    top: -13.3em;
+    left: 39%;
     background-color: #f00;
     color: #fff;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
 }
+
 
 .custom-form-section {
     width: 60%;
