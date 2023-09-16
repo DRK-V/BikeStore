@@ -1,51 +1,40 @@
-import React from 'react'
-import "../css/Actualizar_productos_admin.css"
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import "../css/Actualizar_productos_admin.css";
+
 
 export const Actualizar_productos_admin = () => {
-  // fetch()
-  const [nombreProducto, setNombreProducto] = useState(user ? user.nombre_producto : "");
-  const [descripciondelproducto, setdescripciondelproducto] = useState(user ? user.descripcion_producto : "");
-  const [stock, setstock] = useState(user ? user.stock_disponible : "");
-  const [direccion, setDireccion] = useState(user ? user.direccion : "");
-  const [telefono, setTelefono] = useState(user ? user.telefono : "");
+  const { id_producto } = useParams();
 
-  const handleTelefonoChange = (e) => {
-    setTelefono(e.target.value);
-  };
+  const [producto, setProducto] = useState({
+    nombre_producto: "",
+    descripcion_producto: "",
+    stock_disponible: "",
+    tipo: "",
+    color: "",
+    precio: ""
+  });
 
-  const handleDireccionChange = (e) => {
-    setDireccion(e.target.value);
-  };
-
-  const handlestockChange = (e) => {
-    setstock(e.target.value);
-  };
-
-  const handleNombreProductoChange = (e) => {
-    setNombreProducto(e.target.value);
-  };
-
-  const handledescripciondelproductoChange = (e) => {
-    setdescripciondelproducto(e.target.value);
-  };
+  useEffect(() => {
+    // Realizar una solicitud HTTP GET para obtener los datos del producto
+    fetch(`http://localhost:3060/obtener_producto/${id_producto}`)
+      .then(response => response.json())
+      .then(data => {
+        setProducto(data); // Establecer los datos del producto en el estado
+      })
+      .catch(error => {
+        console.error('Error al obtener el producto:', error);
+      });
+  }, [id_producto]);
 
   const handleGuardarCambios = () => {
-    const updatedUser = {
-      id_cliente: user.id_producto,
-      nombre_producto: nombreProducto,
-      descripcion_producto: descripciondelproducto,
-      stock_disponible: stock,
-      direccion: direccion,
-      telefono: telefono
-    };
-
-    fetch(`/actualizar_producto/${id}`, {
+    // Realizar una solicitud HTTP PUT para actualizar el producto
+    fetch(`http://localhost:3060/actualizar_producto/${id_producto}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(updatedUser)
+      body: JSON.stringify(producto)
     })
       .then(response => response.json())
       .then(data => {
@@ -55,80 +44,89 @@ export const Actualizar_productos_admin = () => {
         console.error('Error al actualizar el producto:', error);
       });
   };
-    return (
-        <>
-            <div className='pa_one'>
-                <div className='img_p'>
-                    <div className='entrante_img'></div>
 
-                </div>
-                <div className='info_padre'>
-                    <form action="" className='info_p'>
-                        <div className='titulo_p'>
-                            <h2>Actualizar</h2>
-                        </div>
-                        <div className='formu_p'>
-                            <div className='p_1'>
-                                <input
-                                    placeholder={user ? user.nombre_producto : ""}
-                                    className='p_2'
-                                    type="text"
-                                    value={nombreProducto} // Establece el valor del campo
-                                    onChange={handleNombreProductoChange}
-                                />
-                            </div>
-                            <div className='p_1'>
-                                <input
-                                    placeholder='Tipo de Bicicleta'
-                                    className='p_2'
-                                    type="text"
-                                    value={producto.tipo} // Establece el valor del campo
-                                />
-                            </div>
-                            <div className='p_1'>
-                                <input
-                                    placeholder='Color'
-                                    className='p_2'
-                                    type="text"
-                                    value={producto.color} // Establece el valor del campo
-                                />
-                            </div>
-                            <div className='p_1'>
-                                <input
-                                    placeholder='Precio'
-                                    className='p_2'
-                                    type="text"
-                                    value={producto.precio} // Establece el valor del campo
-                                />
-                                <div className='p_1'>
-                                    <input
-                                        placeholder={user ? user.descripcion_producto : ""}
-                                        className='p_3'
-                                        type="text"
-                                        value={descripciondelproducto} // Establece el valor del campo
-                                        onChange={handledescripciondelproductoChange}
-                                    />
-                                </div>
-                                <div className='p_1'>
-                                    <input
-                                        placeholder={user ? user.stock_disponible : ""}
-                                        className='p_2'
-                                        type="text"
-                                        value={stock} // Establece el valor del campo
-                                        onChange={handlestockChange}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                    <div className='boton_actualizar'>
-                        <button className='actualizar_p'>Actualizar</button>
-                    </div>
-                </div>
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setProducto({
+      ...producto,
+      [name]: value
+    });
+  };
 
+  return (
+    <div className='pa_one'>
+      <div className='img_p'>
+        <div className='entrante_img'></div>
+      </div>
+      <div className='info_padre'>
+        <form action="" className='info_p'>
+          <div className='titulo_p'>
+            <h2>Actualizar</h2>
+          </div>
+          <div className='formu_p'>
+            {/* Agregar campos de entrada para cada propiedad del producto */}
+            <div className='p_1'>
+              <input
+                name="nombre_producto"
+                className='p_2'
+                type="text"
+                value={producto.nombre_producto}
+                onChange={handleInputChange}
+              />
             </div>
-
-        </>
-    )
-}
-
+            <div className='p_1'>
+              <input
+                name="tipo"
+                className='p_2'
+                type="text"
+                value={producto.tipo}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className='p_1'>
+              <input
+                name="color"
+                className='p_2'
+                type="text"
+                value={producto.color}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className='p_1'>
+              <input
+                name="precio"
+                className='p_2'
+                type="text"
+                value={producto.precio}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className='p_1'>
+              <input
+                name="descripcion_producto"
+                className='p_3'
+                type="text"
+                value={producto.descripcion_producto}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className='p_1'>
+              <input
+                name="stock_disponible"
+                className='p_2'
+                type="text"
+                value={producto.stock_disponible}
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
+        </form>
+        <div className='boton_actualizar'>
+          <button className='actualizar_p' onClick={handleGuardarCambios}>
+            Actualizar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};

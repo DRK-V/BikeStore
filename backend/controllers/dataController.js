@@ -62,13 +62,14 @@ const traerproducto = async (req, res) => {
   const updatedUserData = req.body;
 
   const sql = `UPDATE producto SET
-    nombre_producto = $1,
-    descripcion_producto = $2,
-    stock_disponible = $3,
-    tipo = $4,
-    color = $5
-    precio = $6
-    WHERE id_producto = $7`;
+  nombre_producto = $1,
+  descripcion_producto = $2,
+  stock_disponible = $3,
+  tipo = $4,
+  color = $5,
+  precio = $6
+  WHERE id_producto = $7`;
+
 
   const values = [
     updatedUserData.nombre_producto,
