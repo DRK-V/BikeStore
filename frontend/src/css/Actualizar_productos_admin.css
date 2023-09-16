@@ -50,13 +50,17 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%;
+    width: 20%;
+    max-height: 10vh;
     margin-bottom: 10px;
+    margin-top: 10%;
+    margin-bottom: 10%;
 }
 
 .custom-image-preview {
-    max-width: 6em;
-    max-height: 25vh;
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
     min-height: 25vh;
     object-fit: contain;
     border-radius: 0.5em;
@@ -129,8 +133,10 @@
 
 .custom-p-3 {
     border: solid 1px gray;
-    text-align: left; /* Alinea el texto a la izquierda */
-    vertical-align: top; /* Alinea el texto en la parte superior */
+    text-align: left;
+    /* Alinea el texto a la izquierda */
+    vertical-align: top;
+    /* Alinea el texto en la parte superior */
     height: auto;
     min-height: 23vh;
     border-radius: 0.3rem;
