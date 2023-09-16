@@ -37,10 +37,34 @@
     box-shadow: 1px 1px 10px 1px black;
     cursor: pointer;
 }
+.custom-img-after{
+    position: relative;
+    width: 2em;
+    height: 2em;
+    background-color: red;
+    z-index: 10;
+    top: 0;
+    float: right;
+    right: 0;
+    border-radius: 0 0 0 .5rem;
+    background-image: url('https://cdn-icons-png.flaticon.com/128/3405/3405244.png?ga=GA1.1.692733878.1694872993');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
 
-.custom-img-product {
+.custom-image-container{
     width: 20%;
     min-height: 20vh;
+    border-radius: 0.5em;
+    border: solid 2px #7373739c;
+    object-fit: contain;
+}
+.custom-img-product {
+    position: absolute;
+    width: 10%;
+    height: 20vh;
     border-radius: 0.5em;
     border: solid 2px #7373739c;
     object-fit: contain;
@@ -79,6 +103,7 @@
     padding: 5px 10px;
     cursor: pointer;
 }
+
 
 .custom-form-section {
     width: 60%;
