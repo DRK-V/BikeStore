@@ -812,6 +812,24 @@ function generateRandomPassword() {
   return crypto.randomBytes(8).toString('hex'); // Genera una contraseña aleatoria de 16 caracteres
 }
 
+// En tu archivo dataController.js
+
+const getImagesUpdateProduct = async (req, res) => {
+  const { id } = req.params; // Obtén el ID del producto desde los parámetros de la URL
+
+  try {
+    // Realiza una consulta a la base de datos para obtener las imágenes del producto con el ID proporcionado
+    const query = 'SELECT * FROM imagen_producto WHERE codigo_producto = $1';
+    const result = await pool.query(query, [id]);
+
+    // Envía la respuesta con las imágenes encontradas
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error al obtener imágenes del producto', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
 
 module.exports = {
   verComentarioPorId,
@@ -838,4 +856,5 @@ module.exports = {
   insertarImagenesProducto,
   getProductsAdmin,
   validatePassword,
+  getImagesUpdateProduct,
 };
