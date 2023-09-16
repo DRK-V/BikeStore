@@ -103,7 +103,7 @@ export const Register_products = () => {
 
   return (
     <div className="container">
-      <Link to="/" className="close_register_products">
+      <Link to="/Usuario_usu?section=manage" className="close_register_products">
         <button></button>
       </Link>
       <div className="image-section">
