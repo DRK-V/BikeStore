@@ -23,7 +23,8 @@
 .custom-image-section>button {
     position: relative;
     height: 25vh;
-    width: 25%;
+    top: -2.1%;
+    width: 20%;
     border: dashed 1px gray;
     border-radius: 0.5rem;
     color: transparent;
@@ -70,8 +71,8 @@
 .custom-delete-button {
     position: relative;
     z-index: 2;
-    top: 0;
-    left: 7%;
+    top: -13.3em;
+    left: 39%;
     background-color: #f00;
     color: #fff;
     border: none;
