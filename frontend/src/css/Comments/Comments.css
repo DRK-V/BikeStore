@@ -31,7 +31,30 @@
   border-radius: 5px;
   font-size: 16px;
 }
+.botun_borrar,
+.buton_editar {
+  background-color: #f44336; /* Color de fondo */
+  color: white; /* Color del texto */
+  border: none; /* Borde sin estilo */
+  padding: 8px 16px; /* Espaciado interno */
+  margin-right: 8px; /* Margen derecho para separar los botones */
+  border-radius: 4px; /* Bordes redondeados */
+  cursor: pointer; /* Cambia el cursor al pasar sobre los botones */
+  align-self: flex-end;
+}
 
+/* Estilo cuando se pasa el cursor sobre los botones */
+.botun_borrar:hover,
+.buton_editar:hover {
+  background-color: #d32f2f; /* Cambia el color de fondo al pasar el cursor */
+}
+.button_container{
+  display: flex;
+  justify-content: flex-end; /* Alinea los elementos al final del contenedor */
+  align-items: flex-end; /* Alinea verticalmente los elementos al final */
+  height: 100%; /* Ajusta la altura del contenedor según tus necesidades */
+
+}
 .coments_buton {
   background-color: #007bff;
   color: #fff;

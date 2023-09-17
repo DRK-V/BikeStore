@@ -198,8 +198,8 @@ router.post(
 );
 
 router.post("/comentarios", dataController.añadirComentario);
-router.get("/coments", dataController.verComentarios);
-router.put("/editar-comentario/:id", dataController.editarComentario);
+
+
 router.get("/ver-comentario/:id_comentario", dataController.verComentarioPorId); // Ruta actualizada
 
 router.get(
