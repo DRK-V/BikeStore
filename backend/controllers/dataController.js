@@ -3,7 +3,7 @@ const path = require("path");
 const multer = require("multer");
 //datacontroller
 const { pool } = require("../config/db");
-const crypto = require('crypto');
+const crypto = require("crypto");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -512,7 +512,10 @@ const añadirComentario = async (req, res) => {
   try {
     const result = await pool.query(insertQuery, values);
     const comentarioId = result.rows[0].id_comentario;
-    res.status(201).json({ message: "Comentario añadido con éxito", ID_COMENTARIO: comentarioId });
+    res.status(201).json({
+      message: "Comentario añadido con éxito",
+      ID_COMENTARIO: comentarioId,
+    });
   } catch (error) {
     console.error("Error al añadir el comentario:", error);
     res.status(500).json({ error: "Error al añadir el comentario" });
@@ -561,7 +564,8 @@ const editarComentario = async (req, res) => {
 
   try {
     // Query SQL para actualizar el comentario con el nuevo texto
-    const updateQuery = "UPDATE comentario SET texto = $1 WHERE id_comentario = $2";
+    const updateQuery =
+      "UPDATE comentario SET texto = $1 WHERE id_comentario = $2";
     const values = [texto, id_comentario];
 
     // Ejecutar la consulta SQL para editar el comentario
@@ -593,13 +597,11 @@ const eliminarComentario = async (req, res) => {
 };
 // Asignar las funciones a las rutas
 
-
-
 //fin comentarios
 //ensayo
 const createVenta = async (ventaData) => {
   const insertVentaQuery =
-    "INSERT INTO venta (codigo_cliente, monto_final, tipo_de_cuenta, banco, numero_de_cuenta, estado_venta) VALUES ($1, $2, $3, $4, $5,'finalizado')";
+    "INSERT INTO venta (codigo_cliente, monto_final, tipo_de_cuenta, banco, numero_de_cuenta, estado_venta) VALUES ($1, $2, $3, $4, $5, 'finalizado') RETURNING id_venta";
 
   const values = [
     ventaData.codigo_cliente,
@@ -610,18 +612,47 @@ const createVenta = async (ventaData) => {
   ];
 
   try {
-    console.log("Datos a insertar en la tabla venta:", values); // Agrega este console.log
+    console.log("Datos a insertar en la tabla venta:", values);
 
     const result = await pool.query(insertVentaQuery, values);
+    const idVenta = result.rows[0].id_venta; // Obtenemos el ID de la venta
 
-    console.log("Resultado de la inserción:", result); // Agrega este console.log
+    console.log("ID de la venta insertada:", idVenta);
 
-    return result;
+    return idVenta;
   } catch (error) {
     console.error("Error al crear venta:", error);
     throw error;
   }
 };
+
+const createVentaProducto = async (ventaProductoData) => {
+  try {
+    // Llamamos a createVenta para obtener el id_venta
+    const idVenta = await createVenta(ventaProductoData);
+
+    const insertVentaProductoQuery =
+      "INSERT INTO venta_producto (codigo_venta, codigo_producto, cantidad_producto) VALUES ($1, $2, $3)";
+
+    const values = [
+      idVenta, // Usamos el id_venta obtenido de createVenta
+      ventaProductoData.codigo_producto,
+      ventaProductoData.cantidad_producto,
+    ];
+
+    console.log("Datos a insertar en la tabla venta_producto:", values);
+
+    const result = await pool.query(insertVentaProductoQuery, values);
+
+    console.log("Resultado de la inserción en venta_producto:", result);
+
+    return result;
+  } catch (error) {
+    console.error("Error al crear venta_producto:", error);
+    throw error;
+  }
+};
+
 const getVentas = async () => {
   const selectVentasQuery = "SELECT * FROM venta";
 
@@ -767,11 +798,10 @@ const getProductsAdmin = (req, res) => {
   });
 };
 
-
 const validatePassword = async (req, res) => {
   const { email, newPassword } = req.body;
 
-  const stringSimilarity = require('string-similarity');
+  const stringSimilarity = require("string-similarity");
   try {
     // Busca un cliente con el correo electrónico proporcionado
     const selectClienteQuery = "SELECT * FROM cliente WHERE correo = $1";
@@ -779,13 +809,18 @@ const validatePassword = async (req, res) => {
 
     if (result.rows.length === 0) {
       // Si no se encuentra el correo electrónico, envía una respuesta de error
-      return res.status(401).json({ message: 'Correo electrónico no encontrado' });
+      return res
+        .status(401)
+        .json({ message: "Correo electrónico no encontrado" });
     }
 
     const cliente = result.rows[0];
 
     // Compara la contraseña proporcionada con la almacenada
-    const similarity = stringSimilarity.compareTwoStrings(newPassword, cliente.contrasena);
+    const similarity = stringSimilarity.compareTwoStrings(
+      newPassword,
+      cliente.contrasena
+    );
 
     // Define un umbral de similitud (ajústalo según tus necesidades)
     const similarityThreshold = 0.5;
@@ -795,26 +830,34 @@ const validatePassword = async (req, res) => {
       const randomPassword = generateRandomPassword();
 
       // Actualiza la contraseña en la base de datos
-      const updatePasswordQuery = "UPDATE cliente SET contrasena = $1 WHERE id_cliente = $2";
-      await pool.query(updatePasswordQuery, [randomPassword, cliente.id_cliente]);
+      const updatePasswordQuery =
+        "UPDATE cliente SET contrasena = $1 WHERE id_cliente = $2";
+      await pool.query(updatePasswordQuery, [
+        randomPassword,
+        cliente.id_cliente,
+      ]);
 
       // Envía una respuesta exitosa con la nueva contraseña
-      return res.status(200).json({ message: 'Contraseña cambiada exitosamente', newPassword: randomPassword });
+      return res.status(200).json({
+        message: "Contraseña cambiada exitosamente",
+        newPassword: randomPassword,
+      });
     } else {
       // Si la contraseña no es lo suficientemente similar, envía una respuesta de error
-      return res.status(401).json({ message: 'La nueva contraseña no es suficientemente similar a la antigua' });
+      return res.status(401).json({
+        message:
+          "La nueva contraseña no es suficientemente similar a la antigua",
+      });
     }
   } catch (error) {
-    console.error('Error al validar la contraseña: ', error);
-    return res.status(500).json({ message: 'Error interno del servidor' });
+    console.error("Error al validar la contraseña: ", error);
+    return res.status(500).json({ message: "Error interno del servidor" });
   }
 };
 
-
-
 // Función para generar una contraseña aleatoria
 function generateRandomPassword() {
-  return crypto.randomBytes(8).toString('hex'); // Genera una contraseña aleatoria de 16 caracteres
+  return crypto.randomBytes(8).toString("hex"); // Genera una contraseña aleatoria de 16 caracteres
 }
 
 // En tu archivo dataController.js
@@ -824,19 +867,19 @@ const getImagesUpdateProduct = async (req, res) => {
 
   try {
     // Realiza una consulta a la base de datos para obtener las imágenes del producto con el ID proporcionado
-    const query = 'SELECT * FROM imagen_producto WHERE codigo_producto = $1';
+    const query = "SELECT * FROM imagen_producto WHERE codigo_producto = $1";
     const result = await pool.query(query, [id]);
 
     // Envía la respuesta con las imágenes encontradas
     res.json(result.rows);
   } catch (error) {
-    console.error('Error al obtener imágenes del producto', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
+    console.error("Error al obtener imágenes del producto", error);
+    res.status(500).json({ error: "Error interno del servidor" });
   }
 };
 
-
 module.exports = {
+  createVentaProducto,
   eliminarComentario,
   verComentarioPorId,
   editarComentario,

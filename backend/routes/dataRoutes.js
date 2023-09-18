@@ -199,7 +199,6 @@ router.post(
 
 router.post("/comentarios", dataController.añadirComentario);
 
-
 router.get("/ver-comentario/:id_comentario", dataController.verComentarioPorId); // Ruta actualizada
 
 router.get(
@@ -227,13 +226,28 @@ router.get("/ventas", async (req, res) => {
       .json({ error: "Error al obtener ventas", message: error.message });
   }
 });
+router.post("/crear-venta-producto", async (req, res) => {
+  try {
+    // Obtén los datos enviados desde el cliente
+    const ventaProductoData = req.body;
 
-router.post('/insertarProducto', dataController.insertarProducto);
+    // Llama a la función createVentaProducto para insertar en la tabla venta_producto
+    const result = await dataController.createVentaProducto(ventaProductoData);
+
+    // Envía una respuesta exitosa
+    res.status(201).json({ message: "Venta de producto creada exitosamente" });
+  } catch (error) {
+    // Manejo de errores
+    console.error("Error al crear venta_producto:", error);
+    res.status(500).json({ message: "Error al crear venta_producto" });
+  }
+});
+router.post("/insertarProducto", dataController.insertarProducto);
 
 const storage2 = multer.diskStorage({
   destination: (req, file, cb) => {
     const productId = req.body.productId; // ID del producto al que se asocian las imágenes
-    const frontendPublicPath = path.join(__dirname, '../../frontend/public');
+    const frontendPublicPath = path.join(__dirname, "../../frontend/public");
     const productImagePath = `product_images/product_${productId}`;
     const destinationPath = path.join(frontendPublicPath, productImagePath);
 
@@ -246,18 +260,23 @@ const storage2 = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
-  }
+  },
 });
 
 const upload2 = multer({ storage: storage2 });
-router.post('/insertarImagenesProducto', upload2.array('images'), dataController.insertarImagenesProducto);
-
+router.post(
+  "/insertarImagenesProducto",
+  upload2.array("images"),
+  dataController.insertarImagenesProducto
+);
 
 // router.get("/products/:id_imagen", dataController.getImages);
 router.get("/getproductsadmin", dataController.getProductsAdmin);
-router.post("/validatePassword",dataController.validatePassword)
+router.post("/validatePassword", dataController.validatePassword);
 
-
-router.post("/getImagesUpdateProduct/:id", dataController.getImagesUpdateProduct);
+router.post(
+  "/getImagesUpdateProduct/:id",
+  dataController.getImagesUpdateProduct
+);
 
 module.exports = router;
