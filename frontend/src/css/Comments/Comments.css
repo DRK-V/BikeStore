@@ -13,8 +13,10 @@
   height: 10%;
   color: green;
   font-size: 1.3em;
-  padding: 2%;
+  padding-left: 8%;
+  text-align: left;
 }
+
 .for_coment {
   display: flex;
   align-items: center;
@@ -31,31 +33,48 @@
   border-radius: 5px;
   font-size: 16px;
 }
+
 .botun_borrar,
-.buton_editar
-{
-  background-color: #f44336; /* Color de fondo */
-  color: white; /* Color del texto */
-  border: none; /* Borde sin estilo */
-  padding: 8px 16px; /* Espaciado interno */
-  margin-right: 8px; /* Margen derecho para separar los botones */
-  border-radius: 4px; /* Bordes redondeados */
-  cursor: pointer; /* Cambia el cursor al pasar sobre los botones */
+.buton_editar {
+  border: none;
+  width: 3em;
+  height: 5vh;
+  margin-right: 8px;
+  border-radius: 4px;
+  cursor: pointer;
   align-self: flex-end;
+  margin-bottom: 2%;
+  background-size: 80%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
+.botun_borrar {
+  background-image: url('https://cdn-icons-png.flaticon.com/512/3405/3405244.png');
+}
+
+
+.buton_editar {
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Edit_icon_%28the_Noun_Project_30184%29.svg/1024px-Edit_icon_%28the_Noun_Project_30184%29.svg.png');
+}
+
+.buton_editar .guardar{
+  background-image: url('https://cdn0.iconfinder.com/data/icons/game-ui-casual-chunky/533/IconsByAndreaFryer_GameUI_Chunky_Save-512.png');
+}
 /* Estilo cuando se pasa el cursor sobre los botones */
 .botun_borrar:hover,
 .buton_editar:hover {
-  background-color: #d32f2f; /* Cambia el color de fondo al pasar el cursor */
+  background-color: #d32f2f;
+  /* Cambia el color de fondo al pasar el cursor */
 }
-.button_container{
-  display: flex;
-  justify-content: flex-end; /* Alinea los elementos al final del contenedor */
-  align-items: flex-end; /* Alinea verticalmente los elementos al final */
-  height: 100%; /* Ajusta la altura del contenedor según tus necesidades */
 
+.button_container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: 100%;
 }
+
 .coments_buton {
   background-color: #007bff;
   color: #fff;
@@ -93,6 +112,7 @@
   justify-content: center;
   align-items: flex-start;
 }
+
 .icon_user {
   width: 90%;
   height: 50%;
@@ -112,7 +132,21 @@
   padding-left: 2%;
 }
 
-.text_container > header {
+.text_container>textarea {
+  width: 65%;
+  /* Ancho del 100% para que se ajuste al contenedor */
+  border-radius: .5em;
+  min-height: 8vh;
+  overflow: hidden;
+  height: auto;
+  background-color: rgba(136, 225, 188, 0.726);
+  padding-left: 3%;
+  outline: none;
+  resize: none;
+  padding: 1em;
+}
+
+.text_container>header {
   width: 100%;
   height: 3em;
   display: flex;
@@ -120,21 +154,27 @@
   align-items: center;
   gap: 20px;
 }
+
 .text_name {
   font-size: 1.2em;
 }
+
 .text_time {
-  font-size: 1em;
+  font-size: .8em;
+  color: #23673a;
 }
+
 .text_content {
   font-size: 1em;
   margin: 0px 30px 30px 0;
   text-align: justify;
 }
+
 @media (max-width: 450px) {
   .section_comment_profile {
     align-items: flex-start;
   }
+
   .text_content {
     font-size: 0.8em;
   }
