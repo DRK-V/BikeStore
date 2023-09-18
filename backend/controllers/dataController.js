@@ -506,40 +506,26 @@ const añadirComentario = async (req, res) => {
   const { codigo_cliente, codigo_producto, texto } = req.body;
 
   const insertQuery =
-    "INSERT INTO comentario (codigo_cliente, codigo_producto, texto) VALUES ($1, $2, $3)";
+    "INSERT INTO comentario (codigo_cliente, codigo_producto, texto) VALUES ($1, $2, $3) RETURNING id_comentario";
   const values = [codigo_cliente, codigo_producto, texto];
 
   try {
-    await pool.query(insertQuery, values);
-    res.status(201).json({ message: "Comentario añadido con éxito" });
+    const result = await pool.query(insertQuery, values);
+    const comentarioId = result.rows[0].id_comentario;
+    res.status(201).json({ message: "Comentario añadido con éxito", ID_COMENTARIO: comentarioId });
   } catch (error) {
     console.error("Error al añadir el comentario:", error);
     res.status(500).json({ error: "Error al añadir el comentario" });
   }
 };
 
-const verComentarios = async (req, res) => {
-  const selectQuery = "SELECT * FROM comentario";
-
-  try {
-    const result = await pool.query(selectQuery);
-    const comentarios = result.rows;
-    res.status(200).json(comentarios);
-  } catch (error) {
-    console.error("Error al obtener los comentarios:", error);
-    res.status(500).json({ error: "Error al obtener los comentarios" });
-  }
-};
 const verComentariosPorCodigoProducto = async (req, res) => {
   const { codigo_producto } = req.params;
-  let selectQuery = "SELECT * FROM comentario";
-
-  if (codigo_producto) {
-    selectQuery = `SELECT * FROM comentario WHERE codigo_producto = ${codigo_producto}`;
-  }
+  const selectQuery = "SELECT * FROM comentario WHERE codigo_producto = $1";
+  const values = [codigo_producto];
 
   try {
-    const result = await pool.query(selectQuery);
+    const result = await pool.query(selectQuery, values);
     const comentarios = result.rows;
     res.status(200).json(comentarios);
   } catch (error) {
@@ -547,7 +533,7 @@ const verComentariosPorCodigoProducto = async (req, res) => {
     res.status(500).json({ error: "Error al obtener los comentarios" });
   }
 };
-// En comentariosController.js
+
 const verComentarioPorId = async (req, res) => {
   const { id_comentario } = req.params;
 
@@ -571,24 +557,43 @@ const verComentarioPorId = async (req, res) => {
 
 const editarComentario = async (req, res) => {
   const { texto } = req.body;
-  const { id_comentario } = req.params; // Asegúrate de que coincida con el nombre del parámetro en la URL
-
-  // Query SQL para actualizar el comentario con el nuevo texto
-  const updateQuery =
-    "UPDATE comentario SET texto = $1 WHERE id_comentario = $2";
-  const values = [texto, id_comentario];
+  const { id_comentario } = req.params;
 
   try {
-    // Ejecutar la consulta SQL
-    await db.none(updateQuery, values);
+    // Query SQL para actualizar el comentario con el nuevo texto
+    const updateQuery = "UPDATE comentario SET texto = $1 WHERE id_comentario = $2";
+    const values = [texto, id_comentario];
 
-    // Comprobar si se actualizó correctamente
+    // Ejecutar la consulta SQL para editar el comentario
+    await pool.query(updateQuery, values);
+
     res.status(200).json({ message: "Comentario editado con éxito" });
   } catch (error) {
     console.error("Error al editar el comentario:", error);
     res.status(500).json({ error: "Error al editar el comentario" });
   }
 };
+
+const eliminarComentario = async (req, res) => {
+  const { id_comentario } = req.params;
+
+  try {
+    // Query SQL para eliminar el comentario
+    const deleteQuery = "DELETE FROM comentario WHERE id_comentario = $1";
+    const values = [id_comentario];
+
+    // Ejecutar la consulta SQL para eliminar el comentario
+    await pool.query(deleteQuery, values);
+
+    res.status(200).json({ message: "Comentario eliminado con éxito" });
+  } catch (error) {
+    console.error("Error al eliminar el comentario:", error);
+    res.status(500).json({ error: "Error al eliminar el comentario" });
+  }
+};
+// Asignar las funciones a las rutas
+
+
 
 //fin comentarios
 //ensayo
@@ -832,6 +837,7 @@ const getImagesUpdateProduct = async (req, res) => {
 
 
 module.exports = {
+  eliminarComentario,
   verComentarioPorId,
   editarComentario,
   getVentas,
@@ -839,7 +845,6 @@ module.exports = {
   verComentariosPorCodigoProducto,
   getClientePorId,
   añadirComentario,
-  verComentarios,
   registerUser,
   getImages,
   getAllClientes,
