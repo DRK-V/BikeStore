@@ -26,13 +26,17 @@
 }
 
 .descrip_produc {
-    font-size: .5em;
+    font-size: .4em;
+    min-width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 /* aca va el de los conotenedores */
 .Cart_compras_carrito {
     width: 75%;
-    height: 27%;
+    height: 20vh;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -54,20 +58,27 @@
 }
 
 .Cart_compras_carrito>h2 {
-    margin-left: 6%;
+    padding-left: 6%;
     width: 100%;
-    height: 26%;
+    height: 10vh;
 }
 .descrip_produc h2 {
     margin-left: 6%;
     width: 100%;
-    height: 26%;
+    height: 7vh;
     font-size: 3em;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.green_text{
+    color:#7EE29A;
+    font-size: 1em;
 }
 .info_bici_compra {
     width: 100%;
     height: 74%;
-    margin-left: 6%;
+    padding-left: 6%;
     display: flex;
     flex-direction: row;
 }
@@ -75,35 +86,44 @@
 /*botones de aumentar productos*/
 .botones_compra {
     width: 36%;
-    margin-left: 2%;
+    padding-left: 2%;
     align-items: end;
     display: flex;
+    flex-direction: row;
+    height: 100%;
 }
 
 .boton1 {
     background-color: transparent;
     margin: 1%;
     width: auto;
-    height: 14%;
+    height: 7vh;
     border: solid 2px #bef6c4a2;
     border-radius: 0.5em;
     padding: 6%;
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
+    cursor: pointer;
+    &:hover{
+        background-color: rgba(255, 0, 0, 0.351);
+    }
 }
 
 .boton1>i {
     margin: 0;
     /* Añade un margen derecho al ícono */
     color: #000000;
+    height: 100%;
+    width: 100%;
     /* Cambia el color del ícono */
 }
 
 .boton2 {
     margin: 1%;
-    width: auto;
-    height: 14%;
+    min-width:50%;
+    height: 7vh;
     border: solid 2px #bef6c4a2;
     border-radius: 0.5em;
     padding: 6%;
@@ -158,38 +178,34 @@
 
 .info_pc {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: flex-end;
     flex-direction: column;
-    margin: 6%;
+    width: 100%;
+    height: 30vh;
+    padding-right: 4em;
 }
 
+.info_pc > h1{
+    font-size: 1.7em;
+}
 
+.info_pc > h2{
+    font-size: 1em;
+}
 /* confing button */
-
 .carro_pagar {
-    width: 17%;
+    width: 15%;
     position: relative;
     height: 100%;
     object-fit: contain;
     margin-right: 10px;
     margin-left: 6px;
-
+    filter: invert(1);
 }
 
-.pagar {
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #7EE29A;
-    color: white;
-    border: 0;
-    border-radius: .5em;
-    cursor: pointer;
-}
 .pagar-1 {
-    width: 54%;
+    width: 20%;
     height: 28%;
     display: flex;
     align-items: center;
@@ -198,7 +214,18 @@
     color: white;
     border: 0;
     border-radius: .5em;
-    
+}
+
+.pagar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #7EE29A;
+    color: white;
+    border: 0;
+    border-radius: .5em;
+    cursor: pointer;
+    width: 100%;
 }
 .pagar-2 {
     width: 54%;
@@ -210,7 +237,6 @@
     color: white;
     border: 0;
     border-radius: .5em;
-    
 }
 .pagar-3 {
     position: fixed;

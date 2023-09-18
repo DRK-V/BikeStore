@@ -67,11 +67,14 @@ const Comments = (props) => {
             <h2 className="text_name">{props.name}</h2>
             <h3 className="text_time">{props.time}</h3>
           </header>
+
+          
           {isEditing ? (
-            <input
+            <textarea
               type="text"
               value={newContent}
               onChange={(e) => setNewContent(e.target.value)}
+              maxLength={255}
             />
           ) : (
             <p className="text_content">{props.content}</p>
@@ -86,24 +89,22 @@ const Comments = (props) => {
                   <div className="button_container">
                     {isEditing ? (
                       <button
-                        className='buton_editar'
+                        className='buton_editar guardar'
                         onClick={handleEditComment}
                       >
-                        Guardar
+                        
                       </button>
                     ) : (
                       <button
-                        className='botun_borrar'
+                        className='buton_editar'
                         onClick={() => setIsEditing(true)}
                       >
-                        Editar
                       </button>
                     )}
                     <button
-                      className='buton_editar'
+                      className='botun_borrar'
                       onClick={handleDeleteComment}
                     >
-                      Eliminar
                     </button>
                   </div>
                 </>

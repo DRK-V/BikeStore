@@ -133,7 +133,9 @@ export const Navbar = ({ onSearchClick, onFormSubmit }) => {
             onClick={handleMenuClick}
           />
         </button>
-        <img src={carrito} alt="carrito" className="car2" />
+        <Link to="/Carrito_compras" className="car2">
+          <img src={carrito} alt="carrito" />
+        </Link>
       </nav>
       <nav className="nav2">
         <div className="left-side">
@@ -180,9 +182,8 @@ export const Navbar = ({ onSearchClick, onFormSubmit }) => {
             </Link>
             <Link to="#">
               <div
-                className={`user-icon ${
-                  isLoggedIn === false ? "desactivar_opcion" : ""
-                }`}
+                className={`user-icon ${isLoggedIn === false ? "desactivar_opcion" : ""
+                  }`}
                 onClick={toggleProfileMenu}
               >
                 <li>
@@ -241,9 +242,8 @@ export const Navbar = ({ onSearchClick, onFormSubmit }) => {
       )}
 
       <div
-        className={`menu_profile_container ${
-          profileMenuVisible ? "active" : ""
-        }`}
+        className={`menu_profile_container ${profileMenuVisible ? "active" : ""
+          }`}
       >
         <Menu_profile is_link_active={false} onClose={toggleProfileMenu} />
       </div>

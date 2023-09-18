@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../css/Actualizar_productos_admin.css';
 import { useParams } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
 export const Actualizar_productos_admin = () => {
     const { id } = useParams();
     const [imagenes, setImagenes] = useState([]);
@@ -94,6 +94,9 @@ export const Actualizar_productos_admin = () => {
 
     return (
         <>
+            <Link className="close_update_products" to="/Usuario_usu?section=manage">
+                X
+            </Link>
             <div className='custom-container'>
                 <div className='custom-image-section'>
                     {imagenes.map((imagen, index) => (
