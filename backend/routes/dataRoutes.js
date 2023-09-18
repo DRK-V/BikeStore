@@ -1,9 +1,9 @@
 const express = require("express");
 const dataController = require("../controllers/dataController");
 const router = express.Router();
-const multer = require('multer');
-const path = require("path")
-const fs = require("fs")
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
 /**
  * @openapi
@@ -16,7 +16,7 @@ const fs = require("fs")
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const userId = req.params.userId;
-    const frontendPublicPath = path.join(__dirname, '../../frontend/public');
+    const frontendPublicPath = path.join(__dirname, "../../frontend/public");
     const userImagePath = `profile_images/user_${userId}`;
     const destinationPath = path.join(frontendPublicPath, userImagePath);
 
@@ -29,7 +29,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
-  }
+  },
 });
 const upload = multer({ storage: storage });
 
@@ -137,7 +137,7 @@ router.get(
  *         description: Internal server error.
  */
 router.get("/cliente", dataController.getAllClientes);
-router.get('/cliente/:id', dataController.getClientePorId);
+router.get("/cliente/:id", dataController.getClientePorId);
 router.post("/api/register", async (req, res) => {
   const userData = req.body;
 
@@ -183,35 +183,48 @@ router.post("/api/register", async (req, res) => {
  */
 router.post("/api/login", dataController.loginUser);
 
-router.get('/api/user/:email', dataController.getUserByEmail);
+router.get("/api/user/:email", dataController.getUserByEmail);
 //esta ruta es para traer la informacion de pedidos del usuario
 
-router.get('/user/:userId/ventas', dataController.getUserDetalleCompra);
+router.get("/user/:userId/ventas", dataController.getUserDetalleCompra);
 
-router.put('/api/update_user', dataController.updateUser);
+router.put("/api/update_user", dataController.updateUser);
 
 // router.post('/user/:userId/updateImage', upload.single('image'), dataController.updateUserImage);
-router.post("/user/:userId/updateImage", upload.single("image"), dataController.updateUserImage);
+router.post(
+  "/user/:userId/updateImage",
+  upload.single("image"),
+  dataController.updateUserImage
+);
+
+router.post("/comentarios", dataController.añadirComentario);
 
 
-router.post('/comentarios', dataController.añadirComentario);
-router.get('/coments', dataController.verComentarios);
-router.get('/coments/:codigo_producto', dataController.verComentariosPorCodigoProducto);
-router.post('/crear-venta', async (req, res) => {
+router.get("/ver-comentario/:id_comentario", dataController.verComentarioPorId); // Ruta actualizada
+
+router.get(
+  "/coments/:codigo_producto",
+  dataController.verComentariosPorCodigoProducto
+);
+router.post("/crear-venta", async (req, res) => {
   try {
     const ventaData = req.body; // Asume que los datos se envían en el cuerpo de la solicitud
     const result = await dataController.createVenta(ventaData);
-    res.status(201).json({ message: 'Venta creada con éxito', result });
+    res.status(201).json({ message: "Venta creada con éxito", result });
   } catch (error) {
-    res.status(500).json({ error: 'Error al crear venta', message: error.message });
+    res
+      .status(500)
+      .json({ error: "Error al crear venta", message: error.message });
   }
 });
-router.get('/ventas', async (req, res) => {
+router.get("/ventas", async (req, res) => {
   try {
     const ventas = await dataController.getVentas();
     res.status(200).json(ventas);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener ventas', message: error.message });
+    res
+      .status(500)
+      .json({ error: "Error al obtener ventas", message: error.message });
   }
 });
 
@@ -242,6 +255,10 @@ router.post('/insertarImagenesProducto', upload2.array('images'), dataController
 
 // router.get("/products/:id_imagen", dataController.getImages);
 router.get("/getproductsadmin", dataController.getProductsAdmin);
+router.post("/validatePassword",dataController.validatePassword)
+
+
+router.post("/getImagesUpdateProduct/:id", dataController.getImagesUpdateProduct);
 
 //esta es para actualizar los productos con el rol de administrador
 router.put("/actualizar_producto/:id_producto", dataController.traerproducto);

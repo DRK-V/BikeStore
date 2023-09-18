@@ -12,6 +12,7 @@ const Container_comments = () => {
   const comenContext = useComenContext();
   const authContext = useAuth();
   const [isCommentValid, setIsCommentValid] = useState(false);
+  const [editingComment, setEditingComment] = useState({ text: "", commentId: null });
 
   useEffect(() => {
     setIsLoading(true);
@@ -73,15 +74,18 @@ const Container_comments = () => {
     fetchComments();
   }, [comenContext.selectedProductId]);
 
-  const handleCommentChange = (e) => {
+  const handleCommentChange = (e, commentId, commentText) => {
     const comment = e.target.value;
     setNewComment(comment);
 
-    if (comment.length >= 20) {
+    if (comment.length >= 5) {
       setIsCommentValid(true);
     } else {
       setIsCommentValid(false);
     }
+
+    // Actualiza el estado de edición del comentario
+    setEditingComment({ text: commentText, commentId });
   };
 
   const submitComment = () => {
@@ -89,15 +93,15 @@ const Container_comments = () => {
       console.error("El usuario no está autenticado");
       return;
     }
-
+  
     const codigo_cliente = authContext.user.id_cliente;
     const codigo_producto = comenContext.selectedProductId;
-
+  
     if (!codigo_producto) {
       console.error("El código del producto no es válido");
       return;
     }
-
+  
     fetch("http://localhost:3060/comentarios", {
       method: "POST",
       headers: {
@@ -111,15 +115,16 @@ const Container_comments = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Comentario enviado exitosamente:", data);
-
+        console.log("Comentario enviado exitosamente. ID_COMENTARIO:", data.ID_COMENTARIO);
+  
         const commentWithUserName = {
+          ID_COMENTARIO: data.ID_COMENTARIO,
           codigo_cliente,
           clientName: authContext.user.nombre_usuario || "Nombre no encontrado",
           fecha_creacion: new Date().toISOString(),
           texto: newComment,
         };
-
+  
         setCommentsData([...commentsData, commentWithUserName]);
         setNewComment("");
       })
@@ -148,11 +153,18 @@ const Container_comments = () => {
           {commentsData.map((comment, index) => (
             <Comments
               key={index}
+              id={comment.id_comentario}
               name={comment.clientName}
               time={formatDateTime(comment.fecha_creacion)}
               content={comment.texto}
+              codigoCliente={comment.codigo_cliente}
+              idCliente={authContext.user.id_cliente}
+              isEditing={editingComment.commentId === comment.id_comentario}
+              editCommentText={editingComment.text}
+              onEditComment={(text) => handleCommentChange({ target: { value: text } }, comment.id_comentario, comment.texto)}
             />
           ))}
+
           {authContext.isLoggedIn && (
             <form
               className="for_coment"

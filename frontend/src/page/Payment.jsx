@@ -5,13 +5,13 @@ import { Footer } from "../components/Footer";
 import { useAuth } from "../components/AuthContext";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useCart } from "../components/CartContext"; 
-
+import { useCart } from "../components/CartContext";
+import jsPDF from "jspdf";
 
 export const Payment = () => {
   const location = useLocation();
   const { user, idCliente } = useAuth();
-  const navigate = useNavigate(); // Utiliza useNavigate para la redirección
+  const navigate = useNavigate();
   const { clearCart } = useCart();
 
   const [formValues, setFormValues] = useState({
@@ -77,6 +77,25 @@ export const Payment = () => {
         console.log("Venta creada con éxito.");
         setVentaExitosa(true);
 
+        // Generar factura en PDF
+        const doc = new jsPDF();
+        doc.text("FACTURA", 10, 10);
+        doc.text(`Número: ${Math.floor(Math.random() * 1000000)}`, 10, 20);
+        doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 30);
+        doc.text(`Identificación del Emisor: ${user.identificacion}`, 10, 40);
+        doc.text(
+          `Identificación del Receptor: ${formValues.numeroDocumento}`,
+          10,
+          50
+        );
+        doc.text(`Descripción del Concepto: Compra de productos`, 10, 60);
+        doc.text(`Base Imponible: ${formValues.valorPagar}`, 10, 70);
+        doc.text(`Tipo de IVA Aplicado: 19%`, 10, 80);
+        doc.text(`Total: ${formValues.valorPagar}`, 10, 90);
+
+        // Guardar la factura como PDF
+        doc.save("factura.pdf");
+
         // Limpia el carrito después de una venta exitosa
         clearCart();
 
@@ -91,6 +110,7 @@ export const Payment = () => {
       console.error("Error de red:", error);
     }
   };
+
   return (
     <>
       <Navbar />
@@ -118,14 +138,14 @@ export const Payment = () => {
             <i className="fas fa-id-card"></i>{" "}
             {/* Icono de tipo de documento */}
             <input
-      type="text"
-      id="tipoDocumento"
-      name="tipoDocumento"
-      value={formValues.tipoDocumento}
-      onChange={handleChange}
-      readOnly // Agregar el atributo readOnly
-      required
-    />
+              type="text"
+              id="tipoDocumento"
+              name="tipoDocumento"
+              value={formValues.tipoDocumento}
+              onChange={handleChange}
+              readOnly // Agregar el atributo readOnly
+              required
+            />
           </div>
         </div>
 
@@ -146,47 +166,46 @@ export const Payment = () => {
         </div>
 
         <div className="input-container">
-  <label htmlFor="tipo_de_cuenta">Tipo de cuenta:</label>
-  <div className="input-icon-container">
-    <i className="fas fa-university"></i>
-    <select
-      id="tipo_de_cuenta"
-      name="tipo_de_cuenta"
-      value={formValues.tipo_de_cuenta}
-      onChange={handleChange}
-      required
-    >
-      <option value="">Selecciona un tipo de cuenta</option>
-      <option value="Cuenta Corriente">Cuenta Corriente</option>
-      <option value="Cuenta de Ahorro">Cuenta de Ahorro</option>
-      <option value="Cuenta de Mercado Monetario">Cuenta de Mercado Monetario</option>
-      <option value="Certificado de Depósito (CD)">Certificado de Depósito (CD)</option>
-    </select>
-  </div>
-</div>
+          <label htmlFor="tipo_de_cuenta">Tipo de cuenta:</label>
 
+          <i className="fas fa-university"></i>
+          <select
+            id="tipo_de_cuenta"
+            name="tipo_de_cuenta"
+            value={formValues.tipo_de_cuenta}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Selecciona un tipo de cuenta</option>
+            <option value="Cuenta Corriente">Cuenta Corriente</option>
+            <option value="Cuenta de Ahorro">Cuenta de Ahorro</option>
+            <option value="Cuenta de Mercado Monetario">
+              Cuenta de Mercado Monetario
+            </option>
+            <option value="Certificado de Depósito (CD)">
+              Certificado de Depósito (CD)
+            </option>
+          </select>
+        </div>
 
-<div className="input-container">
-  <label htmlFor="banco">Banco:</label>
-  <div className="input-icon-container">
-    <i className="fas fa-piggy-bank"></i> {/* Icono de banco */}
-    <select
-      id="banco"
-      name="banco"
-      value={formValues.banco}
-      onChange={handleChange}
-      required
-    >
-      <option value="">Selecciona un banco</option>
-      <option value="Bancolombia">Bancolombia</option>
-      <option value="Davivienda">Davivienda</option>
-      <option value="Banco de Bogotá">Banco de Bogotá</option>
-      <option value="Banco Popular">Banco Popular</option>
-      {/* Agrega más bancos aquí según sea necesario */}
-    </select>
-  </div>
-</div>
-
+        <div className="input-container">
+          <label htmlFor="banco">Banco:</label>
+          <i className="fas fa-piggy-bank"></i> {/* Icono de banco */}
+          <select
+            id="banco"
+            name="banco"
+            value={formValues.banco}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Selecciona un banco</option>
+            <option value="Bancolombia">Bancolombia</option>
+            <option value="Davivienda">Davivienda</option>
+            <option value="Banco de Bogotá">Banco de Bogotá</option>
+            <option value="Banco Popular">Banco Popular</option>
+            {/* Agrega más bancos aquí según sea necesario */}
+          </select>
+        </div>
 
         <div className="input-container">
           <label htmlFor="numero_de_cuenta">Número de cuenta:</label>
@@ -243,7 +262,7 @@ export const Payment = () => {
             <i className="fas fa-dollar-sign"></i>{" "}
             {/* Icono de valor a pagar */}
             <input
-              disabled  
+              disabled
               type="number"
               id="valorPagar"
               name="valorPagar"
@@ -254,12 +273,13 @@ export const Payment = () => {
           </div>
         </div>
         {ventaExitosa && (
-  <div className="success-message">
-    <div className="success-message-content">
-      Compra completada. Serás redirigido a la página de inicio.
-    </div>
-  </div>
-)}
+          <div className="success-message">
+            <div className="success-message-content">
+              Compra completada. La factura se ha generado y descargado como
+              PDF.
+            </div>
+          </div>
+        )}
         <button type="submit">Enviar</button>
       </form>
       <Footer />

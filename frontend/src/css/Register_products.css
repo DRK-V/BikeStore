@@ -7,8 +7,14 @@
   height: 100vh;
 }
 
+.select {
+  width: 80%;
+  border: solid 1px gray;
+  border-radius: 0.3rem;
+}
+
 .close_register_products {
-  background-image: url('https://cdn.icon-icons.com/icons2/3257/PNG/512/close_icon_206100.png');
+  background-image: url("https://cdn.icon-icons.com/icons2/3257/PNG/512/close_icon_206100.png");
   background-size: 100%;
   background-repeat: no-repeat;
   margin: 20px;
@@ -53,14 +59,16 @@
   height: 25vh;
   width: 25%;
   border: dashed 1px gray;
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   color: transparent;
-  background-image: url('https://static.thenounproject.com/png/3752804-200.png');
+  background-image: url("https://static.thenounproject.com/png/3752804-200.png");
   background-size: 50%;
   background-repeat: no-repeat;
   background-position: center;
   filter: contrast(0%);
   background-color: transparent;
+  box-shadow: 1px 1px 10px 1px black;
+  cursor: pointer;
 }
 
 .product-form {
@@ -86,6 +94,11 @@
   background-color: #00ffb7;
   cursor: pointer;
   font-weight: bold;
+
+  &:hover {
+    box-shadow: 1px 1px 6px 2px #056147bd;
+    transition: .5s;
+  }
 }
 
 .form-group {
@@ -100,6 +113,23 @@
   width: 80%;
   border: solid 1px gray;
   border-radius: 0.3rem;
+}
+
+.form-group>input,
+.select,
+.form-group>textarea {
+  box-shadow: 1px 2px 4px 1px rgba(0, 0, 0, 0.397);
+  outline: none;
+  font-family: 'karla';
+  padding: 1em;
+}
+
+.select {
+  width: 80%;
+  border: solid 1px gray;
+  border-radius: 0.3rem;
+  width: 80%;
+  height: 80%;
 }
 
 .form-group>textarea {

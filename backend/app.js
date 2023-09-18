@@ -42,6 +42,8 @@ app.get("/api/cliente", (req, res) => {
       res.status(500).json({ message: "Error en el servidor" });
     });
 });
+app.put('/editar-comentario/:id_comentario', dataController.editarComentario);
+app.delete('/eliminar-comentario/:id_comentario', dataController.eliminarComentario);
 
 app.listen(port, () => {
   console.log(`Servidor ejecutándose en http://localhost:${port}`);

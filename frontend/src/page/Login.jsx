@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../css/login.css';
 import { useAuth } from '../components/AuthContext';
 import leftImage from '../assets/bici_login.png';
+import { Link } from 'react-router-dom';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -101,6 +102,10 @@ export const Login = () => {
                 <input type="password" placeholder='Contraseña' name="password" required></input>
               </div>
               <button className='button-ini' type="submit">Iniciar</button>
+              <Link className='forgot_password' to="/Recover_password">Olvide mi contrasena</Link>
+              <Link className='forgot_password' to="/register">
+                Registrarse
+              </Link>
             </form>
             <div className="login-status">{loginStatus}</div>
           </div>
