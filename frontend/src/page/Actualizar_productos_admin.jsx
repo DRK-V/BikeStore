@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 
 export const Actualizar_productos_admin = () => {
     const { id } = useParams();
-    console.log("asdfasd",id)
     const [imagenes, setImagenes] = useState([]);
     const [producto, setProducto] = useState({
         nombre: '',

@@ -54,7 +54,6 @@ const updateUser = async (req, res) => {
 
 //fin de acutalizacion de datos del cliente
 
-//actualizacion de productos 
 
 
 //fin de actualizacion de productos
@@ -840,6 +839,8 @@ const getImagesUpdateProduct = async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
+//actualizacion de productos 
+
 const traerproducto = async (req, res) => {
   const updatedUserData = req.body;
 
