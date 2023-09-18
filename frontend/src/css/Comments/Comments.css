@@ -32,7 +32,8 @@
   font-size: 16px;
 }
 .botun_borrar,
-.buton_editar {
+.buton_editar
+{
   background-color: #f44336; /* Color de fondo */
   color: white; /* Color del texto */
   border: none; /* Borde sin estilo */
