@@ -261,7 +261,7 @@ router.post("/validatePassword",dataController.validatePassword)
 router.post("/getImagesUpdateProduct/:id", dataController.getImagesUpdateProduct);
 
 //esta es para actualizar los productos con el rol de administrador
-router.put("/actualizar_producto/:id_producto", dataController.traerproducto);
+router.post("/actualizar_producto/:id_producto", dataController.traerproducto)
 
 
 module.exports = router;
