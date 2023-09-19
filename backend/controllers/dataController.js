@@ -767,7 +767,6 @@ const getProductsAdmin = (req, res) => {
   });
 };
 
-
 const validatePassword = async (req, res) => {
   const { email, newPassword } = req.body;
 
@@ -809,8 +808,6 @@ const validatePassword = async (req, res) => {
     return res.status(500).json({ message: 'Error interno del servidor' });
   }
 };
-
-
 
 // Función para generar una contraseña aleatoria
 function generateRandomPassword() {
@@ -885,6 +882,76 @@ const deleteImage = async (req, res) => {
   }
 };
 
+//////////////////////////////////////////////////////////
+const getProductDetails = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Realiza una consulta a la base de datos para obtener los detalles del producto con el ID proporcionado
+    const query = 'SELECT * FROM producto WHERE id_producto = $1'; // Reemplaza "tu_tabla_de_productos" por el nombre real de tu tabla
+    const result = await pool.query(query, [id]);
+
+    // Envía la respuesta con los detalles del producto encontrados
+    res.json(result.rows[0]); // Supongo que solo se espera un resultado, por lo que tomo el primer elemento del array
+  } catch (error) {
+    console.error('Error al obtener detalles del producto', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+const updateImageProducts = async (req, res) => {
+  try {
+    const productId = req.body.productId;
+    const productName = req.body.producto;
+    const images = req.files;
+
+    if (!Array.isArray(images) || images.length === 0) {
+      return res.status(400).json({ success: false, error: "Error al recibir imágenes", images });
+    }
+
+    // Validar productId, productName y la existencia de imágenes
+    if (!productId || !productName || !images || images.length === 0) {
+      return res.status(400).json({ success: false, error: "Error en el ID, nombre o al recibir imágenes" });
+    }
+
+    // Construir el nombre de la carpeta usando el nombre del producto
+    const sanitizedProductName = productName.replace(/[^\w\s]/gi, "");
+    const productImageDir = `../images/${sanitizedProductName}`;
+
+    // Verificar si la carpeta de destino existe, si no, crearla
+    const imageFolderPath = path.join(__dirname, productImageDir);
+    if (!fs.existsSync(imageFolderPath)) {
+      fs.mkdirSync(imageFolderPath, { recursive: true });
+    }
+
+    // Insertar todas las imágenes relacionadas con el producto y renombrarlas
+    const insertImageQuery = `
+      INSERT INTO imagen_producto (codigo_producto, nombre_imagen, ruta_imagen)
+      VALUES ($1, $2, $3);
+    `;
+
+    for (let i = 0; i < images.length; i++) {
+      const image = images[i];
+      const originalImageName = image.originalname;
+      const imageName = i === 0 ? "imagen portada" : originalImageName;
+      const imagePath = path.join(imageFolderPath, originalImageName);
+
+      fs.renameSync(image.path, imagePath);
+
+      // Construir la URL completa de la imagen
+      const imageUrl = `http://localhost:3060/images/${sanitizedProductName}/${originalImageName}`;
+
+      const imageValues = [productId, imageName, imageUrl];
+      await pool.query(insertImageQuery, imageValues);
+    }
+
+    return res.status(200).json({ success: true, message: "Imágenes actualizadas con éxito" });
+  } catch (error) {
+    console.error("Error al actualizar las imágenes:", error);
+    return res.status(500).json({ success: false, error: "Error al actualizar las imágenes" });
+  }
+};
+
 
 
 module.exports = {
@@ -914,4 +981,6 @@ module.exports = {
   validatePassword,
   getImagesUpdateProduct,
   deleteImage,
+  updateImageProducts,
+  getProductDetails,
 };
