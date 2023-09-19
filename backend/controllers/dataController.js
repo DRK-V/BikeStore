@@ -767,7 +767,6 @@ const getProductsAdmin = (req, res) => {
   });
 };
 
-
 const validatePassword = async (req, res) => {
   const { email, newPassword } = req.body;
 
@@ -810,13 +809,10 @@ const validatePassword = async (req, res) => {
   }
 };
 
-
-
 // Función para generar una contraseña aleatoria
 function generateRandomPassword() {
   return crypto.randomBytes(8).toString('hex'); // Genera una contraseña aleatoria de 16 caracteres
 }
-
 // En tu archivo dataController.js
 
 const getImagesUpdateProduct = async (req, res) => {
@@ -834,6 +830,150 @@ const getImagesUpdateProduct = async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
+
+const deleteImage = async (req, res) => {
+  const { idImagen } = req.params; // Obtén el ID de la imagen a eliminar desde los parámetros de la URL
+
+  try {
+    // Realiza una consulta para obtener la ruta de la imagen a eliminar
+    const getImagePathQuery = 'SELECT ruta_imagen FROM imagen_producto WHERE id_imagen = $1';
+    const imagePathResult = await pool.query(getImagePathQuery, [idImagen]);
+
+    if (imagePathResult.rowCount === 0) {
+      // Si no se encuentra la imagen con el ID proporcionado, responde con un error
+      return res.status(404).json({ error: 'La imagen no existe' });
+    }
+
+    const imagePath = imagePathResult.rows[0].ruta_imagen;
+
+    // Realiza una consulta para obtener el código de producto de la imagen a eliminar
+    const getCodeQuery = 'SELECT codigo_producto FROM imagen_producto WHERE id_imagen = $1';
+    const codeResult = await pool.query(getCodeQuery, [idImagen]);
+
+    if (codeResult.rowCount === 0) {
+      // Si no se encuentra la imagen con el ID proporcionado, responde con un error
+      return res.status(404).json({ error: 'La imagen no existe' });
+    }
+
+    const codigoProducto = codeResult.rows[0].codigo_producto;
+
+    // Realiza una consulta para contar cuántas imágenes asociadas al mismo producto existen
+    const countQuery = 'SELECT COUNT(*) FROM imagen_producto WHERE codigo_producto = $1';
+    const countResult = await pool.query(countQuery, [codigoProducto]);
+
+    const imageCount = parseInt(countResult.rows[0].count); // Convierte el resultado en un número entero
+
+    if (imageCount === 1) {
+      // Si solo hay una imagen asociada al producto, envía un mensaje de error
+      return res.status(400).json({
+        error: `No puedes eliminar esta imagen para el producto con código ${codigoProducto}, debe existir al menos una imagen por producto`,
+      });
+    }
+
+    if (imageCount > 1) {
+      // Si hay más de una imagen asociada al producto, verifica si alguna tiene nombre 'imagen portada'
+      const hasImagenPortadaQuery = 'SELECT id_imagen FROM imagen_producto WHERE codigo_producto = $1 AND nombre_imagen = $2';
+      const portadaResult = await pool.query(hasImagenPortadaQuery, [codigoProducto, 'imagen portada']);
+
+      if (portadaResult.rowCount === 1 && portadaResult.rows[0].id_imagen === idImagen) {
+        // Si la imagen que se va a eliminar es la 'imagen portada', actualiza otra imagen como 'imagen portada'
+        const updatePortadaQuery = 'UPDATE imagen_producto SET nombre_imagen = $1 WHERE codigo_producto = $2 AND id_imagen != $3 LIMIT 1';
+        await pool.query(updatePortadaQuery, ['imagen portada', codigoProducto, idImagen]);
+      }
+    }
+
+    // Elimina la imagen con el ID proporcionado de la base de datos
+    const deleteQuery = 'DELETE FROM imagen_producto WHERE id_imagen = $1';
+    await pool.query(deleteQuery, [idImagen]);
+
+    // Construye la ruta completa al archivo en el sistema de archivos
+    const fullPath = path.join(__dirname, '..', 'images', imagePath);
+
+    // Verifica si el archivo existe y, si es así, elimínalo
+    if (fs.existsSync(fullPath)) {
+      fs.unlinkSync(fullPath);
+
+      // Envia la ruta de la imagen eliminada en la respuesta JSON
+      res.status(200).json({ success: true, imagePath: fullPath });
+    } else {
+      res.status(204).json({ success: true, imagePath: null }); // La imagen ya se había eliminado
+    }
+  } catch (error) {
+    console.error('Error al eliminar la imagen', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+//////////////////////////////////////////////////////////
+const getProductDetails = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Realiza una consulta a la base de datos para obtener los detalles del producto con el ID proporcionado
+    const query = 'SELECT * FROM producto WHERE id_producto = $1'; // Reemplaza "tu_tabla_de_productos" por el nombre real de tu tabla
+    const result = await pool.query(query, [id]);
+
+    // Envía la respuesta con los detalles del producto encontrados
+    res.json(result.rows[0]); // Supongo que solo se espera un resultado, por lo que tomo el primer elemento del array
+  } catch (error) {
+    console.error('Error al obtener detalles del producto', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+const updateImageProducts = async (req, res) => {
+  try {
+    const productId = req.body.productId;
+    const productName = req.body.producto;
+    const images = req.files;
+
+    if (!Array.isArray(images) || images.length === 0) {
+      return res.status(400).json({ success: false, error: "Error al recibir imágenes", images });
+    }
+
+    // Validar productId, productName y la existencia de imágenes
+    if (!productId || !productName || !images || images.length === 0) {
+      return res.status(400).json({ success: false, error: "Error en el ID, nombre o al recibir imágenes" });
+    }
+
+    // Construir el nombre de la carpeta usando el nombre del producto
+    const sanitizedProductName = productName.replace(/[^\w\s]/gi, "");
+    const productImageDir = `../images/${sanitizedProductName}`;
+
+    // Verificar si la carpeta de destino existe, si no, crearla
+    const imageFolderPath = path.join(__dirname, productImageDir);
+    if (!fs.existsSync(imageFolderPath)) {
+      fs.mkdirSync(imageFolderPath, { recursive: true });
+    }
+
+    // Insertar todas las imágenes relacionadas con el producto y renombrarlas
+    const insertImageQuery = `
+      INSERT INTO imagen_producto (codigo_producto, nombre_imagen, ruta_imagen)
+      VALUES ($1, $2, $3);
+    `;
+
+    for (let i = 0; i < images.length; i++) {
+      const image = images[i];
+      const originalImageName = image.originalname;
+      const imageName = i === 0 ? "imagen portada" : originalImageName;
+      const imagePath = path.join(imageFolderPath, originalImageName);
+
+      fs.renameSync(image.path, imagePath);
+
+      // Construir la URL completa de la imagen
+      const imageUrl = `http://localhost:3060/images/${sanitizedProductName}/${originalImageName}`;
+
+      const imageValues = [productId, imageName, imageUrl];
+      await pool.query(insertImageQuery, imageValues);
+    }
+
+    return res.status(200).json({ success: true, message: "Imágenes actualizadas con éxito" });
+  } catch (error) {
+    console.error("Error al actualizar las imágenes:", error);
+    return res.status(500).json({ success: false, error: "Error al actualizar las imágenes" });
+  }
+};
+
 
 
 module.exports = {
@@ -862,4 +1002,7 @@ module.exports = {
   getProductsAdmin,
   validatePassword,
   getImagesUpdateProduct,
+  deleteImage,
+  updateImageProducts,
+  getProductDetails,
 };

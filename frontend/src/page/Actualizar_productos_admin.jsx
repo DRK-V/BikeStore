@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import '../css/Actualizar_productos_admin.css';
 import { useParams } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
 export const Actualizar_productos_admin = () => {
     const { id } = useParams();
+    const [reloadPage, setReloadPage] = useState(false);//para controlar la carga de la pagina
     const [imagenes, setImagenes] = useState([]);
     const [producto, setProducto] = useState({
         nombre: '',
@@ -14,8 +15,18 @@ export const Actualizar_productos_admin = () => {
         stock: '',
         // otros campos del producto
     });
-
     const [images, setImages] = useState([]); // Estado para almacenar las imágenes seleccionadas
+
+    //controla para cargar la pagina
+    useEffect(() => {
+        if (reloadPage) {
+            // Recargar la página
+            window.location.reload();
+            // Establecer reloadPage de nuevo a false para evitar recargas continuas
+            setReloadPage(false);
+        }
+    }, [reloadPage]);
+
 
     const imageInputRef = React.createRef(); // Referencia al input de tipo file
 
@@ -71,29 +82,104 @@ export const Actualizar_productos_admin = () => {
             });
     }, [id]);
 
-    const handleImageAfterClick = (e) => {
+    useEffect(() => {
+        // Función para obtener detalles del producto por ID
+        const fetchProductDetails = async () => {
+            try {
+                const response = await fetch(`http://localhost:3060/getProductDetails/${id}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    // Establecer el estado del producto con los detalles obtenidos
+                    setProducto(data);
+                    console.log(producto)
+                } else {
+                    console.error('Error al obtener los detalles del producto');
+                    alert('Error al obtener los detalles del producto. Por favor, inténtalo de nuevo más tarde.');
+                }
+            } catch (error) {
+                console.error('Error al realizar la solicitud:', error);
+                alert('Error al realizar la solicitud. Por favor, inténtalo de nuevo más tarde.');
+            }
+        };
+
+        // Llamar a la función para obtener los detalles del producto
+        fetchProductDetails();
+    }, [id]);
+
+    const handleImageAfterClick = async (e) => {
         const idImagen = e.currentTarget.getAttribute('data-id');
-        // Ahora, `idImagen` contiene el ID único de la imagen en la que se hizo clic.
+        console.log(idImagen);
 
         // Preguntar al usuario si realmente desea eliminar la imagen
         const confirmDelete = window.confirm('¿Desea eliminar esta imagen? Este cambio es irreversible.');
 
         if (confirmDelete) {
-            // Realizar la eliminación de la imagen
-            console.log('Eliminando la imagen con ID:', idImagen);
+            try {
+                const response = await fetch(`http://localhost:3060/deleteImage/${idImagen}`, {
+                    method: 'POST',
+                });
 
-            // Aquí puedes agregar la lógica para eliminar la imagen de tu estado o enviar una solicitud al servidor para eliminarla.
+                if (response.ok) {
+                    console.log('Imagen eliminada con éxito');
+                    console.log(response);
+                    setReloadPage(true);
+                    // Aquí puedes agregar la lógica para actualizar el estado de tu aplicación si es necesario.
+                } else if (response.status === 400) {
+                    // Parsea el mensaje de error enviado por el servidor
+                    const errorResponse = await response.json();
+                    console.error('Error al eliminar la imagen', errorResponse.error);
+                    alert(errorResponse.error);
+                } else {
+                    console.log('Error desconocido al eliminar la imagen');
+                    alert('Error desconocido al eliminar la imagen. Por favor, inténtalo de nuevo más tarde.');
+                }
+
+            } catch (error) {
+                console.error('Error al realizar la solicitud:', error);
+                alert('Error al realizar la solicitud. Por favor, inténtalo de nuevo más tarde.');
+            }
         } else {
             // El usuario canceló la eliminación, no se hace nada.
             console.log('Cancelado');
         }
     };
 
+    const handleUpdateProduct = async (event) => {
+        event.preventDefault(); // Evita la recarga de la página por defecto del formulario
 
+        try {
+            const formData = new FormData(); // Crea un objeto FormData para enviar los datos y las imágenes
+            formData.append('productId', id);
+            formData.append('producto', producto.nombre_producto); // Asegúrate de enviar el nombre del producto
+            images.forEach((image) => {
+                formData.append('images', image.file); // Agrega todas las imágenes al formulario
+            });
 
+            const response = await fetch('http://localhost:3060/updateImageProducts', {
+                method: 'POST',
+                body: formData, // Usa el objeto FormData para enviar los datos y las imágenes
+            });
+
+            if (response.ok) {
+                console.log('Producto actualizado con éxito');
+                setReloadPage(true);
+                // Redirige al usuario a la página de gestión después de la actualización
+            } else {
+                // Maneja errores aquí
+                console.error('Error al actualizar el producto');
+                alert('Error al actualizar el producto. Por favor, inténtalo de nuevo más tarde.');
+            }
+        } catch (error) {
+            console.error('Error al realizar la solicitud:', error);
+            alert('Error al realizar la solicitud. Por favor, inténtalo de nuevo más tarde.');
+        }
+    };
 
     return (
         <>
+            <Link className="close_update_products" to="/Usuario_usu?section=manage">
+                X
+            </Link>
             <div className='custom-container'>
                 <div className='custom-image-section'>
                     {imagenes.map((imagen, index) => (
@@ -151,7 +237,7 @@ export const Actualizar_productos_admin = () => {
                                     placeholder='Nombre del producto'
                                     className='custom-p-2'
                                     type='text'
-                                    value={producto.nombre || ''} // Usar valor del estado o cadena vacía
+                                    value={producto.nombre_producto || ''} // Usar valor del estado o cadena vacía
                                     onChange={handleInputChange}
                                 />
                             </div>
@@ -161,7 +247,7 @@ export const Actualizar_productos_admin = () => {
                                     placeholder='Tipo de Bicicleta'
                                     className='custom-p-2'
                                     type='text'
-                                    value={producto ? producto.tipo : ''}
+                                    value={producto.tipo || ''}
                                     onChange={handleInputChange}
                                 />
                             </div>
@@ -191,24 +277,26 @@ export const Actualizar_productos_admin = () => {
                                     placeholder='Descripción'
                                     className='custom-p-3'
                                     type='text'
-                                    value={producto ? producto.descripcion : ''}
+                                    value={producto ? producto.descripcion_producto : ''}
                                     onChange={handleInputChange}
                                 />
                             </div>
                             <div className='custom-form-group'>
-                                <input
+                                <textarea
                                     name='stock'
                                     placeholder='Stock disponible'
                                     className='custom-p-2'
                                     type='text'
-                                    value={producto ? producto.stock : ''}
+                                    value={producto ? producto.stock_disponible : ''}
                                     onChange={handleInputChange}
                                 />
                             </div>
                             {/* Agrega aquí los demás campos del formulario */}
                         </div>
                         <div className='custom-boton-actualizar'>
-                            <button className='custom-actualizar-p'>Actualizar</button>
+                            <button className='custom-actualizar-p' onClick={handleUpdateProduct}>
+                                Actualizar
+                            </button>
                         </div>
                     </form>
                 </div>
