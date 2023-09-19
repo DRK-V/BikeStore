@@ -208,12 +208,10 @@ router.get(
 router.post("/crear-venta", async (req, res) => {
   try {
     const ventaData = req.body; // Asume que los datos se envían en el cuerpo de la solicitud
-    const result = await dataController.createVenta(ventaData);
-    res.status(201).json({ message: "Venta creada con éxito", result });
+    const idVenta = await dataController.createVenta(ventaData); // Llama a la función para crear venta
+    res.status(201).json({ idVenta, message: "Venta creada con éxito" });
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Error al crear venta", message: error.message });
+    res.status(500).json({ error: "Error al crear venta", message: error.message });
   }
 });
 router.get("/ventas", async (req, res) => {
@@ -228,20 +226,14 @@ router.get("/ventas", async (req, res) => {
 });
 router.post("/crear-venta-producto", async (req, res) => {
   try {
-    // Obtén los datos enviados desde el cliente
-    const ventaProductoData = req.body;
-
-    // Llama a la función createVentaProducto para insertar en la tabla venta_producto
-    const result = await dataController.createVentaProducto(ventaProductoData);
-
-    // Envía una respuesta exitosa
-    res.status(201).json({ message: "Venta de producto creada exitosamente" });
+    const ventaProductoData = req.body; // Asume que los datos se envían en el cuerpo de la solicitud
+    await dataController.createVentaProducto(ventaProductoData); // Llama a la función para crear venta de producto
+    res.status(201).json({ message: "Venta de producto creada con éxito" });
   } catch (error) {
-    // Manejo de errores
-    console.error("Error al crear venta_producto:", error);
-    res.status(500).json({ message: "Error al crear venta_producto" });
+    res.status(500).json({ error: "Error al crear venta de producto", message: error.message });
   }
 });
+
 router.post("/insertarProducto", dataController.insertarProducto);
 
 const storage2 = multer.diskStorage({

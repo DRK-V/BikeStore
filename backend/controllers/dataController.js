@@ -611,47 +611,40 @@ const createVenta = async (ventaData) => {
     ventaData.numero_de_cuenta,
   ];
 
+  const insertVentaProductoQuery =
+    "INSERT INTO venta_producto (codigo_venta, codigo_producto, cantidad_producto) VALUES ($1, $2, $3)";
+
+  const client = await pool.connect(); // Iniciar una transacción
+
   try {
-    console.log("Datos a insertar en la tabla venta:", values);
+    await client.query("BEGIN"); // Comenzar la transacción
 
-    const result = await pool.query(insertVentaQuery, values);
-    const idVenta = result.rows[0].id_venta; // Obtenemos el ID de la venta
+    const resultVenta = await client.query(insertVentaQuery, values);
+    const idVenta = resultVenta.rows[0].id_venta; // Obtener el ID de la venta
 
-    console.log("ID de la venta insertada:", idVenta);
+    const ventaProductoData = ventaData.productos.map((producto) => [
+      idVenta, // ID de venta
+      producto.id_producto,
+      producto.cantidad_producto,
+    ]);
+
+    // Realizar la inserción en venta_producto para cada producto
+    for (const item of ventaProductoData) {
+      await client.query(insertVentaProductoQuery, item);
+    }
+
+    await client.query("COMMIT"); // Confirmar la transacción
 
     return idVenta;
   } catch (error) {
+    await client.query("ROLLBACK"); // Revertir la transacción en caso de error
     console.error("Error al crear venta:", error);
     throw error;
+  } finally {
+    client.release(); // Liberar el cliente de la pool
   }
 };
 
-const createVentaProducto = async (ventaProductoData) => {
-  try {
-    // Llamamos a createVenta para obtener el id_venta
-    const idVenta = await createVenta(ventaProductoData);
-
-    const insertVentaProductoQuery =
-      "INSERT INTO venta_producto (codigo_venta, codigo_producto, cantidad_producto) VALUES ($1, $2, $3)";
-
-    const values = [
-      idVenta, // Usamos el id_venta obtenido de createVenta
-      ventaProductoData.codigo_producto,
-      ventaProductoData.cantidad_producto,
-    ];
-
-    console.log("Datos a insertar en la tabla venta_producto:", values);
-
-    const result = await pool.query(insertVentaProductoQuery, values);
-
-    console.log("Resultado de la inserción en venta_producto:", result);
-
-    return result;
-  } catch (error) {
-    console.error("Error al crear venta_producto:", error);
-    throw error;
-  }
-};
 
 const getVentas = async () => {
   const selectVentasQuery = "SELECT * FROM venta";
@@ -879,7 +872,7 @@ const getImagesUpdateProduct = async (req, res) => {
 };
 
 module.exports = {
-  createVentaProducto,
+ 
   eliminarComentario,
   verComentarioPorId,
   editarComentario,

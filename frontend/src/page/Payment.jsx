@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Navbar } from "../components/Navbar";
 import "../css/cart_shopping.css";
 import { Footer } from "../components/Footer";
@@ -30,7 +30,6 @@ export const Payment = () => {
   });
 
   const [ventaExitosa, setVentaExitosa] = useState(false);
-  const [formSubmitting, setFormSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,151 +38,137 @@ export const Payment = () => {
       [name]: value,
     });
   };
-
-  const limpiarCampos = () => {
-    // Reinicia todos los campos del formulario
-    setFormValues({
-      nombreTitular: "",
-      tipoDocumento: "",
-      numeroDocumento: "",
-      correoElectronico: "",
-      confirmacionCorreo: "",
-      valorPagar: "",
-      tipo_de_cuenta: "",
-      banco: "",
-      numero_de_cuenta: "",
-      codigo_cliente: idCliente,
-    });
-  };
+  const [isSubmitting, setIsSubmitting] = useState(false); // Nuevo estado para controlar el envío
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (formSubmitting) {
-      return; // Evitar envíos duplicados
+  
+    if (isSubmitting) {
+      // Si ya se está enviando el formulario, no hagas nada
+      return;
     }
-
-    setFormSubmitting(true); // Marcar el formulario como enviado
-
-    // Crea una matriz de productos con los mismos datos que se usan en el PDF
-    const productosParaEnviarAlServidor = cartItems.map((cartItem) => ({
-      id_producto: cartItem.product.id_producto,
-      nombre_producto: cartItem.product.nombre,
-      precio_producto: cartItem.product.precio,
-      cantidad_producto: cartItem.quantity,
-    }));
-
+  
+    setIsSubmitting(true); // Establece isSubmitting en true al iniciar el envío
+  
     const ventaData = {
       tipo_de_cuenta: formValues.tipo_de_cuenta,
       banco: formValues.banco,
       numero_de_cuenta: formValues.numero_de_cuenta,
       monto_final: formValues.valorPagar,
       codigo_cliente: formValues.codigo_cliente,
-      productos: productosParaEnviarAlServidor, // Utiliza la nueva matriz de productos
+      productos: cartItems.map((cartItem) => ({
+        id_producto: cartItem.product.id_producto,
+        nombre_producto: cartItem.product.nombre,
+        precio_producto: cartItem.product.precio,
+        cantidad_producto: cartItem.quantity,
+      })),
     };
-
+  
     try {
-      // Crear la venta
-      const responseVenta = await fetch("http://localhost:3060/crear-venta", {
+      console.log(
+        "Datos a enviar a la creación de venta:",
+        JSON.stringify(ventaData)
+      );
+  
+      const response = await fetch("http://localhost:3060/crear-venta", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(ventaData),
       });
-
-      if (responseVenta.ok) {
+  
+      if (response.ok) {
         console.log("Venta creada con éxito.");
         setVentaExitosa(true);
-
-        // Obtener el código de venta generado en la respuesta de crear venta
-        const ventaResponseData = await responseVenta.json();
-        const codigoVenta = ventaResponseData.codigo_venta;
-
-        // Crear registros en venta_producto
-        const responseVentaProducto = await fetch(
-          "http://localhost:3060/crear-venta-producto",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              codigo_venta: codigoVenta,
-              productos: cartItems.map((cartItem) => ({
-                codigo_producto: cartItem.product.id_producto,
-                cantidad_producto: cartItem.quantity,
-              })),
-            }),
-          }
+  
+        // Obtén el ID de la venta recién creada desde la respuesta
+        const responseData = await response.json();
+        const idVenta = responseData.idVenta; // Asegúrate de utilizar el nombre correcto
+  
+        const doc = new jsPDF();
+        doc.text("FACTURA", 10, 10);
+        doc.text(`Número: ${Math.floor(Math.random() * 1000000)}`, 10, 20);
+        doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 30);
+        doc.text(`Identificación del Emisor: ${user.identificacion}`, 10, 40);
+        doc.text(
+          `Identificación del Receptor: ${formValues.numeroDocumento}`,
+          10,
+          50
         );
+        doc.text(`Descripción del Concepto: Compra de productos`, 10, 60);
+        doc.text(`Base Imponible: ${formValues.valorPagar}`, 10, 70);
+        doc.text(`Tipo de IVA Aplicado: 19%`, 10, 80);
+        doc.text(`Total: ${formValues.valorPagar}`, 10, 90);
+        let yOffset = 100;
 
-        if (responseVentaProducto.ok) {
-          console.log("Registros en venta_producto creados con éxito.");
-
-          // Generar factura en PDF
-          const doc = new jsPDF();
-          doc.text("FACTURA", 10, 10);
-          doc.text(`Número: ${Math.floor(Math.random() * 1000000)}`, 10, 20);
-          doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 30);
-          doc.text(`Identificación del Emisor: ${user.identificacion}`, 10, 40);
+        ventaData.productos.forEach((producto) => {
+          doc.text(`ID del Producto: ${producto.id_producto}`, 10, yOffset);
           doc.text(
-            `Identificación del Receptor: ${formValues.numeroDocumento}`,
+            `Nombre del Producto: ${producto.nombre_producto}`,
             10,
-            50
+            yOffset + 10
           );
-          doc.text(`Descripción del Concepto: Compra de productos`, 10, 60);
-          doc.text(`Base Imponible: ${formValues.valorPagar}`, 10, 70);
-          doc.text(`Tipo de IVA Aplicado: 19%`, 10, 80);
-          doc.text(`Total: ${formValues.valorPagar}`, 10, 90);
-          let yOffset = 100;
+          doc.text(
+            `Precio del Producto: $${producto.precio_producto.toFixed(2)}`,
+            10,
+            yOffset + 20
+          );
+          doc.text(
+            `Cantidad del Producto: ${producto.cantidad_producto}`,
+            10,
+            yOffset + 30
+          ); // Agrega la cantidad
+          yOffset += 40; // Ajusta el espaciado vertical entre productos
+        });
 
-          ventaData.productos.forEach((producto) => {
-            doc.text(`ID del Producto: ${producto.id_producto}`, 10, yOffset);
-            doc.text(
-              `Nombre del Producto: ${producto.nombre_producto}`,
-              10,
-              yOffset + 10
-            );
-            doc.text(
-              `Precio del Producto: $${producto.precio_producto.toFixed(2)}`,
-              10,
-              yOffset + 20
-            );
-            doc.text(
-              `Cantidad del Producto: ${producto.cantidad_producto}`,
-              10,
-              yOffset + 30
-            ); // Agrega la cantidad
-            yOffset += 40; // Ajusta el espaciado vertical entre productos
-          });
-
-          doc.save("factura.pdf");
-
-          // Limpiar el carrito después de la compra
-          clearCart();
-
-          // Redirigir a la página principal después de 2 segundos
-          setTimeout(() => {
-            navigate("/");
-          }, 2000);
-        } else {
-          console.error("Error al crear registros en venta_producto.");
-        }
+        doc.save("factura.pdf");
+  
+        // Envía los datos a http://localhost:3060/crear-venta-producto
+        ventaData.productos.forEach(async (producto) => {
+          const ventaProductoData = {
+            codigo_venta: idVenta, // Utiliza el ID de la venta recién creada
+            codigo_producto: producto.id_producto,
+            cantidad_producto: producto.cantidad_producto,
+          };
+          console.log(
+            "Datos a enviar a la creación de venta de producto:",
+            JSON.stringify(ventaProductoData)
+          );
+  
+          const responseVentaProducto = await fetch(
+            "http://localhost:3060/crear-venta-producto",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(ventaProductoData),
+            }
+          );
+  
+          if (responseVentaProducto.ok) {
+            console.log("Venta de producto creada con éxito.");
+          } else {
+            console.error("Error al crear la venta de producto.");
+          }
+        });
+  
+        clearCart();
+  
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
       } else {
         console.error("Error al crear la venta.");
       }
     } catch (error) {
       console.error("Error de red:", error);
     } finally {
-      setFormSubmitting(false); // Restablecer el estado del formulario después del envío
+      setIsSubmitting(false); // Establece isSubmitting en false después de completar el envío
     }
   };
-
-  useEffect(() => {
-    // Limpia los campos del formulario cuando el componente se monta
-    limpiarCampos();
-  }, []);
+  
 
   return (
     <>
@@ -194,7 +179,7 @@ export const Payment = () => {
             Nombre del titular de la cuenta:
           </label>
           <div className="input-icon-container">
-            <i className="fas fa-user"></i>
+            <i className="fas fa-user"></i> {/* Icono de nombre */}
             <input
               type="text"
               id="nombreTitular"
@@ -210,13 +195,14 @@ export const Payment = () => {
           <label htmlFor="tipoDocumento">Tipo de documento:</label>
           <div className="input-icon-container">
             <i className="fas fa-id-card"></i>{" "}
+            {/* Icono de tipo de documento */}
             <input
               type="text"
               id="tipoDocumento"
               name="tipoDocumento"
               value={formValues.tipoDocumento}
               onChange={handleChange}
-              readOnly
+              readOnly // Agregar el atributo readOnly
               required
             />
           </div>
@@ -226,6 +212,7 @@ export const Payment = () => {
           <label htmlFor="numeroDocumento">Número de documento:</label>
           <div className="input-icon-container">
             <i className="fas fa-address-card"></i>{" "}
+            {/* Icono de número de documento */}
             <input
               type="text"
               id="numeroDocumento"
@@ -262,7 +249,7 @@ export const Payment = () => {
 
         <div className="input-container">
           <label htmlFor="banco">Banco:</label>
-          <i className="fas fa-piggy-bank"></i>{" "}
+          <i className="fas fa-piggy-bank"></i> {/* Icono de banco */}
           <select
             id="banco"
             name="banco"
@@ -298,6 +285,7 @@ export const Payment = () => {
           <label htmlFor="correoElectronico">Correo electrónico:</label>
           <div className="input-icon-container">
             <i className="fas fa-envelope"></i>{" "}
+            {/* Icono de correo electrónico */}
             <input
               type="email"
               id="correoElectronico"
@@ -315,6 +303,7 @@ export const Payment = () => {
           </label>
           <div className="input-icon-container">
             <i className="fas fa-envelope"></i>{" "}
+            {/* Icono de correo electrónico */}
             <input
               type="email"
               id="confirmacionCorreo"
@@ -330,6 +319,7 @@ export const Payment = () => {
           <label htmlFor="valorPagar">Valor a pagar:</label>
           <div className="input-icon-container">
             <i className="fas fa-dollar-sign"></i>{" "}
+            {/* Icono de valor a pagar */}
             <input
               disabled
               type="number"
@@ -341,15 +331,16 @@ export const Payment = () => {
             />
           </div>
         </div>
+        {ventaExitosa && (
+          <div className="success-message">
+            <div className="success-message-content">
+              Compra completada. La factura se ha generado y descargado como
+              PDF.
+            </div>
+          </div>
+        )}
         <button type="submit">Enviar</button>
       </form>
-      {ventaExitosa && (
-        <div className="success-message">
-          <div className="success-message-content">
-            Compra completada. La factura se ha generado y descargado como PDF.
-          </div>
-        </div>
-      )}
       <Footer />
     </>
   );
