@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 export const Actualizar_productos_admin = () => {
     const { id } = useParams();
+    const [reloadPage, setReloadPage] = useState(false);//para controlar la carga de la pagina
     const [imagenes, setImagenes] = useState([]);
     const [producto, setProducto] = useState({
         nombre: '',
@@ -14,8 +15,18 @@ export const Actualizar_productos_admin = () => {
         stock: '',
         // otros campos del producto
     });
-
     const [images, setImages] = useState([]); // Estado para almacenar las imágenes seleccionadas
+
+    //controla para cargar la pagina
+    useEffect(() => {
+        if (reloadPage) {
+            // Recargar la página
+            window.location.reload();
+            // Establecer reloadPage de nuevo a false para evitar recargas continuas
+            setReloadPage(false);
+        }
+    }, [reloadPage]);
+
 
     const imageInputRef = React.createRef(); // Referencia al input de tipo file
 
@@ -71,26 +82,42 @@ export const Actualizar_productos_admin = () => {
             });
     }, [id]);
 
-    const handleImageAfterClick = (e) => {
+    const handleImageAfterClick = async (e) => {
         const idImagen = e.currentTarget.getAttribute('data-id');
-        // Ahora, `idImagen` contiene el ID único de la imagen en la que se hizo clic.
+        console.log(idImagen);
 
         // Preguntar al usuario si realmente desea eliminar la imagen
         const confirmDelete = window.confirm('¿Desea eliminar esta imagen? Este cambio es irreversible.');
 
         if (confirmDelete) {
-            // Realizar la eliminación de la imagen
-            console.log('Eliminando la imagen con ID:', idImagen);
+            try {
+                const response = await fetch(`http://localhost:3060/deleteImage/${idImagen}`, {
+                    method: 'POST',
+                });
 
-            // Aquí puedes agregar la lógica para eliminar la imagen de tu estado o enviar una solicitud al servidor para eliminarla.
+                if (response.ok) {
+                    console.log('Imagen eliminada con éxito');
+                    setReloadPage(true);
+                    // Aquí puedes agregar la lógica para actualizar el estado de tu aplicación si es necesario.
+                } else if (response.status === 400) {
+                    // Parsea el mensaje de error enviado por el servidor
+                    const errorResponse = await response.json();
+                    console.error('Error al eliminar la imagen', errorResponse.error);
+                    alert(errorResponse.error);
+                } else {
+                    console.log('Error desconocido al eliminar la imagen');
+                    alert('Error desconocido al eliminar la imagen. Por favor, inténtalo de nuevo más tarde.');
+                }
+                
+            } catch (error) {
+                console.error('Error al realizar la solicitud:', error);
+                alert('Error al realizar la solicitud. Por favor, inténtalo de nuevo más tarde.');
+            }
         } else {
             // El usuario canceló la eliminación, no se hace nada.
             console.log('Cancelado');
         }
     };
-
-
-
 
     return (
         <>

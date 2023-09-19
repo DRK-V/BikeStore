@@ -260,4 +260,8 @@ router.post("/validatePassword",dataController.validatePassword)
 
 router.post("/getImagesUpdateProduct/:id", dataController.getImagesUpdateProduct);
 
+
+router.post("/deleteImage/:idImagen", dataController.deleteImage);
+
+
 module.exports = router;

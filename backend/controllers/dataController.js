@@ -816,7 +816,6 @@ const validatePassword = async (req, res) => {
 function generateRandomPassword() {
   return crypto.randomBytes(8).toString('hex'); // Genera una contraseña aleatoria de 16 caracteres
 }
-
 // En tu archivo dataController.js
 
 const getImagesUpdateProduct = async (req, res) => {
@@ -834,6 +833,58 @@ const getImagesUpdateProduct = async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
+
+const deleteImage = async (req, res) => {
+  const { idImagen } = req.params; // Obtén el ID de la imagen a eliminar desde los parámetros de la URL
+
+  try {
+    // Realiza una consulta para obtener el código de producto de la imagen a eliminar
+    const getCodeQuery = 'SELECT codigo_producto FROM imagen_producto WHERE id_imagen = $1';
+    const codeResult = await pool.query(getCodeQuery, [idImagen]);
+
+    if (codeResult.rowCount === 0) {
+      // Si no se encuentra la imagen con el ID proporcionado, responde con un error
+      return res.status(404).json({ error: 'La imagen no existe' });
+    }
+
+    const codigoProducto = codeResult.rows[0].codigo_producto;
+
+    // Realiza una consulta para contar cuántas imágenes asociadas al mismo producto existen
+    const countQuery = 'SELECT COUNT(*) FROM imagen_producto WHERE codigo_producto = (SELECT codigo_producto FROM imagen_producto WHERE id_imagen = $1)';
+    const countResult = await pool.query(countQuery, [idImagen]);
+
+    const imageCount = parseInt(countResult.rows[0].count); // Convierte el resultado en un número entero
+
+    if (imageCount === 1) {
+      // Si solo hay una imagen asociada al producto, envía un mensaje de error
+      return res.status(400).json({
+        error: `No puedes eliminar esta imagen para el producto con código ${codigoProducto}, debe existir al menos una imagen por producto`,
+      });
+    }
+
+    if (imageCount > 1) {
+      // Si hay más de una imagen asociada al producto, verifica si alguna tiene nombre 'imagen portada'
+      const hasImagenPortadaQuery = 'SELECT id_imagen FROM imagen_producto WHERE codigo_producto = $1 AND nombre_imagen = $2';
+      const portadaResult = await pool.query(hasImagenPortadaQuery, [codigoProducto, 'imagen portada']);
+
+      if (portadaResult.rowCount === 1 && portadaResult.rows[0].id_imagen === idImagen) {
+        // Si la imagen que se va a eliminar es la 'imagen portada', actualiza otra imagen como 'imagen portada'
+        const updatePortadaQuery = 'UPDATE imagen_producto SET nombre_imagen = $1 WHERE codigo_producto = $2 AND id_imagen != $3 LIMIT 1';
+        await pool.query(updatePortadaQuery, ['imagen portada', codigoProducto, idImagen]);
+      }
+    }
+
+    // Elimina la imagen con el ID proporcionado
+    const deleteQuery = 'DELETE FROM imagen_producto WHERE id_imagen = $1';
+    await pool.query(deleteQuery, [idImagen]);
+
+    res.sendStatus(204); // Respuesta exitosa sin contenido (No Content)
+  } catch (error) {
+    console.error('Error al eliminar la imagen', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
 
 
 module.exports = {
@@ -862,4 +913,5 @@ module.exports = {
   getProductsAdmin,
   validatePassword,
   getImagesUpdateProduct,
+  deleteImage,
 };
