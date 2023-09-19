@@ -256,11 +256,11 @@ const storage2 = multer.diskStorage({
 });
 
 const upload2 = multer({ storage: storage2 });
-router.post(
-  "/insertarImagenesProducto",
-  upload2.array("images"),
-  dataController.insertarImagenesProducto
-);
+router.post('/insertarImagenesProducto', upload2.array('images'), dataController.insertarImagenesProducto);
+
+// para cargar las imagenes en actualizar producto
+router.post('/updateImageProducts', upload2.array('images'), dataController.updateImageProducts);
+
 
 // router.get("/products/:id_imagen", dataController.getImages);
 router.get("/getproductsadmin", dataController.getProductsAdmin);
@@ -270,5 +270,11 @@ router.post(
   "/getImagesUpdateProduct/:id",
   dataController.getImagesUpdateProduct
 );
+
+
+router.post("/deleteImage/:idImagen", dataController.deleteImage);
+router.get('/getProductDetails/:id', dataController.getProductDetails);
+
+router.delete('/deleteProduct/:id', dataController.deleteProduct);
 
 module.exports = router;

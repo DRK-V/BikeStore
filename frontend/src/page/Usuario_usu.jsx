@@ -164,6 +164,32 @@ export const Usuario_usu = () => {
         console.error('Error al actualizar el usuario:', error);
       });
   };
+  const handleEliminarProducto = async (productoId) => {
+    const confirmacion = window.confirm('¿Estás seguro de que deseas eliminar este producto? Esta acción no se puede deshacer.');
+
+    if (!confirmacion) {
+      // El usuario canceló la eliminación
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:3060/deleteProduct/${productoId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        console.log('Producto eliminado con éxito');
+        // Aquí puedes agregar lógica adicional si es necesario, como actualizar la lista de productos
+      } else {
+        const errorResponse = await response.json();
+        console.error('Error al eliminar el producto', errorResponse.error);
+        alert(errorResponse.error);
+      }
+    } catch (error) {
+      console.error('Error al realizar la solicitud:', error);
+      alert('Error al realizar la solicitud. Por favor, inténtalo de nuevo más tarde.');
+    }
+  };
 
   return (
     <>

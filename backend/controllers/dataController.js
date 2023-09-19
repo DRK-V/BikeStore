@@ -852,7 +852,6 @@ const validatePassword = async (req, res) => {
 function generateRandomPassword() {
   return crypto.randomBytes(8).toString("hex"); // Genera una contraseña aleatoria de 16 caracteres
 }
-
 // En tu archivo dataController.js
 
 const getImagesUpdateProduct = async (req, res) => {
@@ -870,6 +869,7 @@ const getImagesUpdateProduct = async (req, res) => {
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
+
 
 module.exports = {
  
@@ -898,4 +898,8 @@ module.exports = {
   getProductsAdmin,
   validatePassword,
   getImagesUpdateProduct,
+  deleteImage,
+  updateImageProducts,
+  getProductDetails,
+  deleteProduct,
 };
