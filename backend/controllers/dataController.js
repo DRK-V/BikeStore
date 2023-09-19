@@ -975,6 +975,58 @@ const updateImageProducts = async (req, res) => {
 };
 
 
+const deleteProduct = async (req, res) => {
+  const productId = req.params.id;
+  try {
+    // Obtén la información del producto, incluyendo las rutas de las imágenes
+    const getProductInfoQuery = `
+      SELECT p.id_producto, p.nombre_producto, ip.ruta_imagen
+      FROM producto AS p
+      LEFT JOIN imagen_producto AS ip ON p.id_producto = ip.codigo_producto
+      WHERE p.id_producto = $1;
+    `;
+    
+    const productInfoResult = await pool.query(getProductInfoQuery, [productId]);
+
+    if (productInfoResult.rowCount === 0) {
+      return res.status(404).json({ error: 'El producto no existe' });
+    }
+
+    // Elimina las imágenes de la carpeta de imágenes
+    const imagesToDelete = productInfoResult.rows.map((row) => row.ruta_imagen);
+
+    imagesToDelete.forEach((imagePath) => {
+      const fullPath = path.join(__dirname, '..', 'images', imagePath);
+      if (fs.existsSync(fullPath)) {
+        fs.unlinkSync(fullPath);
+      }
+    });
+
+    // Obtiene el nombre del producto
+    const productName = productInfoResult.rows[0].nombre_producto;
+
+    // Elimina las entradas de imagen_producto
+    const deleteImageEntriesQuery = 'DELETE FROM imagen_producto WHERE codigo_producto = $1';
+    await pool.query(deleteImageEntriesQuery, [productId]);
+
+    // Elimina la entrada de producto
+    const deleteProductQuery = 'DELETE FROM producto WHERE id_producto = $1';
+    await pool.query(deleteProductQuery, [productId]);
+
+    // Elimina la carpeta de imágenes del producto
+    const productImagesDir = path.join(__dirname, '..', 'images', productName);
+    if (fs.existsSync(productImagesDir)) {
+      fs.rmSync(productImagesDir, { recursive: true });
+    }
+
+    res.status(204).json({ success: true });
+  } catch (error) {
+    console.error('Error al eliminar el producto', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+
 
 module.exports = {
   eliminarComentario,
@@ -1005,4 +1057,5 @@ module.exports = {
   deleteImage,
   updateImageProducts,
   getProductDetails,
+  deleteProduct,
 };

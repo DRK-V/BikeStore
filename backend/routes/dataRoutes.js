@@ -267,4 +267,6 @@ router.post("/getImagesUpdateProduct/:id", dataController.getImagesUpdateProduct
 router.post("/deleteImage/:idImagen", dataController.deleteImage);
 router.get('/getProductDetails/:id', dataController.getProductDetails);
 
+router.delete('/deleteProduct/:id', dataController.deleteProduct);
+
 module.exports = router;
