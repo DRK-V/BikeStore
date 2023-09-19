@@ -277,4 +277,10 @@ router.get('/getProductDetails/:id', dataController.getProductDetails);
 
 router.delete('/deleteProduct/:id', dataController.deleteProduct);
 
+//esta es para actualizar los productos con el rol de administrador
+router.post("/actualizar_producto/:id_producto", dataController.traerproducto)
+
+
 module.exports = router;
+
+
