@@ -12,8 +12,8 @@ export const ComenProvider = ({ children }) => {
   const { isLoggedIn, user } = useAuth();
   const [selectedProductId, setSelectedProductId] = useState(null);
 
-  console.log('id_cliente:', user.id_cliente);
-  console.log('id_producto:', selectedProductId);
+  // console.log('id_cliente:', user.id_cliente);
+  // console.log('id_producto:', selectedProductId);
 
   
   useEffect(() => {
