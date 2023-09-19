@@ -9,6 +9,8 @@ import { useCart } from "../components/CartContext";
 import jsPDF from "jspdf";
 
 export const Payment = () => {
+  const { cartItems } = useCart();
+
   const location = useLocation();
   const { user, idCliente } = useAuth();
   const navigate = useNavigate();
@@ -36,35 +38,38 @@ export const Payment = () => {
       [name]: value,
     });
   };
-
-  const limpiarCampos = () => {
-    // Reinicia todos los campos del formulario
-    setFormValues({
-      nombreTitular: "",
-      tipoDocumento: "",
-      numeroDocumento: "",
-      correoElectronico: "",
-      confirmacionCorreo: "",
-      valorPagar: "",
-      tipo_de_cuenta: "",
-      banco: "",
-      numero_de_cuenta: "",
-      codigo_cliente: idCliente,
-    });
-  };
+  const [isSubmitting, setIsSubmitting] = useState(false); // Nuevo estado para controlar el envío
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    if (isSubmitting) {
+      // Si ya se está enviando el formulario, no hagas nada
+      return;
+    }
+  
+    setIsSubmitting(true); // Establece isSubmitting en true al iniciar el envío
+  
     const ventaData = {
       tipo_de_cuenta: formValues.tipo_de_cuenta,
       banco: formValues.banco,
       numero_de_cuenta: formValues.numero_de_cuenta,
       monto_final: formValues.valorPagar,
       codigo_cliente: formValues.codigo_cliente,
+      productos: cartItems.map((cartItem) => ({
+        id_producto: cartItem.product.id_producto,
+        nombre_producto: cartItem.product.nombre,
+        precio_producto: cartItem.product.precio,
+        cantidad_producto: cartItem.quantity,
+      })),
     };
-
+  
     try {
+      console.log(
+        "Datos a enviar a la creación de venta:",
+        JSON.stringify(ventaData)
+      );
+  
       const response = await fetch("http://localhost:3060/crear-venta", {
         method: "POST",
         headers: {
@@ -72,12 +77,15 @@ export const Payment = () => {
         },
         body: JSON.stringify(ventaData),
       });
-
+  
       if (response.ok) {
         console.log("Venta creada con éxito.");
         setVentaExitosa(true);
-
-        // Generar factura en PDF
+  
+        // Obtén el ID de la venta recién creada desde la respuesta
+        const responseData = await response.json();
+        const idVenta = responseData.idVenta; // Asegúrate de utilizar el nombre correcto
+  
         const doc = new jsPDF();
         doc.text("FACTURA", 10, 10);
         doc.text(`Número: ${Math.floor(Math.random() * 1000000)}`, 10, 20);
@@ -92,14 +100,62 @@ export const Payment = () => {
         doc.text(`Base Imponible: ${formValues.valorPagar}`, 10, 70);
         doc.text(`Tipo de IVA Aplicado: 19%`, 10, 80);
         doc.text(`Total: ${formValues.valorPagar}`, 10, 90);
+        let yOffset = 100;
 
-        // Guardar la factura como PDF
+        ventaData.productos.forEach((producto) => {
+          doc.text(`ID del Producto: ${producto.id_producto}`, 10, yOffset);
+          doc.text(
+            `Nombre del Producto: ${producto.nombre_producto}`,
+            10,
+            yOffset + 10
+          );
+          doc.text(
+            `Precio del Producto: $${producto.precio_producto.toFixed(2)}`,
+            10,
+            yOffset + 20
+          );
+          doc.text(
+            `Cantidad del Producto: ${producto.cantidad_producto}`,
+            10,
+            yOffset + 30
+          ); // Agrega la cantidad
+          yOffset += 40; // Ajusta el espaciado vertical entre productos
+        });
+
         doc.save("factura.pdf");
-
-        // Limpia el carrito después de una venta exitosa
+  
+        // Envía los datos a http://localhost:3060/crear-venta-producto
+        ventaData.productos.forEach(async (producto) => {
+          const ventaProductoData = {
+            codigo_venta: idVenta, // Utiliza el ID de la venta recién creada
+            codigo_producto: producto.id_producto,
+            cantidad_producto: producto.cantidad_producto,
+          };
+          console.log(
+            "Datos a enviar a la creación de venta de producto:",
+            JSON.stringify(ventaProductoData)
+          );
+  
+          const responseVentaProducto = await fetch(
+            "http://localhost:3060/crear-venta-producto",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(ventaProductoData),
+            }
+          );
+  
+          if (responseVentaProducto.ok) {
+            console.log("Venta de producto creada con éxito.");
+          } else {
+            console.error("Error al crear la venta de producto.");
+          }
+        });
+  
         clearCart();
-
-        // Utiliza navigate para redirigir al usuario a la página de inicio después de 2 segundos
+  
         setTimeout(() => {
           navigate("/");
         }, 2000);
@@ -108,8 +164,11 @@ export const Payment = () => {
       }
     } catch (error) {
       console.error("Error de red:", error);
+    } finally {
+      setIsSubmitting(false); // Establece isSubmitting en false después de completar el envío
     }
   };
+  
 
   return (
     <>
