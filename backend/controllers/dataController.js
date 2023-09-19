@@ -835,6 +835,17 @@ const deleteImage = async (req, res) => {
   const { idImagen } = req.params; // Obtén el ID de la imagen a eliminar desde los parámetros de la URL
 
   try {
+    // Realiza una consulta para obtener la ruta de la imagen a eliminar
+    const getImagePathQuery = 'SELECT ruta_imagen FROM imagen_producto WHERE id_imagen = $1';
+    const imagePathResult = await pool.query(getImagePathQuery, [idImagen]);
+
+    if (imagePathResult.rowCount === 0) {
+      // Si no se encuentra la imagen con el ID proporcionado, responde con un error
+      return res.status(404).json({ error: 'La imagen no existe' });
+    }
+
+    const imagePath = imagePathResult.rows[0].ruta_imagen;
+
     // Realiza una consulta para obtener el código de producto de la imagen a eliminar
     const getCodeQuery = 'SELECT codigo_producto FROM imagen_producto WHERE id_imagen = $1';
     const codeResult = await pool.query(getCodeQuery, [idImagen]);
@@ -847,8 +858,8 @@ const deleteImage = async (req, res) => {
     const codigoProducto = codeResult.rows[0].codigo_producto;
 
     // Realiza una consulta para contar cuántas imágenes asociadas al mismo producto existen
-    const countQuery = 'SELECT COUNT(*) FROM imagen_producto WHERE codigo_producto = (SELECT codigo_producto FROM imagen_producto WHERE id_imagen = $1)';
-    const countResult = await pool.query(countQuery, [idImagen]);
+    const countQuery = 'SELECT COUNT(*) FROM imagen_producto WHERE codigo_producto = $1';
+    const countResult = await pool.query(countQuery, [codigoProducto]);
 
     const imageCount = parseInt(countResult.rows[0].count); // Convierte el resultado en un número entero
 
@@ -871,11 +882,22 @@ const deleteImage = async (req, res) => {
       }
     }
 
-    // Elimina la imagen con el ID proporcionado
+    // Elimina la imagen con el ID proporcionado de la base de datos
     const deleteQuery = 'DELETE FROM imagen_producto WHERE id_imagen = $1';
     await pool.query(deleteQuery, [idImagen]);
 
-    res.sendStatus(204); // Respuesta exitosa sin contenido (No Content)
+    // Construye la ruta completa al archivo en el sistema de archivos
+    const fullPath = path.join(__dirname, '..', 'images', imagePath);
+
+    // Verifica si el archivo existe y, si es así, elimínalo
+    if (fs.existsSync(fullPath)) {
+      fs.unlinkSync(fullPath);
+
+      // Envia la ruta de la imagen eliminada en la respuesta JSON
+      res.status(200).json({ success: true, imagePath: fullPath });
+    } else {
+      res.status(204).json({ success: true, imagePath: null }); // La imagen ya se había eliminado
+    }
   } catch (error) {
     console.error('Error al eliminar la imagen', error);
     res.status(500).json({ error: 'Error interno del servidor' });

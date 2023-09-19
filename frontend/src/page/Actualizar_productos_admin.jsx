@@ -74,7 +74,7 @@ export const Actualizar_productos_admin = () => {
             .then((data) => {
                 // Manejar los datos JSON devueltos por el servidor
                 console.log(data);
-                 setProducto(data); // Actualizar el estado del producto
+                setProducto(data); // Actualizar el estado del producto
                 setImagenes(data);
             })
             .catch((error) => {
@@ -85,26 +85,26 @@ export const Actualizar_productos_admin = () => {
     useEffect(() => {
         // Función para obtener detalles del producto por ID
         const fetchProductDetails = async () => {
-          try {
-            const response = await fetch(`http://localhost:3060/getProductDetails/${id}`);
-            if (response.ok) {
-              const data = await response.json();
-              // Establecer el estado del producto con los detalles obtenidos
-              setProducto(data);
-              console.log(producto)
-            } else {
-              console.error('Error al obtener los detalles del producto');
-              alert('Error al obtener los detalles del producto. Por favor, inténtalo de nuevo más tarde.');
+            try {
+                const response = await fetch(`http://localhost:3060/getProductDetails/${id}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    // Establecer el estado del producto con los detalles obtenidos
+                    setProducto(data);
+                    console.log(producto)
+                } else {
+                    console.error('Error al obtener los detalles del producto');
+                    alert('Error al obtener los detalles del producto. Por favor, inténtalo de nuevo más tarde.');
+                }
+            } catch (error) {
+                console.error('Error al realizar la solicitud:', error);
+                alert('Error al realizar la solicitud. Por favor, inténtalo de nuevo más tarde.');
             }
-          } catch (error) {
-            console.error('Error al realizar la solicitud:', error);
-            alert('Error al realizar la solicitud. Por favor, inténtalo de nuevo más tarde.');
-          }
         };
-    
+
         // Llamar a la función para obtener los detalles del producto
         fetchProductDetails();
-      }, [id]);
+    }, [id]);
 
     const handleImageAfterClick = async (e) => {
         const idImagen = e.currentTarget.getAttribute('data-id');
@@ -121,6 +121,7 @@ export const Actualizar_productos_admin = () => {
 
                 if (response.ok) {
                     console.log('Imagen eliminada con éxito');
+                    console.log(response);
                     setReloadPage(true);
                     // Aquí puedes agregar la lógica para actualizar el estado de tu aplicación si es necesario.
                 } else if (response.status === 400) {
@@ -161,6 +162,7 @@ export const Actualizar_productos_admin = () => {
 
             if (response.ok) {
                 console.log('Producto actualizado con éxito');
+                setReloadPage(true);
                 // Redirige al usuario a la página de gestión después de la actualización
             } else {
                 // Maneja errores aquí
