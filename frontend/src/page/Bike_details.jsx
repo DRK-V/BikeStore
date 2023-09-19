@@ -14,6 +14,8 @@ const Bike_details = () => {
   const { addItemToCart, setSelectedProductId } = useCart();
   const { id_producto } = useParams();
   const [cartMessage, setCartMessage] = useState("");
+  const [quantity, setQuantity] = useState(1);
+
 
   const handleAddToCart = (event) => {
     event.preventDefault();
@@ -103,12 +105,30 @@ const Bike_details = () => {
       if (!isNaN(productPrice)) {
         const totalPriceWithDiscount = productPrice + productPrice * 0.02;
         console.log("Precio con 2% de descuento:", totalPriceWithDiscount);
-        navigate("/payment", { state: { valorPagar: totalPriceWithDiscount } });
+  
+        // Log para ver los datos que se están enviando
+        console.log("Datos enviados a /payment:", {
+          valorPagar: totalPriceWithDiscount,
+          id_producto: id_producto,
+          quantity: quantity,
+          precio_producto: productPrice,
+        });
+  
+        // Incluye el id_producto y la cantidad en el objeto de estado
+        navigate("/payment", {
+          state: {
+            valorPagar: totalPriceWithDiscount,
+            id_producto: id_producto,
+            quantity: quantity,
+            precio_producto: productPrice,
+          },
+        });
       } else {
         console.error("Precio no válido para el producto.");
       }
     }
   };
+  
 
   return (
     <>

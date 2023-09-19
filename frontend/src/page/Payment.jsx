@@ -27,6 +27,9 @@ export const Payment = () => {
     banco: "",
     numero_de_cuenta: "",
     codigo_cliente: idCliente,
+    id_producto: location.state ? location.state.id_producto : "", // Agregamos id_producto aquí
+    quantity: location.state ? location.state.quantity : "", 
+    precio_producto: location.state ? location.state.precio_producto : "",
   });
 
   const [ventaExitosa, setVentaExitosa] = useState(false);
@@ -57,10 +60,10 @@ export const Payment = () => {
       monto_final: formValues.valorPagar,
       codigo_cliente: formValues.codigo_cliente,
       productos: cartItems.map((cartItem) => ({
-        id_producto: cartItem.product.id_producto,
+        id_producto: formValues.id_producto || cartItem.product.id_producto,
         nombre_producto: cartItem.product.nombre,
-        precio_producto: cartItem.product.precio,
-        cantidad_producto: cartItem.quantity,
+        precio_producto: formValues.precio_producto || cartItem.product.precio,
+        cantidad_producto: formValues.quantity || cartItem.quantity, 
       })),
     };
   
@@ -87,42 +90,37 @@ export const Payment = () => {
         const idVenta = responseData.idVenta; // Asegúrate de utilizar el nombre correcto
   
         const doc = new jsPDF();
-        doc.text("FACTURA", 10, 10);
-        doc.text(`Número: ${Math.floor(Math.random() * 1000000)}`, 10, 20);
-        doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 30);
-        doc.text(`Identificación del Emisor: ${user.identificacion}`, 10, 40);
-        doc.text(
-          `Identificación del Receptor: ${formValues.numeroDocumento}`,
-          10,
-          50
-        );
-        doc.text(`Descripción del Concepto: Compra de productos`, 10, 60);
-        doc.text(`Base Imponible: ${formValues.valorPagar}`, 10, 70);
-        doc.text(`Tipo de IVA Aplicado: 19%`, 10, 80);
-        doc.text(`Total: ${formValues.valorPagar}`, 10, 90);
-        let yOffset = 100;
+doc.setFontSize(14); // Set the default font size
+doc.setTextColor(0, 0, 0); // Set text color (black)
 
-        ventaData.productos.forEach((producto) => {
-          doc.text(`ID del Producto: ${producto.id_producto}`, 10, yOffset);
-          doc.text(
-            `Nombre del Producto: ${producto.nombre_producto}`,
-            10,
-            yOffset + 10
-          );
-          doc.text(
-            `Precio del Producto: $${producto.precio_producto.toFixed(2)}`,
-            10,
-            yOffset + 20
-          );
-          doc.text(
-            `Cantidad del Producto: ${producto.cantidad_producto}`,
-            10,
-            yOffset + 30
-          ); // Agrega la cantidad
-          yOffset += 40; // Ajusta el espaciado vertical entre productos
-        });
+doc.text("FACTURA", 10, 10);
+doc.setFontSize(10); // Change font size for the following lines
+doc.text(`Número: ${Math.floor(Math.random() * 1000000)}`, 10, 20);
+doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 30);
+doc.text(`Identificación del Emisor: BikeStore`, 10, 40);
+doc.text(`Identificación del Receptor: ${formValues.numeroDocumento}`, 10, 50);
 
-        doc.save("factura.pdf");
+doc.setFont("helvetica"); // Change font style for the following lines
+doc.setFontSize(12); // Change font size
+doc.text(`Descripción del Concepto: Compra de productos`, 10, 60);
+doc.text(`Base Imponible: ${formValues.valorPagar}`, 10, 70);
+doc.text(`Tipo de IVA Aplicado: 19%`, 10, 80);
+doc.text(`Total: ${formValues.valorPagar}`, 10, 90);
+
+let yOffset = 100;
+
+ventaData.productos.forEach((producto) => {
+  doc.setFont("times"); // Change font for product details
+  doc.setFontSize(10); // Change font size for product details
+  doc.text(`ID del Producto: ${producto.id_producto}`, 10, yOffset);
+  doc.text(`Nombre del Producto: ${producto.nombre_producto}`, 10, yOffset + 10);
+  doc.text(`Precio del Producto: $${producto.precio_producto.toFixed(2)}`, 10, yOffset + 20);
+  doc.text(`Cantidad del Producto: ${producto.cantidad_producto}`, 10, yOffset + 30);
+  yOffset += 40;
+});
+
+doc.save("factura.pdf");
+
   
         // Envía los datos a http://localhost:3060/crear-venta-producto
         ventaData.productos.forEach(async (producto) => {
