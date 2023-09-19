@@ -12,7 +12,10 @@ const Container_comments = () => {
   const comenContext = useComenContext();
   const authContext = useAuth();
   const [isCommentValid, setIsCommentValid] = useState(false);
-  const [editingComment, setEditingComment] = useState({ text: "", commentId: null });
+  const [editingComment, setEditingComment] = useState({
+    text: "",
+    commentId: null,
+  });
 
   useEffect(() => {
     setIsLoading(true);
@@ -93,15 +96,15 @@ const Container_comments = () => {
       console.error("El usuario no está autenticado");
       return;
     }
-  
+
     const codigo_cliente = authContext.user.id_cliente;
     const codigo_producto = comenContext.selectedProductId;
-  
+
     if (!codigo_producto) {
       console.error("El código del producto no es válido");
       return;
     }
-  
+
     fetch("http://localhost:3060/comentarios", {
       method: "POST",
       headers: {
@@ -115,8 +118,11 @@ const Container_comments = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Comentario enviado exitosamente. ID_COMENTARIO:", data.ID_COMENTARIO);
-  
+        console.log(
+          "Comentario enviado exitosamente. ID_COMENTARIO:",
+          data.ID_COMENTARIO
+        );
+
         const commentWithUserName = {
           ID_COMENTARIO: data.ID_COMENTARIO,
           codigo_cliente,
@@ -124,7 +130,7 @@ const Container_comments = () => {
           fecha_creacion: new Date().toISOString(),
           texto: newComment,
         };
-  
+
         setCommentsData([...commentsData, commentWithUserName]);
         setNewComment("");
       })
@@ -161,7 +167,13 @@ const Container_comments = () => {
               idCliente={authContext.user.id_cliente}
               isEditing={editingComment.commentId === comment.id_comentario}
               editCommentText={editingComment.text}
-              onEditComment={(text) => handleCommentChange({ target: { value: text } }, comment.id_comentario, comment.texto)}
+              onEditComment={(text) =>
+                handleCommentChange(
+                  { target: { value: text } },
+                  comment.id_comentario,
+                  comment.texto
+                )
+              }
             />
           ))}
 
