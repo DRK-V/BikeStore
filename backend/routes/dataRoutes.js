@@ -199,6 +199,7 @@ router.post(
 
 router.post("/comentarios", dataController.añadirComentario);
 
+
 router.get("/ver-comentario/:id_comentario", dataController.verComentarioPorId); // Ruta actualizada
 
 router.get(
@@ -208,10 +209,12 @@ router.get(
 router.post("/crear-venta", async (req, res) => {
   try {
     const ventaData = req.body; // Asume que los datos se envían en el cuerpo de la solicitud
-    const idVenta = await dataController.createVenta(ventaData); // Llama a la función para crear venta
-    res.status(201).json({ idVenta, message: "Venta creada con éxito" });
+    const result = await dataController.createVenta(ventaData);
+    res.status(201).json({ message: "Venta creada con éxito", result });
   } catch (error) {
-    res.status(500).json({ error: "Error al crear venta", message: error.message });
+    res
+      .status(500)
+      .json({ error: "Error al crear venta", message: error.message });
   }
 });
 router.get("/ventas", async (req, res) => {
@@ -224,22 +227,13 @@ router.get("/ventas", async (req, res) => {
       .json({ error: "Error al obtener ventas", message: error.message });
   }
 });
-router.post("/crear-venta-producto", async (req, res) => {
-  try {
-    const ventaProductoData = req.body; // Asume que los datos se envían en el cuerpo de la solicitud
-    await dataController.createVentaProducto(ventaProductoData); // Llama a la función para crear venta de producto
-    res.status(201).json({ message: "Venta de producto creada con éxito" });
-  } catch (error) {
-    res.status(500).json({ error: "Error al crear venta de producto", message: error.message });
-  }
-});
 
-router.post("/insertarProducto", dataController.insertarProducto);
+router.post('/insertarProducto', dataController.insertarProducto);
 
 const storage2 = multer.diskStorage({
   destination: (req, file, cb) => {
     const productId = req.body.productId; // ID del producto al que se asocian las imágenes
-    const frontendPublicPath = path.join(__dirname, "../../frontend/public");
+    const frontendPublicPath = path.join(__dirname, '../../frontend/public');
     const productImagePath = `product_images/product_${productId}`;
     const destinationPath = path.join(frontendPublicPath, productImagePath);
 
@@ -252,7 +246,7 @@ const storage2 = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
-  },
+  }
 });
 
 const upload2 = multer({ storage: storage2 });
@@ -264,12 +258,10 @@ router.post('/updateImageProducts', upload2.array('images'), dataController.upda
 
 // router.get("/products/:id_imagen", dataController.getImages);
 router.get("/getproductsadmin", dataController.getProductsAdmin);
-router.post("/validatePassword", dataController.validatePassword);
+router.post("/validatePassword", dataController.validatePassword)
 
-router.post(
-  "/getImagesUpdateProduct/:id",
-  dataController.getImagesUpdateProduct
-);
+
+router.post("/getImagesUpdateProduct/:id", dataController.getImagesUpdateProduct);
 
 
 router.post("/deleteImage/:idImagen", dataController.deleteImage);
@@ -277,10 +269,8 @@ router.get('/getProductDetails/:id', dataController.getProductDetails);
 
 router.delete('/deleteProduct/:id', dataController.deleteProduct);
 
-//esta es para actualizar los productos con el rol de administrador
-router.post("/actualizar_producto/:id_producto", dataController.traerproducto)
+//actualizar producto
+router.post('/updateProduct/:id', dataController.updateProduct);
 
 
 module.exports = router;
-
-

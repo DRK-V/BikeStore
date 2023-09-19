@@ -53,11 +53,6 @@ const updateUser = async (req, res) => {
 };
 
 //fin de acutalizacion de datos del cliente
-
-
-
-//fin de actualizacion de productos
-
 //registro de clients
 const registerUser = async (userData) => {
   const insertUserQuery =
@@ -604,7 +599,7 @@ const eliminarComentario = async (req, res) => {
 //ensayo
 const createVenta = async (ventaData) => {
   const insertVentaQuery =
-    "INSERT INTO venta (codigo_cliente, monto_final, tipo_de_cuenta, banco, numero_de_cuenta, estado_venta) VALUES ($1, $2, $3, $4, $5, 'finalizado') RETURNING id_venta";
+    "INSERT INTO venta (codigo_cliente, monto_final, tipo_de_cuenta, banco, numero_de_cuenta, estado_venta) VALUES ($1, $2, $3, $4, $5,'finalizado')";
 
   const values = [
     ventaData.codigo_cliente,
@@ -614,37 +609,17 @@ const createVenta = async (ventaData) => {
     ventaData.numero_de_cuenta,
   ];
 
-  const insertVentaProductoQuery =
-    "INSERT INTO venta_producto (codigo_venta, codigo_producto, cantidad_producto) VALUES ($1, $2, $3)";
-
-  const client = await pool.connect(); // Iniciar una transacción
-
   try {
-    await client.query("BEGIN"); // Comenzar la transacción
+    console.log("Datos a insertar en la tabla venta:", values); // Agrega este console.log
 
-    const resultVenta = await client.query(insertVentaQuery, values);
-    const idVenta = resultVenta.rows[0].id_venta; // Obtener el ID de la venta
+    const result = await pool.query(insertVentaQuery, values);
 
-    const ventaProductoData = ventaData.productos.map((producto) => [
-      idVenta, // ID de venta
-      producto.id_producto,
-      producto.cantidad_producto,
-    ]);
+    console.log("Resultado de la inserción:", result); // Agrega este console.log
 
-    // Realizar la inserción en venta_producto para cada producto
-    for (const item of ventaProductoData) {
-      await client.query(insertVentaProductoQuery, item);
-    }
-
-    await client.query("COMMIT"); // Confirmar la transacción
-
-    return idVenta;
+    return result;
   } catch (error) {
-    await client.query("ROLLBACK"); // Revertir la transacción en caso de error
     console.error("Error al crear venta:", error);
     throw error;
-  } finally {
-    client.release(); // Liberar el cliente de la pool
   }
 };
 const getVentas = async () => {
@@ -855,43 +830,6 @@ const getImagesUpdateProduct = async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
-//actualizacion de productos 
-
-const traerproducto = async (req, res) => {
-  const updatedUserData = req.body;
-
-  const sql = `UPDATE producto SET
-  nombre_producto = $1,
-  descripcion_producto = $2,
-  stock_disponible = $3,
-  tipo = $4,
-  color = $5,
-  precio = $6
-  WHERE id_producto = $7`;
-
-  const values = [
-    updatedUserData.nombre_producto,
-    updatedUserData.descripcion_producto,
-    updatedUserData.stock_disponible,
-    updatedUserData.tipo,
-    updatedUserData.color,
-    updatedUserData.precio,
-    updatedUserData.id
-  ];
-
-  pool.query(sql, values, (err, results) => {
-    if (err) {
-      console.error('Error al actualizar el producto en la base de datos:', err);
-      res.status(500).json({ message: 'Error al actualizar el producto' });
-      // Reemplaza la línea de console.log con una alerta de error
-      res.status(500).json({ message: 'Error al actualizar el producto' });
-    } else {
-      console.log('Producto actualizado en la base de datos');
-      // Reemplaza la línea de console.log con una alerta de éxito
-      res.json({ message: 'Producto actualizado exitosamente' });
-    }
-  });
-};
 
 const deleteImage = async (req, res) => {
   const { idImagen } = req.params; // Obtén el ID de la imagen a eliminar desde los parámetros de la URL
@@ -1087,6 +1025,50 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+const updateProduct = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const updatedProductData = req.body; // Aquí está el objeto producto enviado como JSON
+
+    // Desestructura los campos actualizados del objeto enviado
+    const {
+      nombre_producto,
+      descripcion_producto,
+      stock_disponible,
+      tipo,
+      color,
+      precio
+    } = updatedProductData;
+
+    // Realiza la actualización en la base de datos
+    const sql = `
+          UPDATE producto
+          SET nombre_producto = $1,
+              descripcion_producto = $2,
+              stock_disponible = $3,
+              tipo = $4,
+              color = $5,
+              precio = $6
+          WHERE id_producto = $7`;
+
+    const values = [
+      nombre_producto,
+      descripcion_producto,
+      stock_disponible,
+      tipo,
+      color,
+      precio,
+      productId
+    ];
+
+    await pool.query(sql, values);
+
+    res.json({ message: 'Producto actualizado con éxito' });
+  } catch (error) {
+    console.error('Error al actualizar el producto:', error);
+    res.status(500).json({ message: 'Error al actualizar el producto' });
+  }
+};
 
 module.exports = {
   eliminarComentario,
@@ -1114,9 +1096,9 @@ module.exports = {
   getProductsAdmin,
   validatePassword,
   getImagesUpdateProduct,
-  traerproducto,
   deleteImage,
   updateImageProducts,
   getProductDetails,
   deleteProduct,
+  updateProduct
 };

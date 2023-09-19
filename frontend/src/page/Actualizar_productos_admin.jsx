@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import '../css/Actualizar_productos_admin.css';
 import { useParams } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
 export const Actualizar_productos_admin = () => {
     const { id } = useParams();
-    const [reloadPage, setReloadPage] = useState(null); // para controlar la carga de la página
+    const [reloadPage, setReloadPage] = useState(false);//para controlar la carga de la pagina
     const [imagenes, setImagenes] = useState([]);
     const [producto, setProducto] = useState({
-        id_producto: '',
         nombre_producto: '',
         tipo: '',
         color: '',
@@ -18,15 +17,16 @@ export const Actualizar_productos_admin = () => {
     });
     const [images, setImages] = useState([]); // Estado para almacenar las imágenes seleccionadas
 
-    // controla para cargar la página
+    //controla para cargar la pagina
     useEffect(() => {
         if (reloadPage) {
             // Recargar la página
-            alert('Recargando la página...'); // Reemplazar por la lógica de recarga real si es necesario
+            window.location.reload();
             // Establecer reloadPage de nuevo a false para evitar recargas continuas
-            // setReloadPage(false);
+            setReloadPage(false);
         }
     }, [reloadPage]);
+
 
     const imageInputRef = React.createRef(); // Referencia al input de tipo file
 
@@ -38,7 +38,7 @@ export const Actualizar_productos_admin = () => {
             [event.target.name]: event.target.value,
         });
     };
-    // console.log(producto)
+
     // Función para manejar la carga de imágenes
     const handleImageUpload = (event) => {
         const newImages = [...images];
@@ -73,13 +73,12 @@ export const Actualizar_productos_admin = () => {
             .then((response) => response.json())
             .then((data) => {
                 // Manejar los datos JSON devueltos por el servidor
-                console.log('Datos del producto obtenidos con éxito.'); // Reemplazar por lógica adecuada si es necesario
+                console.log(data);
                 setProducto(data); // Actualizar el estado del producto
                 setImagenes(data);
             })
             .catch((error) => {
                 console.error('Error al obtener los datos del producto:', error);
-                alert('Error al obtener los datos del producto. Por favor, inténtalo de nuevo más tarde.');
             });
     }, [id]);
 
@@ -92,7 +91,6 @@ export const Actualizar_productos_admin = () => {
                     const data = await response.json();
                     // Establecer el estado del producto con los detalles obtenidos
                     setProducto(data);
-                    console.log('Detalles del producto obtenidos con éxito.', producto); // Reemplazar por lógica adecuada si es necesario
                 } else {
                     console.error('Error al obtener los detalles del producto');
                     alert('Error al obtener los detalles del producto. Por favor, inténtalo de nuevo más tarde.');
@@ -109,7 +107,7 @@ export const Actualizar_productos_admin = () => {
 
     const handleImageAfterClick = async (e) => {
         const idImagen = e.currentTarget.getAttribute('data-id');
-        alert(`Eliminando la imagen con ID: ${idImagen}`);
+        console.log(idImagen);
 
         // Preguntar al usuario si realmente desea eliminar la imagen
         const confirmDelete = window.confirm('¿Desea eliminar esta imagen? Este cambio es irreversible.');
@@ -121,7 +119,9 @@ export const Actualizar_productos_admin = () => {
                 });
 
                 if (response.ok) {
-                    alert('Imagen eliminada con éxito');
+                    console.log('Imagen eliminada con éxito');
+                    console.log(response);
+                    setReloadPage(true);
                     // Aquí puedes agregar la lógica para actualizar el estado de tu aplicación si es necesario.
                 } else if (response.status === 400) {
                     // Parsea el mensaje de error enviado por el servidor
@@ -132,19 +132,19 @@ export const Actualizar_productos_admin = () => {
                     console.log('Error desconocido al eliminar la imagen');
                     alert('Error desconocido al eliminar la imagen. Por favor, inténtalo de nuevo más tarde.');
                 }
+
             } catch (error) {
                 console.error('Error al realizar la solicitud:', error);
                 alert('Error al realizar la solicitud. Por favor, inténtalo de nuevo más tarde.');
             }
         } else {
             // El usuario canceló la eliminación, no se hace nada.
-            alert('Eliminación cancelada');
+            console.log('Cancelado');
         }
     };
 
     const handleUpdateProduct = async (event) => {
         event.preventDefault(); // Evita la recarga de la página por defecto del formulario
-
         try {
             const formData = new FormData(); // Crea un objeto FormData para enviar los datos y las imágenes
             formData.append('productId', id);
@@ -153,47 +153,37 @@ export const Actualizar_productos_admin = () => {
                 formData.append('images', image.file); // Agrega todas las imágenes al formulario
             });
 
-            const response = await fetch('http://localhost:3060/updateImageProducts', {
+            const response1 = await fetch('http://localhost:3060/updateImageProducts', {
                 method: 'POST',
                 body: formData, // Usa el objeto FormData para enviar los datos y las imágenes
             });
 
-            if (response.ok) {
-                alert('Producto actualizado con éxito');
+            if (response1.ok) {
+                console.log('Producto actualizado con éxito');
+                setReloadPage(true);
                 // Redirige al usuario a la página de gestión después de la actualización
             } else {
                 // Maneja errores aquí
                 console.error('Error al actualizar el producto');
                 alert('Error al actualizar el producto. Por favor, inténtalo de nuevo más tarde.');
             }
-        } catch (error) {
-            console.error('Error al realizar la solicitud:', error);
-            alert('Error al realizar la solicitud. Por favor, inténtalo de nuevo más tarde.');
-        }
-    };
 
-    const handleSubir = async (event) => {
-        event.preventDefault();
-        try {
-            const formData = new FormData();
-            formData.append('id', id);
-            formData.append('nombre_producto', producto.nombre_producto);
-            formData.append('tipo', producto.tipo);
-            formData.append('color', producto.color);
-            formData.append('precio', producto.precio);
-            formData.append('descripcion_producto', producto.descripcion_producto);
-            formData.append('stock_disponible', producto.stock_disponible);
-
-            const response = await fetch(`http://localhost:3060/actualizar_producto/${id}`, {
-                method: 'POST',
-                body: formData,
+            console.log(JSON.stringify(producto));
+            // Agregar otro fetch aquí
+            const response2 = await fetch(`http://localhost:3060/updateProduct/${id}`, {
+                method: 'POST', // Ajusta el método HTTP según tus necesidades (puede ser 'PUT' si es una actualización)
+                body: JSON.stringify(producto), // Asegúrate de enviar los datos actualizados
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             });
 
-            if (response.ok) {
-                alert('Producto actualizado con éxito');
+            if (response2.ok) {
+                // Maneja la respuesta de la segunda solicitud aquí
+                console.log('Segunda solicitud exitosa');
             } else {
-                console.error('Error al actualizar el producto');
-                alert('Error al actualizar el producto. Por favor, inténtalo de nuevo más tarde.');
+                // Maneja errores de la segunda solicitud aquí
+                console.error('Error en la segunda solicitud');
             }
         } catch (error) {
             console.error('Error al realizar la solicitud:', error);
@@ -203,6 +193,9 @@ export const Actualizar_productos_admin = () => {
 
     return (
         <>
+            <Link className="close_update_products" to="/Usuario_usu?section=manage">
+                X
+            </Link>
             <div className='custom-container'>
                 <div className='custom-image-section'>
                     {imagenes.map((imagen, index) => (
@@ -305,11 +298,11 @@ export const Actualizar_productos_admin = () => {
                                 />
                             </div>
                             <div className='custom-form-group'>
-                                <input
+                                <textarea
                                     name='stock_disponible'
                                     placeholder='Stock disponible'
                                     className='custom-p-2'
-                                    type='number'
+                                    type='text'
                                     value={producto ? producto.stock_disponible : ''}
                                     onChange={handleInputChange}
                                 />
@@ -317,10 +310,7 @@ export const Actualizar_productos_admin = () => {
                             {/* Agrega aquí los demás campos del formulario */}
                         </div>
                         <div className='custom-boton-actualizar'>
-                            <button type='button' className='custom-actualizar-p' onClick={() => {
-                                handleUpdateProduct();
-                                handleSubir();
-                            }}>
+                            <button className='custom-actualizar-p' onClick={handleUpdateProduct}>
                                 Actualizar
                             </button>
                         </div>
