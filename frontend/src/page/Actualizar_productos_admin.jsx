@@ -4,29 +4,29 @@ import { useParams } from 'react-router-dom';
 
 export const Actualizar_productos_admin = () => {
     const { id } = useParams();
-    const [reloadPage, setReloadPage] = useState(false);//para controlar la carga de la pagina
+    const [reloadPage, setReloadPage] = useState(null); // para controlar la carga de la página
     const [imagenes, setImagenes] = useState([]);
     const [producto, setProducto] = useState({
-        nombre: '',
+        id_producto: '',
+        nombre_producto: '',
         tipo: '',
         color: '',
         precio: '',
-        descripcion: '',
-        stock: '',
+        descripcion_producto: '',
+        stock_disponible: '',
         // otros campos del producto
     });
     const [images, setImages] = useState([]); // Estado para almacenar las imágenes seleccionadas
 
-    //controla para cargar la pagina
+    // controla para cargar la página
     useEffect(() => {
         if (reloadPage) {
             // Recargar la página
-            window.location.reload();
+            alert('Recargando la página...'); // Reemplazar por la lógica de recarga real si es necesario
             // Establecer reloadPage de nuevo a false para evitar recargas continuas
-            setReloadPage(false);
+            // setReloadPage(false);
         }
     }, [reloadPage]);
-
 
     const imageInputRef = React.createRef(); // Referencia al input de tipo file
 
@@ -38,7 +38,7 @@ export const Actualizar_productos_admin = () => {
             [event.target.name]: event.target.value,
         });
     };
-
+    // console.log(producto)
     // Función para manejar la carga de imágenes
     const handleImageUpload = (event) => {
         const newImages = [...images];
@@ -73,12 +73,13 @@ export const Actualizar_productos_admin = () => {
             .then((response) => response.json())
             .then((data) => {
                 // Manejar los datos JSON devueltos por el servidor
-                console.log(data);
+                console.log('Datos del producto obtenidos con éxito.'); // Reemplazar por lógica adecuada si es necesario
                 setProducto(data); // Actualizar el estado del producto
                 setImagenes(data);
             })
             .catch((error) => {
                 console.error('Error al obtener los datos del producto:', error);
+                alert('Error al obtener los datos del producto. Por favor, inténtalo de nuevo más tarde.');
             });
     }, [id]);
 
@@ -91,7 +92,7 @@ export const Actualizar_productos_admin = () => {
                     const data = await response.json();
                     // Establecer el estado del producto con los detalles obtenidos
                     setProducto(data);
-                    console.log(producto)
+                    console.log('Detalles del producto obtenidos con éxito.', producto); // Reemplazar por lógica adecuada si es necesario
                 } else {
                     console.error('Error al obtener los detalles del producto');
                     alert('Error al obtener los detalles del producto. Por favor, inténtalo de nuevo más tarde.');
@@ -106,12 +107,9 @@ export const Actualizar_productos_admin = () => {
         fetchProductDetails();
     }, [id]);
 
-
-
-
     const handleImageAfterClick = async (e) => {
         const idImagen = e.currentTarget.getAttribute('data-id');
-        console.log(idImagen);
+        alert(`Eliminando la imagen con ID: ${idImagen}`);
 
         // Preguntar al usuario si realmente desea eliminar la imagen
         const confirmDelete = window.confirm('¿Desea eliminar esta imagen? Este cambio es irreversible.');
@@ -123,9 +121,7 @@ export const Actualizar_productos_admin = () => {
                 });
 
                 if (response.ok) {
-                    console.log('Imagen eliminada con éxito');
-                    console.log(response);
-                    setReloadPage(true);
+                    alert('Imagen eliminada con éxito');
                     // Aquí puedes agregar la lógica para actualizar el estado de tu aplicación si es necesario.
                 } else if (response.status === 400) {
                     // Parsea el mensaje de error enviado por el servidor
@@ -136,14 +132,13 @@ export const Actualizar_productos_admin = () => {
                     console.log('Error desconocido al eliminar la imagen');
                     alert('Error desconocido al eliminar la imagen. Por favor, inténtalo de nuevo más tarde.');
                 }
-
             } catch (error) {
                 console.error('Error al realizar la solicitud:', error);
                 alert('Error al realizar la solicitud. Por favor, inténtalo de nuevo más tarde.');
             }
         } else {
             // El usuario canceló la eliminación, no se hace nada.
-            console.log('Cancelado');
+            alert('Eliminación cancelada');
         }
     };
 
@@ -151,7 +146,6 @@ export const Actualizar_productos_admin = () => {
         event.preventDefault(); // Evita la recarga de la página por defecto del formulario
 
         try {
-
             const formData = new FormData(); // Crea un objeto FormData para enviar los datos y las imágenes
             formData.append('productId', id);
             formData.append('producto', producto.nombre_producto); // Asegúrate de enviar el nombre del producto
@@ -165,8 +159,7 @@ export const Actualizar_productos_admin = () => {
             });
 
             if (response.ok) {
-                console.log('Producto actualizado con éxito');
-                setReloadPage(true);
+                alert('Producto actualizado con éxito');
                 // Redirige al usuario a la página de gestión después de la actualización
             } else {
                 // Maneja errores aquí
@@ -181,16 +174,15 @@ export const Actualizar_productos_admin = () => {
 
     const handleSubir = async (event) => {
         event.preventDefault();
-
         try {
             const formData = new FormData();
             formData.append('id', id);
-            formData.append('nombre_producto', producto.nombre);
+            formData.append('nombre_producto', producto.nombre_producto);
             formData.append('tipo', producto.tipo);
             formData.append('color', producto.color);
             formData.append('precio', producto.precio);
-            formData.append('descripcion_producto', producto.descripcion);
-            formData.append('stock_disponible', producto.stock);
+            formData.append('descripcion_producto', producto.descripcion_producto);
+            formData.append('stock_disponible', producto.stock_disponible);
 
             const response = await fetch(`http://localhost:3060/actualizar_producto/${id}`, {
                 method: 'POST',
@@ -198,8 +190,7 @@ export const Actualizar_productos_admin = () => {
             });
 
             if (response.ok) {
-                console.log('Producto actualizado con éxito');
-                setReloadPage(true);
+                alert('Producto actualizado con éxito');
             } else {
                 console.error('Error al actualizar el producto');
                 alert('Error al actualizar el producto. Por favor, inténtalo de nuevo más tarde.');
@@ -265,7 +256,7 @@ export const Actualizar_productos_admin = () => {
                         <div className='custom-formu-p'>
                             <div className='custom-form-group'>
                                 <input
-                                    name='nombre'
+                                    name='nombre_producto'
                                     placeholder='Nombre del producto'
                                     className='custom-p-2'
                                     type='text'
@@ -305,7 +296,7 @@ export const Actualizar_productos_admin = () => {
                             </div>
                             <div className='custom-form-group'>
                                 <input
-                                    name='descripcion'
+                                    name='descripcion_producto'
                                     placeholder='Descripción'
                                     className='custom-p-3'
                                     type='text'
@@ -314,11 +305,11 @@ export const Actualizar_productos_admin = () => {
                                 />
                             </div>
                             <div className='custom-form-group'>
-                                <textarea
-                                    name='stock'
+                                <input
+                                    name='stock_disponible'
                                     placeholder='Stock disponible'
                                     className='custom-p-2'
-                                    type='text'
+                                    type='number'
                                     value={producto ? producto.stock_disponible : ''}
                                     onChange={handleInputChange}
                                 />
@@ -326,7 +317,7 @@ export const Actualizar_productos_admin = () => {
                             {/* Agrega aquí los demás campos del formulario */}
                         </div>
                         <div className='custom-boton-actualizar'>
-                            <button className='custom-actualizar-p' onClick={() => {
+                            <button type='button' className='custom-actualizar-p' onClick={() => {
                                 handleUpdateProduct();
                                 handleSubir();
                             }}>

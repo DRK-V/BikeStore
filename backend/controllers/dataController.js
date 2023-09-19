@@ -869,7 +869,6 @@ const traerproducto = async (req, res) => {
   precio = $6
   WHERE id_producto = $7`;
 
-
   const values = [
     updatedUserData.nombre_producto,
     updatedUserData.descripcion_producto,
@@ -877,19 +876,23 @@ const traerproducto = async (req, res) => {
     updatedUserData.tipo,
     updatedUserData.color,
     updatedUserData.precio,
-    updatedUserData.id_producto
+    updatedUserData.id
   ];
 
   pool.query(sql, values, (err, results) => {
     if (err) {
-      console.error('Error al actualizar el usuario en la base de datos:', err);
-      res.status(500).json({ message: 'Error al actualizar el usuario' });
+      console.error('Error al actualizar el producto en la base de datos:', err);
+      res.status(500).json({ message: 'Error al actualizar el producto' });
+      // Reemplaza la línea de console.log con una alerta de error
+      res.status(500).json({ message: 'Error al actualizar el producto' });
     } else {
-      console.log('Usuario actualizado en la base de datos');
-      res.json({ message: 'Usuario actualizado exitosamente' });
+      console.log('Producto actualizado en la base de datos');
+      // Reemplaza la línea de console.log con una alerta de éxito
+      res.json({ message: 'Producto actualizado exitosamente' });
     }
   });
 };
+
 const deleteImage = async (req, res) => {
   const { idImagen } = req.params; // Obtén el ID de la imagen a eliminar desde los parámetros de la URL
 
@@ -1032,7 +1035,6 @@ const updateImageProducts = async (req, res) => {
     return res.status(500).json({ success: false, error: "Error al actualizar las imágenes" });
   }
 };
-
 
 const deleteProduct = async (req, res) => {
   const productId = req.params.id;
