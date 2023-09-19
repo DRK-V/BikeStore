@@ -106,6 +106,9 @@ export const Actualizar_productos_admin = () => {
         fetchProductDetails();
     }, [id]);
 
+
+
+
     const handleImageAfterClick = async (e) => {
         const idImagen = e.currentTarget.getAttribute('data-id');
         console.log(idImagen);
@@ -148,6 +151,7 @@ export const Actualizar_productos_admin = () => {
         event.preventDefault(); // Evita la recarga de la página por defecto del formulario
 
         try {
+
             const formData = new FormData(); // Crea un objeto FormData para enviar los datos y las imágenes
             formData.append('productId', id);
             formData.append('producto', producto.nombre_producto); // Asegúrate de enviar el nombre del producto
@@ -166,6 +170,37 @@ export const Actualizar_productos_admin = () => {
                 // Redirige al usuario a la página de gestión después de la actualización
             } else {
                 // Maneja errores aquí
+                console.error('Error al actualizar el producto');
+                alert('Error al actualizar el producto. Por favor, inténtalo de nuevo más tarde.');
+            }
+        } catch (error) {
+            console.error('Error al realizar la solicitud:', error);
+            alert('Error al realizar la solicitud. Por favor, inténtalo de nuevo más tarde.');
+        }
+    };
+
+    const handleSubir = async (event) => {
+        event.preventDefault();
+
+        try {
+            const formData = new FormData();
+            formData.append('id', id);
+            formData.append('nombre_producto', producto.nombre);
+            formData.append('tipo', producto.tipo);
+            formData.append('color', producto.color);
+            formData.append('precio', producto.precio);
+            formData.append('descripcion_producto', producto.descripcion);
+            formData.append('stock_disponible', producto.stock);
+
+            const response = await fetch(`http://localhost:3060/actualizar_producto/${id}`, {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                console.log('Producto actualizado con éxito');
+                setReloadPage(true);
+            } else {
                 console.error('Error al actualizar el producto');
                 alert('Error al actualizar el producto. Por favor, inténtalo de nuevo más tarde.');
             }
@@ -291,7 +326,10 @@ export const Actualizar_productos_admin = () => {
                             {/* Agrega aquí los demás campos del formulario */}
                         </div>
                         <div className='custom-boton-actualizar'>
-                            <button className='custom-actualizar-p' onClick={handleUpdateProduct}>
+                            <button className='custom-actualizar-p' onClick={() => {
+                                handleUpdateProduct();
+                                handleSubir();
+                            }}>
                                 Actualizar
                             </button>
                         </div>
