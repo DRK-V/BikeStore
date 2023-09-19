@@ -3,7 +3,7 @@ const path = require("path");
 const multer = require("multer");
 //datacontroller
 const { pool } = require("../config/db");
-const crypto = require('crypto');
+const crypto = require("crypto");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -53,8 +53,6 @@ const updateUser = async (req, res) => {
 };
 
 //fin de acutalizacion de datos del cliente
-
-
 
 //fin de actualizacion de productos
 
@@ -517,7 +515,10 @@ const añadirComentario = async (req, res) => {
   try {
     const result = await pool.query(insertQuery, values);
     const comentarioId = result.rows[0].id_comentario;
-    res.status(201).json({ message: "Comentario añadido con éxito", ID_COMENTARIO: comentarioId });
+    res.status(201).json({
+      message: "Comentario añadido con éxito",
+      ID_COMENTARIO: comentarioId,
+    });
   } catch (error) {
     console.error("Error al añadir el comentario:", error);
     res.status(500).json({ error: "Error al añadir el comentario" });
@@ -566,7 +567,8 @@ const editarComentario = async (req, res) => {
 
   try {
     // Query SQL para actualizar el comentario con el nuevo texto
-    const updateQuery = "UPDATE comentario SET texto = $1 WHERE id_comentario = $2";
+    const updateQuery =
+      "UPDATE comentario SET texto = $1 WHERE id_comentario = $2";
     const values = [texto, id_comentario];
 
     // Ejecutar la consulta SQL para editar el comentario
@@ -597,8 +599,6 @@ const eliminarComentario = async (req, res) => {
   }
 };
 // Asignar las funciones a las rutas
-
-
 
 //fin comentarios
 //ensayo
@@ -661,6 +661,34 @@ const getVentas = async () => {
     throw error; // Asegúrate de volver a lanzar el error para que el servidor lo maneje adecuadamente
   }
 };
+
+//intento insertar datos a tabla stock
+const añadirStock = async (req, res) => {
+  const { codigo_producto } = req.body;
+
+  try {
+    // Llamar a la función insertarProducto para obtener el id_producto
+    const insertProductResponse = await insertarProducto(req, res);
+    const productId = insertProductResponse.productId;
+
+    // Insertar el stock utilizando el id_producto
+    const insertQuery =
+      "INSERT INTO stock (codigo_producto, inventario_inicial) VALUES ($1, $2)";
+    const values = [productId, 0]; // Utiliza el productId obtenido
+
+    await pool.query(insertQuery, values);
+
+    res.status(201).json({
+      message: "Stock añadido con éxito",
+      PRODUCT_ID: productId, // Devuelve el id_producto del producto insertado
+    });
+  } catch (error) {
+    console.error("Error al añadir el stock:", error);
+    res.status(500).json({ error: "Error al añadir el stock" });
+  }
+};
+
+//tabla compra
 const insertarProducto = async (req, res) => {
   const productoData = req.body;
   try {
@@ -693,7 +721,7 @@ const insertarProducto = async (req, res) => {
     const insertProductQuery = `
       INSERT INTO producto (nombre_producto, descripcion_producto, stock_disponible, tipo, color, precio)
       VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING id_producto;
+      RETURNING id_producto, stock_disponible, precio;
     `;
 
     const productValues = [
@@ -709,16 +737,83 @@ const insertarProducto = async (req, res) => {
 
     // Obtener el ID del producto recién insertado
     const productId = productResult.rows[0].id_producto;
+    const stockDisponible = productResult.rows[0].stock_disponible;
+    const precio = productResult.rows[0].precio;
 
-    res
-      .status(200)
-      .json({ productId, message: "Producto insertado con éxito" });
+    // Calcular el monto_final
+    const montoFinal = stockDisponible * precio;
+
+    // Establecer el estado como "finalizado"
+    const estado = "finalizado";
+
+    // Insertar la información en la tabla 'compra'
+    const insertCompraQuery = `
+      INSERT INTO compra (monto_final, estado, direccion, codigo_administrador)
+      VALUES ($1, $2, null, null)
+      RETURNING id_compra;
+    `;
+
+    const compraValues = [montoFinal, estado];
+
+    const compraResult = await pool.query(insertCompraQuery, compraValues);
+
+    // Obtener el ID de la compra recién insertada
+    const compraId = compraResult.rows[0].id_compra;
+
+    res.status(200).json({
+      productId,
+      compraId,
+      message:
+        "Producto insertado con éxito y se ha creado una compra con estado 'finalizado'",
+    });
   } catch (error) {
     console.error("Error al insertar el producto:", error);
     res.status(500).json({ error: "Error al insertar el producto" });
   }
 };
+const crearCompra = async (req, res) => {
+  const compraData = req.body;
+  try {
+    // Validar que se proporcionen datos obligatorios
+    if (!compraData.monto_final || !compraData.estado) {
+      const camposFaltantes = [];
+      if (!compraData.monto_final) camposFaltantes.push("Monto Final");
+      if (!compraData.estado) camposFaltantes.push("Estado");
 
+      const mensajeError = `Los siguientes campos son obligatorios: ${camposFaltantes.join(
+        ", "
+      )}`;
+      throw new Error(mensajeError);
+    }
+
+    // Insertar la información de la compra en la base de datos
+    const insertCompraQuery = `
+      INSERT INTO compra (monto_final, estado, direccion, codigo_administrador)
+      VALUES ($1, $2, $3, $4)
+      RETURNING id_compra;
+    `;
+
+    const compraValues = [
+      compraData.monto_final,
+      compraData.estado,
+      compraData.direccion || null,
+      compraData.codigo_administrador || null,
+    ];
+
+    const compraResult = await pool.query(insertCompraQuery, compraValues);
+
+    // Obtener el ID de la compra recién insertada
+    const compraId = compraResult.rows[0].id_compra;
+
+    res.status(200).json({
+      compraId,
+      message: "Compra creada con éxito",
+    });
+  } catch (error) {
+    console.error("Error al crear la compra:", error);
+    res.status(500).json({ error: "Error al crear la compra" });
+  }
+};
 const insertarImagenesProducto = async (req, res) => {
   const productId = req.body.productId; // El ID del producto al que se asocian las imágenes
   const nombre_producto = req.body.producto; // El nombre del producto
@@ -795,7 +890,7 @@ const getProductsAdmin = (req, res) => {
 const validatePassword = async (req, res) => {
   const { email, newPassword } = req.body;
 
-  const stringSimilarity = require('string-similarity');
+  const stringSimilarity = require("string-similarity");
   try {
     // Busca un cliente con el correo electrónico proporcionado
     const selectClienteQuery = "SELECT * FROM cliente WHERE correo = $1";
@@ -803,13 +898,18 @@ const validatePassword = async (req, res) => {
 
     if (result.rows.length === 0) {
       // Si no se encuentra el correo electrónico, envía una respuesta de error
-      return res.status(401).json({ message: 'Correo electrónico no encontrado' });
+      return res
+        .status(401)
+        .json({ message: "Correo electrónico no encontrado" });
     }
 
     const cliente = result.rows[0];
 
     // Compara la contraseña proporcionada con la almacenada
-    const similarity = stringSimilarity.compareTwoStrings(newPassword, cliente.contrasena);
+    const similarity = stringSimilarity.compareTwoStrings(
+      newPassword,
+      cliente.contrasena
+    );
 
     // Define un umbral de similitud (ajústalo según tus necesidades)
     const similarityThreshold = 0.5;
@@ -819,24 +919,34 @@ const validatePassword = async (req, res) => {
       const randomPassword = generateRandomPassword();
 
       // Actualiza la contraseña en la base de datos
-      const updatePasswordQuery = "UPDATE cliente SET contrasena = $1 WHERE id_cliente = $2";
-      await pool.query(updatePasswordQuery, [randomPassword, cliente.id_cliente]);
+      const updatePasswordQuery =
+        "UPDATE cliente SET contrasena = $1 WHERE id_cliente = $2";
+      await pool.query(updatePasswordQuery, [
+        randomPassword,
+        cliente.id_cliente,
+      ]);
 
       // Envía una respuesta exitosa con la nueva contraseña
-      return res.status(200).json({ message: 'Contraseña cambiada exitosamente', newPassword: randomPassword });
+      return res.status(200).json({
+        message: "Contraseña cambiada exitosamente",
+        newPassword: randomPassword,
+      });
     } else {
       // Si la contraseña no es lo suficientemente similar, envía una respuesta de error
-      return res.status(401).json({ message: 'La nueva contraseña no es suficientemente similar a la antigua' });
+      return res.status(401).json({
+        message:
+          "La nueva contraseña no es suficientemente similar a la antigua",
+      });
     }
   } catch (error) {
-    console.error('Error al validar la contraseña: ', error);
-    return res.status(500).json({ message: 'Error interno del servidor' });
+    console.error("Error al validar la contraseña: ", error);
+    return res.status(500).json({ message: "Error interno del servidor" });
   }
 };
 
 // Función para generar una contraseña aleatoria
 function generateRandomPassword() {
-  return crypto.randomBytes(8).toString('hex'); // Genera una contraseña aleatoria de 16 caracteres
+  return crypto.randomBytes(8).toString("hex"); // Genera una contraseña aleatoria de 16 caracteres
 }
 // En tu archivo dataController.js
 
@@ -845,17 +955,17 @@ const getImagesUpdateProduct = async (req, res) => {
 
   try {
     // Realiza una consulta a la base de datos para obtener las imágenes del producto con el ID proporcionado
-    const query = 'SELECT * FROM imagen_producto WHERE codigo_producto = $1';
+    const query = "SELECT * FROM imagen_producto WHERE codigo_producto = $1";
     const result = await pool.query(query, [id]);
 
     // Envía la respuesta con las imágenes encontradas
     res.json(result.rows);
   } catch (error) {
-    console.error('Error al obtener imágenes del producto', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
+    console.error("Error al obtener imágenes del producto", error);
+    res.status(500).json({ error: "Error interno del servidor" });
   }
 };
-//actualizacion de productos 
+//actualizacion de productos
 
 const traerproducto = async (req, res) => {
   const updatedUserData = req.body;
@@ -869,7 +979,6 @@ const traerproducto = async (req, res) => {
   precio = $6
   WHERE id_producto = $7`;
 
-
   const values = [
     updatedUserData.nombre_producto,
     updatedUserData.descripcion_producto,
@@ -877,16 +986,16 @@ const traerproducto = async (req, res) => {
     updatedUserData.tipo,
     updatedUserData.color,
     updatedUserData.precio,
-    updatedUserData.id_producto
+    updatedUserData.id_producto,
   ];
 
   pool.query(sql, values, (err, results) => {
     if (err) {
-      console.error('Error al actualizar el usuario en la base de datos:', err);
-      res.status(500).json({ message: 'Error al actualizar el usuario' });
+      console.error("Error al actualizar el usuario en la base de datos:", err);
+      res.status(500).json({ message: "Error al actualizar el usuario" });
     } else {
-      console.log('Usuario actualizado en la base de datos');
-      res.json({ message: 'Usuario actualizado exitosamente' });
+      console.log("Usuario actualizado en la base de datos");
+      res.json({ message: "Usuario actualizado exitosamente" });
     }
   });
 };
@@ -895,29 +1004,32 @@ const deleteImage = async (req, res) => {
 
   try {
     // Realiza una consulta para obtener la ruta de la imagen a eliminar
-    const getImagePathQuery = 'SELECT ruta_imagen FROM imagen_producto WHERE id_imagen = $1';
+    const getImagePathQuery =
+      "SELECT ruta_imagen FROM imagen_producto WHERE id_imagen = $1";
     const imagePathResult = await pool.query(getImagePathQuery, [idImagen]);
 
     if (imagePathResult.rowCount === 0) {
       // Si no se encuentra la imagen con el ID proporcionado, responde con un error
-      return res.status(404).json({ error: 'La imagen no existe' });
+      return res.status(404).json({ error: "La imagen no existe" });
     }
 
     const imagePath = imagePathResult.rows[0].ruta_imagen;
 
     // Realiza una consulta para obtener el código de producto de la imagen a eliminar
-    const getCodeQuery = 'SELECT codigo_producto FROM imagen_producto WHERE id_imagen = $1';
+    const getCodeQuery =
+      "SELECT codigo_producto FROM imagen_producto WHERE id_imagen = $1";
     const codeResult = await pool.query(getCodeQuery, [idImagen]);
 
     if (codeResult.rowCount === 0) {
       // Si no se encuentra la imagen con el ID proporcionado, responde con un error
-      return res.status(404).json({ error: 'La imagen no existe' });
+      return res.status(404).json({ error: "La imagen no existe" });
     }
 
     const codigoProducto = codeResult.rows[0].codigo_producto;
 
     // Realiza una consulta para contar cuántas imágenes asociadas al mismo producto existen
-    const countQuery = 'SELECT COUNT(*) FROM imagen_producto WHERE codigo_producto = $1';
+    const countQuery =
+      "SELECT COUNT(*) FROM imagen_producto WHERE codigo_producto = $1";
     const countResult = await pool.query(countQuery, [codigoProducto]);
 
     const imageCount = parseInt(countResult.rows[0].count); // Convierte el resultado en un número entero
@@ -931,22 +1043,34 @@ const deleteImage = async (req, res) => {
 
     if (imageCount > 1) {
       // Si hay más de una imagen asociada al producto, verifica si alguna tiene nombre 'imagen portada'
-      const hasImagenPortadaQuery = 'SELECT id_imagen FROM imagen_producto WHERE codigo_producto = $1 AND nombre_imagen = $2';
-      const portadaResult = await pool.query(hasImagenPortadaQuery, [codigoProducto, 'imagen portada']);
+      const hasImagenPortadaQuery =
+        "SELECT id_imagen FROM imagen_producto WHERE codigo_producto = $1 AND nombre_imagen = $2";
+      const portadaResult = await pool.query(hasImagenPortadaQuery, [
+        codigoProducto,
+        "imagen portada",
+      ]);
 
-      if (portadaResult.rowCount === 1 && portadaResult.rows[0].id_imagen === idImagen) {
+      if (
+        portadaResult.rowCount === 1 &&
+        portadaResult.rows[0].id_imagen === idImagen
+      ) {
         // Si la imagen que se va a eliminar es la 'imagen portada', actualiza otra imagen como 'imagen portada'
-        const updatePortadaQuery = 'UPDATE imagen_producto SET nombre_imagen = $1 WHERE codigo_producto = $2 AND id_imagen != $3 LIMIT 1';
-        await pool.query(updatePortadaQuery, ['imagen portada', codigoProducto, idImagen]);
+        const updatePortadaQuery =
+          "UPDATE imagen_producto SET nombre_imagen = $1 WHERE codigo_producto = $2 AND id_imagen != $3 LIMIT 1";
+        await pool.query(updatePortadaQuery, [
+          "imagen portada",
+          codigoProducto,
+          idImagen,
+        ]);
       }
     }
 
     // Elimina la imagen con el ID proporcionado de la base de datos
-    const deleteQuery = 'DELETE FROM imagen_producto WHERE id_imagen = $1';
+    const deleteQuery = "DELETE FROM imagen_producto WHERE id_imagen = $1";
     await pool.query(deleteQuery, [idImagen]);
 
     // Construye la ruta completa al archivo en el sistema de archivos
-    const fullPath = path.join(__dirname, '..', 'images', imagePath);
+    const fullPath = path.join(__dirname, "..", "images", imagePath);
 
     // Verifica si el archivo existe y, si es así, elimínalo
     if (fs.existsSync(fullPath)) {
@@ -958,8 +1082,8 @@ const deleteImage = async (req, res) => {
       res.status(204).json({ success: true, imagePath: null }); // La imagen ya se había eliminado
     }
   } catch (error) {
-    console.error('Error al eliminar la imagen', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
+    console.error("Error al eliminar la imagen", error);
+    res.status(500).json({ error: "Error interno del servidor" });
   }
 };
 
@@ -969,14 +1093,14 @@ const getProductDetails = async (req, res) => {
 
   try {
     // Realiza una consulta a la base de datos para obtener los detalles del producto con el ID proporcionado
-    const query = 'SELECT * FROM producto WHERE id_producto = $1'; // Reemplaza "tu_tabla_de_productos" por el nombre real de tu tabla
+    const query = "SELECT * FROM producto WHERE id_producto = $1"; // Reemplaza "tu_tabla_de_productos" por el nombre real de tu tabla
     const result = await pool.query(query, [id]);
 
     // Envía la respuesta con los detalles del producto encontrados
     res.json(result.rows[0]); // Supongo que solo se espera un resultado, por lo que tomo el primer elemento del array
   } catch (error) {
-    console.error('Error al obtener detalles del producto', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
+    console.error("Error al obtener detalles del producto", error);
+    res.status(500).json({ error: "Error interno del servidor" });
   }
 };
 
@@ -987,12 +1111,17 @@ const updateImageProducts = async (req, res) => {
     const images = req.files;
 
     if (!Array.isArray(images) || images.length === 0) {
-      return res.status(400).json({ success: false, error: "Error al recibir imágenes", images });
+      return res
+        .status(400)
+        .json({ success: false, error: "Error al recibir imágenes", images });
     }
 
     // Validar productId, productName y la existencia de imágenes
     if (!productId || !productName || !images || images.length === 0) {
-      return res.status(400).json({ success: false, error: "Error en el ID, nombre o al recibir imágenes" });
+      return res.status(400).json({
+        success: false,
+        error: "Error en el ID, nombre o al recibir imágenes",
+      });
     }
 
     // Construir el nombre de la carpeta usando el nombre del producto
@@ -1026,13 +1155,16 @@ const updateImageProducts = async (req, res) => {
       await pool.query(insertImageQuery, imageValues);
     }
 
-    return res.status(200).json({ success: true, message: "Imágenes actualizadas con éxito" });
+    return res
+      .status(200)
+      .json({ success: true, message: "Imágenes actualizadas con éxito" });
   } catch (error) {
     console.error("Error al actualizar las imágenes:", error);
-    return res.status(500).json({ success: false, error: "Error al actualizar las imágenes" });
+    return res
+      .status(500)
+      .json({ success: false, error: "Error al actualizar las imágenes" });
   }
 };
-
 
 const deleteProduct = async (req, res) => {
   const productId = req.params.id;
@@ -1044,18 +1176,20 @@ const deleteProduct = async (req, res) => {
       LEFT JOIN imagen_producto AS ip ON p.id_producto = ip.codigo_producto
       WHERE p.id_producto = $1;
     `;
-    
-    const productInfoResult = await pool.query(getProductInfoQuery, [productId]);
+
+    const productInfoResult = await pool.query(getProductInfoQuery, [
+      productId,
+    ]);
 
     if (productInfoResult.rowCount === 0) {
-      return res.status(404).json({ error: 'El producto no existe' });
+      return res.status(404).json({ error: "El producto no existe" });
     }
 
     // Elimina las imágenes de la carpeta de imágenes
     const imagesToDelete = productInfoResult.rows.map((row) => row.ruta_imagen);
 
     imagesToDelete.forEach((imagePath) => {
-      const fullPath = path.join(__dirname, '..', 'images', imagePath);
+      const fullPath = path.join(__dirname, "..", "images", imagePath);
       if (fs.existsSync(fullPath)) {
         fs.unlinkSync(fullPath);
       }
@@ -1065,29 +1199,30 @@ const deleteProduct = async (req, res) => {
     const productName = productInfoResult.rows[0].nombre_producto;
 
     // Elimina las entradas de imagen_producto
-    const deleteImageEntriesQuery = 'DELETE FROM imagen_producto WHERE codigo_producto = $1';
+    const deleteImageEntriesQuery =
+      "DELETE FROM imagen_producto WHERE codigo_producto = $1";
     await pool.query(deleteImageEntriesQuery, [productId]);
 
     // Elimina la entrada de producto
-    const deleteProductQuery = 'DELETE FROM producto WHERE id_producto = $1';
+    const deleteProductQuery = "DELETE FROM producto WHERE id_producto = $1";
     await pool.query(deleteProductQuery, [productId]);
 
     // Elimina la carpeta de imágenes del producto
-    const productImagesDir = path.join(__dirname, '..', 'images', productName);
+    const productImagesDir = path.join(__dirname, "..", "images", productName);
     if (fs.existsSync(productImagesDir)) {
       fs.rmSync(productImagesDir, { recursive: true });
     }
 
     res.status(204).json({ success: true });
   } catch (error) {
-    console.error('Error al eliminar el producto', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
+    console.error("Error al eliminar el producto", error);
+    res.status(500).json({ error: "Error interno del servidor" });
   }
 };
 
-
-
 module.exports = {
+  crearCompra,
+  añadirStock,
   eliminarComentario,
   verComentarioPorId,
   editarComentario,

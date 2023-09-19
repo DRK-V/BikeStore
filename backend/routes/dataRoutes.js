@@ -211,7 +211,9 @@ router.post("/crear-venta", async (req, res) => {
     const idVenta = await dataController.createVenta(ventaData); // Llama a la función para crear venta
     res.status(201).json({ idVenta, message: "Venta creada con éxito" });
   } catch (error) {
-    res.status(500).json({ error: "Error al crear venta", message: error.message });
+    res
+      .status(500)
+      .json({ error: "Error al crear venta", message: error.message });
   }
 });
 router.get("/ventas", async (req, res) => {
@@ -230,10 +232,14 @@ router.post("/crear-venta-producto", async (req, res) => {
     await dataController.createVentaProducto(ventaProductoData); // Llama a la función para crear venta de producto
     res.status(201).json({ message: "Venta de producto creada con éxito" });
   } catch (error) {
-    res.status(500).json({ error: "Error al crear venta de producto", message: error.message });
+    res.status(500).json({
+      error: "Error al crear venta de producto",
+      message: error.message,
+    });
   }
 });
-
+router.post("crear_compra", dataController.crearCompra);
+router.post("/stock", dataController.añadirStock);
 router.post("/insertarProducto", dataController.insertarProducto);
 
 const storage2 = multer.diskStorage({
@@ -256,11 +262,18 @@ const storage2 = multer.diskStorage({
 });
 
 const upload2 = multer({ storage: storage2 });
-router.post('/insertarImagenesProducto', upload2.array('images'), dataController.insertarImagenesProducto);
+router.post(
+  "/insertarImagenesProducto",
+  upload2.array("images"),
+  dataController.insertarImagenesProducto
+);
 
 // para cargar las imagenes en actualizar producto
-router.post('/updateImageProducts', upload2.array('images'), dataController.updateImageProducts);
-
+router.post(
+  "/updateImageProducts",
+  upload2.array("images"),
+  dataController.updateImageProducts
+);
 
 // router.get("/products/:id_imagen", dataController.getImages);
 router.get("/getproductsadmin", dataController.getProductsAdmin);
@@ -271,16 +284,12 @@ router.post(
   dataController.getImagesUpdateProduct
 );
 
-
 router.post("/deleteImage/:idImagen", dataController.deleteImage);
-router.get('/getProductDetails/:id', dataController.getProductDetails);
+router.get("/getProductDetails/:id", dataController.getProductDetails);
 
-router.delete('/deleteProduct/:id', dataController.deleteProduct);
+router.delete("/deleteProduct/:id", dataController.deleteProduct);
 
 //esta es para actualizar los productos con el rol de administrador
-router.post("/actualizar_producto/:id_producto", dataController.traerproducto)
-
+router.post("/actualizar_producto/:id_producto", dataController.traerproducto);
 
 module.exports = router;
-
-
