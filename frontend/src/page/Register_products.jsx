@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import "../css/Register_products.css";
 import { Link } from "react-router-dom";
+import { useAuth } from "../components/AuthContext";
 
 export const Register_products = () => {
+  const { idCliente } = useAuth();
   const [product, setProduct] = useState({
     nombre_producto: "",
     tipo: "",
@@ -43,94 +45,104 @@ export const Register_products = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      // Calcular el monto_final
-      const monto_final = product.precio * product.stock_disponible;
-
+      // Calcular monto_final
+      const montoFinal = product.precio * product.stock_disponible;
+  
+      // Actualizar el objeto product con monto_final
+      setProduct({
+        ...product,
+        monto_final: montoFinal,
+      });
+  
       // Enviar datos del producto como JSON
-      const productResponse = await fetch(
-        "http://localhost:3060/insertarProducto",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(product),
-        }
-      );
-
+      const productResponse = await fetch("http://localhost:3060/insertarProducto", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product),
+      });
+  
       if (productResponse.status === 200) {
         const { productId, nombre_producto } = await productResponse.json();
-
+  
         // Crear un FormData para enviar imágenes
         const formData = new FormData();
         formData.append("productId", productId);
         formData.append("producto", product.nombre_producto);
-
+  
         // Subir las imágenes al servidor
         for (let i = 0; i < images.length; i++) {
           formData.append("images", images[i].file, images[i].file.name);
         }
-
-        const imageResponse = await fetch(
-          "http://localhost:3060/insertarImagenesProducto",
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-
+  
+        const imageResponse = await fetch("http://localhost:3060/insertarImagenesProducto", {
+          method: "POST",
+          body: formData,
+        });
+  
         if (imageResponse.status === 200) {
           console.log("Imágenes insertadas con éxito");
           alert("Imágenes insertadas con éxito");
-
-          // Envía el monto_final a través de la solicitud a http://localhost:3060/añadir_compra
-          const compraResponse = await fetch(
-            "http://localhost:3060/añadir_compra",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ monto_final }), // Envía monto_final como parte del cuerpo
-            }
-          );
-
-          if (compraResponse.status === 200) {
-            console.log("Compra añadida con éxito");
-            alert("Compra añadida con éxito");
-          } else {
-            console.error(
-              "Error al añadir la compra:",
-              compraResponse.statusText
-            );
-          }
-
           window.location.reload();
         } else {
-          console.error(
-            "Error al insertar las imágenes:",
-            imageResponse.statusText
-          );
+          console.error("Error al insertar las imágenes:", imageResponse.statusText);
+        }
+  
+        // Enviar datos de la compra como JSON, incluyendo el id_cliente como codigo_administrador
+        const compraResponse = await fetch("http://localhost:3060/insertarCompra", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            monto_final: montoFinal,
+            estado: "finalizado", // Cambiado a "finalizado" como se mencionó anteriormente
+            direccion: "palmira", // Cambiado a "palmira" como se mencionó anteriormente
+            codigo_administrador: idCliente, // Usar id_cliente como codigo_administrador
+          }),
+        });
+  
+        if (compraResponse.status === 200) {
+          console.log("Compra insertada con éxito");
+  
+          // Obtener el ID de la compra recién insertada
+          const { compraId } = await compraResponse.json();
+  
+          // Enviar datos a insertarCompraProducto
+          const compraProductoResponse = await fetch("http://localhost:3060/insertarCompraProducto", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id_producto: productId, // ID del producto generado
+              id_compra: compraId,   // ID de la compra generada
+            }),
+          });
+  
+          if (compraProductoResponse.status === 200) {
+            console.log("Relación compra-producto insertada con éxito");
+          } else {
+            console.error("Error al insertar la relación compra-producto:", compraProductoResponse.statusText);
+          }
+        } else {
+          console.error("Error al insertar la compra:", compraResponse.statusText);
         }
       } else {
-        console.error(
-          "Error al insertar el producto:",
-          productResponse.statusText
-        );
+        console.error("Error al insertar el producto:", productResponse.statusText);
       }
     } catch (error) {
-      console.error("Error al insertar el producto o las imágenes:", error);
+      console.error("Error al insertar el producto, las imágenes o la relación compra-producto:", error);
     }
   };
+  
 
   return (
     <div className="container">
-      <Link
-        to="/Usuario_usu?section=manage"
-        className="close_register_products"
-      >
+      <Link to="/Usuario_usu?section=manage" className="close_register_products">
         <button></button>
       </Link>
       <div className="image-section">
