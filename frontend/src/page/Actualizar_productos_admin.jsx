@@ -7,12 +7,12 @@ export const Actualizar_productos_admin = () => {
     const [reloadPage, setReloadPage] = useState(false);//para controlar la carga de la pagina
     const [imagenes, setImagenes] = useState([]);
     const [producto, setProducto] = useState({
-        nombre: '',
+        nombre_producto: '',
         tipo: '',
         color: '',
         precio: '',
-        descripcion: '',
-        stock: '',
+        descripcion_producto: '',
+        stock_disponible: '',
         // otros campos del producto
     });
     const [images, setImages] = useState([]); // Estado para almacenar las imágenes seleccionadas
@@ -91,7 +91,6 @@ export const Actualizar_productos_admin = () => {
                     const data = await response.json();
                     // Establecer el estado del producto con los detalles obtenidos
                     setProducto(data);
-                    console.log(producto)
                 } else {
                     console.error('Error al obtener los detalles del producto');
                     alert('Error al obtener los detalles del producto. Por favor, inténtalo de nuevo más tarde.');
@@ -146,7 +145,6 @@ export const Actualizar_productos_admin = () => {
 
     const handleUpdateProduct = async (event) => {
         event.preventDefault(); // Evita la recarga de la página por defecto del formulario
-
         try {
             const formData = new FormData(); // Crea un objeto FormData para enviar los datos y las imágenes
             formData.append('productId', id);
@@ -155,12 +153,12 @@ export const Actualizar_productos_admin = () => {
                 formData.append('images', image.file); // Agrega todas las imágenes al formulario
             });
 
-            const response = await fetch('http://localhost:3060/updateImageProducts', {
+            const response1 = await fetch('http://localhost:3060/updateImageProducts', {
                 method: 'POST',
                 body: formData, // Usa el objeto FormData para enviar los datos y las imágenes
             });
 
-            if (response.ok) {
+            if (response1.ok) {
                 console.log('Producto actualizado con éxito');
                 setReloadPage(true);
                 // Redirige al usuario a la página de gestión después de la actualización
@@ -168,6 +166,24 @@ export const Actualizar_productos_admin = () => {
                 // Maneja errores aquí
                 console.error('Error al actualizar el producto');
                 alert('Error al actualizar el producto. Por favor, inténtalo de nuevo más tarde.');
+            }
+
+            console.log(JSON.stringify(producto));
+            // Agregar otro fetch aquí
+            const response2 = await fetch(`http://localhost:3060/updateProduct/${id}`, {
+                method: 'POST', // Ajusta el método HTTP según tus necesidades (puede ser 'PUT' si es una actualización)
+                body: JSON.stringify(producto), // Asegúrate de enviar los datos actualizados
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response2.ok) {
+                // Maneja la respuesta de la segunda solicitud aquí
+                console.log('Segunda solicitud exitosa');
+            } else {
+                // Maneja errores de la segunda solicitud aquí
+                console.error('Error en la segunda solicitud');
             }
         } catch (error) {
             console.error('Error al realizar la solicitud:', error);
@@ -233,7 +249,7 @@ export const Actualizar_productos_admin = () => {
                         <div className='custom-formu-p'>
                             <div className='custom-form-group'>
                                 <input
-                                    name='nombre'
+                                    name='nombre_producto'
                                     placeholder='Nombre del producto'
                                     className='custom-p-2'
                                     type='text'
@@ -273,7 +289,7 @@ export const Actualizar_productos_admin = () => {
                             </div>
                             <div className='custom-form-group'>
                                 <input
-                                    name='descripcion'
+                                    name='descripcion_producto'
                                     placeholder='Descripción'
                                     className='custom-p-3'
                                     type='text'
@@ -283,7 +299,7 @@ export const Actualizar_productos_admin = () => {
                             </div>
                             <div className='custom-form-group'>
                                 <textarea
-                                    name='stock'
+                                    name='stock_disponible'
                                     placeholder='Stock disponible'
                                     className='custom-p-2'
                                     type='text'
