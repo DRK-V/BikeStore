@@ -158,18 +158,6 @@ export const Actualizar_productos_admin = () => {
                 body: formData, // Usa el objeto FormData para enviar los datos y las imágenes
             });
 
-            if (response1.ok) {
-                console.log('Producto actualizado con éxito');
-                setReloadPage(true);
-                // Redirige al usuario a la página de gestión después de la actualización
-            } else {
-                // Maneja errores aquí
-                console.error('Error al actualizar el producto');
-                alert('Error al actualizar el producto. Por favor, inténtalo de nuevo más tarde.');
-            }
-
-            console.log(JSON.stringify(producto));
-            // Agregar otro fetch aquí
             const response2 = await fetch(`http://localhost:3060/updateProduct/${id}`, {
                 method: 'POST', // Ajusta el método HTTP según tus necesidades (puede ser 'PUT' si es una actualización)
                 body: JSON.stringify(producto), // Asegúrate de enviar los datos actualizados
@@ -178,18 +166,21 @@ export const Actualizar_productos_admin = () => {
                 },
             });
 
-            if (response2.ok) {
-                // Maneja la respuesta de la segunda solicitud aquí
-                console.log('Segunda solicitud exitosa');
+            if (response1.ok || response2.ok) {
+                console.log('Producto actualizado con éxito');
+                setReloadPage(true);
+                alert('Producto actualizado con éxito.'); // Muestra un único mensaje de éxito
             } else {
-                // Maneja errores de la segunda solicitud aquí
-                console.error('Error en la segunda solicitud');
+                // Maneja errores aquí
+                console.error('Error al actualizar el producto');
+                alert('Error al actualizar el producto. Por favor, inténtalo de nuevo más tarde.');
             }
         } catch (error) {
             console.error('Error al realizar la solicitud:', error);
             alert('Error al realizar la solicitud. Por favor, inténtalo de nuevo más tarde.');
         }
     };
+
 
     return (
         <>
