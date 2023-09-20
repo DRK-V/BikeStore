@@ -28,7 +28,7 @@ export const Payment = () => {
     numero_de_cuenta: "",
     codigo_cliente: idCliente,
     id_producto: location.state ? location.state.id_producto : "", // Agregamos id_producto aquí
-    quantity: location.state ? location.state.quantity : "", 
+    quantity: location.state ? location.state.quantity : "",
     precio_producto: location.state ? location.state.precio_producto : "",
   });
 
@@ -45,14 +45,14 @@ export const Payment = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (isSubmitting) {
       // Si ya se está enviando el formulario, no hagas nada
       return;
     }
-  
+
     setIsSubmitting(true); // Establece isSubmitting en true al iniciar el envío
-  
+
     const ventaData = {
       tipo_de_cuenta: formValues.tipo_de_cuenta,
       banco: formValues.banco,
@@ -63,16 +63,16 @@ export const Payment = () => {
         id_producto: formValues.id_producto || cartItem.product.id_producto,
         nombre_producto: cartItem.product.nombre,
         precio_producto: formValues.precio_producto || cartItem.product.precio,
-        cantidad_producto: formValues.quantity || cartItem.quantity, 
+        cantidad_producto: formValues.quantity || cartItem.quantity,
       })),
     };
-  
+
     try {
       console.log(
         "Datos a enviar a la creación de venta:",
         JSON.stringify(ventaData)
       );
-  
+
       const response = await fetch("http://localhost:3060/crear-venta", {
         method: "POST",
         headers: {
@@ -80,51 +80,63 @@ export const Payment = () => {
         },
         body: JSON.stringify(ventaData),
       });
-  
+
       if (response.ok) {
         console.log("Venta creada con éxito.");
         setVentaExitosa(true);
-  
+
         // Obtén el ID de la venta recién creada desde la respuesta
         const responseData = await response.json();
         const idVenta = responseData.idVenta; // Asegúrate de utilizar el nombre correcto
-  
+
         const doc = new jsPDF();
-doc.setFontSize(14); // Set the default font size
-doc.setTextColor(0, 0, 0); // Set text color (black)
+        doc.setFontSize(14); // Set the default font size
+        doc.setTextColor(0, 0, 0); // Set text color (black)
 
-doc.text("FACTURA", 10, 10);
-doc.setFontSize(10); // Change font size for the following lines
-doc.text(`Número: ${Math.floor(Math.random() * 1000000)}`, 10, 20);
-doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 30);
-doc.text(`Identificación del Emisor: BikeStore`, 10, 40);
-doc.text(`Identificación del Receptor: ${formValues.numeroDocumento}`, 10, 50);
+        doc.text("FACTURA", 10, 10);
+        doc.setFontSize(10); // Change font size for the following lines
+        doc.text(`Número: ${Math.floor(Math.random() * 1000000)}`, 10, 20);
+        doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 30);
+        doc.text(`Identificación del Emisor: BikeStore`, 10, 40);
+        doc.text(
+          `Identificación del Receptor: ${formValues.numeroDocumento}`,
+          10,
+          50
+        );
 
-doc.setFont("helvetica"); // Change font style for the following lines
-doc.setFontSize(12); // Change font size
-doc.text(`Descripción del Concepto: Compra de productos`, 10, 60);
-doc.text(`Base Imponible: ${formValues.valorPagar}`, 10, 70);
-doc.text(`Tipo de IVA Aplicado: 19%`, 10, 80);
-doc.text(`Total: ${formValues.valorPagar}`, 10, 90);
+        doc.setFont("helvetica"); // Change font style for the following lines
+        doc.setFontSize(12); // Change font size
+        doc.text(`Descripción del Concepto: Compra de productos`, 10, 60);
+        doc.text(`Base Imponible: ${formValues.valorPagar}`, 10, 70);
+        doc.text(`Tipo de IVA Aplicado: 19%`, 10, 80);
+        doc.text(`Total: ${formValues.valorPagar}`, 10, 90);
 
-let yOffset = 100;
+        let yOffset = 100;
 
-ventaData.productos.forEach((producto) => {
-  doc.setFont("times"); // Change font for product details
-  doc.setFontSize(10); // Change font size for product details
-  doc.text(`ID del Producto: ${producto.id_producto}`, 10, yOffset);
-  doc.text(`Nombre del Producto: ${producto.nombre_producto}`, 10, yOffset + 10);
-  doc.text(`Precio del Producto: $${producto.precio_producto || precio_producto.toFixed(2)}`, 10, yOffset + 20);
-  doc.text(`Cantidad del Producto: ${producto.cantidad_producto}`, 10, yOffset + 30);
-  yOffset += 40;
-});
-if (formValues) {
-  doc.text(`ID del Producto: ${formValues.id_producto}`, 10, yOffset);
- 
-}
-doc.save("factura.pdf");
+        ventaData.productos.forEach((producto) => {
+          doc.setFont("times"); // Change font for product details
+          doc.setFontSize(10); // Change font size for product details
+          doc.text(`ID del Producto: ${producto.id_producto}`, 10, yOffset);
+          doc.text(
+            `Nombre del Producto: ${producto.nombre_producto}`,
+            10,
+            yOffset + 10
+          );
+          doc.text(
+            `Precio del Producto: $${producto.precio_producto.toFixed(2)}`,
+            10,
+            yOffset + 20
+          );
+          doc.text(
+            `Cantidad del Producto: ${producto.cantidad_producto}`,
+            10,
+            yOffset + 30
+          );
+          yOffset += 40;
+        });
 
-  
+        doc.save("factura.pdf");
+
         // Envía los datos a http://localhost:3060/crear-venta-producto
         ventaData.productos.forEach(async (producto) => {
           const ventaProductoData = {
@@ -136,7 +148,7 @@ doc.save("factura.pdf");
             "Datos a enviar a la creación de venta de producto:",
             JSON.stringify(ventaProductoData)
           );
-  
+
           const responseVentaProducto = await fetch(
             "http://localhost:3060/crear-venta-producto",
             {
@@ -147,16 +159,16 @@ doc.save("factura.pdf");
               body: JSON.stringify(ventaProductoData),
             }
           );
-  
+
           if (responseVentaProducto.ok) {
             console.log("Venta de producto creada con éxito.");
           } else {
             console.error("Error al crear la venta de producto.");
           }
         });
-  
+
         clearCart();
-  
+
         setTimeout(() => {
           navigate("/");
         }, 2000);
@@ -169,7 +181,6 @@ doc.save("factura.pdf");
       setIsSubmitting(false); // Establece isSubmitting en false después de completar el envío
     }
   };
-  
 
   return (
     <>

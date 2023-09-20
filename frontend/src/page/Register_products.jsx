@@ -45,6 +45,9 @@ export const Register_products = () => {
     e.preventDefault();
 
     try {
+      // Calcular el monto_final
+      const monto_final = product.precio * product.stock_disponible;
+
       // Enviar datos del producto como JSON
       const productResponse = await fetch(
         "http://localhost:3060/insertarProducto",
@@ -59,6 +62,7 @@ export const Register_products = () => {
 
       if (productResponse.status === 200) {
         const { productId, nombre_producto } = await productResponse.json();
+
         // Crear un FormData para enviar imágenes
         const formData = new FormData();
         formData.append("productId", productId);
@@ -66,10 +70,7 @@ export const Register_products = () => {
 
         // Subir las imágenes al servidor
         for (let i = 0; i < images.length; i++) {
-          formData.append("images", images[i].file, images[i].file.name); // Asegúrate de incluir el nombre original del archivo
-        }
-        for (let i = 0; i < images.length; i++) {
-          console.log(images[i].file, images[i].file.name);
+          formData.append("images", images[i].file, images[i].file.name);
         }
 
         const imageResponse = await fetch(
@@ -83,6 +84,29 @@ export const Register_products = () => {
         if (imageResponse.status === 200) {
           console.log("Imágenes insertadas con éxito");
           alert("Imágenes insertadas con éxito");
+
+          // Envía el monto_final a través de la solicitud a http://localhost:3060/añadir_compra
+          const compraResponse = await fetch(
+            "http://localhost:3060/añadir_compra",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ monto_final }), // Envía monto_final como parte del cuerpo
+            }
+          );
+
+          if (compraResponse.status === 200) {
+            console.log("Compra añadida con éxito");
+            alert("Compra añadida con éxito");
+          } else {
+            console.error(
+              "Error al añadir la compra:",
+              compraResponse.statusText
+            );
+          }
+
           window.location.reload();
         } else {
           console.error(
@@ -103,7 +127,10 @@ export const Register_products = () => {
 
   return (
     <div className="container">
-      <Link to="/Usuario_usu?section=manage" className="close_register_products">
+      <Link
+        to="/Usuario_usu?section=manage"
+        className="close_register_products"
+      >
         <button></button>
       </Link>
       <div className="image-section">
