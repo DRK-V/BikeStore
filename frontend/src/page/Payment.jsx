@@ -114,11 +114,14 @@ ventaData.productos.forEach((producto) => {
   doc.setFontSize(10); // Change font size for product details
   doc.text(`ID del Producto: ${producto.id_producto}`, 10, yOffset);
   doc.text(`Nombre del Producto: ${producto.nombre_producto}`, 10, yOffset + 10);
-  doc.text(`Precio del Producto: $${producto.precio_producto.toFixed(2)}`, 10, yOffset + 20);
+  doc.text(`Precio del Producto: $${producto.precio_producto || precio_producto.toFixed(2)}`, 10, yOffset + 20);
   doc.text(`Cantidad del Producto: ${producto.cantidad_producto}`, 10, yOffset + 30);
   yOffset += 40;
 });
-
+if (formValues) {
+  doc.text(`ID del Producto: ${formValues.id_producto}`, 10, yOffset);
+ 
+}
 doc.save("factura.pdf");
 
   
