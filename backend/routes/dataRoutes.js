@@ -199,7 +199,6 @@ router.post(
 
 router.post("/comentarios", dataController.añadirComentario);
 
-
 router.get("/ver-comentario/:id_comentario", dataController.verComentarioPorId); // Ruta actualizada
 
 router.get(
@@ -208,15 +207,33 @@ router.get(
 );
 router.post("/crear-venta", async (req, res) => {
   try {
-    const ventaData = req.body; // Asume que los datos se envían en el cuerpo de la solicitud
-    const result = await dataController.createVenta(ventaData);
-    res.status(201).json({ message: "Venta creada con éxito", result });
+    const idVenta = await dataController.createVenta(req.body);
+    res.status(200).json({ idVenta });
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Error al crear venta", message: error.message });
+    res.status(500).json({ error: "Error al crear la venta." });
   }
 });
+
+// Configura la ruta para crear productos de venta
+router.post("/crear-venta-producto", async (req, res) => {
+  try {
+    const { productos } = req.body; // Obtén los datos del cuerpo de la solicitud
+
+    // Llama a la función createVentaProducto con los datos recibidos
+    await dataController.createVentaProducto(productos);
+
+    res.status(200).json({ message: "Productos de venta creados con éxito." });
+  } catch (error) {
+    console.error("Error al crear productos de venta:", error);
+    res
+      .status(500)
+      .json({
+        error: "Error interno del servidor al crear productos de venta.",
+      });
+  }
+});
+
+
 router.get("/ventas", async (req, res) => {
   try {
     const ventas = await dataController.getVentas();
@@ -228,12 +245,14 @@ router.get("/ventas", async (req, res) => {
   }
 });
 
-router.post('/insertarProducto', dataController.insertarProducto);
+router.post("crear_compra", dataController.crearCompra);
+router.post("/stock", dataController.añadirStock);
+router.post("/insertarProducto", dataController.insertarProducto);
 
 const storage2 = multer.diskStorage({
   destination: (req, file, cb) => {
     const productId = req.body.productId; // ID del producto al que se asocian las imágenes
-    const frontendPublicPath = path.join(__dirname, '../../frontend/public');
+    const frontendPublicPath = path.join(__dirname, "../../frontend/public");
     const productImagePath = `product_images/product_${productId}`;
     const destinationPath = path.join(frontendPublicPath, productImagePath);
 
@@ -246,31 +265,38 @@ const storage2 = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
-  }
+  },
 });
 
 const upload2 = multer({ storage: storage2 });
-router.post('/insertarImagenesProducto', upload2.array('images'), dataController.insertarImagenesProducto);
+router.post(
+  "/insertarImagenesProducto",
+  upload2.array("images"),
+  dataController.insertarImagenesProducto
+);
 
 // para cargar las imagenes en actualizar producto
-router.post('/updateImageProducts', upload2.array('images'), dataController.updateImageProducts);
-
+router.post(
+  "/updateImageProducts",
+  upload2.array("images"),
+  dataController.updateImageProducts
+);
 
 // router.get("/products/:id_imagen", dataController.getImages);
 router.get("/getproductsadmin", dataController.getProductsAdmin);
 router.post("/validatePassword", dataController.validatePassword);
-router.post("/insertarCompra" , dataController.insertarCompra);
-router.post("/insertarCompraProducto" , dataController.insertarCompraProducto);
-router.post("/getImagesUpdateProduct/:id", dataController.getImagesUpdateProduct);
 
+router.post(
+  "/getImagesUpdateProduct/:id",
+  dataController.getImagesUpdateProduct
+);
 
 router.post("/deleteImage/:idImagen", dataController.deleteImage);
-router.get('/getProductDetails/:id', dataController.getProductDetails);
+router.get("/getProductDetails/:id", dataController.getProductDetails);
 
-router.delete('/deleteProduct/:id', dataController.deleteProduct);
+router.delete("/deleteProduct/:id", dataController.deleteProduct);
 
-//actualizar producto
-router.post('/updateProduct/:id', dataController.updateProduct);
-
+//esta es para actualizar los productos con el rol de administrador
+router.post("/actualizar_producto/:id_producto", dataController.traerproducto);
 
 module.exports = router;

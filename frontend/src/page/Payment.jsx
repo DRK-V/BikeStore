@@ -27,12 +27,14 @@ export const Payment = () => {
     banco: "",
     numero_de_cuenta: "",
     codigo_cliente: idCliente,
-    id_producto: location.state ? location.state.id_producto : "", // Agregamos id_producto aquí
+    id_producto: location.state ? location.state.id_producto : "",
     quantity: location.state ? location.state.quantity : "",
     precio_producto: location.state ? location.state.precio_producto : "",
   });
 
+
   const [ventaExitosa, setVentaExitosa] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,7 +43,7 @@ export const Payment = () => {
       [name]: value,
     });
   };
-  const [isSubmitting, setIsSubmitting] = useState(false); // Nuevo estado para controlar el envío
+  // Nuevo estado para controlar el envío
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,28 +53,26 @@ export const Payment = () => {
       return;
     }
 
-    setIsSubmitting(true); // Establece isSubmitting en true al iniciar el envío
-
-    const ventaData = {
-      tipo_de_cuenta: formValues.tipo_de_cuenta,
-      banco: formValues.banco,
-      numero_de_cuenta: formValues.numero_de_cuenta,
-      monto_final: formValues.valorPagar,
-      codigo_cliente: formValues.codigo_cliente,
-      productos: cartItems.map((cartItem) => ({
-        id_producto: formValues.id_producto || cartItem.product.id_producto,
-        nombre_producto: cartItem.product.nombre,
-        precio_producto: formValues.precio_producto || cartItem.product.precio,
-        cantidad_producto: formValues.quantity || cartItem.quantity,
-      })),
-    };
+    setIsSubmitting(true);
 
     try {
-      console.log(
-        "Datos a enviar a la creación de venta:",
-        JSON.stringify(ventaData)
-      );
+      const ventaData = {
+        tipo_de_cuenta: formValues.tipo_de_cuenta,
+        banco: formValues.banco,
+        numero_de_cuenta: formValues.numero_de_cuenta,
+        monto_final: formValues.valorPagar,
+        codigo_cliente: formValues.codigo_cliente,
+        productos: [
+          {
+            codigo_producto: formValues.id_producto,
+            cantidad_producto: formValues.quantity,
+          },
+        ],
+      };
 
+      console.log("Datos a enviar a la creación de venta:", JSON.stringify(ventaData));
+
+      // Realiza la solicitud POST para crear la venta en http://localhost:3060/crear-venta
       const response = await fetch("http://localhost:3060/crear-venta", {
         method: "POST",
         headers: {
@@ -83,104 +83,101 @@ export const Payment = () => {
 
       if (response.ok) {
         console.log("Venta creada con éxito.");
-        setVentaExitosa(true);
 
-        // Obtén el ID de la venta recién creada desde la respuesta
         const responseData = await response.json();
-        const idVenta = responseData.idVenta; // Asegúrate de utilizar el nombre correcto
+        const idVenta = responseData.idVenta;
 
-        const doc = new jsPDF();
-        doc.setFontSize(14); // Set the default font size
-        doc.setTextColor(0, 0, 0); // Set text color (black)
+        const productosVenta = [];
 
-        doc.text("FACTURA", 10, 10);
-        doc.setFontSize(10); // Change font size for the following lines
-        doc.text(`Número: ${Math.floor(Math.random() * 1000000)}`, 10, 20);
-        doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 30);
-        doc.text(`Identificación del Emisor: BikeStore`, 10, 40);
-        doc.text(
-          `Identificación del Receptor: ${formValues.numeroDocumento}`,
-          10,
-          50
+      // Agregar el producto de formValues a productosVenta
+      productosVenta.push({
+        codigo_venta: idVenta,
+        codigo_producto: formValues.id_producto,
+        cantidad_producto: formValues.quantity,
+      });
+
+      // Agregar los productos de cartItems a productosVenta
+      cartItems.forEach((cartItem) => {
+        productosVenta.push({
+          codigo_venta: idVenta,
+          codigo_producto: cartItem.product.id_producto,
+          cantidad_producto: cartItem.quantity,
+        });
+      });
+
+        console.log(
+          "Datos a enviar a la creación de venta de producto:",
+          JSON.stringify({ codigo_venta: idVenta, productos: productosVenta })
         );
 
-        doc.setFont("helvetica"); // Change font style for the following lines
-        doc.setFontSize(12); // Change font size
-        doc.text(`Descripción del Concepto: Compra de productos`, 10, 60);
-        doc.text(`Base Imponible: ${formValues.valorPagar}`, 10, 70);
-        doc.text(`Tipo de IVA Aplicado: 19%`, 10, 80);
-        doc.text(`Total: ${formValues.valorPagar}`, 10, 90);
-
-        let yOffset = 100;
-
-        ventaData.productos.forEach((producto) => {
-          doc.setFont("times"); // Change font for product details
-          doc.setFontSize(10); // Change font size for product details
-          doc.text(`ID del Producto: ${producto.id_producto}`, 10, yOffset);
-          doc.text(
-            `Nombre del Producto: ${producto.nombre_producto}`,
-            10,
-            yOffset + 10
-          );
-          doc.text(
-            `Precio del Producto: $${producto.precio_producto.toFixed(2)}`,
-            10,
-            yOffset + 20
-          );
-          doc.text(
-            `Cantidad del Producto: ${producto.cantidad_producto}`,
-            10,
-            yOffset + 30
-          );
-          yOffset += 40;
-        });
-
-        doc.save("factura.pdf");
-
-        // Envía los datos a http://localhost:3060/crear-venta-producto
-        ventaData.productos.forEach(async (producto) => {
-          const ventaProductoData = {
-            codigo_venta: idVenta, // Utiliza el ID de la venta recién creada
-            codigo_producto: producto.id_producto,
-            cantidad_producto: producto.cantidad_producto,
-          };
-          console.log(
-            "Datos a enviar a la creación de venta de producto:",
-            JSON.stringify(ventaProductoData)
-          );
-
-          const responseVentaProducto = await fetch(
-            "http://localhost:3060/crear-venta-producto",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(ventaProductoData),
-            }
-          );
-
-          if (responseVentaProducto.ok) {
-            console.log("Venta de producto creada con éxito.");
-          } else {
-            console.error("Error al crear la venta de producto.");
+        const productosResponse = await fetch(
+          "http://localhost:3060/crear-venta-producto",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ codigo_venta: idVenta, productos: productosVenta }),
           }
-        });
+        );
 
-        clearCart();
+        if (productosResponse.ok) {
+          console.log("Venta de productos creada con éxito.");
+          clearCart();
 
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
+          const doc = new jsPDF();
+          doc.setFontSize(14); // Establecer el tamaño de fuente predeterminado
+          doc.setTextColor(0, 0, 0); // Establecer el color del texto (negro)
+      
+          doc.text("FACTURA", 10, 10);
+          doc.setFontSize(10); // Cambiar el tamaño de fuente para las siguientes líneas
+          doc.text(`Número: ${Math.floor(Math.random() * 1000000)}`, 10, 20);
+          doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 30);
+          doc.text(`Identificación del Emisor: BikeStore`, 10, 40);
+          doc.text(
+            `Identificación del Receptor: ${formValues.numeroDocumento}`,
+            10,
+            50
+          );
+      
+          doc.setFont("helvetica"); // Cambiar el estilo de fuente para las siguientes líneas
+          doc.setFontSize(12); // Cambiar el tamaño de fuente
+          doc.text(`Descripción del Concepto: Compra de productos`, 10, 60);
+          doc.text(`Base Imponible: ${formValues.valorPagar}`, 10, 70);
+          doc.text(`Tipo de IVA Aplicado: 19%`, 10, 80);
+          doc.text(`Total: ${formValues.valorPagar}`, 10, 90);
+      
+          let yOffset = 100;
+      
+          productosVenta.forEach((producto) => {
+            doc.setFont("times"); // Cambiar la fuente para los detalles del producto
+            doc.setFontSize(10); // Cambiar el tamaño de fuente para los detalles del producto
+            doc.text(`ID del Producto: ${producto.codigo_producto}`, 10, yOffset);
+            // Agrega más detalles del producto según sea necesario
+            yOffset += 10;
+          });
+      
+          // Guardar el PDF con un nombre único basado en la fecha y hora actual
+          const pdfFileName = `factura_${new Date().toISOString()}.pdf`;
+          doc.save(pdfFileName);
+
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
+        } else {
+          console.error("Error al crear la venta de productos.");
+        }
       } else {
         console.error("Error al crear la venta.");
       }
     } catch (error) {
       console.error("Error de red:", error);
     } finally {
-      setIsSubmitting(false); // Establece isSubmitting en false después de completar el envío
+      setIsSubmitting(false);
     }
   };
+  
+  
 
   return (
     <>

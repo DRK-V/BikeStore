@@ -86,58 +86,83 @@ export const Register_products = () => {
         if (imageResponse.status === 200) {
           console.log("Imágenes insertadas con éxito");
           alert("Imágenes insertadas con éxito");
-          window.location.reload();
-        } else {
-          console.error("Error al insertar las imágenes:", imageResponse.statusText);
-        }
+          
   
-        // Enviar datos de la compra como JSON, incluyendo el id_cliente como codigo_administrador
-        const compraResponse = await fetch("http://localhost:3060/insertarCompra", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            monto_final: montoFinal,
-            estado: "finalizado", // Cambiado a "finalizado" como se mencionó anteriormente
-            direccion: "palmira", // Cambiado a "palmira" como se mencionó anteriormente
-            codigo_administrador: idCliente, // Usar id_cliente como codigo_administrador
-          }),
-        });
-  
-        if (compraResponse.status === 200) {
-          console.log("Compra insertada con éxito");
-  
-          // Obtener el ID de la compra recién insertada
-          const { compraId } = await compraResponse.json();
-  
-          // Enviar datos a insertarCompraProducto
-          const compraProductoResponse = await fetch("http://localhost:3060/insertarCompraProducto", {
+          // Enviar datos de la compra como JSON, incluyendo el id_cliente como codigo_administrador
+          const compraResponse = await fetch("http://localhost:3060/insertarCompra", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              id_producto: productId, // ID del producto generado
-              id_compra: compraId,   // ID de la compra generada
+              monto_final: montoFinal,
+              estado: "finalizado",
+              direccion: "palmira",
+              codigo_administrador: idCliente,
             }),
           });
   
-          if (compraProductoResponse.status === 200) {
-            console.log("Relación compra-producto insertada con éxito");
+          if (compraResponse.status === 200) {
+            console.log("Compra insertada con éxito");
+  
+            // Obtener el ID de la compra recién insertada
+            const { compraId } = await compraResponse.json();
+  
+            // Enviar datos a insertarCompraProducto
+            const compraProductoResponse = await fetch("http://localhost:3060/insertarCompraProducto", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                id_producto: productId,
+                id_compra: compraId,
+              }),
+            });
+        
+            if (compraProductoResponse.status === 200) {
+              console.log("Relación compra-producto insertada con éxito");
+        
+              // Aquí es donde se debe enviar la solicitud para insertar datos de stock
+              const stockResponse = await fetch("http://localhost:3060/insertarStock", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  codigo_producto: productId,
+                  entrada: product.stock_disponible,
+                  codigo_entrada: compraId,
+                  salida: 0,
+                  codigo_salida: null,
+                }),
+              });
+              
+              if (stockResponse.status === 200) {
+                console.log("Datos de stock insertados con éxito");
+              } else {
+                console.error("Error al insertar los datos de stock:", stockResponse.statusText);
+              }
+            } else {
+              console.error("Error al insertar la relación compra-producto:", compraProductoResponse.statusText);
+            }
           } else {
-            console.error("Error al insertar la relación compra-producto:", compraProductoResponse.statusText);
+            console.error("Error al insertar la compra:", compraResponse.statusText);
           }
         } else {
-          console.error("Error al insertar la compra:", compraResponse.statusText);
+          console.error("Error al insertar las imágenes:", imageResponse.statusText);
         }
       } else {
         console.error("Error al insertar el producto:", productResponse.statusText);
       }
     } catch (error) {
-      console.error("Error al insertar el producto, las imágenes o la relación compra-producto:", error);
+      console.error("Error al insertar el producto, las imágenes, la relación compra-producto o los datos de stock:", error);
     }
   };
+
+
+  
+  
   
 
   return (

@@ -98,14 +98,14 @@ const Bike_details = () => {
   const handleSubImageClick = (subImageURL) => {
     setMainImageURL(subImageURL);
   };
-  const handleBuyNow = async (event) => {
+  const handleBuyNow = (event) => {
     event.preventDefault();
     if (additionalProductDetails) {
       const productPrice = parseFloat(additionalProductDetails.product.precio);
       if (!isNaN(productPrice)) {
         const totalPriceWithDiscount = productPrice + productPrice * 0.02;
         console.log("Precio con 2% de descuento:", totalPriceWithDiscount);
-  
+
         // Log para ver los datos que se están enviando
         console.log("Datos enviados a /payment:", {
           valorPagar: totalPriceWithDiscount,
@@ -113,8 +113,8 @@ const Bike_details = () => {
           quantity: quantity,
           precio_producto: productPrice,
         });
-  
-        // Incluye el id_producto y la cantidad en el objeto de estado
+
+        // Incluye id_producto y quantity en el objeto de estado
         navigate("/payment", {
           state: {
             valorPagar: totalPriceWithDiscount,
@@ -128,6 +128,9 @@ const Bike_details = () => {
       }
     }
   };
+
+  
+  
   
 
   return (
@@ -206,10 +209,10 @@ const Bike_details = () => {
                   />
                 </div>
 
-                <button className="btn_buy_now" onClick={handleBuyNow}>
-                  <i></i>
-                  Comprar Ahora
-                </button>
+                <button className="btn_buy_now" onClick={(e) => handleBuyNow(e, id_producto, quantity)}>
+  <i></i>
+  Comprar Ahora
+</button>
                 <button className="btn_add_item_cart" type="submit">
                   <i></i>
                   Agregar al carrito
