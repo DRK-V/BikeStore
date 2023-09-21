@@ -149,6 +149,8 @@ export const Payment = () => {
 
     
 
+          
+
           // Crear un nuevo documento
           const doc = new jsPDF();
           doc.setFontSize(14);
@@ -168,9 +170,9 @@ export const Payment = () => {
           doc.text(`Identificación del Receptor: ${formValues.numeroDocumento}`, 10, 60);
           
           // Encabezados de la tabla
-          doc.setFillColor(211, 211, 211); // Color de fondo de las celdas
-          doc.rect(10, 70, 190, 10, "F"); // Rectángulo para encabezado de tabla
-          doc.setTextColor(255, 255, 255); // Color del texto en las celdas de encabezado
+          doc.setFillColor(211, 211, 211); 
+          doc.rect(10, 70, 190, 10, "F"); 
+          doc.setTextColor(255, 255, 255); 
           doc.setFontSize(12);
           doc.text("Descripción del Concepto", 15, 75);
           doc.text("Base Imponible", 80, 75);
@@ -178,22 +180,22 @@ export const Payment = () => {
           doc.text("Total", 165, 75);
           
           // Datos de la factura en la tabla
-          doc.setDrawColor(0); // Restablecer el color del borde
-          doc.rect(10, 80, 190, 10); // Dibuja un borde alrededor de la fila
-          doc.setTextColor(0, 0, 0); // Restablecer el color del texto
+          doc.setDrawColor(0); 
+          doc.rect(10, 80, 190, 10); 
+          doc.setTextColor(0, 0, 0); 
           doc.setFontSize(12);
           doc.text(`Compra de productos`, 15, 85);
-          doc.text(`${formValues.valorPagar}`, 80, 85);
+          doc.text(`${formValues.valorPagar}`, 80, 85); 
           doc.text("19%", 120, 85);
-          doc.text(`${formValues.valorPagar}`, 165, 85);
+          doc.text(`${formValues.valorPagar}`, 165, 85); 
           
           let yOffset = 95;
           
           // Datos de los productos en la tabla
           productosVenta.forEach((producto, index) => {
-            doc.setDrawColor(0); // Restablecer el color del borde
-            doc.rect(10, yOffset, 190, 30); // Dibuja un borde alrededor de la fila
-            doc.setTextColor(0, 0, 0); // Restablecer el color del texto
+            doc.setDrawColor(0); 
+            doc.rect(10, yOffset, 190, 30); 
+            doc.setTextColor(0, 0, 0); 
             doc.setFontSize(12);
           
             doc.text(`Producto ${index + 1}`, 15, yOffset + 5);
@@ -205,15 +207,11 @@ export const Payment = () => {
             yOffset += 35;
           });
           
-          // Calcular el total
-          const total = productosVenta.reduce((acc, producto) => acc + producto.precio_producto, 0);
-          
-          // Total final
+          // Total final igual al costo total
           doc.setTextColor(0, 0, 0);
           doc.setFontSize(12);
           doc.text("Total:", 120, yOffset + 10);
-          doc.text(`${total}`, 165, yOffset + 10);
-          
+          doc.text(`${formValues.valorPagar}`, 165, yOffset + 10); /
           // Guardar el archivo PDF
           const pdfFileName = `factura_${new Date().toISOString()}.pdf`;
           doc.save(pdfFileName);
