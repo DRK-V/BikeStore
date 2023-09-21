@@ -211,7 +211,7 @@ export const Payment = () => {
           doc.setTextColor(0, 0, 0);
           doc.setFontSize(12);
           doc.text("Total:", 120, yOffset + 10);
-          doc.text(`${formValues.valorPagar}`, 165, yOffset + 10); /
+          doc.text(`${formValues.valorPagar}`, 165, yOffset + 10); 
           // Guardar el archivo PDF
           const pdfFileName = `factura_${new Date().toISOString()}.pdf`;
           doc.save(pdfFileName);
