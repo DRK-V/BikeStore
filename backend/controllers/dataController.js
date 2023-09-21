@@ -593,8 +593,6 @@ const eliminarComentario = async (req, res) => {
 };
 // Asignar las funciones a las rutas
 
-
-
 //fin comentarios
 //ensayo
 const createVenta = async (ventaData) => {
@@ -636,6 +634,7 @@ const getVentas = async () => {
     throw error; // Asegúrate de volver a lanzar el error para que el servidor lo maneje adecuadamente
   }
 };
+
 const insertarProducto = async (req, res) => {
   const productoData = req.body;
   try {
