@@ -47,20 +47,17 @@ const Presio_compra = () => {
       // Si el precio total es 0, muestra el mensaje y evita la redirección
       setShowPagar(true);
     } else {
-      // Crea un array para almacenar la información de todos los productos
-      const productsToPay = cartItems.map((cartItem) => ({
-        id_producto: cartItem.product.id_producto,
-        cantidad: cartItem.quantity,
-      }));
-  
+      // Obtén los nombres de los productos como una cadena separada por comas
+      const productNames = cartItems.map((cartItem) => cartItem.product.nombre).join(", ");
+      
       // Redirige a la página de pago y pasa la información necesaria
       navigate("/payment", {
         state: {
           valorPagar: totalPrice + parseFloat(shippingCost),
-          productos: productsToPay,
+          nombresProductos: productNames,
         },
       });
-      console.log("Productos a pagar:", productsToPay);
+      console.log("Nombres de los productos:", productNames);
     }
   };
   

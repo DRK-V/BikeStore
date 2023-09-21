@@ -637,6 +637,8 @@ const createVenta = async (ventaData) => {
 const createVentaProducto = async (productos) => {
   const insertVentaProductoQuery =
     "INSERT INTO venta_producto (codigo_venta, codigo_producto, cantidad_producto) VALUES ($1, $2, $3)";
+  const updateStockQuery =
+    "UPDATE stock SET salida = salida + $1, codigo_salida = $2 WHERE codigo_producto = $3";
 
   const client = await pool.connect(); // Iniciar una transacción
 
@@ -648,6 +650,10 @@ const createVentaProducto = async (productos) => {
       const values = [codigo_venta, codigo_producto, cantidad_producto];
       console.log("Insertando producto:", values);
       await client.query(insertVentaProductoQuery, values);
+
+      // Actualizar la tabla "stock"
+      const stockUpdateValues = [cantidad_producto, codigo_venta, codigo_producto];
+      await client.query(updateStockQuery, stockUpdateValues);
     }
 
     await client.query("COMMIT"); // Confirmar la transacción
@@ -723,39 +729,7 @@ const insertarStock = async (req, res) => {
   }
 };
 
-const editarStock = async (req, res) => {
-  const stockData = req.body;
-  const codigoProducto = req.params.codigo_producto; // Obtener el código_producto desde la URL
-  try {
-    // Validar que se proporcionen datos obligatorios
-    if (!codigoProducto) {
-      throw new Error("El código de producto es obligatorio");
-    }
 
-    // Actualizar la información del stock en la base de datos para el producto específico
-    const editarStockQuery = `
-      UPDATE stock
-      SET
-        salida = $1,
-        codigo_salida = $2
-      WHERE
-        codigo_producto = $3;
-    `;
-
-    const stockValues = [
-      stockData.salida,
-      stockData.codigo_salida,
-      codigoProducto, // Usar el código_producto proporcionado en la URL
-    ];
-
-    await pool.query(editarStockQuery, stockValues);
-
-    res.status(200).json({ message: "Datos de stock actualizados con éxito" });
-  } catch (error) {
-    console.error("Error al editar los datos de stock:", error);
-    res.status(500).json({ error: "Error al editar los datos de stock" });
-  }
-};
 
 const obtenerStock = async (req, res) => {
   try {
@@ -1344,7 +1318,7 @@ module.exports = {
   insertarCompra,
   insertarCompraProducto,
   insertarStock,
-  editarStock,
+ 
   obtenerStock,
   obtenerDatosDeStockPorCodigoProducto,
   eliminarComentario,

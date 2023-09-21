@@ -18,6 +18,11 @@ const Item_cart = ({ product, image }) => {
         const data = await response.json();
         // Asigna el saldo del producto al estado de saldo
         setSaldo(data[0]?.saldo);
+
+        // Mostrar mensaje de producto agotado si el saldo es igual a 0
+        if (data[0]?.saldo === 0) {
+          showMessageWithTimeout('Producto agotado', 2000);
+        }
       } catch (error) {
         console.error("Error fetching saldo:", error);
       }

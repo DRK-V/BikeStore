@@ -30,6 +30,7 @@ export const Payment = () => {
     id_producto: location.state ? location.state.id_producto : "",
     quantity: location.state ? location.state.quantity : "",
     precio_producto: location.state ? location.state.precio_producto : "",
+    nombre_producto: location.state ? location.state.nombre_producto : "",
   });
 
 
@@ -100,6 +101,10 @@ export const Payment = () => {
         ) {
           // Agrega los productos del formulario a productosVenta
           productosVenta.push({
+            nombre_producto: formValues.nombre_producto,
+   
+
+    precio_producto: formValues.precio_producto,
             codigo_venta: idVenta,
             codigo_producto: formValues.id_producto,
             cantidad_producto: formValues.quantity,
@@ -114,6 +119,7 @@ export const Payment = () => {
               codigo_venta: idVenta,
               codigo_producto: cartItem.product.id_producto,
               cantidad_producto: cartItem.quantity,
+              nombre_producto:cartItem.product.nombre,
             });
         
             // Marca el producto como agregado en el objeto de registro
@@ -140,7 +146,54 @@ export const Payment = () => {
           console.log("Venta de productos creada con éxito.");
           clearCart();
 
-          // Generar y descargar el PDF aquí
+          const doc = new jsPDF();
+          doc.setFontSize(14);
+          doc.setTextColor(0, 0, 0);
+    
+          doc.text("FACTURA", 10, 10);
+          doc.setFontSize(10);
+          doc.text(`Número: ${Math.floor(Math.random() * 1000000)}`, 10, 20);
+          doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 30);
+          doc.text(`Identificación del Emisor: BikeStore`, 10, 40);
+          doc.text(`Identificación del Receptor: ${formValues.numeroDocumento}`, 10, 50);
+    
+          doc.setFont("helvetica");
+          doc.setFontSize(12);
+          doc.text(`Descripción del Concepto: Compra de productos`, 10, 60);
+          doc.text(`Base Imponible: ${formValues.valorPagar}`, 10, 70);
+          doc.text(`Tipo de IVA Aplicado: 19%`, 10, 80);
+          doc.text(`Total: ${formValues.valorPagar}`, 10, 90);
+    
+          let yOffset = 100;
+    
+          productosVenta.forEach((producto, index) => {
+            yOffset += 10;
+            doc.setFont("times", "bold");
+            doc.setFontSize(10);
+            doc.text(`Producto ${index + 1}`, 10, yOffset);
+    
+            doc.setFont("times");
+            doc.setFontSize(10);
+            doc.text(`Nombre: ${producto.nombre_producto}`, 20, yOffset + 10);
+    
+            doc.setFont("times");
+            doc.setFontSize(10);
+            doc.text(`ID del Producto: ${producto.codigo_producto}`, 20, yOffset + 20);
+    
+            doc.setFont("times");
+            doc.setFontSize(10);
+            doc.text(`Cantidad: ${producto.cantidad_producto}`, 20, yOffset + 30);
+    
+            doc.setFont("times");
+            doc.setFontSize(10);
+            doc.text(`Precio: ${producto.precio_producto}`, 20, yOffset + 40);
+    
+            yOffset += 50;
+          });
+    
+          const pdfFileName = `factura_${new Date().toISOString()}.pdf`;
+          doc.save(pdfFileName);
+ 
 
           setTimeout(() => {
             navigate("/");

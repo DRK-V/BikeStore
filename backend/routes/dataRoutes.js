@@ -250,7 +250,8 @@ router.post("/insertarCompra", dataController.insertarCompra);
 router.post("/insertarProducto", dataController.insertarProducto);
 router.post("/insertarCompraProducto", dataController.insertarCompraProducto);
 router.post("/insertarStock", dataController.insertarStock);
-router.put('/editarStock/:codigo_producto', dataController.editarStock);
+
+
 router.get('/obtenerStock', dataController.obtenerStock);
 router.get('/stockPorCodigoProducto/:codigo_producto', dataController.obtenerDatosDeStockPorCodigoProducto);
 
