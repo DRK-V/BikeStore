@@ -9,8 +9,6 @@ import { useCart } from "../components/CartContext";
 import jsPDF from "jspdf";
 
 export const Payment = () => {
-  const { cartItems } = useCart();
-
   const location = useLocation();
   const { user, idCliente } = useAuth();
   const navigate = useNavigate();
@@ -44,11 +42,31 @@ export const Payment = () => {
       [name]: value,
     });
   };
+<<<<<<< HEAD
   // Nuevo estado para controlar el envío
+=======
+
+  const limpiarCampos = () => {
+    // Reinicia todos los campos del formulario
+    setFormValues({
+      nombreTitular: "",
+      tipoDocumento: "",
+      numeroDocumento: "",
+      correoElectronico: "",
+      confirmacionCorreo: "",
+      valorPagar: "",
+      tipo_de_cuenta: "",
+      banco: "",
+      numero_de_cuenta: "",
+      codigo_cliente: idCliente,
+    });
+  };
+>>>>>>> 818e9887f2fa54cf2b75e3bdfc06690a9c166d5c
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+<<<<<<< HEAD
     if (isSubmitting) {
       // Si ya se está enviando el formulario, no hagas nada
       return;
@@ -74,6 +92,17 @@ export const Payment = () => {
       console.log("Datos a enviar a la creación de venta:", JSON.stringify(ventaData));
 
       // Realiza la solicitud POST para crear la venta en http://localhost:3060/crear-venta
+=======
+    const ventaData = {
+      tipo_de_cuenta: formValues.tipo_de_cuenta,
+      banco: formValues.banco,
+      numero_de_cuenta: formValues.numero_de_cuenta,
+      monto_final: formValues.valorPagar,
+      codigo_cliente: formValues.codigo_cliente,
+    };
+
+    try {
+>>>>>>> 818e9887f2fa54cf2b75e3bdfc06690a9c166d5c
       const response = await fetch("http://localhost:3060/crear-venta", {
         method: "POST",
         headers: {
@@ -84,6 +113,7 @@ export const Payment = () => {
 
       if (response.ok) {
         console.log("Venta creada con éxito.");
+<<<<<<< HEAD
 
         const responseData = await response.json();
         const idVenta = responseData.idVenta;
@@ -201,17 +231,52 @@ export const Payment = () => {
         } else {
           console.error("Error al crear la venta de productos.");
         }
+=======
+        setVentaExitosa(true);
+
+        // Generar factura en PDF
+        const doc = new jsPDF();
+        doc.text("FACTURA", 10, 10);
+        doc.text(`Número: ${Math.floor(Math.random() * 1000000)}`, 10, 20);
+        doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 30);
+        doc.text(`Identificación del Emisor: ${user.identificacion}`, 10, 40);
+        doc.text(
+          `Identificación del Receptor: ${formValues.numeroDocumento}`,
+          10,
+          50
+        );
+        doc.text(`Descripción del Concepto: Compra de productos`, 10, 60);
+        doc.text(`Base Imponible: ${formValues.valorPagar}`, 10, 70);
+        doc.text(`Tipo de IVA Aplicado: 19%`, 10, 80);
+        doc.text(`Total: ${formValues.valorPagar}`, 10, 90);
+
+        // Guardar la factura como PDF
+        doc.save("factura.pdf");
+
+        // Limpia el carrito después de una venta exitosa
+        clearCart();
+
+        // Utiliza navigate para redirigir al usuario a la página de inicio después de 2 segundos
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+>>>>>>> 818e9887f2fa54cf2b75e3bdfc06690a9c166d5c
       } else {
         console.error("Error al crear la venta.");
       }
     } catch (error) {
       console.error("Error de red:", error);
+<<<<<<< HEAD
     } finally {
       setIsSubmitting(false);
     }
   };
   
   
+=======
+    }
+  };
+>>>>>>> 818e9887f2fa54cf2b75e3bdfc06690a9c166d5c
 
   return (
     <>
