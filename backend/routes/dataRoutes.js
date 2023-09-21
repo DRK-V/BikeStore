@@ -206,6 +206,7 @@ router.get(
   "/coments/:codigo_producto",
   dataController.verComentariosPorCodigoProducto
 );
+
 router.post("/crear-venta", async (req, res) => {
   try {
     const ventaData = req.body; // Asume que los datos se envían en el cuerpo de la solicitud
@@ -217,6 +218,7 @@ router.post("/crear-venta", async (req, res) => {
       .json({ error: "Error al crear venta", message: error.message });
   }
 });
+
 router.get("/ventas", async (req, res) => {
   try {
     const ventas = await dataController.getVentas();

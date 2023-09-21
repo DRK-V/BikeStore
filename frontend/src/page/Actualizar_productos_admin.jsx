@@ -181,7 +181,6 @@ export const Actualizar_productos_admin = () => {
         }
     };
 
-
     return (
         <>
             <Link className="close_update_products" to="/Usuario_usu?section=manage">

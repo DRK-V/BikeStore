@@ -12,9 +12,7 @@ const Item_cart = ({ product, image }) => {
 
     updateCartItemQuantity(product.id_producto, newQuantity);
 
-
     const addedPrice = product.precio;
-
 
     updateTotalPrice(addedPrice);
   };
