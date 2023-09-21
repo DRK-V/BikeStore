@@ -199,14 +199,12 @@ router.post(
 
 router.post("/comentarios", dataController.añadirComentario);
 
-
 router.get("/ver-comentario/:id_comentario", dataController.verComentarioPorId); // Ruta actualizada
 
 router.get(
   "/coments/:codigo_producto",
   dataController.verComentariosPorCodigoProducto
 );
-
 router.post("/crear-venta", async (req, res) => {
   try {
     const idVenta = await dataController.createVenta(req.body);
@@ -263,7 +261,7 @@ router.get('/stockPorCodigoProducto/:codigo_producto', dataController.obtenerDat
 const storage2 = multer.diskStorage({
   destination: (req, file, cb) => {
     const productId = req.body.productId; // ID del producto al que se asocian las imágenes
-    const frontendPublicPath = path.join(__dirname, '../../frontend/public');
+    const frontendPublicPath = path.join(__dirname, "../../frontend/public");
     const productImagePath = `product_images/product_${productId}`;
     const destinationPath = path.join(frontendPublicPath, productImagePath);
 
@@ -276,7 +274,7 @@ const storage2 = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
-  }
+  },
 });
 
 const upload2 = multer({ storage: storage2 });
@@ -295,10 +293,12 @@ router.post(
 
 // router.get("/products/:id_imagen", dataController.getImages);
 router.get("/getproductsadmin", dataController.getProductsAdmin);
-router.post("/validatePassword", dataController.validatePassword)
+router.post("/validatePassword", dataController.validatePassword);
 
-
-router.post("/getImagesUpdateProduct/:id", dataController.getImagesUpdateProduct);
+router.post(
+  "/getImagesUpdateProduct/:id",
+  dataController.getImagesUpdateProduct
+);
 
 router.post("/deleteImage/:idImagen", dataController.deleteImage);
 router.get("/getProductDetails/:id", dataController.getProductDetails);

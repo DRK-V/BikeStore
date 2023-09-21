@@ -604,7 +604,7 @@ const eliminarComentario = async (req, res) => {
 //ensayo
 const createVenta = async (ventaData) => {
   const insertVentaQuery =
-    "INSERT INTO venta (codigo_cliente, monto_final, tipo_de_cuenta, banco, numero_de_cuenta, estado_venta) VALUES ($1, $2, $3, $4, $5,'finalizado')";
+    "INSERT INTO venta (codigo_cliente, monto_final, tipo_de_cuenta, banco, numero_de_cuenta, estado_venta) VALUES ($1, $2, $3, $4, $5, 'finalizado') RETURNING id_venta";
 
   const values = [
     ventaData.codigo_cliente,
@@ -617,16 +617,20 @@ const createVenta = async (ventaData) => {
   const client = await pool.connect(); // Iniciar una transacción
 
   try {
-    console.log("Datos a insertar en la tabla venta:", values); // Agrega este console.log
+    await client.query("BEGIN"); // Comenzar la transacción
 
-    const result = await pool.query(insertVentaQuery, values);
+    const resultVenta = await client.query(insertVentaQuery, values);
+    const idVenta = resultVenta.rows[0].id_venta; // Obtener el ID de la venta
 
     await client.query("COMMIT"); // Confirmar la transacción
 
     return idVenta;
   } catch (error) {
+    await client.query("ROLLBACK"); // Revertir la transacción en caso de error
     console.error("Error al crear venta:", error);
     throw error;
+  } finally {
+    client.release(); // Liberar el cliente de la pool
   }
 };
 
@@ -1314,7 +1318,6 @@ module.exports = {
   insertarCompra,
   insertarCompraProducto,
   insertarStock,
- 
   obtenerStock,
   obtenerDatosDeStockPorCodigoProducto,
   eliminarComentario,
@@ -1343,6 +1346,7 @@ module.exports = {
   getProductsAdmin,
   validatePassword,
   getImagesUpdateProduct,
+  traerproducto,
   deleteImage,
   updateImageProducts,
   getProductDetails,

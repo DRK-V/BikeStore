@@ -65,7 +65,9 @@ const Presio_compra = () => {
   return (
     <div className="info_pc">
       <h2>Envío ${shippingCost}</h2>
-      <h1>Costo Total ${(totalPrice + parseFloat(shippingCost)).toLocaleString()}</h1>
+      <h1>
+        Costo Total ${(totalPrice + parseFloat(shippingCost)).toLocaleString()}
+      </h1>
       {isLoggedIn ? (
         <Link
           to="/payment"
@@ -83,16 +85,17 @@ const Presio_compra = () => {
         </Link>
       ) : (
         <Link to="/login" className="pagar-1">
-          <button className={`pagar ${totalPrice === 0 ? "disabled" : ""}`} onClick={handleButtonClick}>
+          <button
+            className={`pagar ${totalPrice === 0 ? "disabled" : ""}`}
+            onClick={handleButtonClick}
+          >
             <img src={carritoo} alt="carrito" className="carro_pagar" />
             Continuar compra
           </button>
         </Link>
       )}
       {showPagar && (
-        <div className="pagar-3">
-          Debes añadir un producto para continuar.
-        </div>
+        <div className="pagar-3">Debes añadir un producto para continuar.</div>
       )}
     </div>
   );
