@@ -252,6 +252,11 @@ router.post("/insertarCompraProducto", dataController.insertarCompraProducto);
 router.post("/insertarStock", dataController.insertarStock);
 router.put('/editarStock/:codigo_producto', dataController.editarStock);
 router.get('/obtenerStock', dataController.obtenerStock);
+router.get('/stockPorCodigoProducto/:codigo_producto', dataController.obtenerDatosDeStockPorCodigoProducto);
+
+
+
+
 const storage2 = multer.diskStorage({
   destination: (req, file, cb) => {
     const productId = req.body.productId; // ID del producto al que se asocian las imágenes

@@ -89,22 +89,37 @@ export const Payment = () => {
 
         const productosVenta = [];
 
-      // Agregar el producto de formValues a productosVenta
-      productosVenta.push({
-        codigo_venta: idVenta,
-        codigo_producto: formValues.id_producto,
-        cantidad_producto: formValues.quantity,
-      });
+        const productosAgregados = {};
 
-      // Agregar los productos de cartItems a productosVenta
-      cartItems.forEach((cartItem) => {
-        productosVenta.push({
-          codigo_venta: idVenta,
-          codigo_producto: cartItem.product.id_producto,
-          cantidad_producto: cartItem.quantity,
+        // Verifica si los campos del formulario son válidos
+        if (
+          formValues.id_producto &&
+          formValues.quantity &&
+          formValues.id_producto !== "" &&
+          formValues.quantity !== ""
+        ) {
+          // Agrega los productos del formulario a productosVenta
+          productosVenta.push({
+            codigo_venta: idVenta,
+            codigo_producto: formValues.id_producto,
+            cantidad_producto: formValues.quantity,
+          });
+        }
+        
+        // Ahora, agrega los productos de cartItems
+        cartItems.forEach((cartItem) => {
+          // Verifica si el producto ya se ha agregado
+          if (!productosAgregados[cartItem.product.id_producto]) {
+            productosVenta.push({
+              codigo_venta: idVenta,
+              codigo_producto: cartItem.product.id_producto,
+              cantidad_producto: cartItem.quantity,
+            });
+        
+            // Marca el producto como agregado en el objeto de registro
+            productosAgregados[cartItem.product.id_producto] = true;
+          }
         });
-      });
-
         console.log(
           "Datos a enviar a la creación de venta de producto:",
           JSON.stringify({ codigo_venta: idVenta, productos: productosVenta })
@@ -125,41 +140,7 @@ export const Payment = () => {
           console.log("Venta de productos creada con éxito.");
           clearCart();
 
-          const doc = new jsPDF();
-          doc.setFontSize(14); // Establecer el tamaño de fuente predeterminado
-          doc.setTextColor(0, 0, 0); // Establecer el color del texto (negro)
-      
-          doc.text("FACTURA", 10, 10);
-          doc.setFontSize(10); // Cambiar el tamaño de fuente para las siguientes líneas
-          doc.text(`Número: ${Math.floor(Math.random() * 1000000)}`, 10, 20);
-          doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 30);
-          doc.text(`Identificación del Emisor: BikeStore`, 10, 40);
-          doc.text(
-            `Identificación del Receptor: ${formValues.numeroDocumento}`,
-            10,
-            50
-          );
-      
-          doc.setFont("helvetica"); // Cambiar el estilo de fuente para las siguientes líneas
-          doc.setFontSize(12); // Cambiar el tamaño de fuente
-          doc.text(`Descripción del Concepto: Compra de productos`, 10, 60);
-          doc.text(`Base Imponible: ${formValues.valorPagar}`, 10, 70);
-          doc.text(`Tipo de IVA Aplicado: 19%`, 10, 80);
-          doc.text(`Total: ${formValues.valorPagar}`, 10, 90);
-      
-          let yOffset = 100;
-      
-          productosVenta.forEach((producto) => {
-            doc.setFont("times"); // Cambiar la fuente para los detalles del producto
-            doc.setFontSize(10); // Cambiar el tamaño de fuente para los detalles del producto
-            doc.text(`ID del Producto: ${producto.codigo_producto}`, 10, yOffset);
-            // Agrega más detalles del producto según sea necesario
-            yOffset += 10;
-          });
-      
-          // Guardar el PDF con un nombre único basado en la fecha y hora actual
-          const pdfFileName = `factura_${new Date().toISOString()}.pdf`;
-          doc.save(pdfFileName);
+          // Generar y descargar el PDF aquí
 
           setTimeout(() => {
             navigate("/");

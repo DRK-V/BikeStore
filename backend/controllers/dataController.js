@@ -683,34 +683,36 @@ const insertarStock = async (req, res) => {
     if (
       !stockData.codigo_producto ||
       !stockData.entrada ||
-      !stockData.codigo_entrada 
+      !stockData.codigo_entrada
     ) {
       const camposFaltantes = [];
       if (!stockData.codigo_producto) camposFaltantes.push("Código de Producto");
       if (!stockData.entrada) camposFaltantes.push("Entrada");
       if (!stockData.codigo_entrada) camposFaltantes.push("Código de Entrada");
-    
 
       const mensajeError = `Los siguientes campos son obligatorios: ${camposFaltantes.join(", ")}`;
       throw new Error(mensajeError);
     }
 
-    // Asignar un valor fijo de 0 al campo inventario_inicial
+    // Asignar un valor fijo de 0 a los campos inventario_inicial, salida y codigo_salida
     stockData.inventario_inicial = 0;
+    stockData.salida = 0;
+    stockData.codigo_salida = 0;
 
     // Insertar la información del stock en la base de datos
     const insertStockQuery = `
-    INSERT INTO stock (codigo_producto, inventario_inicial, entrada, codigo_entrada)
-    VALUES ($1, $2, $3, $4);
-  `;
+      INSERT INTO stock (codigo_producto, inventario_inicial, entrada, codigo_entrada, salida, codigo_salida)
+      VALUES ($1, $2, $3, $4, $5, $6);
+    `;
 
-  const stockValues = [
-    stockData.codigo_producto,
-    stockData.inventario_inicial,
-    stockData.entrada,
-    stockData.codigo_entrada,
-   
-  ];
+    const stockValues = [
+      stockData.codigo_producto,
+      stockData.inventario_inicial,
+      stockData.entrada,
+      stockData.codigo_entrada,
+      stockData.salida, // Se agrega el campo salida con valor 0
+      stockData.codigo_salida, // Se agrega el campo codigo_salida con valor 0
+    ];
 
     await pool.query(insertStockQuery, stockValues);
 
@@ -768,7 +770,24 @@ const obtenerStock = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener los datos de stock' });
   }
 };
+const obtenerDatosDeStockPorCodigoProducto = async (req, res) => {
+  const { codigo_producto } = req.params;
+  try {
+    // Realiza la consulta SQL para obtener los datos de stock por codigo_producto
+    const consultaStock = 'SELECT * FROM stock WHERE codigo_producto = $1';
+    const resultados = await pool.query(consultaStock, [codigo_producto]);
 
+    // Enviar los resultados como respuesta JSON
+    if (resultados.rowCount === 0) {
+      res.status(404).json({ error: 'No se encontraron datos de stock para el código de producto especificado' });
+    } else {
+      res.status(200).json(resultados.rows);
+    }
+  } catch (error) {
+    console.error('Error al obtener los datos de stock por codigo_producto:', error);
+    res.status(500).json({ error: 'Error al obtener los datos de stock por codigo_producto' });
+  }
+};
 
 //tabla compra
 const insertarProducto = async (req, res) => {
@@ -1327,6 +1346,7 @@ module.exports = {
   insertarStock,
   editarStock,
   obtenerStock,
+  obtenerDatosDeStockPorCodigoProducto,
   eliminarComentario,
   verComentarioPorId,
   editarComentario,

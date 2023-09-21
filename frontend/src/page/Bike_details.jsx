@@ -28,13 +28,14 @@ const Bike_details = () => {
             precio: productPrice,
             nombre: additionalProductDetails.product.nombre_producto,
             tipo: additionalProductDetails.product.tipo,
+            stock: stock, // Agregar el valor de stock aquí
           },
           image: mainImageURL,
         };
         addItemToCart(cartItem);
         setSelectedProductId(id_producto);
         setCartMessage("Se ha agregado el producto al carrito.");
-
+  
         // Set a timer to clear the cart message after 1 second
         setTimeout(() => {
           setCartMessage("");
@@ -44,6 +45,7 @@ const Bike_details = () => {
       }
     }
   };
+  
 
   const [productDetails, setProductDetails] = useState(null);
   const [additionalProductDetails, setAdditionalProductDetails] =
@@ -129,6 +131,30 @@ const Bike_details = () => {
     }
   };
 
+  const [stock, setStock] = useState(null); 
+  useEffect(() => {
+    // Realiza la solicitud para obtener el stock
+    const fetchStock = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3060/stockPorCodigoProducto/${id_producto}`
+        );
+        const data = await response.json();
+  
+        // Accede al saldo en el primer objeto del array (si existe)
+        setStock(data[0]?.saldo);
+  
+        // Agrega una consola.log para mostrar el resultado
+        console.log("Resultado de la solicitud de stock:", data[0]?.saldo);
+      } catch (error) {
+        console.error("Error fetching stock:", error);
+      }
+    };
+  
+    if (id_producto) {
+      fetchStock();
+    }
+  }, [id_producto]);
   
   
   
@@ -199,15 +225,9 @@ const Bike_details = () => {
                   Tipo de bicleta:{additionalProductDetails?.product?.tipo}
                 </label>
                 <div className="container_count">
-                  <label htmlFor="">Cantidad:</label>
-                  <input
-                    type="number"
-                    name="count_bike"
-                    min="1"
-                    max="5"
-                    id=""
-                  />
-                </div>
+                <label htmlFor="">stock disponible:</label>
+                <p>{stock !== null ? stock : "Cargando..."}</p>
+              </div>
 
                 <button className="btn_buy_now" onClick={(e) => handleBuyNow(e, id_producto, quantity)}>
   <i></i>
