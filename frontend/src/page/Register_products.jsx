@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import "../css/Register_products.css";
 import { Link } from "react-router-dom";
-import { useAuth } from "../components/AuthContext";
+import { useAuth } from "../components/AuthContext"; // Importa useAuth desde tu AuthContext
 
 export const Register_products = () => {
-  const { idCliente } = useAuth();
   const [product, setProduct] = useState({
     nombre_producto: "",
     tipo: "",
@@ -15,6 +14,9 @@ export const Register_products = () => {
   });
   const [images, setImages] = useState([]);
   const [imageInput, setImageInput] = useState(null);
+
+  // Obtiene el id_cliente del contexto de autenticación
+  const { idCliente } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -86,7 +88,6 @@ export const Register_products = () => {
         if (imageResponse.status === 200) {
           console.log("Imágenes insertadas con éxito");
           alert("Imágenes insertadas con éxito");
-          
   
           // Enviar datos de la compra como JSON, incluyendo el id_cliente como codigo_administrador
           const compraResponse = await fetch("http://localhost:3060/insertarCompra", {
@@ -119,27 +120,27 @@ export const Register_products = () => {
                 id_compra: compraId,
               }),
             });
-        
+  
             if (compraProductoResponse.status === 200) {
               console.log("Relación compra-producto insertada con éxito");
-        
-              // Aquí es donde se debe enviar la solicitud para insertar datos de stock
+  
+              // Luego de insertar la relación compra-producto, enviar datos a insertarStock
               const stockResponse = await fetch("http://localhost:3060/insertarStock", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  codigo_producto: productId,
+                  codigo_producto: productId, // Utiliza el ID del producto recién insertado
                   entrada: product.stock_disponible,
-                  codigo_entrada: compraId,
-                  salida: 0,
-                  codigo_salida: null,
+                  codigo_entrada: compraId, // Utiliza el ID de la compra recién insertada
                 }),
               });
-              
+  
               if (stockResponse.status === 200) {
                 console.log("Datos de stock insertados con éxito");
+                // Solo después de que se haya completado todo con éxito, recarga la página
+                window.location.reload();
               } else {
                 console.error("Error al insertar los datos de stock:", stockResponse.statusText);
               }
@@ -159,11 +160,9 @@ export const Register_products = () => {
       console.error("Error al insertar el producto, las imágenes, la relación compra-producto o los datos de stock:", error);
     }
   };
+  
 
 
-  
-  
-  
 
   return (
     <div className="container">

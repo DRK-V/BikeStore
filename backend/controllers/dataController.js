@@ -676,30 +676,99 @@ const getVentas = async () => {
 };
 
 //intento insertar datos a tabla stock
-const añadirStock = async (req, res) => {
-  const { codigo_producto } = req.body;
-
+const insertarStock = async (req, res) => {
+  const stockData = req.body;
   try {
-    // Llamar a la función insertarProducto para obtener el id_producto
-    const insertProductResponse = await insertarProducto(req, res);
-    const productId = insertProductResponse.productId;
+    // Validar que se proporcionen datos obligatorios
+    if (
+      !stockData.codigo_producto ||
+      !stockData.entrada ||
+      !stockData.codigo_entrada 
+    ) {
+      const camposFaltantes = [];
+      if (!stockData.codigo_producto) camposFaltantes.push("Código de Producto");
+      if (!stockData.entrada) camposFaltantes.push("Entrada");
+      if (!stockData.codigo_entrada) camposFaltantes.push("Código de Entrada");
+    
 
-    // Insertar el stock utilizando el id_producto
-    const insertQuery =
-      "INSERT INTO stock (codigo_producto, inventario_inicial) VALUES ($1, $2)";
-    const values = [productId, 0]; // Utiliza el productId obtenido
+      const mensajeError = `Los siguientes campos son obligatorios: ${camposFaltantes.join(", ")}`;
+      throw new Error(mensajeError);
+    }
 
-    await pool.query(insertQuery, values);
+    // Asignar un valor fijo de 0 al campo inventario_inicial
+    stockData.inventario_inicial = 0;
 
-    res.status(201).json({
-      message: "Stock añadido con éxito",
-      PRODUCT_ID: productId, // Devuelve el id_producto del producto insertado
-    });
+    // Insertar la información del stock en la base de datos
+    const insertStockQuery = `
+    INSERT INTO stock (codigo_producto, inventario_inicial, entrada, codigo_entrada)
+    VALUES ($1, $2, $3, $4);
+  `;
+
+  const stockValues = [
+    stockData.codigo_producto,
+    stockData.inventario_inicial,
+    stockData.entrada,
+    stockData.codigo_entrada,
+   
+  ];
+
+    await pool.query(insertStockQuery, stockValues);
+
+    res.status(200).json({ message: "Datos de stock insertados con éxito" });
   } catch (error) {
-    console.error("Error al añadir el stock:", error);
-    res.status(500).json({ error: "Error al añadir el stock" });
+    console.error("Error al insertar los datos de stock:", error);
+    res.status(500).json({ error: "Error al insertar los datos de stock" });
   }
 };
+
+const editarStock = async (req, res) => {
+  const stockData = req.body;
+  const codigoProducto = req.params.codigo_producto; // Obtener el código_producto desde la URL
+  try {
+    // Validar que se proporcionen datos obligatorios
+    if (!codigoProducto) {
+      throw new Error("El código de producto es obligatorio");
+    }
+
+    // Actualizar la información del stock en la base de datos para el producto específico
+    const editarStockQuery = `
+      UPDATE stock
+      SET
+        salida = $1,
+        codigo_salida = $2
+      WHERE
+        codigo_producto = $3;
+    `;
+
+    const stockValues = [
+      stockData.salida,
+      stockData.codigo_salida,
+      codigoProducto, // Usar el código_producto proporcionado en la URL
+    ];
+
+    await pool.query(editarStockQuery, stockValues);
+
+    res.status(200).json({ message: "Datos de stock actualizados con éxito" });
+  } catch (error) {
+    console.error("Error al editar los datos de stock:", error);
+    res.status(500).json({ error: "Error al editar los datos de stock" });
+  }
+};
+
+const obtenerStock = async (req, res) => {
+  try {
+    // Realiza la consulta SQL para obtener todos los datos de stock
+    const consultaStock = 'SELECT * FROM stock';
+    const resultados = await pool.query(consultaStock);
+
+    // Enviar los resultados como respuesta JSON
+    res.status(200).json(resultados.rows);
+  } catch (error) {
+    console.error('Error al obtener los datos de stock:', error);
+    res.status(500).json({ error: 'Error al obtener los datos de stock' });
+  }
+};
+
 
 //tabla compra
 const insertarProducto = async (req, res) => {
@@ -734,7 +803,7 @@ const insertarProducto = async (req, res) => {
     const insertProductQuery = `
       INSERT INTO producto (nombre_producto, descripcion_producto, stock_disponible, tipo, color, precio)
       VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING id_producto, stock_disponible, precio;
+      RETURNING id_producto;
     `;
 
     const productValues = [
@@ -750,48 +819,33 @@ const insertarProducto = async (req, res) => {
 
     // Obtener el ID del producto recién insertado
     const productId = productResult.rows[0].id_producto;
-    const stockDisponible = productResult.rows[0].stock_disponible;
-    const precio = productResult.rows[0].precio;
 
-    // Calcular el monto_final
-    const montoFinal = stockDisponible * precio;
-
-    // Establecer el estado como "finalizado"
-    const estado = "finalizado";
-
-    // Insertar la información en la tabla 'compra'
-    const insertCompraQuery = `
-      INSERT INTO compra (monto_final, estado, direccion, codigo_administrador)
-      VALUES ($1, $2, null, null)
-      RETURNING id_compra;
-    `;
-
-    const compraValues = [montoFinal, estado];
-
-    const compraResult = await pool.query(insertCompraQuery, compraValues);
-
-    // Obtener el ID de la compra recién insertada
-    const compraId = compraResult.rows[0].id_compra;
-
-    res.status(200).json({
-      productId,
-      compraId,
-      message:
-        "Producto insertado con éxito y se ha creado una compra con estado 'finalizado'",
-    });
+    res
+      .status(200)
+      .json({ productId, message: "Producto insertado con éxito" });
   } catch (error) {
     console.error("Error al insertar el producto:", error);
     res.status(500).json({ error: "Error al insertar el producto" });
   }
 };
-const crearCompra = async (req, res) => {
+
+
+
+
+
+const insertarCompra = async (req, res) => {
   const compraData = req.body;
   try {
     // Validar que se proporcionen datos obligatorios
-    if (!compraData.monto_final || !compraData.estado) {
+    if (
+      !compraData.monto_final ||
+      !compraData.estado ||
+      !compraData.direccion
+    ) {
       const camposFaltantes = [];
       if (!compraData.monto_final) camposFaltantes.push("Monto Final");
       if (!compraData.estado) camposFaltantes.push("Estado");
+      if (!compraData.direccion) camposFaltantes.push("Dirección");
 
       const mensajeError = `Los siguientes campos son obligatorios: ${camposFaltantes.join(
         ", "
@@ -809,8 +863,8 @@ const crearCompra = async (req, res) => {
     const compraValues = [
       compraData.monto_final,
       compraData.estado,
-      compraData.direccion || null,
-      compraData.codigo_administrador || null,
+      compraData.direccion,
+      compraData.codigo_administrador, // Utilizamos el codigo_administrador proporcionado en la solicitud
     ];
 
     const compraResult = await pool.query(insertCompraQuery, compraValues);
@@ -818,15 +872,49 @@ const crearCompra = async (req, res) => {
     // Obtener el ID de la compra recién insertada
     const compraId = compraResult.rows[0].id_compra;
 
-    res.status(200).json({
-      compraId,
-      message: "Compra creada con éxito",
-    });
+    res.status(200).json({ compraId, message: "Compra insertada con éxito" });
   } catch (error) {
-    console.error("Error al crear la compra:", error);
-    res.status(500).json({ error: "Error al crear la compra" });
+    console.error("Error al insertar la compra:", error);
+    res.status(500).json({ error: "Error al insertar la compra" });
   }
 };
+
+
+const insertarCompraProducto = async (req, res) => {
+  const { id_producto, id_compra } = req.body; // Obtener id_producto e id_compra del cuerpo de la solicitud
+  try {
+    // Validar que se proporcionen los datos obligatorios (id_producto e id_compra)
+    if (!id_producto || !id_compra) {
+      const camposFaltantes = [];
+      if (!id_producto) camposFaltantes.push("ID de Producto");
+      if (!id_compra) camposFaltantes.push("ID de Compra");
+
+      const mensajeError = `Los siguientes campos son obligatorios: ${camposFaltantes.join(", ")}`;
+      throw new Error(mensajeError);
+    }
+
+    // Insertar la relación compra-producto en la tabla compra_producto
+    const insertCompraProductoQuery = `
+      INSERT INTO compra_producto (codigo_producto, codigo_compra)
+      VALUES ($1, $2);
+    `;
+
+    const compraProductoValues = [
+      id_producto,
+      id_compra,
+    ];
+
+    await pool.query(insertCompraProductoQuery, compraProductoValues);
+
+    res.status(200).json({ message: "Relación compra-producto insertada con éxito" });
+  } catch (error) {
+    console.error("Error al insertar la relación compra-producto:", error);
+    res.status(500).json({ error: "Error al insertar la relación compra-producto" });
+  }
+};
+
+
+
 const insertarImagenesProducto = async (req, res) => {
   const productId = req.body.productId; // El ID del producto al que se asocian las imágenes
   const nombre_producto = req.body.producto; // El nombre del producto
@@ -1234,8 +1322,11 @@ const deleteProduct = async (req, res) => {
 };
 
 module.exports = {
-  crearCompra,
-  añadirStock,
+  insertarCompra,
+  insertarCompraProducto,
+  insertarStock,
+  editarStock,
+  obtenerStock,
   eliminarComentario,
   verComentarioPorId,
   editarComentario,
