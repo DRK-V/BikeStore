@@ -1,39 +1,37 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../css/login.css';
-import { useAuth } from '../components/AuthContext';
-import leftImage from '../assets/bici_login.png';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../css/login.css";
+import { useAuth } from "../components/AuthContext";
+import leftImage from "../assets/bici_login.png";
+import { Link } from "react-router-dom";
 
 export const Login = () => {
   const navigate = useNavigate();
-  const [loginStatus, setLoginStatus] = useState('');
+  const [loginStatus, setLoginStatus] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const { login } = useAuth();
 
   const handleSuccessfulLogin = async (email) => {
-    setLoginStatus('¡Inicio de sesión exitoso!');
-
     try {
       const response = await fetch(`http://localhost:3060/api/user/${email}`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
       if (response.status === 200) {
         const userData = await response.json();
         login(userData); // Establecer los datos del usuario en el contexto
-        console.log('Información del usuario:', userData); // Mostrar en la consola
+        console.log("Información del usuario:", userData); // Mostrar en la consola
       }
     } catch (error) {
-      console.error('Error en la solicitud al backend:', error);
+      console.error("Error en la solicitud al backend:", error);
     }
 
     const redirectTimeout = setTimeout(() => {
-      navigate('/');
+      navigate("/");
     }, 3000);
 
     return () => {
@@ -51,14 +49,14 @@ export const Login = () => {
 
     try {
       if (!userData.email || !userData.password) {
-        setLoginStatus('Por favor, complete todos los campos.');
+        setLoginStatus("Por favor, complete todos los campos.");
         return;
       }
 
-      const response = await fetch('http://localhost:3060/api/login', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3060/api/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(userData),
       });
@@ -67,20 +65,18 @@ export const Login = () => {
         setIsLoggedIn(true);
         handleSuccessfulLogin(userData.email);
       } else {
-        setLoginStatus('Credenciales inválidas. Intente nuevamente.');
+        setLoginStatus("Credenciales inválidas. Intente nuevamente.");
       }
     } catch (error) {
-      console.error('Error en la solicitud al backend:', error);
-      setLoginStatus('Error en el servidor. Intente nuevamente más tarde.');
+      console.error("Error en la solicitud al backend:", error);
+      setLoginStatus("Error en el servidor. Intente nuevamente más tarde.");
     }
   };
   return (
     <div className="App">
       <div className="split-container">
-        <button className="close-button2" onClick={() => navigate('/')}>
-          <span className="material-icons">
-            close
-          </span>
+        <button className="close-button2" onClick={() => navigate("/")}>
+          <span className="material-icons">close</span>
         </button>
         <div className="left-side">
           <img src={leftImage} alt="Image on the left" />
@@ -89,21 +85,37 @@ export const Login = () => {
           <div className="form-container">
             <h1>Iniciar Sesión</h1>
             {isLoggedIn && (
-              <div className="login-message-overlay">¡Has iniciado sesión exitosamente!</div>
+              <div className="login-message-overlay">
+                ¡Has iniciado sesión exitosamente!
+              </div>
             )}
 
             <form id="form12" onSubmit={handleSubmit}>
               <div className="form-row">
                 <i className="fas fa-envelope"></i>
-                <input type="email" placeholder='Correo electrónico' name="email" required />
+                <input
+                  type="email"
+                  placeholder="Correo electrónico"
+                  name="email"
+                  required
+                />
               </div>
               <div className="form-row">
                 <i className="fas fa-lock"></i>
-                <input type="password" placeholder='Contraseña' name="password" required></input>
+                <input
+                  type="password"
+                  placeholder="Contraseña"
+                  name="password"
+                  required
+                ></input>
               </div>
-              <button className='button-ini' type="submit">Iniciar</button>
-              <Link className='forgot_password' to="/Recover_password">Olvide mi contrasena</Link>
-              <Link className='forgot_password' to="/register">
+              <button className="button-ini" type="submit">
+                Iniciar
+              </button>
+              <Link className="forgot_password" to="/Recover_password">
+                Olvide mi contrasena
+              </Link>
+              <Link className="forgot_password" to="/register">
                 Registrarse
               </Link>
             </form>

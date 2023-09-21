@@ -47,15 +47,27 @@ const Presio_compra = () => {
       // Si el precio total es 0, muestra el mensaje y evita la redirección
       setShowPagar(true);
     } else {
-      // Si el precio total no es 0, redirige a la página de pago
-      navigate("/payment", { state: { valorPagar: totalPrice + parseFloat(shippingCost) } });
+      // Obtén los nombres de los productos como una cadena separada por comas
+      const productNames = cartItems.map((cartItem) => cartItem.product.nombre).join(", ");
+      
+      // Redirige a la página de pago y pasa la información necesaria
+      navigate("/payment", {
+        state: {
+          valorPagar: totalPrice + parseFloat(shippingCost),
+          nombresProductos: productNames,
+        },
+      });
+      console.log("Nombres de los productos:", productNames);
     }
   };
+  
 
   return (
     <div className="info_pc">
       <h2>Envío ${shippingCost}</h2>
-      <h1>Costo Total ${(totalPrice + parseFloat(shippingCost)).toLocaleString()}</h1>
+      <h1>
+        Costo Total ${(totalPrice + parseFloat(shippingCost)).toLocaleString()}
+      </h1>
       {isLoggedIn ? (
         <Link
           to="/payment"
@@ -73,16 +85,17 @@ const Presio_compra = () => {
         </Link>
       ) : (
         <Link to="/login" className="pagar-1">
-          <button className={`pagar ${totalPrice === 0 ? "disabled" : ""}`} onClick={handleButtonClick}>
+          <button
+            className={`pagar ${totalPrice === 0 ? "disabled" : ""}`}
+            onClick={handleButtonClick}
+          >
             <img src={carritoo} alt="carrito" className="carro_pagar" />
             Continuar compra
           </button>
         </Link>
       )}
       {showPagar && (
-        <div className="pagar-3">
-          Debes añadir un producto para continuar.
-        </div>
+        <div className="pagar-3">Debes añadir un producto para continuar.</div>
       )}
     </div>
   );

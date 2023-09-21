@@ -1,4 +1,3 @@
-//BIKE_DETAILS
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "../css/Bike_details.css";
@@ -14,6 +13,11 @@ const Bike_details = () => {
   const { addItemToCart, setSelectedProductId } = useCart();
   const { id_producto } = useParams();
   const [cartMessage, setCartMessage] = useState("");
+  const [quantity, setQuantity] = useState(1);
+  const [stock, setStock] = useState(null);
+  const [stockExhausted, setStockExhausted] = useState(false);
+  const [showStockExhaustedMessage, setShowStockExhaustedMessage] = useState(false);
+
 
   const handleAddToCart = (event) => {
     event.preventDefault();
@@ -26,13 +30,14 @@ const Bike_details = () => {
             precio: productPrice,
             nombre: additionalProductDetails.product.nombre_producto,
             tipo: additionalProductDetails.product.tipo,
+            stock: stock, // Agregar el valor de stock aquí
           },
           image: mainImageURL,
         };
         addItemToCart(cartItem);
         setSelectedProductId(id_producto);
         setCartMessage("Se ha agregado el producto al carrito.");
-
+  
         // Set a timer to clear the cart message after 1 second
         setTimeout(() => {
           setCartMessage("");
@@ -42,6 +47,7 @@ const Bike_details = () => {
       }
     }
   };
+  
 
   const [productDetails, setProductDetails] = useState(null);
   const [additionalProductDetails, setAdditionalProductDetails] =
@@ -96,19 +102,73 @@ const Bike_details = () => {
   const handleSubImageClick = (subImageURL) => {
     setMainImageURL(subImageURL);
   };
-  const handleBuyNow = async (event) => {
+  const handleBuyNow = (event) => {
     event.preventDefault();
     if (additionalProductDetails) {
       const productPrice = parseFloat(additionalProductDetails.product.precio);
       if (!isNaN(productPrice)) {
         const totalPriceWithDiscount = productPrice + productPrice * 0.02;
         console.log("Precio con 2% de descuento:", totalPriceWithDiscount);
-        navigate("/payment", { state: { valorPagar: totalPriceWithDiscount } });
+
+        // Log para ver los datos que se están enviando
+        console.log("Datos enviados a /payment:", {
+          valorPagar: totalPriceWithDiscount,
+          id_producto: id_producto,
+          quantity: quantity,
+          precio_producto: productPrice,
+          nombre_producto: additionalProductDetails.product.nombre_producto,
+        });
+
+        // Incluye id_producto y quantity en el objeto de estado
+        navigate("/payment", {
+          state: {
+            valorPagar: totalPriceWithDiscount,
+            id_producto: id_producto,
+            quantity: quantity,
+            precio_producto: productPrice,
+            nombre_producto: additionalProductDetails.product.nombre_producto,
+          },
+        });
       } else {
         console.error("Precio no válido para el producto.");
       }
     }
   };
+
+
+  useEffect(() => {
+    // Realiza la solicitud para obtener el stock
+    const fetchStock = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3060/stockPorCodigoProducto/${id_producto}`
+        );
+        const data = await response.json();
+
+        // Accede al saldo en el primer objeto del array (si existe)
+        const stockValue = data[0]?.saldo;
+
+        setStock(stockValue);
+
+        // Verifica si el stock está agotado y muestra el mensaje correspondiente
+        if (stockValue === 0) {
+          setStockExhausted(true);
+          setShowStockExhaustedMessage(true);
+        }
+
+        console.log("Resultado de la solicitud de stock:", stockValue);
+      } catch (error) {
+        console.error("Error fetching stock:", error);
+      }
+    };
+
+    if (id_producto) {
+      fetchStock();
+    }
+  }, [id_producto]);
+  
+  
+  
 
   return (
     <>
@@ -138,7 +198,7 @@ const Bike_details = () => {
                 src={mainImageURL}
                 alt="Imagen Principal"
               />
-
+  
               <form
                 onSubmit={handleAddToCart}
                 action="dialog"
@@ -157,7 +217,7 @@ const Bike_details = () => {
                     }
                   )}
                 </label>
-
+  
                 <div className="container_color_details">
                   <label htmlFor="" className="color_text">
                     Color:
@@ -171,29 +231,36 @@ const Bike_details = () => {
                   Descripción:{" "}
                   {additionalProductDetails?.product?.descripcion_producto}
                 </p>
-
+  
                 <label htmlFor="" className="text_bike_type">
                   Tipo de bicleta:{additionalProductDetails?.product?.tipo}
                 </label>
                 <div className="container_count">
-                  <label htmlFor="">Cantidad:</label>
-                  <input
-                    type="number"
-                    name="count_bike"
-                    min="1"
-                    max="5"
-                    id=""
-                  />
+                  <label htmlFor="">stock disponible:</label>
+                  <p>{stock !== null ? stock : "Cargando..."}</p>
                 </div>
-
-                <button className="btn_buy_now" onClick={handleBuyNow}>
+  
+                <button
+                  className={`btn_buy_now ${stockExhausted ? "disabled" : ""}`}
+                  onClick={(e) => handleBuyNow(e, id_producto, quantity)}
+                  disabled={stockExhausted}
+                >
                   <i></i>
                   Comprar Ahora
                 </button>
-                <button className="btn_add_item_cart" type="submit">
+                <button
+                  className={`btn_add_item_cart ${stockExhausted ? "disabled" : ""}`}
+                  type="submit"
+                  disabled={stockExhausted}
+                >
                   <i></i>
                   Agregar al carrito
                 </button>
+                {showStockExhaustedMessage && (
+                  <div className="cart-message">Producto agotado</div>
+                )}
+                {showStockExhaustedMessage &&
+                  setTimeout(() => setShowStockExhaustedMessage(false), 2000)}
               </form>
               {cartMessage && <div className="cart-message">{cartMessage}</div>}
               <div className="container_comments">

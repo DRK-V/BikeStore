@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../css/Register_products.css";
 import { Link } from "react-router-dom";
+import { useAuth } from "../components/AuthContext"; // Importa useAuth desde tu AuthContext
 
 export const Register_products = () => {
   const [product, setProduct] = useState({
@@ -13,6 +14,9 @@ export const Register_products = () => {
   });
   const [images, setImages] = useState([]);
   const [imageInput, setImageInput] = useState(null);
+
+  // Obtiene el id_cliente del contexto de autenticación
+  const { idCliente } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,63 +47,121 @@ export const Register_products = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
+      // Calcular monto_final
+      const montoFinal = product.precio * product.stock_disponible;
+  
+      // Actualizar el objeto product con monto_final
+      setProduct({
+        ...product,
+        monto_final: montoFinal,
+      });
+  
       // Enviar datos del producto como JSON
-      const productResponse = await fetch(
-        "http://localhost:3060/insertarProducto",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(product),
-        }
-      );
-
+      const productResponse = await fetch("http://localhost:3060/insertarProducto", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product),
+      });
+  
       if (productResponse.status === 200) {
         const { productId, nombre_producto } = await productResponse.json();
+  
         // Crear un FormData para enviar imágenes
         const formData = new FormData();
         formData.append("productId", productId);
         formData.append("producto", product.nombre_producto);
-
+  
         // Subir las imágenes al servidor
         for (let i = 0; i < images.length; i++) {
-          formData.append("images", images[i].file, images[i].file.name); // Asegúrate de incluir el nombre original del archivo
+          formData.append("images", images[i].file, images[i].file.name);
         }
-        for (let i = 0; i < images.length; i++) {
-          console.log(images[i].file, images[i].file.name);
-        }
-
-        const imageResponse = await fetch(
-          "http://localhost:3060/insertarImagenesProducto",
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-
+  
+        const imageResponse = await fetch("http://localhost:3060/insertarImagenesProducto", {
+          method: "POST",
+          body: formData,
+        });
+  
         if (imageResponse.status === 200) {
           console.log("Imágenes insertadas con éxito");
           alert("Imágenes insertadas con éxito");
-          window.location.reload();
+  
+          // Enviar datos de la compra como JSON, incluyendo el id_cliente como codigo_administrador
+          const compraResponse = await fetch("http://localhost:3060/insertarCompra", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              monto_final: montoFinal,
+              estado: "finalizado",
+              direccion: "palmira",
+              codigo_administrador: idCliente,
+            }),
+          });
+  
+          if (compraResponse.status === 200) {
+            console.log("Compra insertada con éxito");
+  
+            // Obtener el ID de la compra recién insertada
+            const { compraId } = await compraResponse.json();
+  
+            // Enviar datos a insertarCompraProducto
+            const compraProductoResponse = await fetch("http://localhost:3060/insertarCompraProducto", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                id_producto: productId,
+                id_compra: compraId,
+              }),
+            });
+  
+            if (compraProductoResponse.status === 200) {
+              console.log("Relación compra-producto insertada con éxito");
+  
+              // Luego de insertar la relación compra-producto, enviar datos a insertarStock
+              const stockResponse = await fetch("http://localhost:3060/insertarStock", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  codigo_producto: productId, // Utiliza el ID del producto recién insertado
+                  entrada: product.stock_disponible,
+                  codigo_entrada: compraId, // Utiliza el ID de la compra recién insertada
+                }),
+              });
+  
+              if (stockResponse.status === 200) {
+                console.log("Datos de stock insertados con éxito");
+                // Solo después de que se haya completado todo con éxito, recarga la página
+                window.location.reload();
+              } else {
+                console.error("Error al insertar los datos de stock:", stockResponse.statusText);
+              }
+            } else {
+              console.error("Error al insertar la relación compra-producto:", compraProductoResponse.statusText);
+            }
+          } else {
+            console.error("Error al insertar la compra:", compraResponse.statusText);
+          }
         } else {
-          console.error(
-            "Error al insertar las imágenes:",
-            imageResponse.statusText
-          );
+          console.error("Error al insertar las imágenes:", imageResponse.statusText);
         }
       } else {
-        console.error(
-          "Error al insertar el producto:",
-          productResponse.statusText
-        );
+        console.error("Error al insertar el producto:", productResponse.statusText);
       }
     } catch (error) {
-      console.error("Error al insertar el producto o las imágenes:", error);
+      console.error("Error al insertar el producto, las imágenes, la relación compra-producto o los datos de stock:", error);
     }
   };
+  
+
 
   return (
     <div className="container">
@@ -150,23 +212,23 @@ export const Register_products = () => {
             />
           </div>
           <div className="form-group">
-            <label className="form-label">Tipo de Bicicleta:</label>
-            <select
-              className="select"
-              name="tipo"
-              value={product.tipo}
-              onChange={handleChange}
-            >
-              <option value="bicicleta de montaña">Bicicleta de Montaña</option>
-              <option value="bicicleta de gravel">Bicicleta de Gravel</option>
-              <option value="bicicleta de carretera">
-                Bicicleta de Carretera
-              </option>
-              <option value="bicicleta de ciudad">Bicicleta de Ciudad</option>
-              <option value="bicicleta electrica">Bicicleta Eléctrica</option>
-              <option value="bicicleta plegable">Bicicleta Plegable</option>
-            </select>
-          </div>
+  <label className="form-label">Tipo de Bicicleta:</label>
+  <select
+    className="select"
+    name="tipo"
+    value={product.tipo}
+    onChange={handleChange}
+  >
+    <option value="">Escoge tipo</option>
+    <option value="bicicleta de montaña">Bicicleta de Montaña</option>
+    <option value="bicicleta de gravel">Bicicleta de Gravel</option>
+    <option value="bicicleta de carretera">Bicicleta de Carretera</option>
+    <option value="bicicleta de ciudad">Bicicleta de Ciudad</option>
+    <option value="bicicleta electrica">Bicicleta Eléctrica</option>
+    <option value="bicicleta plegable">Bicicleta Plegable</option>
+  </select>
+</div>
+
 
           <div className="form-group">
             <label className="form-label">Color:</label>

@@ -9,6 +9,8 @@ import { useCart } from "../components/CartContext";
 import jsPDF from "jspdf";
 
 export const Payment = () => {
+  const { cartItems } = useCart();
+
   const location = useLocation();
   const { user, idCliente } = useAuth();
   const navigate = useNavigate();
@@ -25,9 +27,15 @@ export const Payment = () => {
     banco: "",
     numero_de_cuenta: "",
     codigo_cliente: idCliente,
+    id_producto: location.state ? location.state.id_producto : "",
+    quantity: location.state ? location.state.quantity : "",
+    precio_producto: location.state ? location.state.precio_producto : "",
+    nombre_producto: location.state ? location.state.nombre_producto : "",
   });
 
+
   const [ventaExitosa, setVentaExitosa] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,35 +44,36 @@ export const Payment = () => {
       [name]: value,
     });
   };
-
-  const limpiarCampos = () => {
-    // Reinicia todos los campos del formulario
-    setFormValues({
-      nombreTitular: "",
-      tipoDocumento: "",
-      numeroDocumento: "",
-      correoElectronico: "",
-      confirmacionCorreo: "",
-      valorPagar: "",
-      tipo_de_cuenta: "",
-      banco: "",
-      numero_de_cuenta: "",
-      codigo_cliente: idCliente,
-    });
-  };
+  // Nuevo estado para controlar el envío
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const ventaData = {
-      tipo_de_cuenta: formValues.tipo_de_cuenta,
-      banco: formValues.banco,
-      numero_de_cuenta: formValues.numero_de_cuenta,
-      monto_final: formValues.valorPagar,
-      codigo_cliente: formValues.codigo_cliente,
-    };
+    if (isSubmitting) {
+      // Si ya se está enviando el formulario, no hagas nada
+      return;
+    }
+
+    setIsSubmitting(true);
 
     try {
+      const ventaData = {
+        tipo_de_cuenta: formValues.tipo_de_cuenta,
+        banco: formValues.banco,
+        numero_de_cuenta: formValues.numero_de_cuenta,
+        monto_final: formValues.valorPagar,
+        codigo_cliente: formValues.codigo_cliente,
+        productos: [
+          {
+            codigo_producto: formValues.id_producto,
+            cantidad_producto: formValues.quantity,
+          },
+        ],
+      };
+
+      console.log("Datos a enviar a la creación de venta:", JSON.stringify(ventaData));
+
+      // Realiza la solicitud POST para crear la venta en http://localhost:3060/crear-venta
       const response = await fetch("http://localhost:3060/crear-venta", {
         method: "POST",
         headers: {
@@ -75,41 +84,134 @@ export const Payment = () => {
 
       if (response.ok) {
         console.log("Venta creada con éxito.");
-        setVentaExitosa(true);
 
-        // Generar factura en PDF
-        const doc = new jsPDF();
-        doc.text("FACTURA", 10, 10);
-        doc.text(`Número: ${Math.floor(Math.random() * 1000000)}`, 10, 20);
-        doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 30);
-        doc.text(`Identificación del Emisor: ${user.identificacion}`, 10, 40);
-        doc.text(
-          `Identificación del Receptor: ${formValues.numeroDocumento}`,
-          10,
-          50
+        const responseData = await response.json();
+        const idVenta = responseData.idVenta;
+
+        const productosVenta = [];
+
+        const productosAgregados = {};
+
+        // Verifica si los campos del formulario son válidos
+        if (
+          formValues.id_producto &&
+          formValues.quantity &&
+          formValues.id_producto !== "" &&
+          formValues.quantity !== ""
+        ) {
+          // Agrega los productos del formulario a productosVenta
+          productosVenta.push({
+            nombre_producto: formValues.nombre_producto,
+   
+
+    precio_producto: formValues.precio_producto,
+            codigo_venta: idVenta,
+            codigo_producto: formValues.id_producto,
+            cantidad_producto: formValues.quantity,
+          });
+        }
+        
+        // Ahora, agrega los productos de cartItems
+        cartItems.forEach((cartItem) => {
+          // Verifica si el producto ya se ha agregado
+          if (!productosAgregados[cartItem.product.id_producto]) {
+            productosVenta.push({
+              codigo_venta: idVenta,
+              codigo_producto: cartItem.product.id_producto,
+              cantidad_producto: cartItem.quantity,
+              nombre_producto:cartItem.product.nombre,
+            });
+        
+            // Marca el producto como agregado en el objeto de registro
+            productosAgregados[cartItem.product.id_producto] = true;
+          }
+        });
+        console.log(
+          "Datos a enviar a la creación de venta de producto:",
+          JSON.stringify({ codigo_venta: idVenta, productos: productosVenta })
         );
-        doc.text(`Descripción del Concepto: Compra de productos`, 10, 60);
-        doc.text(`Base Imponible: ${formValues.valorPagar}`, 10, 70);
-        doc.text(`Tipo de IVA Aplicado: 19%`, 10, 80);
-        doc.text(`Total: ${formValues.valorPagar}`, 10, 90);
 
-        // Guardar la factura como PDF
-        doc.save("factura.pdf");
+        const productosResponse = await fetch(
+          "http://localhost:3060/crear-venta-producto",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ codigo_venta: idVenta, productos: productosVenta }),
+          }
+        );
 
-        // Limpia el carrito después de una venta exitosa
-        clearCart();
+        if (productosResponse.ok) {
+          console.log("Venta de productos creada con éxito.");
+          clearCart();
 
-        // Utiliza navigate para redirigir al usuario a la página de inicio después de 2 segundos
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
+          const doc = new jsPDF();
+          doc.setFontSize(14);
+          doc.setTextColor(0, 0, 0);
+    
+          doc.text("FACTURA", 10, 10);
+          doc.setFontSize(10);
+          doc.text(`Número: ${Math.floor(Math.random() * 1000000)}`, 10, 20);
+          doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 30);
+          doc.text(`Identificación del Emisor: BikeStore`, 10, 40);
+          doc.text(`Identificación del Receptor: ${formValues.numeroDocumento}`, 10, 50);
+    
+          doc.setFont("helvetica");
+          doc.setFontSize(12);
+          doc.text(`Descripción del Concepto: Compra de productos`, 10, 60);
+          doc.text(`Base Imponible: ${formValues.valorPagar}`, 10, 70);
+          doc.text(`Tipo de IVA Aplicado: 19%`, 10, 80);
+          doc.text(`Total: ${formValues.valorPagar}`, 10, 90);
+    
+          let yOffset = 100;
+    
+          productosVenta.forEach((producto, index) => {
+            yOffset += 10;
+            doc.setFont("times", "bold");
+            doc.setFontSize(10);
+            doc.text(`Producto ${index + 1}`, 10, yOffset);
+    
+            doc.setFont("times");
+            doc.setFontSize(10);
+            doc.text(`Nombre: ${producto.nombre_producto}`, 20, yOffset + 10);
+    
+            doc.setFont("times");
+            doc.setFontSize(10);
+            doc.text(`ID del Producto: ${producto.codigo_producto}`, 20, yOffset + 20);
+    
+            doc.setFont("times");
+            doc.setFontSize(10);
+            doc.text(`Cantidad: ${producto.cantidad_producto}`, 20, yOffset + 30);
+    
+            doc.setFont("times");
+            doc.setFontSize(10);
+            doc.text(`Precio: ${producto.precio_producto}`, 20, yOffset + 40);
+    
+            yOffset += 50;
+          });
+    
+          const pdfFileName = `factura_${new Date().toISOString()}.pdf`;
+          doc.save(pdfFileName);
+ 
+
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
+        } else {
+          console.error("Error al crear la venta de productos.");
+        }
       } else {
         console.error("Error al crear la venta.");
       }
     } catch (error) {
       console.error("Error de red:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
+  
+  
 
   return (
     <>
