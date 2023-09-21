@@ -120,6 +120,7 @@ export const Payment = () => {
               codigo_producto: cartItem.product.id_producto,
               cantidad_producto: cartItem.quantity,
               nombre_producto:cartItem.product.nombre,
+              precio_producto:cartItem.product.precio,
             });
         
             // Marca el producto como agregado en el objeto de registro
@@ -146,53 +147,75 @@ export const Payment = () => {
           console.log("Venta de productos creada con éxito.");
           clearCart();
 
+    
+
+          
+
+          // Crear un nuevo documento
           const doc = new jsPDF();
           doc.setFontSize(14);
           doc.setTextColor(0, 0, 0);
-    
-          doc.text("FACTURA", 10, 10);
-          doc.setFontSize(10);
-          doc.text(`Número: ${Math.floor(Math.random() * 1000000)}`, 10, 20);
-          doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 30);
-          doc.text(`Identificación del Emisor: BikeStore`, 10, 40);
-          doc.text(`Identificación del Receptor: ${formValues.numeroDocumento}`, 10, 50);
-    
-          doc.setFont("helvetica");
+          
+          // Título de la factura
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(20);
+          doc.text("BikeStore", 105, 15, { align: "center" });
+          
+          // Datos de la factura
+          doc.setFont("helvetica", "normal");
           doc.setFontSize(12);
-          doc.text(`Descripción del Concepto: Compra de productos`, 10, 60);
-          doc.text(`Base Imponible: ${formValues.valorPagar}`, 10, 70);
-          doc.text(`Tipo de IVA Aplicado: 19%`, 10, 80);
-          doc.text(`Total: ${formValues.valorPagar}`, 10, 90);
-    
-          let yOffset = 100;
-    
+          doc.text(`Número: ${Math.floor(Math.random() * 1000000)}`, 10, 30);
+          doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 40);
+          doc.text(`Identificación del Emisor: BikeStore`, 10, 50);
+          doc.text(`Identificación del Receptor: ${formValues.numeroDocumento}`, 10, 60);
+          
+          // Encabezados de la tabla
+          doc.setFillColor(211, 211, 211); 
+          doc.rect(10, 70, 190, 10, "F"); 
+          doc.setTextColor(255, 255, 255); 
+          doc.setFontSize(12);
+          doc.text("Descripción del Concepto", 15, 75);
+          doc.text("Base Imponible", 80, 75);
+          doc.text("Tipo de IVA Aplicado", 120, 75);
+          doc.text("Total", 165, 75);
+          
+          // Datos de la factura en la tabla
+          doc.setDrawColor(0); 
+          doc.rect(10, 80, 190, 10); 
+          doc.setTextColor(0, 0, 0); 
+          doc.setFontSize(12);
+          doc.text(`Compra de productos`, 15, 85);
+          doc.text(`${formValues.valorPagar}`, 80, 85); 
+          doc.text("19%", 120, 85);
+          doc.text(`${formValues.valorPagar}`, 165, 85); 
+          
+          let yOffset = 95;
+          
+          // Datos de los productos en la tabla
           productosVenta.forEach((producto, index) => {
-            yOffset += 10;
-            doc.setFont("times", "bold");
-            doc.setFontSize(10);
-            doc.text(`Producto ${index + 1}`, 10, yOffset);
-    
-            doc.setFont("times");
-            doc.setFontSize(10);
-            doc.text(`Nombre: ${producto.nombre_producto}`, 20, yOffset + 10);
-    
-            doc.setFont("times");
-            doc.setFontSize(10);
-            doc.text(`ID del Producto: ${producto.codigo_producto}`, 20, yOffset + 20);
-    
-            doc.setFont("times");
-            doc.setFontSize(10);
-            doc.text(`Cantidad: ${producto.cantidad_producto}`, 20, yOffset + 30);
-    
-            doc.setFont("times");
-            doc.setFontSize(10);
-            doc.text(`Precio: ${producto.precio_producto}`, 20, yOffset + 40);
-    
-            yOffset += 50;
+            doc.setDrawColor(0); 
+            doc.rect(10, yOffset, 190, 30); 
+            doc.setTextColor(0, 0, 0); 
+            doc.setFontSize(12);
+          
+            doc.text(`Producto ${index + 1}`, 15, yOffset + 5);
+            doc.text(`Nombre: ${producto.nombre_producto}`, 15, yOffset + 15);
+            doc.text(`ID del Producto: ${producto.codigo_producto}`, 15, yOffset + 25);
+            doc.text(`Cantidad: ${producto.cantidad_producto}`, 120, yOffset + 15);
+            doc.text(`Precio: ${producto.precio_producto}`, 120, yOffset + 25);
+          
+            yOffset += 35;
           });
-    
+          
+          // Total final igual al costo total
+          doc.setTextColor(0, 0, 0);
+          doc.setFontSize(12);
+          doc.text("Total:", 120, yOffset + 10);
+          doc.text(`${formValues.valorPagar}`, 165, yOffset + 10); /
+          // Guardar el archivo PDF
           const pdfFileName = `factura_${new Date().toISOString()}.pdf`;
           doc.save(pdfFileName);
+          
  
 
           setTimeout(() => {
