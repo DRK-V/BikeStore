@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/register.css";
-
+import { Link } from "react-router-dom";
 import leftImage from "../assets/bici_login.png";
 
 export const Register = () => {
@@ -124,11 +124,16 @@ export const Register = () => {
 
   const handleAlphaInput = (event) => {
     const input = event.target;
-    const regex = /^[A-Za-z]*$/;
-    if (!regex.test(input.value)) {
-      input.value = input.value.replace(/[^A-Za-z]/g, "");
+    const regex = /^[A-Za-z ]*$/;
+    let previousValue = input.dataset.previousValue || '';
+  
+    if (!regex.test(input.value) || (input.value.split(' ').length - 1) > 1) {
+      input.value = previousValue;
+    } else {
+      input.dataset.previousValue = input.value;
     }
   };
+  
 
   const handleNumericInput = (event) => {
     const input = event.target;
@@ -173,7 +178,7 @@ export const Register = () => {
                   <i className="fas fa-user"></i>
                   <input
                     type="text"
-                    placeholder="Nombre"
+                    placeholder="Nombre completo"
                     name="nombre"
                     required
                     onInput={handleAlphaInput}
@@ -267,6 +272,9 @@ export const Register = () => {
               <button className="regis-button" type="submit">
                 Registrarse
               </button>
+              <Link className="forgot_password" to="/login">
+               Iniciar 
+              </Link>
             </form>
           </div>
         </div>
