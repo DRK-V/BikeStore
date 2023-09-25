@@ -76,7 +76,26 @@ export const Card_container = (props) => {
     }
   }, [location.search, cardsData, tipo]);
   
-  
+  useEffect(() => {
+    // ... Tu código para obtener los datos de las tarjetas
+
+    if (props.tipo) {
+      const filteredByType = cardsData.filter(
+        (card) => card.product.tipo.toLowerCase() === props.tipo.toLowerCase()
+      );
+      setFilteredCards(filteredByType);
+    } else if (props.color) {
+      const filteredByColor = cardsData.filter(
+        (card) => card.product.color.toLowerCase() === props.color.toLowerCase()
+      );
+      setFilteredCards(filteredByColor);
+    } else {
+      setFilteredCards(cardsData);
+    }
+
+    console.log('Tarjetas filtradas:', filteredCards);
+  }, [props.tipo, props.color, cardsData]);
+
   
 
   return (

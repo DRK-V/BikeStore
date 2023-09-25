@@ -17,6 +17,9 @@ export const Usuario_usu = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [productos, setProductos] = useState([]);
+  const [searchValue, setSearchValue] = useState(""); // Estado para el valor del campo de búsqueda
+const [isSearching, setIsSearching] = useState(false); // Estado para indicar si se está realizando una búsqueda
+const [foundProducts, setFoundProducts] = useState([]); // Estado para los productos encontrados
 
 
   const handleEditarProducto = (productoId) => {
@@ -188,6 +191,47 @@ export const Usuario_usu = () => {
     } catch (error) {
       console.error('Error al realizar la solicitud:', error);
       alert('Error al realizar la solicitud. Por favor, inténtalo de nuevo más tarde.');
+    }
+  };
+
+
+
+  
+  useEffect(() => {
+    if (isSearching) {
+     
+      const lowercaseSearchValue = searchValue.toLowerCase();
+      const filteredProducts = productos.filter((producto) => {
+        if (!isNaN(searchValue)) {
+          
+          return producto.id_producto.toString() === searchValue;
+        } else {
+         
+          const nombreProducto = producto.nombre_producto.toLowerCase();
+          return nombreProducto.includes(lowercaseSearchValue); 
+        }
+      });
+  
+      setFoundProducts(filteredProducts); 
+    } else {
+    
+      setFoundProducts([]); 
+    }
+  }, [searchValue, productos, isSearching]);
+  
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
+  
+    
+    setIsSearching(value.trim() !== ""); 
+  };
+  
+  const handleBlur = () => {
+    if (searchValue === "") {
+     
+      setSearchValue("");
+      setIsSearching(false); 
     }
   };
 
@@ -431,63 +475,113 @@ export const Usuario_usu = () => {
           </div>
 
           <div className={`container_manage_products ${isManageActive ? "container_active" : ""}`}>
-            <header className="cabecera_administrar">
-              <h1>Administrar productos</h1>
-              <div className="search-container">
-                <input type="text" placeholder="Buscar por ID o nombre" />
-                <button className="search-button">
-
-                </button>
-              </div>
-              <Link className="agregar-button" to="/Register_products">
-                Agregar producto
+  <header className="cabecera_administrar">
+    <h1>Administrar productos</h1>
+    <div className="search-container">
+      <input
+        type="text"
+        placeholder="Buscar por ID o nombre"
+        value={searchValue}
+        onChange={handleSearchChange}
+        onBlur={handleBlur} // Agregar un evento onBlur 
+          />
+      <button className="search-button"></button>
+    </div>
+    <Link className="agregar-button" to="/Register_products">
+      Agregar producto
+    </Link>
+  </header>
+  {isSearching ? (
+    
+    foundProducts.length > 0 ? (
+      <table className="table_manage_products">
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>nombre</th>
+            <th>color</th>
+            <th>tipo</th>
+            <th>precio</th>
+            <th>stock_disponible</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {foundProducts.map((producto) => (
+            <tr key={producto.id_producto}>
+              <td className='columna_nombre'>{producto.id_producto}</td>
+              <td className='columna_nombre'>{producto.nombre_producto}</td>
+              <td className='columna_nombre'>{producto.color}</td>
+              <td className='columna_nombre'>{producto.tipo}</td>
+              <td className='columna_nombre'><span style={{ color: 'green', fontSize: '1em' }}>$</span>{producto.precio}</td>
+              <td className='columna_nombre'>{producto.stock_disponible}</td>
+              <td className='icon_container'>
+                <Link to={`/Actualizar_productos_admin/${producto.id_producto}`}>
+                  <button
+                    className='boton_editar_producto'
+                    onClick={() => handleEditarProducto(producto.id_producto)}
+                    data-producto-id={producto.id_producto}
+                  ></button>
+                </Link>
+                <button
+                  className='boton_eliminar_producto'
+                  onClick={() => handleEliminarProducto(producto.id_producto)}
+                  data-producto-id={producto.id_producto}
+                ></button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    ) : (
+      // Muestra un mensaje si no se encuentran productos
+      <div>No se encontraron productos</div>
+    )
+  ) : (
+ 
+    <table className="table_manage_products">
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>nombre</th>
+          <th>color</th>
+          <th>tipo</th>
+          <th>precio</th>
+          <th>stock_disponible</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {productos.map((producto) => (
+          <tr key={producto.id_producto}>
+            <td className='columna_nombre'>{producto.id_producto}</td>
+            <td className='columna_nombre'>{producto.nombre_producto}</td>
+            <td className='columna_nombre'>{producto.color}</td>
+            <td className='columna_nombre'>{producto.tipo}</td>
+            <td className='columna_nombre'><span style={{ color: 'green', fontSize: '1em' }}>$</span>{producto.precio}</td>
+            <td className='columna_nombre'>{producto.stock_disponible}</td>
+            <td className='icon_container'>
+              <Link to={`/Actualizar_productos_admin/${producto.id_producto}`}>
+                <button
+                  className='boton_editar_producto'
+                  onClick={() => handleEditarProducto(producto.id_producto)}
+                  data-producto-id={producto.id_producto}
+                ></button>
               </Link>
-            </header>
-            {/* aqui va la tabla */}
-            <table className="table_manage_products">
-              <thead>
-                <tr>
-                  <th>id</th>
-                  <th>nombre</th>
-                  <th>color</th>
-                  <th>tipo</th>
-                  <th>precio</th>
-                  <th>stock_disponible</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {productos.map(producto => (
-                  <tr key={producto.id_producto}>
-                    <td className='columna_nombre'>{producto.id_producto}</td>
-                    <td className='columna_nombre'>{producto.nombre_producto}</td>
-                    <td className='columna_nombre'>{producto.color}</td>
-                    <td className='columna_nombre'>{producto.tipo}</td>
-                    <td className='columna_nombre'><span style={{ color: 'green', fontSize: '1em' }}>$</span>{producto.precio}</td>
-                    <td className='columna_nombre'>{producto.stock_disponible}</td>
-                    <td className='icon_container'>
-
-                      <Link to={`/Actualizar_productos_admin/${producto.id_producto}`}>
-                        <button
-                          className='boton_editar_producto'
-                          onClick={() => handleEditarProducto(producto.id_producto)}
-                          data-producto-id={producto.id_producto}
-                        ></button>
-                      </Link>
-
-                      <button
-                        className='boton_eliminar_producto'
-                        onClick={() => handleEliminarProducto(producto.id_producto)}
-                        data-producto-id={producto.id_producto}
-                      ></button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+              <button
+                className='boton_eliminar_producto'
+                onClick={() => handleEliminarProducto(producto.id_producto)}
+                data-producto-id={producto.id_producto}
+              ></button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )}
+</div>
 
 
-          </div>
 
         </div>
       </div>
