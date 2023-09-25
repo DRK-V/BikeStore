@@ -1,56 +1,87 @@
 /* PaymentForm.css */
 
 .payment-form {
-    position: relative;
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Divide en dos columnas */
-    gap: 20px; /* Espacio entre las columnas */
-    max-width: 50%; /* Ajusta el ancho máximo del formulario */
-    margin: 5% auto; /* Centra el formulario horizontalmente */
-    height: 70vh;
-    border:solid rgb(173, 172, 172) 1px;
-    box-shadow: -1px 0px 10px 1px rgba(0, 0, 0, 0.473);
-    border-radius: .4rem;
-    padding: 20px;
-    top: 5%;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Divide en dos columnas */
+  gap: 20px; /* Espacio entre las columnas */
+  max-width: 50%; /* Ajusta el ancho máximo del formulario */
+  margin: 5% auto; /* Centra el formulario horizontalmente */
+  height: 70vh;
+  border: solid rgb(173, 172, 172) 1px;
+  box-shadow: -1px 0px 10px 1px rgba(0, 0, 0, 0.473);
+  border-radius: 0.4rem;
+  padding: 20px;
+  top: 5%;
 }
-  
-  .input-container {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 10px;
-  }
-  
-  .label {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .input-icon-container {
-    display: flex;
-    align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 5px;
-  }
-  
-  input {
-    flex: 1;
-    border: none;
-    outline: none;
-    padding: 5px;
-  }
-.payment-form button{
-    width: 50%;
-    height: 3em;
-    background-color: rgb(128, 221, 182);
-    border: none;
-    border-radius: .3rem;
+.pay {
+  outline: none;
+  padding: 5px;
+  border: none;
 }
-  i {
-    margin-left: 10px; /* Espacio entre el input y el icono */
-  }
-  /* CSS para centrar un mensaje en la pantalla con fondo y texto personalizados */
+.input-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+.thank-you-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 999; /* Asegura que esté encima de todo el contenido */
+}
+
+/* Estilos para el botón */
+button[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+.label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.input-icon-container {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 5px;
+}
+.payment-form button {
+  width: 50%;
+  height: 3em;
+  background-color: rgb(128, 221, 182);
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+}
+i {
+  margin-left: 10px; /* Espacio entre el input y el icono */
+}
+/* CSS para centrar un mensaje en la pantalla con fondo y texto personalizados */
 .success-message {
   display: flex;
   flex-direction: column;
