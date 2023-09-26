@@ -106,8 +106,8 @@
     justify-content: center;
     align-items: center;
     width: 70%;
-    height: 35vh;
-    border-radius: .4rem;
+    height: 45vh;
+    border-radius: 0.4rem;
     box-shadow: 1px 10px 10px 5px rgb(136, 136, 136);
     flex-direction: column;
     margin-top: 8%;
@@ -144,9 +144,9 @@
 }
 
 .card_discount>img {
-    height: 40%;
+    height: 50%;
     width: 12em;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .card_similar>img {
@@ -156,9 +156,9 @@
 }
 
 .card>img {
-    height: 40%;
+    height: 50%;
     width: 12em;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .texto_descuento,

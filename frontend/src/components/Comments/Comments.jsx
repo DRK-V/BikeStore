@@ -87,24 +87,17 @@ const Comments = (props) => {
               {props.codigoCliente === props.idCliente && (
                 <>
                   <div className="button_container">
-                    {isEditing ? (
-                      <button
-                        className='buton_editar guardar'
-                        onClick={handleEditComment}
-                      >
-                        
+                  {isEditing ? (
+                      <button className='buton_editar guardar' onClick={handleEditComment}>
+                        <i className="fas fa-save"></i> 
                       </button>
                     ) : (
-                      <button
-                        className='buton_editar'
-                        onClick={() => setIsEditing(true)}
-                      >
+                      <button className='buton_editar' onClick={() => setIsEditing(true)}>
+                        <i className="fas fa-edit"></i> 
                       </button>
                     )}
-                    <button
-                      className='botun_borrar'
-                      onClick={handleDeleteComment}
-                    >
+                    <button className='botun_borrar' onClick={handleDeleteComment}>
+                      <i className="fas fa-trash-alt"></i> 
                     </button>
                   </div>
                 </>
