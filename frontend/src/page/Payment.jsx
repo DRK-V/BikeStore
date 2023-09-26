@@ -45,6 +45,11 @@ export const Payment = () => {
     });
   };
 
+  const handleCloseThankYouMessage = () => {
+    setShowThankYouMessage(false);
+    navigate("/");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -70,12 +75,7 @@ export const Payment = () => {
         ],
       };
 
-      console.log(
-        "Datos a enviar a la creación de venta:",
-        JSON.stringify(ventaData)
-      );
-
-      // Realiza la solicitud POST para crear la venta en http://localhost:3060/crear-venta
+      // Realiza la solicitud POST para crear la venta
       const response = await fetch("http://localhost:3060/crear-venta", {
         method: "POST",
         headers: {
@@ -85,26 +85,21 @@ export const Payment = () => {
       });
 
       if (response.ok) {
-        console.log("Venta creada con éxito.");
-
         const responseData = await response.json();
         const idVenta = responseData.idVenta;
 
         const productosVenta = [];
-
         const productosAgregados = {};
 
-        // Verifica si los campos del formulario son válidos
+        // Agrega productos del formulario a productosVenta
         if (
           formValues.id_producto &&
           formValues.quantity &&
           formValues.id_producto !== "" &&
           formValues.quantity !== ""
         ) {
-          // Agrega los productos del formulario a productosVenta
           productosVenta.push({
             nombre_producto: formValues.nombre_producto,
-
             precio_producto: formValues.precio_producto,
             codigo_venta: idVenta,
             codigo_producto: formValues.id_producto,
@@ -112,9 +107,8 @@ export const Payment = () => {
           });
         }
 
-        // Ahora, agrega los productos de cartItems
+        // Agrega productos de cartItems
         cartItems.forEach((cartItem) => {
-          // Verifica si el producto ya se ha agregado
           if (!productosAgregados[cartItem.product.id_producto]) {
             productosVenta.push({
               codigo_venta: idVenta,
@@ -124,15 +118,11 @@ export const Payment = () => {
               precio_producto: cartItem.product.precio,
             });
 
-            // Marca el producto como agregado en el objeto de registro
             productosAgregados[cartItem.product.id_producto] = true;
           }
         });
-        console.log(
-          "Datos a enviar a la creación de venta de producto:",
-          JSON.stringify({ codigo_venta: idVenta, productos: productosVenta })
-        );
 
+        // Realiza la solicitud POST para crear la venta de productos
         const productosResponse = await fetch(
           "http://localhost:3060/crear-venta-producto",
           {
@@ -148,10 +138,9 @@ export const Payment = () => {
         );
 
         if (productosResponse.ok) {
-          console.log("Venta de productos creada con éxito.");
           clearCart();
 
-          // Crear un nuevo documento
+          // Crear un nuevo documento PDF
           const doc = new jsPDF();
           doc.setFontSize(14);
           doc.setTextColor(0, 0, 0);
@@ -229,11 +218,6 @@ export const Payment = () => {
           doc.save(pdfFileName);
 
           setShowThankYouMessage(true);
-
-          setTimeout(() => {
-            navigate("/");
-            setShowThankYouMessage(false); // Oculta el mensaje después de 2 segundos
-          }, 2000);
         } else {
           console.error("Error al crear la venta de productos.");
         }
@@ -413,17 +397,13 @@ export const Payment = () => {
             />
           </div>
         </div>
-        {ventaExitosa && (
-          <div className="success-message">
-            <div className="success-message-content">
-              Compra completada. La factura se ha generado y descargado como
-              PDF.
-            </div>
-          </div>
-        )}
+
         {showThankYouMessage && (
-          <div className="thank-you-message">
-            <p>¡Gracias por tu compra!</p>
+          <div className="modal">
+            <div className="thank-you-message">
+              <p>¡Gracias por tu compra!</p>
+              <button onClick={handleCloseThankYouMessage}>Aceptar</button>
+            </div>
           </div>
         )}
         <button type="submit">Enviar</button>

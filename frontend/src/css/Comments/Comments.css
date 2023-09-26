@@ -49,23 +49,32 @@
   background-repeat: no-repeat;
 }
 
-.botun_borrar {
-  background-image: url('https://cdn-icons-png.flaticon.com/512/3405/3405244.png');
+
+i.fa-edit,
+i.fa-trash-alt,
+i.fa-save {
+  font-size: 20px; 
+  margin-right: 5px; 
+}
+
+/* Cambia el color de los íconos (opcional) */
+i.fa-edit {
+  color: #007bff;
+}
+
+i.fa-trash-alt {
+  color: #ff0000;
+}
+
+i.fa-save {
+  color: #28a745; 
 }
 
 
-.buton_editar {
-  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Edit_icon_%28the_Noun_Project_30184%29.svg/1024px-Edit_icon_%28the_Noun_Project_30184%29.svg.png');
-}
-
-.buton_editar .guardar{
-  background-image: url('https://cdn0.iconfinder.com/data/icons/game-ui-casual-chunky/533/IconsByAndreaFryer_GameUI_Chunky_Save-512.png');
-}
-/* Estilo cuando se pasa el cursor sobre los botones */
 .botun_borrar:hover,
 .buton_editar:hover {
   background-color: #d32f2f;
-  /* Cambia el color de fondo al pasar el cursor */
+ 
 }
 
 .button_container {
