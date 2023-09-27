@@ -48,8 +48,31 @@ export const Card_container = (props) => {
     fetchProductsWithImages();
   }, []);
 
+  
+
+
+  
   useEffect(() => {
-    
+    // ... Tu código para obtener los datos de las tarjetas
+  
+    if (props.tipo) {
+      const filteredByType = cardsData.filter(
+        (card) => card.product.tipo.toLowerCase() === props.tipo.toLowerCase()
+      );
+      setFilteredCards(filteredByType);
+    } else if (props.color) {
+      const filteredByColor = cardsData.filter(
+        (card) => card.product.color.toLowerCase() === props.color.toLowerCase()
+      );
+      setFilteredCards(filteredByColor);
+    } else {
+      setFilteredCards(cardsData);
+    }
+  
+    console.log('Tarjetas filtradas:', filteredCards);
+  }, [props.tipo, props.color, cardsData]);
+  
+  useEffect(() => {
     if (tipo) {
       const filtered = cardsData.filter(
         (card) => card.product.tipo.toLowerCase() === tipo.toLowerCase()
@@ -59,7 +82,8 @@ export const Card_container = (props) => {
       setFilteredCards(cardsData);
     }
   }, [tipo, cardsData]);
-
+  
+  
   useEffect(() => {
     const searchQuery = new URLSearchParams(location.search).get('query');
     const filteredByCategory = tipo
@@ -75,29 +99,6 @@ export const Card_container = (props) => {
       setFilteredCards(filteredByCategory);
     }
   }, [location.search, cardsData, tipo]);
-  
-  useEffect(() => {
-    // ... Tu código para obtener los datos de las tarjetas
-
-    if (props.tipo) {
-      const filteredByType = cardsData.filter(
-        (card) => card.product.tipo.toLowerCase() === props.tipo.toLowerCase()
-      );
-      setFilteredCards(filteredByType);
-    } else if (props.color) {
-      const filteredByColor = cardsData.filter(
-        (card) => card.product.color.toLowerCase() === props.color.toLowerCase()
-      );
-      setFilteredCards(filteredByColor);
-    } else {
-      setFilteredCards(cardsData);
-    }
-
-    console.log('Tarjetas filtradas:', filteredCards);
-  }, [props.tipo, props.color, cardsData]);
-
-  
-
   return (
     <div>
       {tipo && (
