@@ -50,21 +50,7 @@ export const Card_container = (props) => {
 
   
 
-  useEffect(() => {
-    const searchQuery = new URLSearchParams(location.search).get('query');
-    const filteredByCategory = tipo
-      ? cardsData.filter((card) => card.product.tipo.toLowerCase() === tipo.toLowerCase())
-      : cardsData;
-  
-    if (searchQuery) {
-      const filteredBySearch = cardsData.filter((card) =>
-        card.product.nombre_producto.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFilteredCards(filteredBySearch);
-    } else {
-      setFilteredCards(filteredByCategory);
-    }
-  }, [location.search, cardsData, tipo]);
+
   
   useEffect(() => {
     // ... Tu código para obtener los datos de las tarjetas
@@ -98,7 +84,21 @@ export const Card_container = (props) => {
   }, [tipo, cardsData]);
   
   
-
+  useEffect(() => {
+    const searchQuery = new URLSearchParams(location.search).get('query');
+    const filteredByCategory = tipo
+      ? cardsData.filter((card) => card.product.tipo.toLowerCase() === tipo.toLowerCase())
+      : cardsData;
+  
+    if (searchQuery) {
+      const filteredBySearch = cardsData.filter((card) =>
+        card.product.nombre_producto.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredCards(filteredBySearch);
+    } else {
+      setFilteredCards(filteredByCategory);
+    }
+  }, [location.search, cardsData, tipo]);
   return (
     <div>
       {tipo && (
