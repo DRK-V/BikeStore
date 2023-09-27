@@ -231,7 +231,7 @@ export const Navbar = ({ onSearchClick, onFormSubmit }) => {
                 <span>Bicicleta plegable</span>
               </li>
             </Link>
-            <Link to="/categoria/Bicicleta eléctrica">
+            <Link to="/categoria/bicicleta electrica">
               <li className="sub-menu-item">
                 <img src={b6} alt="Icono Bicicleta" />
                 <span>Bicicleta eléctrica</span>

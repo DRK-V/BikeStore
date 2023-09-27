@@ -3,10 +3,10 @@
 .payment-form {
   position: relative;
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Divide en dos columnas */
-  gap: 20px; /* Espacio entre las columnas */
-  max-width: 50%; /* Ajusta el ancho máximo del formulario */
-  margin: 5% auto; /* Centra el formulario horizontalmente */
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  max-width: 50%;
+  margin: 5% auto;
   height: 70vh;
   border: solid rgb(173, 172, 172) 1px;
   box-shadow: -1px 0px 10px 1px rgba(0, 0, 0, 0.473);
@@ -107,4 +107,35 @@ i {
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   text-align: center;
+}
+@media (max-width: 768px) {
+  .payment-form {
+    grid-template-columns: 1fr;
+    max-width: 80%;
+    border: none;
+    box-shadow: none;
+    height: initial;
+  }
+  /* Asegurarse de que los elementos ocupen todo el ancho en una sola columna */
+  .input-container {
+    width: 100%;
+  }
+  .payment-form button {
+    width: 100%;
+  }
+}
+
+/* Estilos para pantallas aún más pequeñas (por ejemplo, smartphones) */
+@media (max-width: 480px) {
+  .payment-form {
+    max-width: 90%; 
+    padding: 1px;
+  }
+  /* Asegurarse de que los elementos ocupen todo el ancho en una sola columna */
+  .input-container {
+    width: 100%;
+  }
+  .payment-form button {
+    width: 100%;
+  }
 }

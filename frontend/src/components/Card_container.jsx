@@ -48,17 +48,7 @@ export const Card_container = (props) => {
     fetchProductsWithImages();
   }, []);
 
-  useEffect(() => {
-    
-    if (tipo) {
-      const filtered = cardsData.filter(
-        (card) => card.product.tipo.toLowerCase() === tipo.toLowerCase()
-      );
-      setFilteredCards(filtered);
-    } else {
-      setFilteredCards(cardsData);
-    }
-  }, [tipo, cardsData]);
+  
 
   useEffect(() => {
     const searchQuery = new URLSearchParams(location.search).get('query');
@@ -78,7 +68,7 @@ export const Card_container = (props) => {
   
   useEffect(() => {
     // ... Tu código para obtener los datos de las tarjetas
-
+  
     if (props.tipo) {
       const filteredByType = cardsData.filter(
         (card) => card.product.tipo.toLowerCase() === props.tipo.toLowerCase()
@@ -92,10 +82,21 @@ export const Card_container = (props) => {
     } else {
       setFilteredCards(cardsData);
     }
-
+  
     console.log('Tarjetas filtradas:', filteredCards);
   }, [props.tipo, props.color, cardsData]);
-
+  
+  useEffect(() => {
+    if (tipo) {
+      const filtered = cardsData.filter(
+        (card) => card.product.tipo.toLowerCase() === tipo.toLowerCase()
+      );
+      setFilteredCards(filtered);
+    } else {
+      setFilteredCards(cardsData);
+    }
+  }, [tipo, cardsData]);
+  
   
 
   return (
