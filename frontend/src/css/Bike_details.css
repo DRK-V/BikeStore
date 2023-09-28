@@ -7,26 +7,42 @@
   flex-wrap: wrap;
 }
 
+.auth-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 0, 0, 0.8);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  z-index: 999;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* Si deseas que el mensaje esté oculto por defecto */
+.auth-message.hidden {
+  display: none;
+}
+
 .cart-message {
   position: fixed;
   top: 50%;
-  /* Center vertically */
+
   left: 50%;
-  /* Center horizontally */
-  transform: translate(-50%,
-      -50%);
-  /* Center the message in the middle of the screen */
+
+  transform: translate(-50%, -50%);
+
   background-color: #333;
-  /* Background color of the message */
+
   color: white;
-  /* Text color of the message */
+
   padding: 10px 20px;
-  /* Padding around the message text */
+
   border-radius: 5px;
-  /* Rounded corners */
+
   z-index: 999;
-  /* Ensure it's above other content */
-  /* Add more styles as needed */
 }
 
 .container_images {
@@ -67,8 +83,8 @@
 }
 
 /* aqui van los estilos del formulario */
-.form_add_item_cart>label,
-.container_color_details>label {
+.form_add_item_cart > label,
+.container_color_details > label {
   font-weight: bold;
   font-size: 1.2em;
 }
@@ -93,12 +109,12 @@
   font-size: 1.4em;
 }
 
-.price_text>p {
+.price_text > p {
   font-size: 1.2em;
   color: black;
 }
 
-.price_text>small {
+.price_text > small {
   text-decoration: line-through;
   color: red;
 }
@@ -108,7 +124,7 @@
   margin-right: 5%;
 }
 
-.color_text>strong {
+.color_text > strong {
   margin-left: 4%;
 }
 
@@ -119,19 +135,19 @@
   flex-wrap: wrap;
 }
 
-.container_color_details>label {
+.container_color_details > label {
   width: 90%;
   text-align: left;
 }
 
-.container_color_details>input[type="color"] {
+.container_color_details > input[type="color"] {
   border: none;
   border-radius: 2em;
   width: 30%;
   height: 65%;
 }
 
-.form_add_item_cart>select {
+.form_add_item_cart > select {
   width: 26%;
   height: 6%;
   border-radius: 0.5rem;
@@ -143,13 +159,13 @@
   height: 7%;
 }
 
-.container_count>label {
+.container_count > label {
   font-weight: bold;
   font-size: 1.2em;
   margin-right: 4%;
 }
 
-.container_count>input {
+.container_count > input {
   width: 30%;
   height: 80%;
   border-radius: 0.5rem;
@@ -163,7 +179,7 @@
 }
 
 /* Estilos generales para los botones */
-.form_add_item_cart>button {
+.form_add_item_cart > button {
   position: relative;
   min-width: 50%;
   height: 10%;
@@ -191,8 +207,8 @@
 }
 
 /* Estilos para el ícono */
-.btn_buy_now>i,
-.btn_add_item_cart>i {
+.btn_buy_now > i,
+.btn_add_item_cart > i {
   display: inline-block;
   width: 3em;
   height: 3em;
@@ -203,11 +219,11 @@
   background-repeat: no-repeat;
 }
 
-.btn_buy_now>i {
+.btn_buy_now > i {
   background-image: url("../assets/icons/trolley_ico.svg");
 }
 
-.btn_add_item_cart>i {
+.btn_add_item_cart > i {
   background-image: url("../assets/icons/buy_icon.svg");
 }
 
@@ -219,8 +235,8 @@
 
 .container_comments {
   position: relative;
-  top: -10%;
-  left: -7%;
+  top: 2%;
+  left: -1%;
   width: 55%;
   height: 65vh;
   background-color: rgb(255, 255, 255);
@@ -295,8 +311,8 @@
   object-fit: cover;
 }
 
-.assessment>h1,
-.brand>h1 {
+.assessment > h1,
+.brand > h1 {
   width: 100%;
   height: 10%;
   font-size: 0.3em;
@@ -313,21 +329,21 @@
   flex-direction: row-reverse;
 }
 
-.container_stars>label {
+.container_stars > label {
   color: rgb(218, 213, 213);
 }
 
 /* Al pasar por encima las etiquetas <label> ( o sea: las estrellas ) cambian de color */
-.container_stars>label:hover {
+.container_stars > label:hover {
   color: orange;
 }
 
 /* También cambian de color todas las etiquetas <label> precedidas ( ~ ) por aquella <label> que tiene el ratón encima ( hover ). */
-.container_stars>label:hover~label {
+.container_stars > label:hover ~ label {
   color: orange;
 }
 
-.option_star:checked~label {
+.option_star:checked ~ label {
   color: orange;
 }
 
@@ -335,21 +351,21 @@
   display: none;
 }
 
-.container_stars>label {
+.container_stars > label {
   color: rgb(218, 213, 213);
 }
 
 /* Al pasar por encima las etiquetas <label> ( o sea: las estrellas ) cambian de color */
-.container_stars>label:hover {
+.container_stars > label:hover {
   color: orange;
 }
 
 /* También cambian de color todas las etiquetas <label> precedidas ( ~ ) por aquella <label> que tiene el ratón encima ( hover ). */
-.container_stars>label:hover~label {
+.container_stars > label:hover ~ label {
   color: orange;
 }
 
-.option_star:checked~label {
+.option_star:checked ~ label {
   color: orange;
 }
 
@@ -357,7 +373,7 @@
   display: none;
 }
 @media (max-width: 1250px) {
-  .form_add_item_cart>button {
+  .form_add_item_cart > button {
     min-width: 60%;
     display: inline;
   }
@@ -384,13 +400,12 @@
     height: 120vh;
   }
 
-  .form_add_item_cart>button {
+  .form_add_item_cart > button {
     min-width: 40%;
     display: inline;
   }
 
   .container_comments {
-    top: 10%;
     width: 60%;
   }
 
@@ -402,7 +417,7 @@
     top: 10%;
   }
 
-  .card_similar>img {
+  .card_similar > img {
     object-fit: contain;
   }
 }
@@ -428,7 +443,7 @@
     width: 85%;
   }
 
-  .form_add_item_cart>button {
+  .form_add_item_cart > button {
     left: 30%;
     height: 10%;
     width: 40%;
@@ -446,7 +461,7 @@
     top: 0;
   }
 
-  .form_add_item_cart>button {
+  .form_add_item_cart > button {
     width: 70%;
     left: 15%;
   }
@@ -488,16 +503,16 @@
     order: 5;
   }
 
-  .form_add_item_cart>select {
+  .form_add_item_cart > select {
     width: 40%;
   }
 
-  .container_color_details>input[type="color"] {
+  .container_color_details > input[type="color"] {
     margin-top: 2%;
     width: 40%;
   }
 
-  .container_count>input {
+  .container_count > input {
     width: 40%;
   }
 
@@ -536,13 +551,60 @@
     width: 100%;
   }
 
-  .form_add_item_cart>label,
-  .container_color_details>label {
+  .form_add_item_cart > label,
+  .container_color_details > label {
     width: 100%;
     text-align: left;
   }
 
   .assessment {
     margin-top: 0;
+  }
+}
+/* Estilos generales para el iPhone SE */
+@media (max-width: 640px) {
+  .main_image {
+    width: 80%;
+  }
+
+  .sub_images {
+    width: 30%;
+  }
+
+  .container_images {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .form_add_item_cart {
+    width: 100%;
+  }
+
+  .form_add_item_cart > button {
+    width: 80%;
+    left: 10%;
+  }
+
+  .container_color_details > input[type="color"] {
+    margin-top: 2%;
+    width: 80%;
+  }
+
+  .container_count > input {
+    width: 80%;
+  }
+
+  .container_comments {
+    width: 100%;
+    left: 0;
+    height: 60vh;
+    top: 14%;
+  }
+
+  .assessment {
+    margin-top: 1em;
+    height: 40vh;
+    width: 80%;
   }
 }

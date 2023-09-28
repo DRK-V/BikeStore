@@ -8,7 +8,10 @@ import Similar_container from "../components/Similar_container";
 import { Footer } from "../components/Footer";
 import icon_brand from "../assets/icons/bbike-red-logo.png";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../components/AuthContext";
+
 const Bike_details = () => {
+  const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   const { addItemToCart, setSelectedProductId } = useCart();
   const { id_producto } = useParams();
@@ -16,8 +19,9 @@ const Bike_details = () => {
   const [quantity, setQuantity] = useState(1);
   const [stock, setStock] = useState(null);
   const [stockExhausted, setStockExhausted] = useState(false);
-  const [showStockExhaustedMessage, setShowStockExhaustedMessage] = useState(false);
-
+  const [showStockExhaustedMessage, setShowStockExhaustedMessage] =
+    useState(false);
+  const [showMessage, setShowMessage] = useState(false);
 
   const handleAddToCart = (event) => {
     event.preventDefault();
@@ -37,7 +41,7 @@ const Bike_details = () => {
         addItemToCart(cartItem);
         setSelectedProductId(id_producto);
         setCartMessage("Se ha agregado el producto al carrito.");
-  
+
         // Set a timer to clear the cart message after 1 second
         setTimeout(() => {
           setCartMessage("");
@@ -47,7 +51,6 @@ const Bike_details = () => {
       }
     }
   };
-  
 
   const [productDetails, setProductDetails] = useState(null);
   const [additionalProductDetails, setAdditionalProductDetails] =
@@ -102,39 +105,40 @@ const Bike_details = () => {
   const handleSubImageClick = (subImageURL) => {
     setMainImageURL(subImageURL);
   };
+
   const handleBuyNow = (event) => {
     event.preventDefault();
-    if (additionalProductDetails) {
-      const productPrice = parseFloat(additionalProductDetails.product.precio);
-      if (!isNaN(productPrice)) {
-        const totalPriceWithDiscount = productPrice + productPrice * 0.02;
-        console.log("Precio con 2% de descuento:", totalPriceWithDiscount);
+    if (isLoggedIn) {
+      // Si el usuario está autenticado, redirige a /payment
+      if (additionalProductDetails) {
+        const productPrice = parseFloat(
+          additionalProductDetails.product.precio
+        );
+        if (!isNaN(productPrice)) {
+          const totalPriceWithDiscount = productPrice + productPrice * 0.02;
 
-        // Log para ver los datos que se están enviando
-        console.log("Datos enviados a /payment:", {
-          valorPagar: totalPriceWithDiscount,
-          id_producto: id_producto,
-          quantity: quantity,
-          precio_producto: productPrice,
-          nombre_producto: additionalProductDetails.product.nombre_producto,
-        });
-
-        // Incluye id_producto y quantity en el objeto de estado
-        navigate("/payment", {
-          state: {
-            valorPagar: totalPriceWithDiscount,
-            id_producto: id_producto,
-            quantity: quantity,
-            precio_producto: productPrice,
-            nombre_producto: additionalProductDetails.product.nombre_producto,
-          },
-        });
-      } else {
-        console.error("Precio no válido para el producto.");
+          navigate("/payment", {
+            state: {
+              valorPagar: totalPriceWithDiscount,
+              id_producto: id_producto,
+              quantity: quantity,
+              precio_producto: productPrice,
+              nombre_producto: additionalProductDetails.product.nombre_producto,
+            },
+          });
+        } else {
+          console.error("Precio no válido para el producto.");
+        }
       }
+    } else {
+      setShowMessage(true);
+      setTimeout(() => {
+        setShowMessage(false);
+
+        navigate("/register");
+      }, 2000);
     }
   };
-
 
   useEffect(() => {
     // Realiza la solicitud para obtener el stock
@@ -166,9 +170,6 @@ const Bike_details = () => {
       fetchStock();
     }
   }, [id_producto]);
-  
-  
-  
 
   return (
     <>
@@ -198,7 +199,7 @@ const Bike_details = () => {
                 src={mainImageURL}
                 alt="Imagen Principal"
               />
-  
+
               <form
                 onSubmit={handleAddToCart}
                 action="dialog"
@@ -217,7 +218,7 @@ const Bike_details = () => {
                     }
                   )}
                 </label>
-  
+
                 <div className="container_color_details">
                   <label htmlFor="" className="color_text">
                     Color:
@@ -231,7 +232,7 @@ const Bike_details = () => {
                   Descripción:{" "}
                   {additionalProductDetails?.product?.descripcion_producto}
                 </p>
-  
+
                 <label htmlFor="" className="text_bike_type">
                   Tipo de bicleta:{additionalProductDetails?.product?.tipo}
                 </label>
@@ -239,7 +240,7 @@ const Bike_details = () => {
                   <label htmlFor="">stock disponible:</label>
                   <p>{stock !== null ? stock : "Cargando..."}</p>
                 </div>
-  
+
                 <button
                   className={`btn_buy_now ${stockExhausted ? "disabled" : ""}`}
                   onClick={(e) => handleBuyNow(e, id_producto, quantity)}
@@ -249,7 +250,9 @@ const Bike_details = () => {
                   Comprar Ahora
                 </button>
                 <button
-                  className={`btn_add_item_cart ${stockExhausted ? "disabled" : ""}`}
+                  className={`btn_add_item_cart ${
+                    stockExhausted ? "disabled" : ""
+                  }`}
                   type="submit"
                   disabled={stockExhausted}
                 >
@@ -259,6 +262,11 @@ const Bike_details = () => {
                 {showStockExhaustedMessage && (
                   <div className="cart-message">Producto agotado</div>
                 )}
+                {showMessage && (
+                  <div className="auth-message">
+                    Debes registrarte o iniciar sesión antes de comprar.
+                  </div>
+                )}
                 {showStockExhaustedMessage &&
                   setTimeout(() => setShowStockExhaustedMessage(false), 2000)}
               </form>
@@ -267,49 +275,6 @@ const Bike_details = () => {
                 <Container_comments />
               </div>
               <form className="assessment">
-                <h1>Valoracion del producto</h1>
-                <div className="container_stars">
-                  <input
-                    className="option_star"
-                    id="radio1"
-                    type="radio"
-                    name="estrellas"
-                    value="5"
-                  />
-                  <label htmlFor="radio1">★</label>
-                  <input
-                    className="option_star"
-                    id="radio2"
-                    type="radio"
-                    name="estrellas"
-                    value="4"
-                  />
-                  <label htmlFor="radio2">★</label>
-                  <input
-                    className="option_star"
-                    id="radio3"
-                    type="radio"
-                    name="estrellas"
-                    value="3"
-                  />
-                  <label htmlFor="radio3">★</label>
-                  <input
-                    className="option_star"
-                    id="radio4"
-                    type="radio"
-                    name="estrellas"
-                    value="2"
-                  />
-                  <label htmlFor="radio4">★</label>
-                  <input
-                    className="option_star"
-                    id="radio5"
-                    type="radio"
-                    name="estrellas"
-                    value="1"
-                  />
-                  <label htmlFor="radio5">★</label>
-                </div>
                 <div className="brand">
                   <h1>Marca del producto</h1>
                   <img src={icon_brand} alt="" className="icon_bike_brand" />
